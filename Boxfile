@@ -22,8 +22,8 @@ web1:
     - "rm -f app/storage/cache/*"
     - "php artisan cache:clear"
     - "rm -f app/storage/views/*"
-    - "php artisan routes"
   before_deploy:
+    - "php artisan routes"
     - "php artisan migrate"
     - "php artisan migrate:refresh --seed"
 cache1:
