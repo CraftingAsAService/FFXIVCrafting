@@ -18,10 +18,23 @@
 			</select>
 		</div>
 		<div class='form-group'>
-			<input name='level' placeholder='Level (e.g. 5)' class='form-control'>
+			<input type='number' name='level' placeholder='Level (e.g. 5)' class='form-control'>
 		</div>
 		<button type='submit' class='btn btn-primary'>Get my Gear!</button>
 	</fieldset>
 </form>
+
+{{--
+<div class='panel'>
+	<div class='panel-title'>
+		<h3>Updates</h3>
+	</div>
+	<div class='panel-body'>
+		<ul>
+			<li>9/6/13 - Bugfixes</li>
+		</ul>
+	</div>
+</div>
+--}}
 
 @stop

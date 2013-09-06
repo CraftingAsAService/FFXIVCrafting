@@ -37,3 +37,5 @@ Route::get('food', function()
 Route::get('equipment/{job}/{level}/{range}', 'EquipmentController@calculate');
 
 Route::controller('equipment', 'EquipmentController');
+
+Route::controller('datamine', 'DatamineController');
