@@ -26,7 +26,7 @@ class EquipmentController extends BaseController
 
 		// Figure out the Discipline
 		$disciple = 'DOH'; // Assume Disciple of Hand
-		if (in_array($desired_job, array('MIN', 'BTN', 'FSH')))
+		if (in_array($desired_job, array('MIN', 'BTN', 'FSH', 'DOL')))
 			$disciple = 'DOL';
 
 		$disciple = Job::where('abbreviation', $disciple)->first();

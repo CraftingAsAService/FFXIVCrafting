@@ -47,8 +47,22 @@
 
 		<div id='footer'>
 			<div class='container text-center'>
-				<p class='text-muted credit'>
-					<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/'>My Character</a> | <a href='mailto:tickthokk@gmail.com'>Email Me</a>
+				<div class='row'>
+					<div class='col-sm-4'>
+						<p class='text-muted credit'>
+							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/'>My Character</a> 
+						</p>
+					</div>
+					<div class='col-sm-4'>
+						<p class='text-muted credit'>
+							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
+						</p>
+					</div>
+					<div class='col-sm-4'>
+						<p class='text-muted credit'>
+							<a href='https://github.com/Tickthokk/ffxiv-caas/issues'>Issue Tracker</a>
+						</p>
+					</div>
 				</p>
 			</div>
 		</div>
@@ -62,5 +76,15 @@
 
 		@section('javascript')
 		@show
+
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-43830923-1', 'thokk.com');
+			ga('send', 'pageview');
+		</script>
 	</body>
 </html>
