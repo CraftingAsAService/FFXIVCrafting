@@ -3,6 +3,7 @@
 @section('content')
 
 <h1>Gear for a Level {{ $level }} {{ $job->name }}</h1>
+
 <button class='btn btn-info toggle-origin pull-right' style='margin: 0 10px 10px 0;'>Toggle Origin</button>
 <!--
 <button class='btn btn-info toggle-changes pull-right' style='margin: 0 10px 10px 0;'>Toggle Changes Only</button>
