@@ -2,7 +2,7 @@
 
 return array(
 
-	/*'connections' => array(
+	'connections' => array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
@@ -17,5 +17,5 @@ return array(
 		),
 
 	),
-*/
+
 );
