@@ -50,7 +50,7 @@
 				<div class='row'>
 					<div class='col-sm-4'>
 						<p class='text-muted credit'>
-							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/'>My Character</a> 
+							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
 						</p>
 					</div>
 					<div class='col-sm-4'>
@@ -60,7 +60,7 @@
 					</div>
 					<div class='col-sm-4'>
 						<p class='text-muted credit'>
-							<a href='https://github.com/Tickthokk/ffxiv-caas/issues'>Issue Tracker</a>
+							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
 						</p>
 					</div>
 				</p>
