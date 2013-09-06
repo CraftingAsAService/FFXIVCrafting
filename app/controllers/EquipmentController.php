@@ -8,7 +8,7 @@ class EquipmentController extends BaseController
 		return $this->calculate(Input::get('class'), Input::get('level'));
 	}
 
-	public function getCalculate($desired_job = '', $level = 0, $range = 1)
+	public function calculate($desired_job = '', $level = 0, $range = 1)
 	{
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);

@@ -34,5 +34,6 @@ Route::get('food', function()
 	return View::make('food');
 });
 
-Route::post('equipment', 'EquipmentController@postIndex');
-Route::get('equipment/{job}/{level}/{range}', 'EquipmentController@getCalculate');
+Route::get('equipment/{job}/{level}/{range}', 'EquipmentController@calculate');
+
+Route::controller('equipment', 'EquipmentController');

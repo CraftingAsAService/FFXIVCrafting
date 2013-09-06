@@ -4,6 +4,9 @@
 	"require": {
 		"laravel/framework": "4.0.*"
 	},
+	"require-dev": {
+		"loic-sharma/profiler": "1.0.*"
+	},
 	"autoload": {
 		"classmap": [
 			"app/commands",

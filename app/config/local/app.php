@@ -26,33 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://caas.thokk.com',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Application Timezone
-	|--------------------------------------------------------------------------
-	|
-	| Here you may specify the default timezone for your application, which
-	| will be used by the PHP date and date-time functions. We have gone
-	| ahead and set this to a sensible default for you out of the box.
-	|
-	*/
-
-	'timezone' => 'UTC',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Application Locale Configuration
-	|--------------------------------------------------------------------------
-	|
-	| The application locale determines the default locale that will be used
-	| by the translation service provider. You are free to set this value
-	| to any of the locales which will be supported by the application.
-	|
-	*/
-
-	'locale' => 'en',
+	'url' => 'http://ffxiv-caas.local.dev',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -65,7 +39,7 @@ return array(
 	|
 	*/
 
-	'key' => '96334d6d2d51b2abb4f534454b07c261',
+	'key' => 'YourSecretKey!!!',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -114,20 +88,10 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+		// Profiler
+		'Profiler\ProfilerServiceProvider',
+
 	),
-
-	/*
-	|--------------------------------------------------------------------------
-	| Service Provider Manifest
-	|--------------------------------------------------------------------------
-	|
-	| The service provider manifest is used by Laravel to lazy load service
-	| providers which are not needed for each request, as well to keep a
-	| list of all of the services. Here, you may set its storage spot.
-	|
-	*/
-
-	'manifest' => storage_path().'/meta',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -179,6 +143,9 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
+		// Profiler
+		'Profiler' => 'Profiler\Facades\Profiler'
+		
 	),
 
 );
