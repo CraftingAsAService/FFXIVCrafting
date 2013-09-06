@@ -51,3 +51,15 @@ td.new .stats {
 .credit {
 	margin: 20px 0;
 }
+
+.no-value {
+	color: #ccc;
+}
+
+.table-striped th.title {
+	background: #ededed !important;
+}
+
+.fixed-width-50 {
+	width: 50%;
+}

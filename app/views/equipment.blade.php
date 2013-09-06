@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>Gear for a level {{ $level }} {{ $job->name }}</h1>
+<h1>Gear for a Level {{ $level }} {{ $job->name }}</h1>
 <button class='btn btn-info toggle-origin pull-right' style='margin: 0 10px 10px 0;'>Toggle Origin</button>
 <!--
 <button class='btn btn-info toggle-changes pull-right' style='margin: 0 10px 10px 0;'>Toggle Changes Only</button>
@@ -12,12 +12,10 @@
 <h2>{{ $disciple->name }}</h2>
 @endif
 
-<table class='table table-bordered'>
+<table class='table table-bordered table-striped'>
 	<thead>
 		<tr>
-			<th>
-				
-			</th>
+			<th class='invisible'>&nbsp;</th>
 			@foreach(array_keys($equipment) as $th_level)
 			<th class='text-center alert alert-{{ $th_level == $level ? 'success' : ($th_level < $level ? 'info' : 'warning') }}'>
 				Level
@@ -28,9 +26,7 @@
 	</thead>
 	<tfoot>
 		<tr>
-			<th>
-				
-			</th>
+			<th class='invisible'>&nbsp;</th>
 			@foreach(array_keys($equipment) as $tf_level)
 			<th>
 				@foreach($stats[$tf_level] as $stat => $value)
@@ -39,7 +35,7 @@
 						<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
 					</div>
 					<div class='col-sm-10'>
-						{{ $stat }}: {{ $value }} 
+						{{ $stat }}: {{ $value }}
 						@if(isset($stats_diff[$tf_level][$stat]))
 						({{ $stats_diff[$tf_level][$stat] > 0 ? '+' : '' }}{{ $stats_diff[$tf_level][$stat] }})
 						@endif
@@ -69,12 +65,12 @@
 					@endif
 					<div>
 						<strong>{{ $item->level }}</strong>
-						{{ $item->name }} 
+						{{ $item->name }}
 					</div>
 					@if($new)
 						@if(strlen($item->origin) != 3)
 						<div class='origin panel'>
-							<strong>Origin</strong> 
+							<strong>Origin</strong>
 							{{ $item->origin }}
 						</div>
 						@endif
