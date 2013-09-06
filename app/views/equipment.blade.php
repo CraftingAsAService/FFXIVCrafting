@@ -3,9 +3,11 @@
 @section('content')
 
 <h1>Gear for a level {{ $level }} {{ $job->name }}</h1>
-<button class='btn btn-info toggle-origin pull-right'>Toggle Origin</button>
-<button class='btn btn-info toggle-changes pull-right' style='margin-right: 10px;'>Toggle Changes Only</button>
-<button class='btn btn-info toggle-range pull-right' style='margin-right: 10px;'>Toggle Range</button>
+<button class='btn btn-info toggle-origin pull-right' style='margin: 0 10px 10px 0;'>Toggle Origin</button>
+<!--
+<button class='btn btn-info toggle-changes pull-right' style='margin: 0 10px 10px 0;'>Toggle Changes Only</button>
+<button class='btn btn-info toggle-range pull-right' style='margin: 0 10px 10px 0;'>Toggle Range</button>
+-->
 @if($job->name != $disciple->name)
 <h2>{{ $disciple->name }}</h2>
 @endif
@@ -99,7 +101,13 @@
 	<ul class='pagination pagination'>
 		@foreach($job_list as $abbr => $rjob)
 		<li class='{{ $rjob == $job->name ? 'active' : '' }} '>
-			<a href='/equipment/{{ strtolower($abbr) }}/{{ $level }}/{{ $range }}' rel='tooltip' title='{{ $rjob }}'>{{ $abbr }}</a>
+			<a href='/equipment/{{ strtolower($abbr) }}/{{ $level }}/{{ $range }}' rel='tooltip' title='{{ $rjob }}'>
+				@if( ! in_array($abbr, array('DOH', 'DOL')))
+				<img src='/img/classes/{{ $abbr }}.png'>
+				@else
+				<img src='/img/classes/NA.png'> {{ $abbr }}
+				@endif
+			</a>
 		</li>
 		@endforeach
 	</ul>
