@@ -132,7 +132,7 @@ var xivdb_tooltips = {
 ?>
 
 <p class='well'>
-	<small><em>We love <a href='http://http://xivdb.com/'>XIVDB</a>, and so should you!</em></small>
+	<small><em>We love <a href='http://http://xivdb.com/' target='_blank'>XIVDB</a>, and so should you!</em></small>
 </p>
 
 @stop

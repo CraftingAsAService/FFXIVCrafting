@@ -10,7 +10,8 @@ class EquipmentController extends BaseController
 
 	public function postIndex()
 	{
-		return $this->calculate(Input::get('class'), Input::get('level'), Input::get('forecast'), Input::has('hindsight'));
+		//return $this->calculate();
+		return Redirect::to('/equipment/' . Input::get('class') . '/' . Input::get('level') . '/' . Input::get('forecast') . '/' . Input::has('hindsight'));
 	}
 
 	public function calculate($desired_job = '', $level = 1, $forecast = 1, $hindsight = FALSE)

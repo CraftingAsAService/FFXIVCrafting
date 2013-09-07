@@ -46,7 +46,8 @@ class JobTableSeeder extends Seeder
 	public function run()
 	{
 		$jobs = array(
-			'DOH' => 'Disciple of Hand',
+			'DOH' => 'Disciple of the Hand',
+
 			'BSM' => 'Blacksmith',
 			'GSM' => 'Goldsmith',
 			'ARM' => 'Armourer',
@@ -55,10 +56,18 @@ class JobTableSeeder extends Seeder
 			'WVR' => 'Weaver',
 			'ALC' => 'Alchemist',
 			'CUL' => 'Culinarian',
-			'DOL' => 'Disciple of Land',
+
+			'DOL' => 'Disciple of the Land',
+
 			'FSH' => 'Fisher',
 			'BTN' => 'Botanist',
 			'MIN' => 'Miner',
+
+			'DOW' => 'Disciple of War',
+
+			
+
+			'DOM' => 'Disciple of Magic',
 		);
 
 		foreach ($jobs as $abbr => $job)

@@ -76,7 +76,7 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->integer('equipment_id');
 			$table->integer('stat_id');
-			$table->smallInteger('amount');
+			$table->decimal('amount', 6, 2);
 		});
 		
 		Schema::create('materia', function($table)
