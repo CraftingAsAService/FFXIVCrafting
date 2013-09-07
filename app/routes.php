@@ -39,5 +39,3 @@ Route::get('equipment/{job}/{level}', 'EquipmentController@calculate');
 Route::get('equipment/{job}', 'EquipmentController@calculate');
 
 Route::controller('equipment', 'EquipmentController');
-
-Route::controller('datamine', 'DatamineController');
