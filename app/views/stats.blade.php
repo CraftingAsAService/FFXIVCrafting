@@ -55,7 +55,7 @@
 	</h2>
 
 	<p>
-		Acts as MP for Miner/Botanist. Recharges by 5 GP every 3 seconds while not gathering. While gathering, GP recovery only happens when you gather something successfully, and increases with each EXP chain. (Say you have 5 attempts at a gathering spot and you successfully gather 5 times in a row. GP would recover 1>2>3>4>5 for 15 GP; assuming you did not use any GP that gathering attempt. Now, suppose you did 5 gathering attemps, but missed the 3rd one. GP recovered would be 1>2>0>1>2. GP recovery chain resets with EXP chain while gathering.)
+		Acts as MP for Miner/Botanist. Recharges by 5 GP every 3 seconds while not gathering. While gathering, each successful gather provides a static 5 GP.
 	</p>
 
 	<p class='well'>

@@ -1,5 +1,15 @@
 @extends('layout')
 
+{{--
+@section('javascript')
+<script type="text/javascript" src="http://xivdb.com/tooltips.js"></script><script> 
+var xivdb_tooltips = { 
+	"language": "EN"
+} 
+</script>
+@stop
+--}}
+
 @section('content')
 
 <h1>Gear for a level {{ $level }} {{ $job->name }}</h1>
@@ -123,5 +133,10 @@
 		@endforeach
 	</ul>
 </div>
+
+
+<p class='well'>
+	<small><em>We love <a href='http://http://xivdb.com/'>XIVDB</a>, and so should you!</em></small>
+</p>
 
 @stop

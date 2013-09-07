@@ -3,12 +3,17 @@
 class EquipmentController extends BaseController 
 {
 
+	public function getIndex()
+	{
+		return Redirect::to('/');
+	}
+
 	public function postIndex()
 	{
 		return $this->calculate(Input::get('class'), Input::get('level'));
 	}
 
-	public function calculate($desired_job = '', $level = 0, $range = 1)
+	public function calculate($desired_job = '', $level = 1, $range = 1)
 	{
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);
@@ -21,8 +26,8 @@ class EquipmentController extends BaseController
 			exit('Error, unrecognized job/class');
 
 		// Make sure level is valid
-		if ($level < 0 || $level > 50 || ! is_numeric($level))
-			exit('Error, invalid Level');
+		if ($level < 1 || $level > 50 || ! is_numeric($level))
+			$level = 1;
 
 		// Figure out the Discipline
 		$disciple = 'DOH'; // Assume Disciple of Hand
