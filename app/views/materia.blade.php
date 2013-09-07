@@ -10,13 +10,13 @@
 	<div class='col-sm-6 text-center'>
 		<h3>{{ $job->name }}</h3>
 
-		<table class='table table-bordered'>
+		@foreach($stats as $stat)
+		<?php $stat = Stat::where('name', $stat)->first(); ?>
+		<table class='table table-bordered table-striped'>
 			<tbody>
-				@foreach($stats as $stat)
-				<?php $stat = Stat::where('name', $stat)->first(); ?>
 				<tr>
-					<th> </th>
-					<th class='text-center'>
+					<th class='invisible'>&nbsp;</th>
+					<th class='text-center fixed-width-50 title'>
 						<img src='/img/stats/{{ $stat->name }}.png' class='stat-icon'>
 						{{ $stat->name }} Bonus
 					</th>
@@ -27,11 +27,11 @@
 					<td class='text-center'>+{{ $materia->amount }}</td>
 				</tr>
 				@endforeach
-				@endforeach
 			</tbody>
 		</table>
+		@endforeach
 	</div>
 	@endforeach
 </div>
-	
+
 @stop
