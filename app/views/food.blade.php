@@ -5,7 +5,7 @@
 <h1>Food</h1>
 
 <p>
-	Food provides a certain percentage of your stat up to the maximum.  The Threshold is what it takes to reach that percentage and maximum.  
+	Food provides a certain percentage of your stat up to the maximum.  The Threshold is what it takes to reach that percentage and maximum.
 	For example, if you had 65 Craftsmanship, it would be a waist to use <em>Mashed Popotoes</em> when <em>Mint Lassi</em> is available (and assumedly cheaper).
 </p>
 
@@ -14,7 +14,7 @@
 
 <h3>{{ $job->name }}</h3>
 
-<table class='table table-bordered'>
+<table class='table table-bordered table-striped'>
 	<tbody>
 		<?php $last = null; ?>
 		@foreach(Food::with('stats')->where('job_id', $job->id)->get() as $food)
@@ -22,20 +22,20 @@
 			@if ($concat != $last)
 				<?php $last = $concat; ?>
 				<tr>
-					<th> </th>
+					<th class='invisible'>&nbsp;</th>
 					@foreach(range(0, $stat_limit - 1) as $place)
-					<td colspan='{{ 6 / $stat_limit }}' class='text-center'>
+					<th colspan='{{ 6 / $stat_limit }}' class='text-center title'>
 						@if (isset($food->stats[$place]))
-						<div>
+
 							<img src='/img/stats/{{ $food->stats[$place]->name }}.png' class='stat-icon'>
 							{{ $food->stats[$place]->name }} Bonus
-						</div>
+
 						@endif
-					</td>
+					</th>
 					@endforeach
 				</tr>
 				<tr>
-					<th> </th>
+					<th class='invisible'>&nbsp;</th>
 					@foreach(range(1, $stat_limit) as $ignore)
 					<th class='text-center'>
 						Percent
@@ -53,7 +53,9 @@
 				<th>{{ $food->name }}</th>
 					@foreach(range(0, $stat_limit - 1) as $place)
 					@if( ! isset($food->stats[$place]))
-					<td></td><td></td><td></td>
+					<td class='text-center no-value'>-</td>
+					<td class='text-center no-value'>-</td>
+					<td class='text-center no-value'>-</td>
 					@else
 					<td class='text-center'>
 						{{ $food->stats[$place]->pivot->percent }}%
@@ -67,14 +69,9 @@
 					@endif
 					@endforeach
 			</tr>
-
-			<?php /*var_dump($food->stats[0]->name); ?>
-			<?php var_dump($food->stats[0]->pivot->percent); ?>
-			<?php var_dump(@$food->stats[1]->name ?: ''); ?>
-			<?php var_dump(@$food->stats[1]->pivot->percent);*/ ?>
 		@endforeach
 	</tbody>
 </table>
 @endforeach
-	
+
 @stop
