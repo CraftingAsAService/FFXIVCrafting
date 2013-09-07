@@ -10,6 +10,10 @@
 
 		<link href='/css/bootstrap.min.css' rel='stylesheet' />
 		<link href='/css/bootstrap-theme.min.css' rel='stylesheet' />
+
+		@section('vendor-css')
+		@show
+
 		<link href='/css/global.css' rel='stylesheet' />
 
 		@section('css')
@@ -69,6 +73,7 @@
 
 		<!-- jQuery -->
 		<script src='//code.jquery.com/jquery.js'></script>
+		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 		
 		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
 

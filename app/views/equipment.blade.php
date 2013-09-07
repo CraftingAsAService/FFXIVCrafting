@@ -15,10 +15,7 @@ var xivdb_tooltips = {
 <h1>Gear for a Level {{ $level }} {{ $job->name }}</h1>
 
 <button class='btn btn-info toggle-origin pull-right' style='margin: 0 10px 10px 0;'>Toggle Origin</button>
-<!--
-<button class='btn btn-info toggle-changes pull-right' style='margin: 0 10px 10px 0;'>Toggle Changes Only</button>
-<button class='btn btn-info toggle-range pull-right' style='margin: 0 10px 10px 0;'>Toggle Range</button>
--->
+
 @if($job->name != $disciple->name)
 <h2>{{ $disciple->name }}</h2>
 @endif
@@ -104,6 +101,7 @@ var xivdb_tooltips = {
 	</tbody>
 </table>
 
+<?php /*
 <div class='text-center'>
 	<ul class='pagination pagination'>
 		@foreach($job_list as $abbr => $rjob)
@@ -130,7 +128,8 @@ var xivdb_tooltips = {
 		@endforeach
 	</ul>
 </div>
-
+*/
+?>
 
 <p class='well'>
 	<small><em>We love <a href='http://http://xivdb.com/'>XIVDB</a>, and so should you!</em></small>

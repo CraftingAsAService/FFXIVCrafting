@@ -63,3 +63,7 @@ td.new .stats {
 .fixed-width-50 {
 	width: 50%;
 }
+
+.opaque {
+	opacity: .6;
+}

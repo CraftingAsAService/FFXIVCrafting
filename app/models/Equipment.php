@@ -16,7 +16,7 @@ class Equipment extends Eloquent
 		return $this->belongsTo('EquipmentType');
 	}
 
-	public static function calculate($job, $disciple, $level = 1, $prefer_craftable = TRUE)
+	public static function calculate($job, $disciple, $level = 1)
 	{
 		// Get the job IDs
 		$job_ids = array(
@@ -34,7 +34,7 @@ class Equipment extends Eloquent
 				->whereIn('job_id', $job_ids)
 				->orderBy('level', 'DESC');
 
-			if ($prefer_craftable)
+			if (1)//$prefer_craftable)
 				$query->where(DB::raw('LENGTH(origin)'), 3);
 
 			$equipment_list[$type->name] = $query->get();

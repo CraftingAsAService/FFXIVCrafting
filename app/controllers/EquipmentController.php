@@ -10,10 +10,10 @@ class EquipmentController extends BaseController
 
 	public function postIndex()
 	{
-		return $this->calculate(Input::get('class'), Input::get('level'));
+		return $this->calculate(Input::get('class'), Input::get('level'), Input::get('forecast'), Input::has('hindsight'));
 	}
 
-	public function calculate($desired_job = '', $level = 1, $range = 1)
+	public function calculate($desired_job = '', $level = 1, $forecast = 1, $hindsight = FALSE)
 	{
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);
@@ -26,8 +26,16 @@ class EquipmentController extends BaseController
 			exit('Error, unrecognized job/class');
 
 		// Make sure level is valid
-		if ($level < 1 || $level > 50 || ! is_numeric($level))
+		if ($level < 1 || ! is_numeric($level))
 			$level = 1;
+		elseif ($level > 50)
+			$level = 50;
+
+		// control the Forecast
+		if ($forecast < 0)
+			$forecast = 0;
+		elseif ($forecast > 5)
+			$forecast = 5;
 
 		// Figure out the Discipline
 		$disciple = 'DOH'; // Assume Disciple of Hand
@@ -42,18 +50,15 @@ class EquipmentController extends BaseController
 			$job_list[$j->abbreviation] = $j->name;
 
 		// Find equipment at this level, per equipment type
-		$level_range = in_array($range, array(1, 2)) ? $range * 2 + 1 : 3; // Cover x levels, generally half before and half after actual level
-
 		$equipment = array();
-		$start = $level - (($level_range - 1) / 2);
-		if ($start < 1) $start = 1;
-		if ($level >= 50) $start = $level - $level_range + 1;
+		$start = $level;
+		if ($hindsight) $start--;
 
-		foreach (range($start - 1, $start + ($level_range - 1)) as $use_level)
-			$equipment[$use_level] = Equipment::calculate($job->abbreviation, $disciple->abbreviation, $use_level, TRUE);
+		foreach (range($start - 1, $start + $forecast) as $use_level)
+			$equipment[$use_level] = Equipment::calculate($job->abbreviation, $disciple->abbreviation, $use_level);
 
 		$changes = array($start => array());
-		foreach (range($start, $start + ($level_range - 1)) as $use_level)
+		foreach (range($start, $start + $forecast) as $use_level)
 		{
 			$changes[$use_level] = array();
 
@@ -181,7 +186,8 @@ class EquipmentController extends BaseController
 				'disciple' => $disciple,
 				'job_list' => $job_list,
 				'level' => $level,
-				'range' => $range
+				'forecast' => $forecast,
+				'hindsight' => $hindsight
 			));
 			
 	}
