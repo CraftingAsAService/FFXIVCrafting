@@ -1,5 +1,13 @@
 @extends('layout')
 
+@section('vendor-css')
+	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
+@stop
+
+@section('javascript')
+	<script src='/js/home.js'></script>
+@stop
+
 @section('content')
 
 <div class='jumbotron'>
@@ -7,34 +15,6 @@
 	<h3>Crafting information and planning for FFXIV: ARR</h3>
 </div>
 
-<form action='/equipment' method='post' role='form' class='form-inline well'>
-	<fieldset>
-		<legend>Gear Calculator</legend>
-		<div class='form-group'>
-			<select name='class' class='form-control'>
-				@foreach(Job::all() as $job)
-				<option value='{{ $job->abbreviation }}'>{{ $job->name }}</option>
-				@endforeach
-			</select>
-		</div>
-		<div class='form-group'>
-			<input type='number' name='level' placeholder='Level (e.g. 5)' class='form-control'>
-		</div>
-		<button type='submit' class='btn btn-primary'>Get my Gear!</button>
-	</fieldset>
-</form>
-
-{{--
-<div class='panel'>
-	<div class='panel-title'>
-		<h3>Updates</h3>
-	</div>
-	<div class='panel-body'>
-		<ul>
-			<li>9/6/13 - Bugfixes</li>
-		</ul>
-	</div>
-</div>
---}}
+@include('snippets.calculate_form')
 
 @stop

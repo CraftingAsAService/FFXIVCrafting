@@ -63,3 +63,49 @@ td.new .stats {
 .fixed-width-50 {
 	width: 50%;
 }
+
+.opaque {
+	opacity: .6;
+}
+
+.name-box {
+	min-height: 52px;
+	font-size: 1.25em;
+}
+
+.stats-box {
+
+}
+
+	.stats-box .stat {
+		line-height: 30px;
+	}
+
+	.stat-icon {
+		border-radius: 5px;
+		width: 20px;
+		height: 20px;
+	}
+
+td {
+	position: relative;
+}
+
+.td-navigation-buffer {
+	height: 32px;
+}
+
+	.td-navigation {
+		position: absolute;
+		bottom: 8px;
+		left: 8px;
+		right: 8px;
+	}
+
+		.td-navigation .btn {
+			width: 40%;
+		}
+
+		.td-navigation .disabled {
+			width: 20%;
+		}

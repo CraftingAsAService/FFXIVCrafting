@@ -17,7 +17,13 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		return View::make('hello');
+		// All Jobs
+		$job_list = array();
+		foreach (Job::all() as $j)
+			$job_list[$j->abbreviation] = $j->name;
+
+		return View::make('hello')
+			->with('job_list', $job_list);
 	}
 
 }
