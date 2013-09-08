@@ -11,13 +11,15 @@ class DatabaseStructure extends Migration {
 	 */
 	public function up()
 	{
-
-		Schema::create('stats', function($table)
+		
+		Schema::create('slots', function($table)
 		{
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');
-			$table->string('name', 50);
+			$table->string('name', 10);
+			$table->smallInteger('rank');
+			$table->enum('type', array('equipment', 'materia', 'food'));
 		});
 		
 		Schema::create('jobs', function($table)
@@ -27,15 +29,16 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('abbreviation', 3);
 			$table->string('name', 50);
+			$table->enum('disciple', array('DOH', 'DOL', 'DOW', 'DOM'));
 		});
-		
-		Schema::create('slots', function($table)
+
+		Schema::create('stats', function($table)
 		{
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');
-			$table->string('name', 10);
-			$table->smallInteger('rank');
+			$table->string('name', 50);
+			$table->string('disciple_focus', 3);
 		});
 
 		Schema::create('items', function($table)
@@ -45,69 +48,31 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('name', 50);
 			$table->string('href', 255);
-			$table->smallInteger('vendors');
-			$table->smallInteger('cost');
-		});
-
-		Schema::create('equipment', function($table)
-		{
-			$table->engine = 'InnoDB';
-
-			$table->increments('id');
-			$table->integer('item_id');
+			$table->smallInteger('level');
 			$table->integer('slot_id');
 			$table->integer('crafted_by');
-			$table->smallInteger('level');
+			$table->smallInteger('vendors');
+			$table->smallInteger('gil');
+			$table->smallInteger('ilvl');
 		});
 		
-		Schema::create('equipment_job', function($table)
+		Schema::create('item_job', function($table)
 		{
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');
-			$table->integer('job_id');
 			$table->integer('item_id');
+			$table->integer('job_id');
 		});
 		
-		Schema::create('equipment_stat', function($table)
+		Schema::create('item_stat', function($table)
 		{
 			$table->engine = 'InnoDB';
 
 			$table->increments('id');
-			$table->integer('equipment_id');
+			$table->integer('item_id');
 			$table->integer('stat_id');
 			$table->decimal('amount', 6, 2);
-		});
-		
-		Schema::create('materia', function($table)
-		{
-			$table->engine = 'InnoDB';
-
-			$table->increments('id');
-			$table->integer('job_id');
-			$table->integer('item_id');
-			$table->integer('stat_id');
-			$table->smallInteger('amount');
-		});
-		
-		Schema::create('food', function($table)
-		{
-			$table->engine = 'InnoDB';
-
-			$table->increments('id');
-			$table->integer('job_id');
-			$table->integer('item_id');
-			$table->integer('crafted_by'); // Crafted By
-		});
-
-		Schema::create('food_stat', function($table)
-		{
-			$table->engine = 'InnoDB';
-
-			$table->increments('id');
-			$table->integer('food_id');
-			$table->integer('stat_id');
-			$table->smallInteger('percent');
 			$table->smallInteger('maximum');
 		});
 
@@ -120,15 +85,17 @@ class DatabaseStructure extends Migration {
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('stats');
-		Schema::dropIfExists('jobs');
-		Schema::dropIfExists('slots');
-		Schema::dropIfExists('equipment');
-		Schema::dropIfExists('equipment_job');
-		Schema::dropIfExists('equipment_stat');
-		Schema::dropIfExists('materia');
-		Schema::dropIfExists('food');
-		Schema::dropIfExists('food_stat');
+		
+		// Just delete every table
+		foreach (DB::select('SHOW TABLES') as $table)
+		{	
+			$table = (Array) $table;
+			$table = end($table);
+			// Except for migrations
+			if ($table != 'migrations')
+				Schema::dropIfExists($table);
+		}
+
 	}
 
 }

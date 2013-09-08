@@ -15,24 +15,35 @@ Route::get('/', 'HomeController@showWelcome');
 
 Route::get('stats', function()
 {
-	View::share('active', 'stats');
-	return View::make('stats');
+	return View::make('stats')
+		->with('active', 'stats');
 });
 
-Route::get('materia', function()
+Route::controller('materia', 'MateriaController');
+Route::controller('food', 'FoodController');
+
+Route::get('calculate', function()
 {
-	View::share('active', 'materia');
-	return View::make('materia');
+	// All Jobs
+	$job_list = array();
+	foreach (Job::all() as $j)
+		$job_list[$j->abbreviation] = $j->name;
+
+	return View::make('calculate')
+		->with('error', FALSE)
+		->with('active', 'calculate')
+		->with('job_list', $job_list);
 });
 
-Route::get('food', function()
-{
-	View::share('active', 'food');
-	return View::make('food');
-});
-
-Route::get('equipment/{job}/{level}/{range}', 'EquipmentController@calculate');
+Route::get('equipment/{job}/{level}/{forecast}/{hindsight}', 'EquipmentController@calculate');
+Route::get('equipment/{job}/{level}/{forecast}', 'EquipmentController@calculate');
 Route::get('equipment/{job}/{level}', 'EquipmentController@calculate');
 Route::get('equipment/{job}', 'EquipmentController@calculate');
 
 Route::controller('equipment', 'EquipmentController');
+
+Route::get('thanks', function()
+{
+	View::share('active', 'thanks');
+	return View::make('thanks');
+});

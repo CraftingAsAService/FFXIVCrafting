@@ -2,9 +2,11 @@ var global = {
 	init:function() {
 		$('[rel=tooltip]').tooltip();
 
-		$('.toggle-origin').click(function() {
-			$('.not-new').toggleClass('hidden');
-		});
+		$('#buymeabeer').click(function(event) {
+			event.preventDefault();
+
+			$('#buymeabeer_button').trigger('click');
+		})
 	}
 }
 
