@@ -1,102 +1,79 @@
 @extends('layout')
 
-{{--
 @section('javascript')
-<script type="text/javascript" src="http://xivdb.com/tooltips.js"></script><script> 
-var xivdb_tooltips = { 
-	"language": "EN"
-} 
-</script>
+<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
+<script type='text/javascript' src='/js/calculate.js'></script>
 @stop
---}}
 
 @section('content')
 
 <h1>Gear for a Level {{ $level }} {{ $job->name }}</h1>
-
-<button class='btn btn-info toggle-origin pull-right' style='margin: 0 10px 10px 0;'>Toggle Origin</button>
-<!--
-<button class='btn btn-info toggle-changes pull-right' style='margin: 0 10px 10px 0;'>Toggle Changes Only</button>
-<button class='btn btn-info toggle-range pull-right' style='margin: 0 10px 10px 0;'>Toggle Range</button>
--->
-@if($job->name != $disciple->name)
-<h2>{{ $disciple->name }}</h2>
-@endif
 
 <table class='table table-bordered table-striped'>
 	<thead>
 		<tr>
 			<th class='invisible'>&nbsp;</th>
 			@foreach(array_keys($equipment) as $th_level)
-			<th class='text-center alert alert-{{ $th_level == $level ? 'success' : ($th_level < $level ? 'info' : 'warning') }}'>
+			<?php if ($th_level > 50) continue; ?>
+			<th class='text-center alert alert-{{ $th_level == $level ? 'success' : ($th_level < $level ? 'info' : 'warning') }}{{ $th_level == $kill_column ? ' hidden' : '' }}'>
 				Level
 				{{ $th_level }}
 			</th>
 			@endforeach
 		</tr>
 	</thead>
-	<tfoot>
-		<tr>
-			<th class='invisible'>&nbsp;</th>
-			@foreach(array_keys($equipment) as $tf_level)
-			<th>
-				@foreach($stats[$tf_level] as $stat => $value)
-				<div class='row'>
-					<div class='col-sm-2 text-center'>
-						<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
-					</div>
-					<div class='col-sm-10'>
-						{{ $stat }}: {{ $value }}
-						@if(isset($stats_diff[$tf_level][$stat]))
-						({{ $stats_diff[$tf_level][$stat] > 0 ? '+' : '' }}{{ $stats_diff[$tf_level][$stat] }})
-						@endif
-					</div>
-				</div>
-				@endforeach
-			</th>
-			@endforeach
-		</tr>
-	</tfoot>
 	<tbody>
-		@foreach(EquipmentType::orderBy('rank')->get() as $type)
+		@foreach($slots as $slot)
 		<tr>
 			<td class='text-center'>
-				<img src='/img/equipment/{{ $type->name }}.png' class='equipment-icon' rel='tooltip' title='{{ $type->name }}'>
+				<img src='/img/equipment/{{ $slot->name }}.png' class='equipment-icon' rel='tooltip' title='{{ $slot->name }}'>
 				<div>
-					<strong>{{ $type->name }}</strong>
+					<strong>{{ $slot->name }}</strong>
 				</div>
 			</td>
 			@foreach(array_keys($equipment) as $td_level)
-			<?php $new = isset($changes[$td_level][$type->name]); ?>
-			<td class='{{ $new ? ('alert alert-' . ($td_level == $level ? 'success' : ($td_level < $level ? 'info' : 'warning'))) : '' }}'>
-			@foreach($equipment[$td_level][$type->name] as $item)
-				<div class='clearfix'>
-					@if(strlen($item->origin) == 3)
-					<img src='/img/classes/{{ $item->origin == 'n/a' ? 'NA' : $item->origin }}.png' class='stat-origin pull-right {{ $new ? '' : 'hidden not-new' }}' rel='tooltip' title='{{ $item->origin == 'n/a' ? 'Guildmaster / Quartermaster' : $job_list[$item->origin] }}'>
-					@endif
-					<div>
-						<strong>{{ $item->level }}</strong>
-						{{ $item->name }}
-					</div>
-					@if($new)
-						@if(strlen($item->origin) != 3)
-						<div class='origin panel'>
-							<strong>Origin</strong>
-							{{ $item->origin }}
+			<?php if ($td_level > 50) continue; ?>
+			<?php $new = isset($changes[$td_level][$slot->name]); ?>
+			<td class='{{ $new ? ('alert alert-' . ($td_level == $level ? 'success' : ($td_level < $level ? 'info' : 'warning'))) : '' }}{{ $td_level == $kill_column ? ' hidden' : '' }}'>
+				<div class='items'>
+					@foreach($equipment[$td_level][$slot->name] as $key => $item)
+					<div class='item clearfix{{ $key > 0 ? ' hidden' : ' active' }}'>
+						<div class='obtain-box pull-right'>
+							@if($item->crafted_by)
+							<div>
+								<img src='/img/classes/{{ $item->crafted_by }}.png' class='stat-crafted_by pull-right' rel='tooltip' title='Crafted By {{ $job_list[$item->crafted_by] }}' width='24' height='24'>
+							</div>
+							@endif
+							@if($item->vendors)
+							<div>
+								<img src='/img/coin.png' class='stat-vendors pull-right' rel='tooltip' title='Available from {{ $item->vendors }} vendors for {{ $item->gil }} gil' width='24' height='24'>
+							</div>
+							@endif
 						</div>
-						@endif
-						<div class='stats'>
-							@foreach($changes[$td_level][$type->name] as $stat => $change)
-							<?php if ($change == 0) continue; ?>
-							<div class='text-center panel pull-left stat-box'>
-								<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'><br>
-								{{ $change > 0 ? '+' : '' }}{{ $change }}
+						
+						<div class='name-box'>
+							<a href='http://xivdb.com/{{ $item->href }}' target='_blank' class='text-primary'>{{ $item->name }}</a>
+						</div>
+
+						<div class='stats-box row{{ ! $new ? ' hidden' : '' }}'>
+							@foreach($item->stats as $stat => $amount)
+							<div class='col-sm-6 text-center stat{{ ! in_array($disciple_focus[$stat], array('ALL', $job->disciple)) ? ' hidden always_hidden' : '' }}' data-stat='{{ $stat }}' data-amount='{{ $amount }}'>
+								<span>{{ $amount }}</span> &nbsp; 
+								<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
 							</div>
 							@endforeach
 						</div>
-					@endif
+					</div>
+					@endforeach
 				</div>
-			@endforeach
+				@if(count($equipment[$td_level][$slot->name]) > 1)
+				<div class='td-navigation-buffer'></div>
+				<div class='btn-group btn-group-xs td-navigation' rel='tooltip' title='More than one option!<br>Navigate Options' data-html='true' data-placement='bottom'>
+					<button type='button' class='btn btn-default previous'>&lt;&lt;</button>
+					<button type='button' class='btn btn-default disabled'><span class='current'>1</span> / <span class='total'>{{ count($equipment[$td_level][$slot->name]) }}</span></button>
+					<button type='button' class='btn btn-default next'>&gt;&gt;</button>
+				</div>
+				@endif
 			</td>
 			@endforeach
 		</tr>
@@ -104,36 +81,17 @@ var xivdb_tooltips = {
 	</tbody>
 </table>
 
-<div class='text-center'>
-	<ul class='pagination pagination'>
-		@foreach($job_list as $abbr => $rjob)
-		<li class='{{ $rjob == $job->name ? 'active' : '' }} '>
-			<a href='/equipment/{{ strtolower($abbr) }}/{{ $level }}/{{ $range }}' rel='tooltip' title='{{ $rjob }}'>
-				@if( ! in_array($abbr, array('DOH', 'DOL')))
-				<img src='/img/classes/{{ $abbr }}.png'>
-				@else
-				<img src='/img/classes/NA.png'> {{ $abbr }}
-				@endif
-			</a>
-		</li>
-		@endforeach
-	</ul>
+<div class='well'>
+	<p>
+		<strong>Crafting as a Service</strong> couldn't have done it without these resources.  Please support them!
+	</p>
+	<p>
+		<small><em>
+			<a href='http://xivdb.com/' target='_blank'>XIVDB</a>, for their tooltips and data.
+			<a href='http://game-icons.net/' target='_blank'>Game-icons.net</a> for some of the icons.
+			And of course <a href='http://www.finalfantasyxiv.com/' target='_blank'>Square Enix</a>.
+		</em></small>
+	</p>
 </div>
-
-<div class='text-center'>
-	<ul class='pagination pagination'>
-		@foreach(range($level - 5, $level + 5) as $rlevel)
-		<?php if ($rlevel < 1 || $rlevel > 50) continue; ?>
-		<li class='{{ $rlevel == $level ? 'active' : '' }} '>
-			<a href='/equipment/{{ strtolower($job->abbreviation) }}/{{ $rlevel }}/{{ $range }}'>{{ $rlevel }}</a>
-		</li>
-		@endforeach
-	</ul>
-</div>
-
-
-<p class='well'>
-	<small><em>We love <a href='http://xivdb.com/'>XIVDB</a>, and so should you!</em></small>
-</p>
 
 @stop
