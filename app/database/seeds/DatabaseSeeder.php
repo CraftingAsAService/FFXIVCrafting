@@ -291,7 +291,7 @@ class DataTablesSeeder extends Seeder
 				$maximum = 0;
 
 				// Amount looks like this: 10%(Max: 10)
-				if ($object->slot == 'Food' && preg_match('/^(\d+).*(\d+)\)$/', $value, $matches))
+				if ($object->slot == 'Food' && preg_match('/^(\d+).*\s(\d+)\)$/', $value, $matches))
 					list($ignore, $value, $maximum) = $matches;
 
 				$stats[] = array(

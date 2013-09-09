@@ -72,7 +72,11 @@
 					{{ $food['stats'][$place]['amount'] }}%
 				</td>
 				<td class='text-center'>
+					@if($food['stats'][$place]['max'] == 0)
+					None!
+					@else
 					{{ $food['stats'][$place]['max'] }}
+					@endif
 				</td>
 				<td class='text-center'>
 					{{ round($food['stats'][$place]['max'] / ($food['stats'][$place]['amount'] / 100)) }}
