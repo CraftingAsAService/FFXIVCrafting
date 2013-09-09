@@ -46,7 +46,7 @@
 							@endif
 							@if($item->vendors)
 							<div>
-								<img src='/img/coin.png' class='stat-vendors pull-right' rel='tooltip' title='Available from {{ $item->vendors }} vendors for {{ $item->gil }} gil' width='24' height='24'>
+								<img src='/img/coin.png' class='stat-vendors pull-right' rel='tooltip' title='Available from {{ $item->vendors }} vendor{{ $item->vendors != 1 ? 's' : '' }} for {{ number_format($item->gil) }} gil' width='24' height='24'>
 							</div>
 							@endif
 						</div>
