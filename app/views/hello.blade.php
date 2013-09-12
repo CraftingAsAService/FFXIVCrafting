@@ -33,7 +33,7 @@
 				Want to get everything you need before trying to level Weaver from levels 5 to 10?  
 				Use this tool to select your craft and level range.
 			</p>
-			<a href='/crafting' class='btn btn-primary btn-lg btn-block'>Craft me up!</a>
+			<a href='/crafting' class='btn btn-primary btn-lg btn-block'>Vocationalize!</a>
 		</div>
 	</div>
 </div>

@@ -59,16 +59,18 @@
 				</div>
 			</div>
 
-			<!-- TODO -->
-			<input type='hidden' name='self_sufficient' value='1'>
-
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Self Sufficient</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-						<input type='checkbox' name='self_sufficient' value='1' checked='checked'>
+						<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked'>
 					</div>
-					"I want to gather things manually instead of buying them"
+					<span class='ss_yes'>
+						"I want to gather things manually instead of buying them"
+					</span>
+					<span class='ss_no hidden'>
+						"Just let me know where to buy stuff"
+					</span>
 				</div>
 			</div>
 		</fieldset>

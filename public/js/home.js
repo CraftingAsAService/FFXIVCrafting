@@ -23,6 +23,10 @@ var home = {
 			$('fieldset.quests').addClass('hidden');
 			$('fieldset.quests[data-job="' + job + '"]').removeClass('hidden');
 		});
+
+		$('#self_sufficient_switch').change(function() {
+			$('.ss_yes, .ss_no').toggleClass('hidden');
+		});
 	}
 }
 

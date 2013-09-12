@@ -23,6 +23,8 @@ Route::controller('materia', 'MateriaController');
 
 Route::controller('food', 'FoodController');
 
+Route::get('equipment/list', 'EquipmentController@getList');
+Route::any('equipment/{all}', 'EquipmentController@badUrl')->where('all', '.*');
 Route::controller('equipment', 'EquipmentController');
 
 Route::controller('crafting', 'CraftingController');

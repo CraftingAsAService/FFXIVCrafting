@@ -16,6 +16,11 @@ class EquipmentController extends BaseController
 			->with('job_list', $job_list);
 	}
 
+	public function badUrl()
+	{
+		return Redirect::to('/equipment');
+	}
+
 	public function postIndex()
 	{
 		$vars = array('class' => 'CRP', 'level' => 5, 'forecast' => '3', 'hindsight' => 0, 'craftable_only' => 0);
@@ -24,13 +29,12 @@ class EquipmentController extends BaseController
 			$values[] = Input::has($var) ? Input::get($var) : $default;
 		
 		return Redirect::to('/equipment/list?' . implode(':', $values));
-		//return Redirect::to('/equipment/' . Input::get('class') . '/' . Input::get('level') . '/' . Input::get('forecast') . '/' . Input::has('hindsight'));
 	}
 
 	public function getList()
 	{
 		// Get Options
-		$options = explode(':', array_keys(Input::all())[0]);
+		$options = Input::all() ? explode(':', array_keys(Input::all())[0]) : array();
 
 		// Parse Options              // Defaults
 		$desired_job    = isset($options[0]) ? $options[0] : 'CRP';
