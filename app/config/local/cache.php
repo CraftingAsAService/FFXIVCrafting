@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'driver' => 'redis',
+	'driver' => 'file',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -84,6 +84,6 @@ return array(
 	|
 	*/
 
-	'prefix' => 'caas-',
+	'prefix' => 'laravel',
 
 );

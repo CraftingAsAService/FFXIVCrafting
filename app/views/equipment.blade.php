@@ -1,97 +1,121 @@
 @extends('layout')
 
+@section('vendor-css')
+	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
+	<link href='/css/bootstrap-switch.css' rel='stylesheet'>
+@stop
+
 @section('javascript')
-<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-<script type='text/javascript' src='/js/calculate.js'></script>
+	<script src='/js/home.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-switch.js'></script>
 @stop
 
 @section('content')
 
-<h1>Gear for a Level {{ $level }} {{ $job->name }}</h1>
+	<h1>Equipment Calculator</h1>
 
-<table class='table table-bordered table-striped'>
-	<thead>
-		<tr>
-			<th class='invisible'>&nbsp;</th>
-			@foreach(array_keys($equipment) as $th_level)
-			<?php if ($th_level > 50) continue; ?>
-			<th class='text-center alert alert-{{ $th_level == $level ? 'success' : ($th_level < $level ? 'info' : 'warning') }}{{ $th_level == $kill_column ? ' hidden' : '' }}'>
-				Level
-				{{ $th_level }}
-			</th>
-			@endforeach
-		</tr>
-	</thead>
-	<tbody>
-		@foreach($slots as $slot)
-		<tr>
-			<td class='text-center'>
-				<img src='/img/equipment/{{ $slot->name }}.png' class='equipment-icon' rel='tooltip' title='{{ $slot->name }}'>
-				<div>
-					<strong>{{ $slot->name }}</strong>
-				</div>
-			</td>
-			@foreach(array_keys($equipment) as $td_level)
-			<?php if ($td_level > 50) continue; ?>
-			<?php $new = isset($changes[$td_level][$slot->name]); ?>
-			<td class='{{ $new ? ('alert alert-' . ($td_level == $level ? 'success' : ($td_level < $level ? 'info' : 'warning'))) : '' }}{{ $td_level == $kill_column ? ' hidden' : '' }}'>
-				<div class='items'>
-					@foreach($equipment[$td_level][$slot->name] as $key => $item)
-					<div class='item clearfix{{ $key > 0 ? ' hidden' : ' active' }}'>
-						<div class='obtain-box pull-right'>
-							@if($item->crafted_by)
-							<div>
-								<img src='/img/classes/{{ $item->crafted_by }}.png' class='stat-crafted_by pull-right' rel='tooltip' title='Crafted By {{ $job_list[$item->crafted_by] }}' width='24' height='24'>
-							</div>
-							@endif
-							@if($item->vendors)
-							<div>
-								<img src='/img/coin.png' class='stat-vendors pull-right' rel='tooltip' title='Available from {{ $item->vendors }} vendor{{ $item->vendors != 1 ? 's' : '' }} for {{ number_format($item->gil) }} gil' width='24' height='24'>
-							</div>
-							@endif
-						</div>
-						
-						<div class='name-box'>
-							<a href='http://xivdb.com/{{ $item->href }}' target='_blank' class='text-primary'>{{ $item->name }}</a>
-						</div>
+	<p>Display the gear available for a class at a certain level.</p>
 
-						<div class='stats-box row{{ ! $new ? ' hidden' : '' }}'>
-							@foreach($item->stats as $stat => $amount)
-							<div class='col-sm-6 text-center stat{{ ! in_array($disciple_focus[$stat], array('ALL', $job->disciple)) ? ' hidden always_hidden' : '' }}' data-stat='{{ $stat }}' data-amount='{{ $amount }}'>
-								<span>{{ $amount }}</span> &nbsp; 
-								<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
-							</div>
-							@endforeach
-						</div>
+	@if(isset($error) && $error)
+	<div class='alert alert-danger'>
+		The job you selected is unrecognized.  Try again.
+	</div>
+	@endif
+
+	<form action='/equipment' method='post' role='form' class='well form-horizontal'>
+		<fieldset>
+			<legend>Select your Class</legend>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand &amp; Land</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+						<label class='btn btn-primary class-selector{{ $job == 'CRP' ? ' active' : '' }}'>
+							<input type='radio' name='class' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
 					</div>
-					@endforeach
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('MIN','BTN','FSH') as $job)
+						<label class='btn btn-info class-selector'>
+							<input type='radio' name='class' value='{{ $job }}'> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
+					</div>
 				</div>
-				@if(count($equipment[$td_level][$slot->name]) > 1)
-				<div class='td-navigation-buffer'></div>
-				<div class='btn-group btn-group-xs td-navigation' rel='tooltip' title='More than one option!<br>Navigate Options' data-html='true' data-placement='bottom'>
-					<button type='button' class='btn btn-default previous'>&lt;&lt;</button>
-					<button type='button' class='btn btn-default disabled'><span class='current'>1</span> / <span class='total'>{{ count($equipment[$td_level][$slot->name]) }}</span></button>
-					<button type='button' class='btn btn-default next'>&gt;&gt;</button>
-				</div>
-				@endif
-			</td>
-			@endforeach
-		</tr>
-		@endforeach
-	</tbody>
-</table>
+			</div>
 
-<div class='well'>
-	<p>
-		<strong>Crafting as a Service</strong> couldn't have done it without these resources.  Please support them!
-	</p>
-	<p>
-		<small><em>
-			<a href='http://xivdb.com/' target='_blank'>XIVDB</a>, for their tooltips and data.
-			<a href='http://game-icons.net/' target='_blank'>Game-icons.net</a> for some of the icons.
-			And of course <a href='http://www.finalfantasyxiv.com/' target='_blank'>Square Enix</a>.
-		</em></small>
-	</p>
-</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC') as $job)
+						<label class='btn btn-danger class-selector '>
+							<input type='radio' name='class' value='{{ $job }}'> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
+					</div>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('CNJ', 'THM', 'ACN') as $job)
+						<label class='btn btn-warning class-selector '>
+							<input type='radio' name='class' value='{{ $job }}'> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Options</legend>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Level</label>
+				<div class='col-sm-4 col-md-3'>
+					<input type='number' name='level' value='5' placeholder='Level (e.g. 5)' class='form-control' required='required'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Forecast</label>
+				<div class='col-sm-4 col-md-3'>
+					<p>
+						<div id='slider-range-min'></div>
+					</p>
+				</div>
+				<div class='col-sm-4 col-md-6'>
+					<p style='margin-top: 4px;'>
+						See <input type='text' name='forecast' id='forecast' value='3' style='border: 0; font-style: italic; width: 10px; background-color: inherit;' class='text-center'> set<span id='forecast_plural'>s</span> into the future
+					</p>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Hindsight</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='make-switch' data-on='success' data-off='warning'>
+						<input type='checkbox' name='hindsight' value='1'>
+					</div>
+					See back one level
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Craftable Only</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='make-switch' data-on='success' data-off='warning'>
+						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
+					</div>
+					Only show craftable items
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<div class='form-group'>
+				<div class='col-sm-4 col-md-3 col-sm-offset-4 col-md-offset-3'>
+					<button type='submit' class='btn btn-success btn-block btn-lg'>Get my Gear!</button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
 
 @stop

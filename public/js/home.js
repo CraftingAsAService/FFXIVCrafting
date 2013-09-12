@@ -16,6 +16,13 @@ var home = {
 		});
 
 		$('#forecast').val($('#slider-range-min').slider('value'));
+
+		$('.quest-selector').click(function() {
+			var job = $(this).data('job');
+
+			$('fieldset.quests').addClass('hidden');
+			$('fieldset.quests[data-job="' + job + '"]').removeClass('hidden');
+		});
 	}
 }
 

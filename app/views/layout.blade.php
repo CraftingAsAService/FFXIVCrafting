@@ -33,7 +33,8 @@
 					</div>
 					<div class='collapse navbar-collapse'>
 						<ul class='nav navbar-nav'>
-							<li{{ isset($active) && $active == 'calculate' ? ' class="active"' : '' }}><a href='/calculate'>Calculate</a></li>
+							<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
+							<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
 							<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
 							<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
 							<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>

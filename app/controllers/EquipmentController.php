@@ -5,18 +5,41 @@ class EquipmentController extends BaseController
 
 	public function getIndex()
 	{
-		return Redirect::to('/');
+		// All Jobs
+		$job_list = array();
+		foreach (Job::all() as $j)
+			$job_list[$j->abbreviation] = $j->name;
+
+		return View::make('equipment')
+			->with('error', FALSE)
+			->with('active', 'equipment')
+			->with('job_list', $job_list);
 	}
 
 	public function postIndex()
 	{
-		//return $this->calculate();
-		return Redirect::to('/equipment/' . Input::get('class') . '/' . Input::get('level') . '/' . Input::get('forecast') . '/' . Input::has('hindsight'));
+		$vars = array('class' => 'CRP', 'level' => 5, 'forecast' => '3', 'hindsight' => 0, 'craftable_only' => 0);
+		$values = array();
+		foreach ($vars as $var => $default)
+			$values[] = Input::has($var) ? Input::get($var) : $default;
+		
+		return Redirect::to('/equipment/list?' . implode(':', $values));
+		//return Redirect::to('/equipment/' . Input::get('class') . '/' . Input::get('level') . '/' . Input::get('forecast') . '/' . Input::has('hindsight'));
 	}
 
-	public function calculate($desired_job = '', $level = 1, $forecast = 1, $hindsight = FALSE)
+	public function getList()
 	{
-		View::share('active', 'calculate');
+		// Get Options
+		$options = explode(':', array_keys(Input::all())[0]);
+
+		// Parse Options              // Defaults
+		$desired_job    = isset($options[0]) ? $options[0] : 'CRP';
+		$level          = isset($options[1]) ? $options[1] : 5;
+		$forecast       = isset($options[2]) ? $options[2] : 3;
+		$hindsight      = isset($options[3]) ? $options[3] : 0;
+		$craftable_only = isset($options[4]) ? $options[4] : 1;
+
+		View::share('active', 'equipment');
 
 		// All Jobs
 		$job_list = array();
@@ -33,7 +56,7 @@ class EquipmentController extends BaseController
 
 		// If the job isn't real, error out
 		if ( ! $job)
-			return View::make('calculate')
+			return View::make('equipment')
 				->with('error', TRUE);
 
 		// Make sure level is valid
@@ -53,7 +76,7 @@ class EquipmentController extends BaseController
 
 		$equipment = array();
 		foreach (range($start - 1, $start + $forecast) as $use_level)
-			$equipment[$use_level] = Item::calculate($job->abbreviation, $use_level, TRUE);
+			$equipment[$use_level] = Item::calculate($job->abbreviation, $use_level, $craftable_only);
 
 		$changes = array();
 		foreach (range($start, $start + $forecast) as $use_level)
@@ -95,7 +118,14 @@ class EquipmentController extends BaseController
 		foreach (Stat::all() as $stat)
 			$disciple_focus[$stat->name] = $stat->disciple_focus;
 
-		return View::make('equipment')
+		$first_time = TRUE;
+
+		if (Session::has('equipment_first_time'))
+			$first_time = FALSE;
+		else
+			Session::put('equipment_first_time', TRUE);
+
+		return View::make('equipment.list')
 			->with(array(
 				'equipment' => $equipment,
 				'slots' => $slots,
@@ -108,7 +138,9 @@ class EquipmentController extends BaseController
 
 				'level' => $level,
 				'forecast' => $forecast,
-				'hindsight' => $hindsight
+				'hindsight' => $hindsight,
+				'craftable_only' => $craftable_only,
+				'first_time' => $first_time
 			));
 			
 	}
