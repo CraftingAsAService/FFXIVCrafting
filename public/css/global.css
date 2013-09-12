@@ -68,9 +68,12 @@ td.new .stats {
 	opacity: .6;
 }
 
+.recipe-name, .name-box {
+	font-size: 1.25em;
+}
+
 .name-box {
 	min-height: 52px;
-	font-size: 1.25em;
 }
 
 .stats-box {
@@ -109,3 +112,37 @@ td {
 		.td-navigation .disabled {
 			width: 20%;
 		}
+
+.small {
+	font-size: .9em;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+.margin-top {
+	margin-top: .5em;
+}
+
+.crafted_gathered {
+
+}
+
+	.crafted_gathered .alert {
+		padding: 5px 5px 8px;
+		margin-right: 5px;
+	}
+
+		.crafted_gathered .alert:last-child {
+			margin-right: 0px;
+		}
+
+.crafting_list {
+
+}
+
+	.crafting_list .well {
+		padding: 10px 10px 5px;
+		margin-bottom: 10px;
+	}

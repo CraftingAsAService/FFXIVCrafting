@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
 
 		$this->call('DataTablesSeeder');
 
+		$this->call('QuestSeeder');
+
 		echo "\n";
 	}
 
@@ -168,39 +170,49 @@ class JobTableSeeder extends Seeder
 
 class SlotTableSeeder extends Seeder
 {
-
 	public function run()
 	{
 		$slots = array(
-			'Primary',
-			'Secondary',
-			'Head',
-			'Body',
-			'Hands',
-			'Waist',
-			'Legs',
-			'Feet',
-			'Neck',
-			'Ears',
-			'Wrists',
-			'Ring',
-			'Ring',
-			'Materia',
-			'Food'
+			'equipment' => array(
+				'Primary',
+				'Secondary',
+				'Head',
+				'Body',
+				'Hands',
+				'Waist',
+				'Legs',
+				'Feet',
+				'Neck',
+				'Ears',
+				'Wrists',
+				'Ring',
+				'Ring',
+			),
+			'materia' => array(
+				'Materia',
+			),
+			'food' => array(
+				'Food',
+			),
+			'reagent' => array(
+				'Reagent'
+			),
 		);
 
-		foreach ($slots as $key => $slot)
-			Slot::create(array(
-				'name' => $slot,
-				'rank' => $key,
-				'type' => in_array($slot, array('Materia', 'Food')) ? strtolower($slot) : 'equipment'
-			));
+		foreach ($slots as $type => $s)
+			foreach ($s as $key => $slot)
+				Slot::create(array(
+					'name' => $slot,
+					'rank' => $key,
+					'type' => $type
+				));
 	}
 	
 }
 
 class DataTablesSeeder extends Seeder
 {
+	private $batch_limit = 100;
 
 	public
 		$stats = array(),
@@ -229,26 +241,74 @@ class DataTablesSeeder extends Seeder
 		// Custom job ID
 		$this->job_names['Achievement:'] = 99;
 
-		// Import Materia file
+		// Import item files
 		$this->items(json_decode(file_get_contents(storage_path() . '/raw-data/items.json')));
+		$this->items(json_decode(file_get_contents(storage_path() . '/raw-data/reagents.json')));
+
+		// Import recipes
+		$this->recipes(json_decode(file_get_contents(storage_path() . '/raw-data/recipes.json')));
+	}
+
+	private function recipes($data = array())
+	{
+		echo "+\n";
+		
+		$recipes = array();
+		$reagents = array();
+
+		foreach ($data as $object)
+		{
+			$recipes[] = array(
+				'id' => $object->id,
+				'item_id' => $object->item_id,
+				'job_id' => $this->jobs[$object->class],
+				'name' => $object->name,
+				'yields' => $object->yields,
+				'level' => $object->level, 
+				'job_level' => $object->crafting_level
+			);
+
+			// Ingredients
+			foreach ($object->ingredients as $ingredient)
+				$reagents[] = array(
+					'recipe_id' => $object->id,
+					'item_id' => $ingredient->id,
+					'amount' => $ingredient->required
+				);
+
+			// Attempt a batch insert every $this->batch_limit
+
+			if (count($recipes) > $this->batch_limit)
+				$recipes = $this->_batch_insert($recipes, 'recipes');
+
+			if (count($reagents) > $this->batch_limit)
+				$reagents = $this->_batch_insert($reagents, 'item_recipe');
+		}
+
+		// Insert the straglers
+		if ($recipes)
+			$this->_batch_insert($recipes, 'recipes');
+
+		if ($reagents)
+			$this->_batch_insert($reagents, 'item_recipe');
 	}
 
 	private function items($data = array())
 	{
-		// We just cleared the database, so we're starting at 1;
-		static $item_id = 0; // Will be incremented to 1
+		echo "+\n";
 
 		$items = array();
 		$classes = array();
 		$stats = array();
 
-		foreach ($data as $key => $object)
+		foreach ($data as $object)
 		{
-			$item_id++;
-
 			// Cleanup
 			if (in_array($object->slot, array('Left', 'Right')))
 				$object->slot = 'Ring';
+
+			// Item ID is either set or based on the HREF
+			$item_id = isset($object->xivdb_id) ? $object->xivdb_id : preg_replace('/^.*\/(\d+)\/.*$/', '$1', trim($object->href));
 
 			// Base Item
 			$items[] = array(
@@ -258,7 +318,7 @@ class DataTablesSeeder extends Seeder
 				'level' => $object->level ?: 0,
 				'vendors' => $object->vendors ?: 0,
 				'gil' => $object->gil ?: 0,
-				'crafted_by' => $object->crafted_by ? $this->job_names[trim($object->crafted_by)] : 0,
+				#'crafted_by' => isset($object->crafted_by) ? $this->job_names[trim($object->crafted_by)] : 0,
 				'slot_id' => $this->slots[$object->slot],
 				'ilvl' => $object->ilvl ?: 0
 			);
@@ -302,15 +362,15 @@ class DataTablesSeeder extends Seeder
 				);
 			}
 
-			// Attempt a batch insert every 100
+			// Attempt a batch insert every $this->batch_limit
 
-			if (count($items) > 250)
+			if (count($items) > $this->batch_limit)
 				$items = $this->_batch_insert($items, 'items');
 
-			if (count($classes) > 250)
+			if (count($classes) > $this->batch_limit)
 				$classes = $this->_batch_insert($classes, 'item_job');
 
-			if (count($stats) > 250)
+			if (count($stats) > $this->batch_limit)
 				$stats = $this->_batch_insert($stats, 'item_stat');
 		}
 
@@ -354,6 +414,54 @@ class DataTablesSeeder extends Seeder
 
 		// Return a blank array on purpose, to represent an empty $data
 		return array();
+	}
+
+}
+
+class QuestSeeder extends Seeder
+{
+	public $manual_items = array(
+		'5599' => 'Grade 1 Carbonized Matter',
+		'4874' => 'Harbor Herring',
+		'4963' => 'Shadow Catfish',
+		'5033' => 'Desert Catfish',
+		'4917' => 'Mazlaya Marlin',
+		'4564' => 'Antidote',
+		'4597' => 'Potion of Intelligence',
+		'4595' => 'Potion of Dexterity',
+		'4575' => 'Weak Blinding Potion',
+		'4870' => 'Lominsan Anchovy',
+		'1123' => 'Ether',
+		'4599' => 'Hi-Potion of Strength',
+		'4607' => 'Mega-Potion of Intelligence',
+		'4606' => 'Mega-Potion of Vitality',
+	);
+
+	public function run()
+	{
+		// Get all jobs
+		foreach (Job::all() as $job)
+			$jobs[$job->abbreviation] = $job->id;
+
+		// Insert the manual items (Didn't crawl for them)
+		foreach ($this->manual_items as $id => $name)
+			DB::table('items')->insert(array(
+				'id' => $id,
+				'name' => $name
+			));
+
+		// Insert quest items
+		$quest_items = json_decode(file_get_contents(storage_path() . '/raw-data/quest_items.json'));
+
+		foreach ($quest_items as $item)
+			DB::table('quest_items')->insert(array(
+				'item_id' => $item->id,
+				'job_id' => $jobs[$item->job],
+				'level' => $item->level,
+				'amount' => $item->amount,
+				'quality' => $item->quality,
+				'notes' => $item->notes,
+			));
 	}
 
 }

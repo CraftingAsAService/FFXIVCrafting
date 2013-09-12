@@ -19,7 +19,7 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('name', 10);
 			$table->smallInteger('rank');
-			$table->enum('type', array('equipment', 'materia', 'food'));
+			$table->enum('type', array('equipment', 'materia', 'food', 'reagent'));
 		});
 		
 		Schema::create('jobs', function($table)
@@ -50,7 +50,6 @@ class DatabaseStructure extends Migration {
 			$table->string('href', 255);
 			$table->smallInteger('level');
 			$table->integer('slot_id');
-			$table->integer('crafted_by');
 			$table->smallInteger('vendors');
 			$table->smallInteger('gil');
 			$table->smallInteger('ilvl');
@@ -74,6 +73,42 @@ class DatabaseStructure extends Migration {
 			$table->integer('stat_id');
 			$table->decimal('amount', 6, 2);
 			$table->smallInteger('maximum');
+		});
+		
+		Schema::create('recipes', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('item_id');
+			$table->integer('job_id');
+			$table->string('name', 50);
+			$table->smallInteger('yields');
+			$table->smallInteger('level');
+			$table->smallInteger('job_level');
+		});
+		
+		Schema::create('item_recipe', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('recipe_id');
+			$table->integer('item_id');
+			$table->smallInteger('amount');
+		});
+		
+		Schema::create('quest_items', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('item_id');
+			$table->integer('job_id');
+			$table->smallInteger('level');
+			$table->smallInteger('amount');
+			$table->smallInteger('quality');
+			$table->string('notes', 50);
 		});
 
 	}

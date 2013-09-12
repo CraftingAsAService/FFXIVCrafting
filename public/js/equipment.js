@@ -64,6 +64,10 @@ var calculate = {
 		$('td').mouseenter(this.compare);
 
 		$('td').mouseleave(this.uncompare);
+
+		$('#craftable_only_switch').change(function() {
+			$(this).closest('form').submit();
+		});
 	},
 	el_height:function(el) {
 		el.css('min-height', el.height());
