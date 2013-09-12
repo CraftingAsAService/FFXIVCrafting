@@ -188,7 +188,7 @@ class CraftingController extends BaseController
 			));
 	}
 
-	private function _reagents($recipes = array(), $self_sufficient = FALSE)
+	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1)
 	{
 		static $reagent_list = array();
 
@@ -202,7 +202,7 @@ class CraftingController extends BaseController
 						'item' => $reagent,
 					);
 
-				$reagent_list[$reagent->id]['make_this_many'] += $reagent->pivot->amount;
+				$reagent_list[$reagent->id]['make_this_many'] += $reagent->pivot->amount * $multiplier;
 
 				if ($self_sufficient)
 				{
@@ -213,7 +213,7 @@ class CraftingController extends BaseController
 					elseif(isset($reagent->recipes[0]))
 					{
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents($reagent->recipes, $self_sufficient);
+						$this->_reagents($reagent->recipes, $self_sufficient, $reagent->pivot->amount);
 					}
 				}
 			}
