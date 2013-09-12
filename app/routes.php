@@ -20,27 +20,14 @@ Route::get('stats', function()
 });
 
 Route::controller('materia', 'MateriaController');
+
 Route::controller('food', 'FoodController');
 
-Route::get('calculate', function()
-{
-	// All Jobs
-	$job_list = array();
-	foreach (Job::all() as $j)
-		$job_list[$j->abbreviation] = $j->name;
-
-	return View::make('calculate')
-		->with('error', FALSE)
-		->with('active', 'calculate')
-		->with('job_list', $job_list);
-});
-
-Route::get('equipment/{job}/{level}/{forecast}/{hindsight}', 'EquipmentController@calculate');
-Route::get('equipment/{job}/{level}/{forecast}', 'EquipmentController@calculate');
-Route::get('equipment/{job}/{level}', 'EquipmentController@calculate');
-Route::get('equipment/{job}', 'EquipmentController@calculate');
-
+Route::get('equipment/list', 'EquipmentController@getList');
+Route::any('equipment/{all}', 'EquipmentController@badUrl')->where('all', '.*');
 Route::controller('equipment', 'EquipmentController');
+
+Route::controller('crafting', 'CraftingController');
 
 Route::get('thanks', function()
 {
