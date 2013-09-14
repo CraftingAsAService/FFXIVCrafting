@@ -1,0 +1,153 @@
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+.equipment-icon {
+	border-radius: 5px;
+}
+
+td.new {
+	-webkit-box-shadow: inset 0 0 10px #ef00ef;
+	-moz-box-shadow: inset 0 0 10px #ef00ef;
+	box-shadow: inset 0 0 10px #ef00ef;
+}
+
+td.new .stats {
+	margin-left: 20px;
+}
+
+.stat-box {
+	padding-left: 8px; padding-right: 8px;
+	margin-right: 8px;
+}
+
+.stat-box:last-child {
+	margin-right: 0px;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -60px;
+	padding: 0 0 60px;
+}
+
+#wrap > .container {
+	padding: 60px 15px 0;
+}
+
+#footer {
+	height: 60px;
+	background-color: #f5f5f5;
+}
+
+#footer > .container {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.credit {
+	margin: 20px 0;
+}
+
+.no-value {
+	color: #ccc;
+}
+
+.table-striped th.title {
+	background: #ededed !important;
+}
+
+.fixed-width-50 {
+	width: 50%;
+}
+
+.opaque {
+	opacity: .6;
+}
+
+.recipe-name, .name-box {
+	font-size: 1.25em;
+}
+
+.name-box {
+	min-height: 52px;
+}
+
+.stats-box {
+
+}
+
+	.stats-box .stat {
+		line-height: 30px;
+	}
+
+	.stat-icon {
+		border-radius: 5px;
+		width: 20px;
+		height: 20px;
+	}
+
+td {
+	position: relative;
+}
+
+.td-navigation-buffer {
+	height: 32px;
+}
+
+	.td-navigation {
+		position: absolute;
+		bottom: 8px;
+		left: 8px;
+		right: 8px;
+	}
+
+		.td-navigation .btn {
+			width: 40%;
+		}
+
+		.td-navigation .disabled {
+			width: 20%;
+		}
+
+.small {
+	font-size: .9em;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+.margin-top {
+	margin-top: .5em;
+}
+
+.crafted_gathered {
+
+}
+
+	.crafted_gathered .alert {
+		padding: 5px 5px 8px;
+		margin-right: 5px;
+	}
+
+		.crafted_gathered .alert:last-child {
+			margin-right: 0px;
+		}
+
+.crafting-list {
+
+}
+
+	.crafting-list .well {
+		padding: 10px 10px 5px;
+		margin-bottom: 10px;
+	}
+
+.stat-toggle {
+	cursor: pointer;
+	line-height: 30px;
+}

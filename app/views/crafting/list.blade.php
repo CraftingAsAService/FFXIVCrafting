@@ -13,7 +13,11 @@
 @section('content')
 
 <h1>
+	@if(isset($job))
 	{{ $job->name }} Recipes between Levels {{ $start }} and {{ $end }}
+	@else
+	Custom Recipe List
+	@endif
 </h1>
 
 @if($self_sufficient && $first_time)
@@ -27,22 +31,7 @@
 @endif
 
 <div class='row'>
-	<div class='col-sm-4 crafting_list'>
-		<h3>What you'll be crafting</h3>
-		@foreach($recipes as $recipe)
-		<div class='well'>
-			<a class='close' rel='tooltip' title='Level'>{{ $recipe->level }}</a>
-			<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>
-				{{ $recipe->name }}
-			</a>
-			<p><small>Yields: {{ $recipe->yields }}</small></p>
-			@foreach($recipe->reagents as $reagent)
-
-			@endforeach
-		</div>
-		@endforeach
-	</div>
-	<div class='col-sm-8'>
+	<div class='col-sm-8 col-sm-push-4 item-list'>
 		<h3>
 			<a href='#howToUse' class='btn btn-sm btn-info pull-right' data-toggle='modal'>How to use</a>
 			But first, obtain these items
@@ -159,6 +148,34 @@
 			@endforeach
 		</table>
 	</div>
+	<div class='col-sm-4 crafting-list col-sm-pull-8'>
+		<h3>
+			<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
+			What you'll be crafting
+		</h3>
+
+		<div class='recipe-holder'>
+			@foreach($recipes as $recipe)
+			<div class='well'>
+				<a class='close' rel='tooltip' title='Level'>
+					{{ $recipe->level }}
+				</a>
+				@if( ! isset($job))
+				<div class='pull-right' style='clear: right;'>
+					<img src='/img/classes/{{ $recipe['abbreviation'] }}.png' rel='tooltip' title='{{ $job_list[$recipe['abbreviation']] }}'>
+				</div>
+				@endif
+				<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>
+					{{ $recipe->name }}
+				</a>
+				<p><small>Yields: {{ $recipe->yields }}</small></p>
+				{{--@foreach($recipe->reagents as $reagent)
+
+				@endforeach--}}
+			</div>
+			@endforeach
+		</div>
+	</div>
 </div>
 
 <a name='options'></a>
@@ -168,6 +185,7 @@
 		<h3 class='panel-title'>Options</h3>
 	</div>
 	<div class='panel-body'>
+		@if(isset($job))
 		<form action='/crafting' method='post' role='form' class='form-horizontal'>
 			<input type='hidden' name='class' value='{{ $job->abbreviation }}'>
 			<input type='hidden' name='start' value='{{ $start }}'>
@@ -178,11 +196,25 @@
 			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
 				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}>
 			</div>
+			<small><em>* Refreshes page</em></small>
 		</form>
+		@else
+		<form action='/crafting/gear' method='post' role='form' class='form-horizontal'>
+			<input type='hidden' name='ids' value='{{ implode(':', $item_ids) }}'>
+			<label>
+				Self Sufficient
+			</label>
+			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
+				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}>
+			</div>
+			<small><em>* Refreshes page</em></small>
+		</form>
+		@endif
 	</div>
 </div>
 
 <div class='row'>
+	@if(isset($job))
 	<div class='col-sm-6'>
 		@if($end - $start >= 4)
 		<div class='panel panel-primary'>
@@ -217,10 +249,11 @@
 		</div>
 		@endif
 	</div>
-	<div class='col-sm-6'>
+	@endif
+	<div class='col-sm-{{ isset($job) ? '6' : '12' }}'>
 		<div class='panel panel-info'>
 			<div class='panel-heading'>
-				<h3 class='panel-title'>Info</h3>
+				<h3 class='panel-title'>Tips</h3>
 			</div>
 			<div class='panel-body text-center'>
 				<p>Get extras in case of a failed synthesis.</p>

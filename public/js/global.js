@@ -1,13 +1,1 @@
-var global = {
-	init:function() {
-		$('[rel=tooltip]').tooltip();
-
-		$('#buymeabeer').click(function(event) {
-			event.preventDefault();
-
-			$('#buymeabeer_button').trigger('click');
-		})
-	}
-}
-
-$(global.init);
+var global={init:function(){$("[rel=tooltip]").tooltip();$("#buymeabeer").click(function(a){a.preventDefault();$("#buymeabeer_button").trigger("click")})}};$(global.init);

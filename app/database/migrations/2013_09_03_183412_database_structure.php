@@ -38,7 +38,6 @@ class DatabaseStructure extends Migration {
 
 			$table->increments('id');
 			$table->string('name', 50);
-			$table->string('disciple_focus', 3);
 		});
 
 		Schema::create('items', function($table)

@@ -32,77 +32,69 @@ class StatTableSeeder extends Seeder
 	{
 		$stats = array(
 			// Custom Attributes
-			'ALL' => array(
-				'Materia',
-				'Defense', 
-			),
-			'DOL' => array(
-				'Gathering', 
-				'GP',
-				'Perception', 
-			),
-			'DOH' => array(
-				'Control', 
-				'CP', 
-				'Craftsmanship', 
-			),
-			'DOW' => array(
-				'Strength', 
-				'Vitality',
-				'Dexterity', 
+			'Materia',
 
-				'Physical Damage', 
-				'Skill Speed', 
+			// Actual Attributes
+			'Defense', 
 
-				'Block Rate', 
-				'Block Strength', 
-				'Parry', 
-				'Determination', 
-			),
-			'DOM' => array(
-				'Intelligence',
-				'Mind',
-				'Piety', 
+			'Gathering',
+			'GP',
+			'Perception', 
 
-				'Magic Damage',
-				'Spell Speed', 
-			),
-			'NA' => array(
-				// Actual Attributes
-				'Accuracy', 
-				'Auto-Attack', 
-				'Critical Hit Rate', 
-				'Delay', 
-				'DPS', 
-				'Magic Defense',
-				
-				'Increased Spiritbond Gain',
-				'Reduced Durability Loss', 
-				
-				'Blind Resistance', 
-				'Blunt Resistance',
-				'Earth Resistance', 
-				'Fire Resistance', 
-				'Heavy Resistance',
-				'Ice Resistance',
-				'Lightning Resistance',
-				'Paralysis Resistance',
-				'Piercing Resistance', 
-				'Poison Resistance', 
-				'Silence Resistance', 
-				'Slashing Resistance', 
-				'Sleep Resistance', 
-				'Water Resistance',
-				'Wind Resistance',
-			),
+			'Control', 
+			'CP', 
+			'Craftsmanship', 
+
+			'Strength', 
+			'Vitality',
+			'Dexterity', 
+
+			'Physical Damage', 
+			'Skill Speed', 
+
+			'Block Rate', 
+			'Block Strength', 
+			'Parry', 
+			'Determination', 
+
+			'Intelligence',
+			'Mind',
+			'Piety', 
+
+			'Magic Damage',
+			'Spell Speed', 
+
+			'Accuracy', 
+			'Auto-Attack', 
+			'Critical Hit Rate', 
+			'Delay', 
+			'DPS', 
+			'Magic Defense',
+			
+			'Increased Spiritbond Gain',
+			'Reduced Durability Loss', 
+			
+			'Blind Resistance', 
+			'Blunt Resistance',
+			'Earth Resistance', 
+			'Fire Resistance', 
+			'Heavy Resistance',
+			'Ice Resistance',
+			'Lightning Resistance',
+			'Paralysis Resistance',
+			'Piercing Resistance', 
+			'Poison Resistance', 
+			'Silence Resistance', 
+			'Slashing Resistance', 
+			'Sleep Resistance', 
+			'Water Resistance',
+			'Wind Resistance',
 		);
 
-		foreach ($stats as $focus => $attributes)
-			foreach ($attributes as $stat)
-				Stat::create(array(
-					'name' => $stat,
-					'disciple_focus' => $focus
-				));
+		foreach ($stats as $stat)
+			Stat::create(array(
+				'name' => $stat
+			));
 	}
 	
 }

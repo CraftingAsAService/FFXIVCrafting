@@ -26,7 +26,7 @@
 </div>
 @endif
 
-<table class='table table-bordered table-striped'>
+<table class='table table-bordered table-striped' id='gear'>
 	<thead>
 		<tr>
 			<th class='invisible'>&nbsp;</th>
@@ -39,10 +39,23 @@
 			@endforeach
 		</tr>
 	</thead>
+	<tfoot>
+		<tr>
+			<th class='invisible'>&nbsp;</th>
+			@foreach(array_keys($equipment) as $th_level)
+			<?php if ($th_level > 50) continue; ?>
+			<th class='text-center alert alert-{{ $th_level == $level ? 'success' : ($th_level < $level ? 'info' : 'warning') }}{{ $th_level == $kill_column ? ' hidden' : '' }}'>
+				<div class='stats-box row'>
+					test
+				</div>
+			</th>
+			@endforeach
+		</tr>
+	</tfoot>
 	<tbody>
 		@foreach($slots as $slot)
 		<tr>
-			<td class='text-center'>
+			<td class='text-center no-summary'>
 				<img src='/img/equipment/{{ $slot->name }}.png' class='equipment-icon' rel='tooltip' title='{{ $slot->name }}'>
 				<div>
 					<strong>{{ $slot->name }}</strong>
@@ -51,10 +64,10 @@
 			@foreach(array_keys($equipment) as $td_level)
 			<?php if ($td_level > 50) continue; ?>
 			<?php $new = isset($changes[$td_level][$slot->name]); ?>
-			<td class='{{ $new ? ('alert alert-' . ($td_level == $level ? 'success' : ($td_level < $level ? 'info' : 'warning'))) : '' }}{{ $td_level == $kill_column ? ' hidden' : '' }}'>
+			<td class='{{ $new ? ('alert alert-' . ($td_level == $level ? 'success' : ($td_level < $level ? 'info' : 'warning'))) : '' }}{{ $td_level == $kill_column ? ' hidden no-summary' : '' }}'>
 				<div class='items'>
 					@foreach($equipment[$td_level][$slot->name] as $key => $item)
-					<div class='item clearfix {{ $key > 0 ? 'hidden' : 'active' }}{{ $item->crafted_by ? ' craftable' : '' }}'>
+					<div class='item clearfix {{ $key > 0 ? 'hidden' : 'active' }}{{ $item->crafted_by ? ' craftable' : '' }}' data-item-id='{{ $item->id }}'>
 						<div class='obtain-box pull-right'>
 							@if($item->crafted_by)
 							@foreach(explode(',', $item->crafted_by) as $crafted_by)
@@ -76,7 +89,7 @@
 
 						<div class='stats-box row{{ ! $new ? ' hidden' : '' }}'>
 							@foreach($item->stats as $stat => $amount)
-							<div class='col-sm-6 text-center stat{{ ! in_array($disciple_focus[$stat], array('ALL', $job->disciple)) ? ' hidden always_hidden' : '' }}' data-stat='{{ $stat }}' data-amount='{{ $amount }}'>
+							<div class='col-sm-6 text-center stat{{ ! in_array($stat, $job_focus) ? ' hidden' : '' }}' data-stat='{{ $stat }}' data-amount='{{ $amount }}'>
 								<span>{{ $amount }}</span> &nbsp; 
 								<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
 							</div>
@@ -99,12 +112,95 @@
 		@endforeach
 	</tbody>
 </table>
+		
+<div class='panel panel-primary'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>Stat Display</h3>
+	</div>
+	<div class='panel-body'>
+		<div class='row stat-displayer'>
+			@foreach($visible_stats as $stat)
+			<div class='col-xs-6 col-sm-3 col-lg-2'>
+				<span class='stat-toggle {{ ! in_array($stat, $job_focus) ? ' opaque' : '' }}' rel='tooltip' title='Click to toggle' data-stat='{{ $stat }}'>
+					<img src='/img/stats/{{ $stat }}.png' class='stat-icon'>
+					{{ $stat }}
+				</span>
+			</div>
+			@endforeach
+		</div>
+		@if($stats_to_avoid)
+		<hr>
+		<strong>Gear with these stats were omitted:</strong>
+
+		<div class='row'>
+			@foreach($stats_to_avoid as $stat)
+			<div class='col-xs-6 col-sm-3 col-lg-2'>
+				<span class='stat-toggle' rel='tooltip' title='Click to toggle' data-stat='{{ $stat }}'>
+					<img src='/img/stats/{{ $stat }}.png' class='stat-icon'>
+					{{ $stat }}
+				</span>
+			</div>
+			@endforeach
+		</div>
+		@endif
+	</div>
+</div>
+
+<div class='panel panel-success'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>Craft These Items</h3>
+	</div>
+	<div class='panel-body'>
+		<div class='row'>
+			<div class='col-sm-3'>
+				<div class='form-group'>
+					<label for='craft_level'>Level</label>
+					<select id='craft_level' class='form-control' required='required'>
+						<option value='all'>All visible levels</option>
+						<?php $i = 3; ?>
+						@foreach(array_keys($equipment) as $craft_level)
+						<?php if ($craft_level == $kill_column) continue; ?>
+						<option value='{{ $i++ }}'{{ $craft_level == $level ? ' selected="selected"' : '' }}>{{ $craft_level }}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+			<div class='col-sm-3'>
+				<div class='form-group'>
+					<label for='craft_slot'>Slot</label>
+					<select id='craft_slot' class='form-control' required='required'>
+						<option value='all'>All slots</option>
+						<?php $i = 1; ?>
+						@foreach($slots as $slot)
+						<option value='{{ $i++ }}'>{{ $slot->name }}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+			<div class='col-sm-3'>
+				<div class='form-group'>
+					<label for='craft_status'>Status</label>
+					<select id='craft_status' class='form-control' required='required'>
+						<option value='new'>New Crafts</option>
+						<option value='all'>Everything</option>
+					</select>
+				</div>
+			</div>
+			<div class='col-sm-3'>
+				<div class='form-group'>
+					<label>&nbsp;</label>
+					<button type='submit' id='craft_these' class='btn btn-success form-control'>Let's go!</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <a name='options'></a>
 
 <div class='panel panel-info'>
 	<div class='panel-heading'>
-		<h3 class='panel-title'>Options</h3>
+		<h3 class='panel-title'>Switch</h3>
 	</div>
 	<div class='panel-body'>
 		<form action='/equipment' method='post' role='form' class='form-horizontal'>
@@ -118,6 +214,7 @@
 			<div class='make-switch' data-on='success' data-off='warning'>
 				<input type='checkbox' id='craftable_only_switch' name='craftable_only' value='1' {{ $craftable_only ? " checked='checked'" : '' }}>
 			</div>
+			<small><em>* Refreshes page</em></small>
 		</form>
 	</div>
 </div>

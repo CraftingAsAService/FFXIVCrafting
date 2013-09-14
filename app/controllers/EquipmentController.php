@@ -78,9 +78,38 @@ class EquipmentController extends BaseController
 
 		$slots = Slot::where('type', 'equipment')->orderBy('rank')->get();
 
+		// What stats do the class like?
+		$job_focus = Stat::focus($job->abbreviation);
+
 		$equipment = array();
 		foreach (range($start - 1, $start + $forecast) as $use_level)
 			$equipment[$use_level] = Item::calculate($job->abbreviation, $use_level, $craftable_only);
+
+		// Make sure the pieces avoid pieces with certain stats
+		$stats_to_avoid = Stat::avoid($job->abbreviation);
+
+		if ($stats_to_avoid)
+			foreach ($equipment as $use_levelB => $slotsB)
+			{
+				if ($use_levelB == array_keys($equipment)[0])
+					continue;
+
+				foreach ($slotsB as $slotB => $itemsB)
+				{
+					foreach ($itemsB as $key => $itemB)
+						foreach ($stats_to_avoid as $avoid)
+							if (in_array($avoid, array_keys($itemB->stats)))
+								// Remove piece
+								unset($equipment[$use_levelB][$slotB][$key]);
+
+					// Make sure it's not empty: Grab the previous level's item(s)
+					if (empty($equipment[$use_levelB][$slotB]))
+						$equipment[$use_levelB][$slotB] = $equipment[$use_levelB - 1][$slotB];
+
+					// Reset Keys
+					$equipment[$use_levelB][$slotB] = array_values($equipment[$use_levelB][$slotB]);
+				}
+			}
 
 		$changes = array();
 		foreach (range($start, $start + $forecast) as $use_level)
@@ -117,11 +146,25 @@ class EquipmentController extends BaseController
 			}
 		}
 
-		// List of stats
-		$disciple_focus = array();
-		foreach (Stat::all() as $stat)
-			$disciple_focus[$stat->name] = $stat->disciple_focus;
+		// List of stats that show up
+		$visible_stats = array();
+		foreach ($equipment as $use_levelB => $slotsB)
+			foreach ($slotsB as $slotB => $itemsB)
+				foreach ($itemsB as $itemB)
+					foreach ($itemB->stats as $statB => $amountB)
+						$visible_stats[] = $statB;
 
+
+		$visible_stats = array_unique($visible_stats);
+		sort($visible_stats);
+
+		// Make sure visible stats aren't boring
+		$boring_stats = Stat::boring();
+		foreach ($visible_stats as $key => $stat)
+			if (in_array($stat, $boring_stats))
+				unset($visible_stats[$key]);
+
+		// Was this their first run?
 		$first_time = TRUE;
 
 		if (Session::has('equipment_first_time'))
@@ -134,7 +177,9 @@ class EquipmentController extends BaseController
 				'equipment' => $equipment,
 				'slots' => $slots,
 				'changes' => $changes,
-				'disciple_focus' => $disciple_focus,
+				'job_focus' => $job_focus,
+				'visible_stats' => $visible_stats,
+				'stats_to_avoid' => $stats_to_avoid,
 
 				'kill_column' => $start - 1,
 

@@ -38,17 +38,8 @@ class CraftingController extends BaseController
 		return Redirect::to('/crafting/list?' . implode(':', $values));
 	}
 
-	public function getList()
+	public function getList($item_ids = array(), $self_sufficient = 1)
 	{
-		// Get Options
-		$options = explode(':', array_keys(Input::all())[0]);
-
-		// Parse Options              // Defaults
-		$desired_job     = isset($options[0]) ? $options[0] : 'CRP';
-		$start           = isset($options[1]) ? $options[1] : 1;
-		$end             = isset($options[2]) ? $options[2] : 5;
-		$self_sufficient = isset($options[3]) ? $options[3] : 1;
-
 		View::share('active', 'crafting');
 
 		// All Jobs
@@ -58,25 +49,55 @@ class CraftingController extends BaseController
 
 		View::share('job_list', $job_list);
 
-		// Jobs are capital
-		$desired_job = strtoupper($desired_job);
+		if ($item_ids) 
+		{
+			View::share('item_ids', $item_ids);
+		}
+		else
+		{
+			// Get Options
+			$options = explode(':', array_keys(Input::all())[0]);
 
-		// Make sure it's a real job
-		$job = Job::where('abbreviation', $desired_job)->first();
+			// Parse Options              // Defaults
+			$desired_job     = isset($options[0]) ? $options[0] : 'CRP';
+			$start           = isset($options[1]) ? $options[1] : 1;
+			$end             = isset($options[2]) ? $options[2] : 5;
+			$self_sufficient = isset($options[3]) ? $options[3] : 1;
 
-		// If the job isn't real, error out
-		if ( ! $job)
-			return View::make('crafting')
-				->with('error', TRUE);
+			// Jobs are capital
+			$desired_job = strtoupper($desired_job);
 
-		// Starting maximum of 1
-		if ($start < 0) $start = 1;
-		if ($start > $end) $end = $start;
-		if ($end - $start > 9) $end = $start + 9;
+			// Make sure it's a real job
+			$job = Job::where('abbreviation', $desired_job)->first();
+
+			// If the job isn't real, error out
+			if ( ! $job)
+				return View::make('crafting')
+					->with('error', TRUE);
+
+			// Starting maximum of 1
+			if ($start < 0) $start = 1;
+			if ($start > $end) $end = $start;
+			if ($end - $start > 9) $end = $start + 9;
+
+			// Check for quests
+			$quest_items = QuestItem::whereBetween('level', array($start, $end))
+				->where('job_id', $job->id)
+				->orderBy('level')
+				->with('item')
+				->get();
+
+			View::share(array(
+				'job' => $job,
+				'start' => $start,
+				'end' => $end,
+				'quest_items' => $quest_items,
+			));
+		}
 
 		// Gather Recipes and Reagents
 
-		$recipes = Recipe::with(array(
+		$query = Recipe::with(array(
 				'item', // The recipe's Item
 				'reagents', // The reagents for the recipe
 					'reagents.jobs' => function($query) {
@@ -90,15 +111,20 @@ class CraftingController extends BaseController
 							$query->where('disciple', 'DOH');
 						},
 			))
-			->select('recipes.*')
+			->select('recipes.*', 'j.abbreviation')
 			->join('jobs AS j', 'j.id', '=', 'recipes.job_id')
-			->where('j.abbreviation', $desired_job)
-			->whereBetween('level', array($start, $end))
-			->orderBy('level')
-			->get();
+			->orderBy('level');
 
-		$reagent_list = array();
-		
+		if ($item_ids)
+			$query
+				->whereIn('recipes.item_id', $item_ids);
+		else
+			$query
+				->where('j.abbreviation', $desired_job)
+				->whereBetween('level', array($start, $end));
+
+		$recipes = $query->get();
+
 		$reagent_list = $this->_reagents($recipes, $self_sufficient);
 
 		// Look through the list.  Is there something we're already crafting?
@@ -160,13 +186,6 @@ class CraftingController extends BaseController
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
 
-		// Check for quests
-		$quest_items = QuestItem::whereBetween('level', array($start, $end))
-			->where('job_id', $job->id)
-			->orderBy('level')
-			->with('item')
-			->get();
-
 		// Was this their first time?
 		$first_time = TRUE;
 
@@ -179,12 +198,8 @@ class CraftingController extends BaseController
 			->with(array(
 				'recipes' => $recipes,
 				'reagent_list' => $sorted_reagent_list,
-				'quest_items' => $quest_items,
-				'job' => $job,
-				'start' => $start,
-				'end' => $end,
-				'self_sufficient' => $self_sufficient,
 				'first_time' => $first_time,
+				'self_sufficient' => $self_sufficient,
 			));
 	}
 
@@ -219,6 +234,23 @@ class CraftingController extends BaseController
 			}
 
 		return $reagent_list;
+	}
+
+	public function getGear()
+	{
+		// Get Item IDs
+		$item_ids = explode(':', array_keys(Input::all())[0]);
+		$self_sufficient = array_pop($item_ids);
+
+		return $this->getList($item_ids, $self_sufficient);
+	}
+
+	public function postGear()
+	{
+		$item_ids = explode(':', Input::get('ids'));
+		$self_sufficient = Input::get('self_sufficient');
+
+		return $this->getList($item_ids, $self_sufficient);
 	}
 
 }
