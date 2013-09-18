@@ -54,13 +54,13 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'ffxiv-caas',
-			'username'  => 'root',
-			'password'  => '',
+			'host'      => 'DB_HOST',
+			'database'  => 'DB_NAME',
+			'username'  => 'DB_USER',
+			'password'  => 'DB_PASS',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'prefix'    => ''
 		),
 
 		'pgsql' => array(
@@ -114,7 +114,7 @@ return array(
 		'cluster' => true,
 
 		'default' => array(
-			'host'     => '127.0.0.1',
+			'host'     => 'tunnel.pagodabox.com',
 			'port'     => 6379,
 			'database' => 0,
 		),

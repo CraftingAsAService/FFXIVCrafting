@@ -55,11 +55,65 @@
 	</h2>
 
 	<p>
-		Acts as MP for Miner/Botanist. Recharges by 5 GP every 3 seconds while not gathering. While gathering, GP recovery only happens when you gather something successfully, and increases with each EXP chain. (Say you have 5 attempts at a gathering spot and you successfully gather 5 times in a row. GP would recover 1>2>3>4>5 for 15 GP; assuming you did not use any GP that gathering attempt. Now, suppose you did 5 gathering attemps, but missed the 3rd one. GP recovered would be 1>2>0>1>2. GP recovery chain resets with EXP chain while gathering.)
+		Acts as MP for Miner/Botanist. Recharges by 5 GP every 3 seconds while not gathering. While gathering, each successful gather provides a static 5 GP.
+	</p>
+
+	<h2>
+		<img src='/img/stats/Strength.png' class='stat-icon'>
+		Strength
+	</h2>
+
+	<p>
+		Increases HQ chance for Blacksmith's Primary tool and Armorer's Secondary tool.  Increases Botanist's Gathering.
+	</p>
+
+	<h2>
+		<img src='/img/stats/Dexterity.png' class='stat-icon'>
+		Dexterity
+	</h2>
+
+	<p>
+		Increases HQ chance for Goldsmith/Weaver's Primary tool and Carpenter's Secondary tool.  Increases Fisher's Gathering.
+	</p>
+
+	<h2>
+		<img src='/img/stats/Vitality.png' class='stat-icon'>
+		Vitality
+	</h2>
+
+	<p>
+		Increases HQ chance for Carpenter/Armorer/Leatherworker's Primary tool.  Increases Miner's Gathering.
+	</p>
+
+	<h2>
+		<img src='/img/stats/Intelligence.png' class='stat-icon'>
+		Intelligence
+	</h2>
+
+	<p>
+		Increases HQ chance for Alchemist's Primary tool and Goldsmith/Leatherworker's Secondary tool.  Increases Botanist's Gathering.
+	</p>
+
+	<h2>
+		<img src='/img/stats/Mind.png' class='stat-icon'>
+		Mind
+	</h2>
+
+	<p>
+		Increases HQ chance for Culinarian's Primary tool and Blacksmith/Weaver's Secondary tool.  Increases Miner's Gathering.
+	</p>
+
+	<h2>
+		<img src='/img/stats/Piety.png' class='stat-icon'>
+		Piety
+	</h2>
+
+	<p>
+		Increases HQ chance for Alchemist/Culinarian's Secondary tool.  Increases Fisher's Gathering.
 	</p>
 
 	<p class='well'>
-		<small><em>Information pulled from <a href='http://www.ffxivpro.com/forum/topic/40286/ffxiv-arr-stats/'>here</a></em></small>
+		<small><em>Some information pulled from <a href='http://www.ffxivpro.com/forum/topic/40286/ffxiv-arr-stats/'>this thread</a>, other pieces pulled from <a href='http://ffxiv.gamerescape.com/wiki/Category:Attributes'>Gamer Escape's wiki</a>.</em></small>
 	</p>
 
 @stop
