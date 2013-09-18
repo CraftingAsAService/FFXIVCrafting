@@ -7,15 +7,9 @@
 
 @section('content')
 
-<style>
-	#job_selector, #level_selector {
-		width: 100%;
-	}
-</style>
-
 <h1>{{ $job->name }} Gathering</h1>
 
-<p>Want to know what to focus on when you're out there with your {{ $job->name }}? Assuming you want to make one of everything with the selected DOH classes and in the selected level ranges, this lists them all.</p>
+<p>Want to know what to focus on when you're out there with your {{ $job->name }}? Assuming you want to make one of everything with the selected DOH classes and in the selected level ranges, this lists them all.  This is simply the minimum required.  Always remember to grab a few extra!</p>
 
 @if(in_array($job->abbreviation, array('MIN','BTN')))
 <p><em>Please Note:</em> The level 20 quest for 'Grade 1 Carbonized Matter x99' is not reflected in the list as it is not used in any crafts.</p>
@@ -33,7 +27,7 @@
 		</div>
 		@endforeach
 
-		<h4>Level Ranges</h4>
+		<h4>Crafting Levels</h4>
 		@foreach($level_ranges as $start)
 		<div class='checkbox'>
 			<label>
@@ -90,16 +84,24 @@
 						@endif
 						<span>{{ number_format($item['tally'] + (isset($item['data']->quest[0]) ? $item['data']->quest[0]->amount : 0)) }}</span>
 					</td>
-					<td class='text-center'>
-						<?php $i = 0; ?>
-						@if(count($item['data']->locations) > 1)
-						<span class='pull-right'>+</span>
-						@endif
-						@foreach($item['data']->locations as $location)
-						<div class='{{ $i++ == 0 ? 'first' : 'hidden' }}'>
-							{{ $location->name }} {{ $location->pivot->level }}
+					<td class='text-left'>
+						<div class='location'>
+							<span class='close' rel='tooltip' title='Node Level'>
+								{{ $item['data']->locations[0]->pivot->level }}
+							</span>
+							{{ $item['data']->locations[0]->name }}
+							@if(count($item['data']->locations) > 1)
+							<span class='faux_link and_more' data-container='body' data-toggle='popover' data-placement='bottom' data-content='
+								@foreach($item['data']->locations as $location)
+								<div class="location">
+									{{ $location->name }} (Lv.{{ $location->pivot->level }})
+								</div>
+								@endforeach
+							' data-html='true'>
+								and more
+							</span>
+							@endif
 						</div>
-						@endforeach
 					</td>
 					<td class='text-right' style='white-space: nowrap;'>
 						@if($item['data']->gil)

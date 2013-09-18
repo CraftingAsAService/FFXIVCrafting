@@ -6,9 +6,16 @@ var gathering = {
 
 		$('.job_checkbox').click(gathering.toggle_classes);
 
-		$('#hide_shards').click(function() {
-			$('.shard')[($(this).is('checked') ? 'add' : 'remove') + 'Class']('hidden');
+		$('#hide_shards').change(function() {
+			$('.shard')[($(this).is(':checked') ? 'add' : 'remove') + 'Class']('hidden');
+			$('.and_more').popover('destroy');
+			$('.and_more').popover();
+			while($('#footer + .popover').length > 0)
+				$('#footer + .popover').remove();
+			
 		});
+
+		$('.and_more').popover();
 	},
 	collapse_row:function() {
 		var btn = $(this);
