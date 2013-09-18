@@ -39,10 +39,13 @@ class CraftingController extends BaseController
 		foreach (Job::all() as $j)
 			$job_list[$j->abbreviation] = $j->name;
 
+		$include_quests = TRUE;
+
 		View::share('job_list', $job_list);
 
 		if ($item_ids) 
 		{
+			$include_quests = FALSE;
 			View::share('item_ids', $item_ids);
 		}
 		else
@@ -134,6 +137,7 @@ class CraftingController extends BaseController
 			))
 			->select('recipes.*', 'j.abbreviation')
 			->join('jobs AS j', 'j.id', '=', 'recipes.job_id')
+			->groupBy('recipes.item_id')
 			->orderBy('level');
 
 		if ($item_ids)
@@ -146,7 +150,7 @@ class CraftingController extends BaseController
 
 		$recipes = $query->get();
 
-		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, TRUE);
+		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests);
 
 		// Look through the list.  Is there something we're already crafting?
 		// Subtract what's being made from needed reagents.
@@ -221,10 +225,11 @@ class CraftingController extends BaseController
 				'reagent_list' => $sorted_reagent_list,
 				'first_time' => $first_time,
 				'self_sufficient' => $self_sufficient,
+				'include_quests' => $include_quests
 			));
 	}
 
-	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1, $top_level = FALSE)
+	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE)
 	{
 		static $reagent_list = array();
 
@@ -234,7 +239,7 @@ class CraftingController extends BaseController
 
 			// Recipe may be involved in a Guildmaster quest.  They may need to make this multiple times.
 			// But only account for the top level recipes
-			if ($top_level == TRUE)
+			if ($include_quests == TRUE)
 			{
 				$run = 0;
 				foreach ($recipe->item->quest as $quest)
@@ -254,7 +259,7 @@ class CraftingController extends BaseController
 					);
 
 				$reagent_list[$reagent->id]['make_this_many'] += $reagent->pivot->amount * $inner_multiplier;
-				
+
 				if ($self_sufficient)
 				{
 					if (isset($reagent->jobs[0]))
@@ -285,7 +290,7 @@ class CraftingController extends BaseController
 	{
 		// Get Item IDs
 		$item_ids = explode(':', array_keys(Input::all())[0]);
-		$self_sufficient = array_pop($item_ids);
+		$self_sufficient = count($item_ids) > 1 ? array_pop($item_ids) : 1;
 
 		return $this->getList($item_ids, $self_sufficient);
 	}

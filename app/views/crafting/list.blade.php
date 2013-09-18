@@ -173,7 +173,7 @@
 				@if( ! isset($job))
 					<img src='/img/classes/{{ $recipe['abbreviation'] }}.png' rel='tooltip' title='{{ $job_list[$recipe['abbreviation']] }}'>
 				@endif
-				@if(isset($recipe->item->quest[0]))
+				@if($include_quests && isset($recipe->item->quest[0]))
 					<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
 				@endif
 				</div>

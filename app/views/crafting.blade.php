@@ -38,7 +38,7 @@
 					</div>
 					<div class='btn-group hidden jobs-list' data-toggle='buttons'>
 						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-						<label class='btn btn-info class-selector multi{{ $job == 'CRP' ? ' active' : '' }}'>
+						<label class='btn btn-warning class-selector multi{{ $job == 'CRP' ? ' active' : '' }}'>
 							<input type='checkbox' name='classes[]' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
 							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
 						</label>
