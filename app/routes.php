@@ -28,6 +28,7 @@ Route::any('equipment/{all}', 'EquipmentController@badUrl')->where('all', '.*');
 Route::controller('equipment', 'EquipmentController');
 
 Route::controller('crafting', 'CraftingController');
+Route::controller('gathering', 'GatheringController');
 
 Route::get('thanks', function()
 {

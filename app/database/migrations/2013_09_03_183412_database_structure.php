@@ -110,6 +110,24 @@ class DatabaseStructure extends Migration {
 			$table->string('notes', 50);
 		});
 
+		Schema::create('locations', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->string('name', 50);
+		});
+
+		Schema::create('item_location', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('item_id');
+			$table->integer('location_id');
+			$table->smallInteger('level');
+		});
+
 	}
 
 	/**

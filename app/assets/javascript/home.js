@@ -1,6 +1,6 @@
 var home = {
 	init:function() {
-		$('.class-selector').click(function() {
+		$('.class-selector:not(.multi)').click(function() {
 			$('.class-selector.active').removeClass('active');
 		});
 
@@ -26,6 +26,10 @@ var home = {
 
 		$('#self_sufficient_switch').change(function() {
 			$('.ss_yes, .ss_no').toggleClass('hidden');
+		});
+
+		$('#multi').change(function() {
+			$('.jobs-list').toggleClass('hidden');
 		});
 	}
 }

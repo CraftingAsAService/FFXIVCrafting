@@ -11,4 +11,9 @@ class QuestItem extends Eloquent
 		return $this->belongsTo('Item');
 	}
 
+	public function job()
+	{
+		return $this->belongsTo('Job');
+	}
+
 }

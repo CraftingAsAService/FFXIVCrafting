@@ -6,26 +6,14 @@ class CraftingController extends BaseController
 	public function getIndex()
 	{
 		// All Jobs
-		$job_list = $job_ids = array();
+		$job_list = array();
 		foreach (Job::all() as $j)
-		{
-			$job_ids[$j->abbreviation] = $j->id;
 			$job_list[$j->abbreviation] = $j->name;
-		}
-
-		// Check for DOL quests
-		$quests = array();
-		foreach (array('MIN','BTN','FSH') as $job)
-			$quests[$job] = QuestItem::where('job_id', $job_ids[$job])
-				->orderBy('level')
-				->with('item')
-				->get();
 
 		return View::make('crafting')
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', $job_list)
-			->with('quests', $quests);
+			->with('job_list', $job_list);
 	}
 
 	public function postIndex()
@@ -34,6 +22,10 @@ class CraftingController extends BaseController
 		$values = array();
 		foreach ($vars as $var => $default)
 			$values[] = Input::has($var) ? Input::get($var) : $default;
+
+		// Overwrite Class var
+		if (Input::has('multi') && Input::has('classes'))
+			$values[0] = implode(',', Input::get('classes'));
 		
 		return Redirect::to('/crafting/list?' . implode(':', $values));
 	}
@@ -67,13 +59,39 @@ class CraftingController extends BaseController
 			// Jobs are capital
 			$desired_job = strtoupper($desired_job);
 
-			// Make sure it's a real job
-			$job = Job::where('abbreviation', $desired_job)->first();
+			// Make sure it's a real job, jobs might be multiple
+			$job = Job::whereIn('abbreviation', explode(',', $desired_job))->get();
 
 			// If the job isn't real, error out
-			if ( ! $job)
+			if ( ! isset($job[0]))
+			{
+				// All Jobs
+				$job_list = $job_ids = array();
+				foreach (Job::all() as $j)
+				{
+					$job_ids[$j->abbreviation] = $j->id;
+					$job_list[$j->abbreviation] = $j->name;
+				}
+
+				// Check for DOL quests
+				$quests = array();
+				foreach (array('MIN','BTN','FSH') as $job)
+					$quests[$job] = QuestItem::where('job_id', $job_ids[$job])
+						->orderBy('level')
+						->with('item')
+						->get();
+
 				return View::make('crafting')
-					->with('error', TRUE);
+					->with('error', TRUE)
+					->with('quests', $quests);
+			}
+
+			$job_ids = array();
+			foreach ($job as $j)
+				$job_ids[] = $j->id;
+
+			if (count($job) == 1)
+				$job = $job[0];
 
 			// Starting maximum of 1
 			if ($start < 0) $start = 1;
@@ -81,8 +99,9 @@ class CraftingController extends BaseController
 			if ($end - $start > 9) $end = $start + 9;
 
 			// Check for quests
-			$quest_items = QuestItem::whereBetween('level', array($start, $end))
-				->where('job_id', $job->id)
+			$quest_items = QuestItem::with('job')
+				->whereBetween('level', array($start, $end))
+				->whereIn('job_id', $job_ids)
 				->orderBy('level')
 				->with('item')
 				->get();
@@ -92,6 +111,7 @@ class CraftingController extends BaseController
 				'start' => $start,
 				'end' => $end,
 				'quest_items' => $quest_items,
+				'desired_job' => $desired_job
 			));
 		}
 
@@ -99,6 +119,7 @@ class CraftingController extends BaseController
 
 		$query = Recipe::with(array(
 				'item', // The recipe's Item
+					'item.quest', // Is the recipe used as a quest turnin?
 				'reagents', // The reagents for the recipe
 					'reagents.jobs' => function($query) {
 						// Only Land Disciples
@@ -120,12 +141,12 @@ class CraftingController extends BaseController
 				->whereIn('recipes.item_id', $item_ids);
 		else
 			$query
-				->where('j.abbreviation', $desired_job)
+				->whereIn('j.id', $job_ids)
 				->whereBetween('level', array($start, $end));
 
 		$recipes = $query->get();
 
-		$reagent_list = $this->_reagents($recipes, $self_sufficient);
+		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, TRUE);
 
 		// Look through the list.  Is there something we're already crafting?
 		// Subtract what's being made from needed reagents.
@@ -203,11 +224,26 @@ class CraftingController extends BaseController
 			));
 	}
 
-	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1)
+	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1, $top_level = FALSE)
 	{
 		static $reagent_list = array();
 
 		foreach ($recipes as $recipe)
+		{
+			$inner_multiplier = $multiplier;
+
+			// Recipe may be involved in a Guildmaster quest.  They may need to make this multiple times.
+			// But only account for the top level recipes
+			if ($top_level == TRUE)
+			{
+				$run = 0;
+				foreach ($recipe->item->quest as $quest)
+					$run += ceil($quest->amount / $recipe->yields);
+
+				// Run everything at least once
+				$inner_multiplier *= $run ?: 1;
+			}
+
 			foreach ($recipe->reagents as $reagent)
 			{
 				if ( ! isset($reagent_list[$reagent->id]))
@@ -217,21 +253,30 @@ class CraftingController extends BaseController
 						'item' => $reagent,
 					);
 
-				$reagent_list[$reagent->id]['make_this_many'] += $reagent->pivot->amount * $multiplier;
-
+				$reagent_list[$reagent->id]['make_this_many'] += $reagent->pivot->amount * $inner_multiplier;
+				
 				if ($self_sufficient)
 				{
 					if (isset($reagent->jobs[0]))
 					{
-						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->jobs[0]->abbreviation;
+						// Prevent non DOH/DOL jobs from showing up
+						for ($i = count($reagent->jobs) - 1; $i < 0; $i--)
+						{
+							$job = $reagent->jobs[$i];
+							if ( ! in_array($job->disciple, array('DOH', 'DOL'))) 
+								continue;
+
+							$reagent_list[$reagent->id]['self_sufficient'] = $job->abbreviation;
+						}
 					}
 					elseif(isset($reagent->recipes[0]))
 					{
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents($reagent->recipes, $self_sufficient, $reagent->pivot->amount);
+						$this->_reagents($reagent->recipes, $self_sufficient, $reagent->pivot->amount * $inner_multiplier);
 					}
 				}
 			}
+		}
 
 		return $reagent_list;
 	}

@@ -293,6 +293,11 @@ class DataTablesSeeder extends Seeder
 		$classes = array();
 		$stats = array();
 
+		static $location_id = 0;
+		$locations = array();
+
+		$item_location = array();
+
 		foreach ($data as $object)
 		{
 			// Cleanup
@@ -310,7 +315,6 @@ class DataTablesSeeder extends Seeder
 				'level' => $object->level ?: 0,
 				'vendors' => $object->vendors ?: 0,
 				'gil' => $object->gil ?: 0,
-				#'crafted_by' => isset($object->crafted_by) ? $this->job_names[trim($object->crafted_by)] : 0,
 				'slot_id' => $this->slots[$object->slot],
 				'ilvl' => $object->ilvl ?: 0
 			);
@@ -318,6 +322,7 @@ class DataTablesSeeder extends Seeder
 			// Item Classes
 			foreach ($object->class as $class)
 			{
+				// Disciple shortcut?
 				if (in_array($class, array_keys($this->disciples)))
 					foreach ($this->disciples[$class] as $cls)
 						$classes[] = array(
@@ -325,10 +330,41 @@ class DataTablesSeeder extends Seeder
 							'job_id' => $this->jobs[$cls]
 						);
 				else
+				{
 					$classes[] = array(
 						'item_id' => $item_id,
 						'job_id' => $this->jobs[$class]
 					);
+
+					// Items with locations won't use a disciple shortcut
+					// "BTN":["Lv.30 Central Thanalan","Lv.50 Central Thanalan"],
+					// "MIN":["Lv.30 Southern Thanalan"]
+					if ( ! empty($object->location) && isset($object->location->$class))
+					{
+						// Saved it as a separate thing, but I don't think it needs to be used
+						// But FYI, I could alter structure to show a $class' locations.
+						foreach ($object->location->$class as $level_location)
+						{
+							preg_match('/^Lv\.(\d+)\s(.*)$/', trim($level_location), $matches);
+							list($ignore, $ll_level, $ll_location) = $matches;
+							
+							// Create a location id if it doesn't exist
+							if ( ! in_array($ll_location, array_keys($locations)))
+							{
+								$ll_id = ++$location_id;
+								$locations[$ll_location] = $ll_id;
+							}
+							else
+								$ll_id = $locations[$ll_location];
+
+							$item_location[] = array(
+								'item_id' => $item_id,
+								'location_id' => $ll_id,
+								'level' => $ll_level
+							);
+						}
+					}
+				}
 			}
 
 			// Item Stats
@@ -375,6 +411,24 @@ class DataTablesSeeder extends Seeder
 
 		if ($stats)
 			$this->_batch_insert($stats, 'item_stat');
+
+		// Insert Locations
+		if ($locations)
+		{
+			// Make the array ready for the DB
+			$location_batch = array();
+			foreach ($locations as $name => $id)
+				$location_batch[] = array(
+					'id' => $id,
+					'name' => $name
+				);
+
+			$this->_batch_insert($location_batch, 'locations');
+		}
+
+		// Insert Item Job Locations
+		if ($item_location)
+			$this->_batch_insert($item_location, 'item_location');
 	}
 
 	private function _batch_insert($data = array(), $table = '')

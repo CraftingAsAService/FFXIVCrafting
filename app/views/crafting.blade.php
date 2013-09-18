@@ -22,19 +22,33 @@
 	</div>
 	@endif
 
-	<form action='/crafting' method='post' role='form' class='well form-horizontal'>
+	<form action='/crafting' method='post' role='form' class='well form-horizontal' autocomplete='off'>
 		<fieldset>
 			<legend>Select your Class</legend>
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='btn-group' data-toggle='buttons'>
+					<div class='btn-group jobs-list' data-toggle='buttons'>
 						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
 						<label class='btn btn-primary class-selector{{ $job == 'CRP' ? ' active' : '' }}'>
 							<input type='radio' name='class' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
 							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
 						</label>
 						@endforeach
+					</div>
+					<div class='btn-group hidden jobs-list' data-toggle='buttons'>
+						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+						<label class='btn btn-info class-selector multi{{ $job == 'CRP' ? ' active' : '' }}'>
+							<input type='checkbox' name='classes[]' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input name='multi' id='multi' type='checkbox'>
+							I want to select multiple classes
+						</label>
 					</div>
 				</div>
 			</div>
@@ -82,53 +96,4 @@
 			</div>
 		</fieldset>
 	</form>
-
-	<h3>Quest information for Disciples of the Land</h3>
-	<div class='well form-horizontal'>
-		<div class='row'>
-			<div class='col-sm-6'>
-				<fieldset>
-					<legend>Select your Class</legend>
-					<div class='form-group'>
-						<label class='col-sm-6 control-label'>Disciples of the Land</label>
-						<div class='col-sm-6'>
-							<div class='btn-group'>
-								@foreach(array('MIN','BTN','FSH') as $job)
-								<span class='btn btn-info quest-selector' data-job='{{ $job }}'>
-									<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
-								</span>
-								@endforeach
-							</div>
-						</div>
-					</div>
-				</fieldset>
-			</div>
-			<div class='col-sm-6'>
-				@foreach(array('MIN','BTN','FSH') as $job)
-				<fieldset class='quests hidden' data-job='{{ $job }}'>
-					<legend>{{ $job_list[$job] }}</legend>
-					<ul>
-						@foreach($quests[$job] as $quest)
-						<li>
-							Level {{ $quest->level }}: 
-							@if ( ! $quest->item)
-								No data! Please help complete the list.
-							@else
-								{{ preg_replace('/\\\\/', '', $quest->item->name) }} 
-								<small>x</small>{{ $quest->amount }}
-								@if($quest->quality)
-								<strong>(HQ)</strong>
-								@endif
-							@endif
-							@if($quest->notes)
-							({{ $quest->notes }})
-							@endif
-						</li>
-						@endforeach
-					</ul>
-				</fieldset>
-				@endforeach
-			</div>
-		</div>
-	</div>
 @stop

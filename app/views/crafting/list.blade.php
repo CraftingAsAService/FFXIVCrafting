@@ -14,7 +14,8 @@
 
 <h1>
 	@if(isset($job))
-	{{ $job->name }} Recipes between Levels {{ $start }} and {{ $end }}
+	{{ implode(' ', explode(',', $desired_job)) }} 
+	Recipes between Levels {{ $start }} and {{ $end }}
 	@else
 	Custom Recipe List
 	@endif
@@ -113,7 +114,14 @@
 					</th>
 					@endif
 					<td>
+						@if($section == 'Crafted')
+						@foreach($item->recipes as $recipe)
+						<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>{{ $recipe->name }}</a>
+						<?php break; ?>
+						@endforeach
+						@else
 						<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>{{ $item->name }}</a>
+						@endif
 					</td>
 					<td>
 						{{ $reagent['make_this_many'] }}
@@ -128,12 +136,13 @@
 					</td>
 					<td class='crafted_gathered'>
 						@foreach($item->jobs as $reagent_job)
+						<?php if ( ! in_array($reagent_job->disciple, array('DOH', 'DOL'))) continue; ?>
 						<span class='alert alert-{{ $reagent_job->abbreviation == $reagent['self_sufficient'] ? 'success' : 'info' }}'>
 							<img src='/img/classes/{{ $reagent_job->abbreviation }}.png' rel='tooltip' title='{{ $job_list[$reagent_job->abbreviation] }}'>
 						</span>
 						@endforeach
 						@foreach($item->recipes as $recipe)
-						<span class='alert alert-{{ $recipe->job->abbreviation == $reagent['self_sufficient'] ? 'success' : 'warning' }}''>
+						<span class='alert alert-{{ $recipe->job->abbreviation == $reagent['self_sufficient'] ? 'success' : 'warning' }}'>
 							<img src='/img/classes/{{ $recipe->job->abbreviation }}.png' rel='tooltip' title='{{ $job_list[$recipe->job->abbreviation] }}'>
 						</span>
 						@endforeach
@@ -160,11 +169,14 @@
 				<a class='close' rel='tooltip' title='Level'>
 					{{ $recipe->level }}
 				</a>
-				@if( ! isset($job))
 				<div class='pull-right' style='clear: right;'>
+				@if( ! isset($job))
 					<img src='/img/classes/{{ $recipe['abbreviation'] }}.png' rel='tooltip' title='{{ $job_list[$recipe['abbreviation']] }}'>
-				</div>
 				@endif
+				@if(isset($recipe->item->quest[0]))
+					<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
+				@endif
+				</div>
 				<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>
 					{{ $recipe->name }}
 				</a>
@@ -187,7 +199,7 @@
 	<div class='panel-body'>
 		@if(isset($job))
 		<form action='/crafting' method='post' role='form' class='form-horizontal'>
-			<input type='hidden' name='class' value='{{ $job->abbreviation }}'>
+			<input type='hidden' name='class' value='{{ $desired_job }}'>
 			<input type='hidden' name='start' value='{{ $start }}'>
 			<input type='hidden' name='end' value='{{ $end }}'>
 			<label>
@@ -223,10 +235,14 @@
 			</div>
 			<div class='panel-body'>
 				<p>Be efficient, make quest items in advance!</p>
+				<p>Materials needed already reflected in lists above.</p>
 
 				<ul>
 					@foreach($quest_items as $quest)
 					<li>
+						@if(count($job) > 2)
+						{{ $quest->job->abbreviation }} 
+						@endif
 						Level {{ $quest->level }}: 
 						@if ( ! $quest->item)
 							No data! Please help complete the list.

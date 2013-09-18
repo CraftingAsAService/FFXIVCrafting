@@ -26,6 +26,16 @@ class Item extends Eloquent
 		return $this->hasMany('Recipe');
 	}
 
+	public function quest()
+	{
+		return $this->hasMany('QuestItem');
+	}
+
+	public function locations()
+	{
+		return $this->belongsToMany('Location')->withPivot('level')->orderBy('level');
+	}
+
 	public static function calculate($job = '', $level = 1, $craftable_only = TRUE)
 	{
 		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? 'T' : 'F');
