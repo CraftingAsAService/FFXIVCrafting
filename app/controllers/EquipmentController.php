@@ -3,180 +3,170 @@
 class EquipmentController extends BaseController 
 {
 
-	public function postIndex()
+	public function getIndex()
 	{
-		return $this->calculate(Input::get('class'), Input::get('level'));
+		// All Jobs
+		$job_list = array();
+		foreach (Job::all() as $j)
+			$job_list[$j->abbreviation] = $j->name;
+
+		return View::make('equipment')
+			->with('error', FALSE)
+			->with('active', 'equipment')
+			->with('job_list', $job_list);
 	}
 
-	public function getCalculate($desired_job = '', $level = 0, $range = 1)
+	public function badUrl()
 	{
-		// Jobs are capital
-		$desired_job = strtoupper($desired_job);
+		return Redirect::to('/equipment');
+	}
 
-		// Make sure it's a real job
-		$job = Job::where('abbreviation', $desired_job)->first();
+	public function postIndex()
+	{
+		$vars = array('class' => 'CRP', 'level' => 5, 'forecast' => '3', 'hindsight' => 0, 'craftable_only' => 0);
+		$values = array();
+		foreach ($vars as $var => $default)
+			$values[] = Input::has($var) ? Input::get($var) : $default;
+		
+		return Redirect::to('/equipment/list?' . implode(':', $values));
+	}
 
-		// TODO: proper error
-		if ( ! $job)
-			exit('Error, unrecognized job/class');
+	public function getList()
+	{
+		// Get Options
+		$options = Input::all() ? explode(':', array_keys(Input::all())[0]) : array();
 
-		// Make sure level is valid
-		if ($level < 0 || $level > 50 || ! is_numeric($level))
-			exit('Error, invalid Level');
+		// Parse Options              // Defaults
+		$desired_job    = isset($options[0]) ? $options[0] : 'CRP';
+		$level          = isset($options[1]) ? $options[1] : 5;
+		$forecast       = isset($options[2]) ? $options[2] : 3;
+		$hindsight      = isset($options[3]) ? $options[3] : 0;
+		$craftable_only = isset($options[4]) ? $options[4] : 1;
 
-		// Figure out the Discipline
-		$disciple = 'DOH'; // Assume Disciple of Hand
-		if (in_array($desired_job, array('MIN', 'BTN', 'FSH')))
-			$disciple = 'DOL';
-
-		$disciple = Job::where('abbreviation', $disciple)->first();
+		View::share('active', 'equipment');
 
 		// All Jobs
 		$job_list = array();
 		foreach (Job::all() as $j)
 			$job_list[$j->abbreviation] = $j->name;
 
+		View::share('job_list', $job_list);
+
+		// Jobs are capital
+		$desired_job = strtoupper($desired_job);
+
+		// Make sure it's a real job
+		$job = Job::where('abbreviation', $desired_job)->first();
+
+		// If the job isn't real, error out
+		if ( ! $job)
+			return View::make('equipment')
+				->with('error', TRUE);
+
+		// Make sure level is valid
+		if ($level < 1 || ! is_numeric($level)) $level = 1;
+		elseif ($level > 50) $level = 50;
+
+		// control the Forecast
+		if ($forecast < 0)     $forecast = 0;
+		elseif ($forecast > 5) $forecast = 5;
+
 		// Find equipment at this level, per equipment type
-		$level_range = in_array($range, array(1, 2)) ? $range * 2 + 1 : 3; // Cover x levels, generally half before and half after actual level
+		$start = $level;
+		if ($hindsight) { $start--; $forecast++; }
+		if ($level == 50) $start -= $forecast;
+
+		$slots = Slot::where('type', 'equipment')->orderBy('rank')->get();
+
+		// What stats do the class like?
+		$job_focus = Stat::focus($job->abbreviation);
 
 		$equipment = array();
-		$start = $level - (($level_range - 1) / 2);
-		if ($start < 1) $start = 1;
-		if ($level >= 50) $start = $level - $level_range + 1;
+		foreach (range($start - 1, $start + $forecast) as $use_level)
+			$equipment[$use_level] = Item::calculate($job->abbreviation, $use_level, $craftable_only);
 
-		foreach (range($start - 1, $start + ($level_range - 1)) as $use_level)
-			$equipment[$use_level] = Equipment::calculate($job->abbreviation, $disciple->abbreviation, $use_level, TRUE);
+		// Make sure the pieces avoid pieces with certain stats
+		$stats_to_avoid = Stat::avoid($job->abbreviation);
 
-		$changes = array($start => array());
-		foreach (range($start, $start + ($level_range - 1)) as $use_level)
+		$changes = array();
+		foreach (range($start, $start + $forecast) as $use_level)
 		{
 			$changes[$use_level] = array();
 
-			foreach (array_keys($equipment[$use_level]) as $slot)
-			{
-				if (empty($equipment[$use_level]) || empty($equipment[$use_level - 1]))
-					continue;
-
-				if (end($equipment[$use_level][$slot]) == array() || end($equipment[$use_level - 1][$slot]) == array())
-				{
-					if (end($equipment[$use_level][$slot]) != array())
-					{
-						$current =& end($equipment[$use_level][$slot])[0];
-						$stats = array('Materia' => $current->materia);
-						foreach ($current->stats as $stat)
-							$stats[$stat->name] = $stat->pivot->amount;
-
-						$changes[$use_level][$slot] = $stats;
-					}
-					
-					continue;
-				}
-
-				if (end($equipment[$use_level][$slot])[0]->level != end($equipment[$use_level - 1][$slot])[0]->level)
-				{
-					$a = $b = array();
-					$previous =& end($equipment[$use_level - 1][$slot])[0];
-					$current =& end($equipment[$use_level][$slot])[0];
-					
-					$a['Materia'] = $previous->materia;
-					$b['Materia'] = $current->materia;
-
-					foreach ($previous->stats as $stat)
-						$a[$stat->name] = $stat->pivot->amount;
-
-					foreach ($current->stats as $stat)
-						$b[$stat->name] = $stat->pivot->amount;
-
-					$diff = array();
-					$diff_keys = array_unique(array_merge(array_keys($a), array_keys($b)));
-					foreach ($diff_keys as $key)
-					{
-						if ( ! isset($a[$key]))
-							$diff[$key] = $b[$key];
-						elseif ( ! isset($b[$key]))
-							$diff[$key] = '-' . $a[$key];
-						else
-							$diff[$key] = $b[$key] - $a[$key];
-
-						if ($diff[$key] == 0)
-							unset($diff[$key]);
-					}
-
-					$changes[$use_level][$slot] = $diff;
-				}
-			}
-		}
-
-		// We got the one before start for the comparison, but we're done with it now
-		unset($equipment[$start - 1]);
-
-		$stats = array();
-		foreach($equipment as $td_level => $slots)
-		{
-			foreach(EquipmentType::orderBy('rank')->get() as $slot)
-			{
-				$item = $slots[$slot->name];
-
-				if ( ! isset($item[0]))
-					continue;
-
-				$item = $item[0];
-
-				if ( ! isset($stats[$td_level]['Materia']))
-					$stats[$td_level]['Materia'] = 0;
-
-				$stats[$td_level]['Materia'] += $item->materia;
-
-				foreach ($item->stats as $stat)
-				{
-					if ( ! isset($stats[$td_level][$stat->name]))
-						$stats[$td_level][$stat->name] = 0;
-
-					$stats[$td_level][$stat->name] += $stat->pivot->amount;
-				}
-			}
-		}
-
-		$stats_diff = array();
-		foreach ($stats as $stat_level => $list)
-		{
-			$stats_diff[$stat_level] = array();
-
-			if ( ! isset($stats[$stat_level - 1]))
+			$current_bucket =& $equipment[$use_level];
+			$previous_bucket =& $equipment[$use_level - 1];
+			
+			if (empty($current_bucket) || empty($previous_bucket))
 				continue;
 
-			$a =& $stats[$stat_level - 1];
-			$b =& $stats[$stat_level];
-
-			$diff = array();
-			$diff_keys = array_unique(array_merge(array_keys($a), array_keys($b)));
-			foreach ($diff_keys as $key)
+			foreach ($slots as $slot)
 			{
-				if ( ! isset($a[$key]))
-					$diff[$key] = $b[$key];
-				elseif ( ! isset($b[$key]))
-					$diff[$key] = '-' . $a[$key];
-				else
-					$diff[$key] = $b[$key] - $a[$key];
+				// Slots empty?
+				if ($current_bucket[$slot->name] == array() || $previous_bucket[$slot->name] == array())
+				{
+					// Maybe it's just previous that's empty
+					if ( ! end($current_bucket[$slot->name]))
+						// Nope
+						continue;
+					else
+						$previous_bucket[$slot->name][0] = (object) array('level' => 0);
+				}
 
-				if ($diff[$key] == 0)
-					unset($diff[$key]);
+				// Are the items the same?  No changes.
+				if ($current_bucket[$slot->name][0]->level == $previous_bucket[$slot->name][0]->level)
+					continue;
+
+				$changes[$use_level][$slot->name] = TRUE;
+
+				if ($previous_bucket[$slot->name][0]->level == 0)
+					unset($previous_bucket[$slot->name][0]);
 			}
-
-			$stats_diff[$stat_level] = $diff;
 		}
 
-		return View::make('equipment')
+		// List of stats that show up
+		$visible_stats = array();
+		foreach ($equipment as $use_levelB => $slotsB)
+			foreach ($slotsB as $slotB => $itemsB)
+				foreach ($itemsB as $itemB)
+					foreach ($itemB->stats as $statB => $amountB)
+						$visible_stats[] = $statB;
+
+
+		$visible_stats = array_unique($visible_stats);
+		sort($visible_stats);
+
+		// Make sure visible stats aren't boring
+		$boring_stats = Stat::boring();
+		foreach ($visible_stats as $key => $stat)
+			if (in_array($stat, $boring_stats))
+				unset($visible_stats[$key]);
+
+		// Was this their first run?
+		$first_time = TRUE;
+
+		if (Session::has('equipment_first_time'))
+			$first_time = FALSE;
+		else
+			Session::put('equipment_first_time', TRUE);
+
+		return View::make('equipment.list')
 			->with(array(
 				'equipment' => $equipment,
-				'stats' => $stats,
-				'stats_diff' => $stats_diff,
+				'slots' => $slots,
 				'changes' => $changes,
+				'job_focus' => $job_focus,
+				'visible_stats' => $visible_stats,
+				'stats_to_avoid' => $stats_to_avoid,
+
+				'kill_column' => $start - 1,
+
 				'job' => $job,
-				'disciple' => $disciple,
-				'job_list' => $job_list,
+
 				'level' => $level,
-				'range' => $range
+				'forecast' => $forecast,
+				'hindsight' => $hindsight,
+				'craftable_only' => $craftable_only,
+				'first_time' => $first_time
 			));
 			
 	}

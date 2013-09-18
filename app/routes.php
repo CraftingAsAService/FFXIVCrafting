@@ -11,28 +11,27 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', 'HomeController@showWelcome');
 
 Route::get('stats', function()
 {
-	View::share('active', 'stats');
-	return View::make('stats');
+	return View::make('stats')
+		->with('active', 'stats');
 });
 
-Route::get('materia', function()
-{
-	View::share('active', 'materia');
-	return View::make('materia');
-});
+Route::controller('materia', 'MateriaController');
 
-Route::get('food', function()
-{
-	View::share('active', 'food');
-	return View::make('food');
-});
+Route::controller('food', 'FoodController');
 
-Route::get('equipment/{job}/{level}/{range}', 'EquipmentController@getCalculate');
+Route::get('equipment/list', 'EquipmentController@getList');
+Route::any('equipment/{all}', 'EquipmentController@badUrl')->where('all', '.*');
 Route::controller('equipment', 'EquipmentController');
+
+Route::controller('crafting', 'CraftingController');
+Route::controller('gathering', 'GatheringController');
+
+Route::get('thanks', function()
+{
+	View::share('active', 'thanks');
+	return View::make('thanks');
+});

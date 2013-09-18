@@ -1,119 +1,121 @@
 @extends('layout')
 
+@section('vendor-css')
+	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
+	<link href='/css/bootstrap-switch.css' rel='stylesheet'>
+@stop
+
+@section('javascript')
+	<script src='/js/home.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-switch.js'></script>
+@stop
+
 @section('content')
 
-<h1>Gear for a level {{ $level }} {{ $job->name }}</h1>
-<button class='btn btn-info toggle-origin pull-right'>Toggle Origin</button>
-<button class='btn btn-info toggle-changes pull-right' style='margin-right: 10px;'>Toggle Changes Only</button>
-<button class='btn btn-info toggle-range pull-right' style='margin-right: 10px;'>Toggle Range</button>
-@if($job->name != $disciple->name)
-<h2>{{ $disciple->name }}</h2>
-@endif
+	<h1>Equipment Calculator</h1>
 
-<table class='table table-bordered'>
-	<thead>
-		<tr>
-			<th>
-				
-			</th>
-			@foreach(array_keys($equipment) as $th_level)
-			<th class='text-center alert alert-{{ $th_level == $level ? 'success' : ($th_level < $level ? 'info' : 'warning') }}'>
-				Level
-				{{ $th_level }}
-			</th>
-			@endforeach
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<th>
-				
-			</th>
-			@foreach(array_keys($equipment) as $tf_level)
-			<th>
-				@foreach($stats[$tf_level] as $stat => $value)
-				<div class='row'>
-					<div class='col-sm-2 text-center'>
-						<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
+	<p>Display the gear available for a class at a certain level.</p>
+
+	@if(isset($error) && $error)
+	<div class='alert alert-danger'>
+		The job you selected is unrecognized.  Try again.
+	</div>
+	@endif
+
+	<form action='/equipment' method='post' role='form' class='well form-horizontal'>
+		<fieldset>
+			<legend>Select your Class</legend>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand &amp; Land</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+						<label class='btn btn-primary class-selector{{ $job == 'CRP' ? ' active' : '' }}'>
+							<input type='radio' name='class' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
 					</div>
-					<div class='col-sm-10'>
-						{{ $stat }}: {{ $value }} 
-						@if(isset($stats_diff[$tf_level][$stat]))
-						({{ $stats_diff[$tf_level][$stat] > 0 ? '+' : '' }}{{ $stats_diff[$tf_level][$stat] }})
-						@endif
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('MIN','BTN','FSH') as $job)
+						<label class='btn btn-info class-selector'>
+							<input type='radio' name='class' value='{{ $job }}'> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
 					</div>
 				</div>
-				@endforeach
-			</th>
-			@endforeach
-		</tr>
-	</tfoot>
-	<tbody>
-		@foreach(EquipmentType::orderBy('rank')->get() as $type)
-		<tr>
-			<td class='text-center'>
-				<img src='/img/equipment/{{ $type->name }}.png' class='equipment-icon' rel='tooltip' title='{{ $type->name }}'>
-				<div>
-					<strong>{{ $type->name }}</strong>
-				</div>
-			</td>
-			@foreach(array_keys($equipment) as $td_level)
-			<?php $new = isset($changes[$td_level][$type->name]); ?>
-			<td class='{{ $new ? ('alert alert-' . ($td_level == $level ? 'success' : ($td_level < $level ? 'info' : 'warning'))) : '' }}'>
-			@foreach($equipment[$td_level][$type->name] as $item)
-				<div class='clearfix'>
-					@if(strlen($item->origin) == 3)
-					<img src='/img/classes/{{ $item->origin == 'n/a' ? 'NA' : $item->origin }}.png' class='stat-origin pull-right {{ $new ? '' : 'hidden not-new' }}' rel='tooltip' title='{{ $item->origin == 'n/a' ? 'Guildmaster / Quartermaster' : $job_list[$item->origin] }}'>
-					@endif
-					<div>
-						<strong>{{ $item->level }}</strong>
-						{{ $item->name }} 
+			</div>
+
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC') as $job)
+						<label class='btn btn-danger class-selector '>
+							<input type='radio' name='class' value='{{ $job }}'> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
 					</div>
-					@if($new)
-						@if(strlen($item->origin) != 3)
-						<div class='origin panel'>
-							<strong>Origin</strong> 
-							{{ $item->origin }}
-						</div>
-						@endif
-						<div class='stats'>
-							@foreach($changes[$td_level][$type->name] as $stat => $change)
-							<?php if ($change == 0) continue; ?>
-							<div class='text-center panel pull-left stat-box'>
-								<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'><br>
-								{{ $change > 0 ? '+' : '' }}{{ $change }}
-							</div>
-							@endforeach
-						</div>
-					@endif
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach(array('CNJ', 'THM', 'ACN') as $job)
+						<label class='btn btn-warning class-selector '>
+							<input type='radio' name='class' value='{{ $job }}'> 
+							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						</label>
+						@endforeach
+					</div>
 				</div>
-			@endforeach
-			</td>
-			@endforeach
-		</tr>
-		@endforeach
-	</tbody>
-</table>
-
-<div class='text-center'>
-	<ul class='pagination pagination'>
-		@foreach($job_list as $abbr => $rjob)
-		<li class='{{ $rjob == $job->name ? 'active' : '' }} '>
-			<a href='/equipment/{{ strtolower($abbr) }}/{{ $level }}/{{ $range }}' rel='tooltip' title='{{ $rjob }}'>{{ $abbr }}</a>
-		</li>
-		@endforeach
-	</ul>
-</div>
-
-<div class='text-center'>
-	<ul class='pagination pagination'>
-		@foreach(range($level - 5, $level + 5) as $rlevel)
-		<?php if ($rlevel < 1 || $rlevel > 50) continue; ?>
-		<li class='{{ $rlevel == $level ? 'active' : '' }} '>
-			<a href='/equipment/{{ strtolower($job->abbreviation) }}/{{ $rlevel }}/{{ $range }}'>{{ $rlevel }}</a>
-		</li>
-		@endforeach
-	</ul>
-</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Options</legend>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Level</label>
+				<div class='col-sm-4 col-md-3'>
+					<input type='number' name='level' value='5' placeholder='Level (e.g. 5)' class='form-control' required='required'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Forecast</label>
+				<div class='col-sm-4 col-md-3'>
+					<p>
+						<div id='slider-range-min'></div>
+					</p>
+				</div>
+				<div class='col-sm-4 col-md-6'>
+					<p style='margin-top: 4px;'>
+						See <input type='text' name='forecast' id='forecast' value='3' style='border: 0; font-style: italic; width: 10px; background-color: inherit;' class='text-center'> set<span id='forecast_plural'>s</span> into the future
+					</p>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Hindsight</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='make-switch' data-on='success' data-off='warning'>
+						<input type='checkbox' name='hindsight' value='1'>
+					</div>
+					See back one level
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Craftable Only</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='make-switch' data-on='success' data-off='warning'>
+						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
+					</div>
+					Only show craftable items
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<div class='form-group'>
+				<div class='col-sm-4 col-md-3 col-sm-offset-4 col-md-offset-3'>
+					<button type='submit' class='btn btn-success btn-block btn-lg'>Get my Gear!</button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
 
 @stop
