@@ -1,10 +1,6 @@
-## FFXIV CAAS
+# Crafting As A Service
 
-### Requirements:
-* PHP 5.4.3+
-* Composer
-* MySQL
-* Git Bash
+An online tool to help crafters in Final Fantasy XIV: A Realm Reborn.
 
 ### Contributions
 * Are welcome!

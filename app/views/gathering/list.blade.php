@@ -74,11 +74,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach(range(5,50,5) as $range_level)
+				{{-- @foreach(range(5,50,5) as $range_level) --}}
+				@foreach(range(1,75) as $item_level)
 				@foreach($items as $item_id => $item)
-				<?php if($item['data']->locations[0]->pivot->level != $range_level) continue; ?>
+				<?php if ($item['data']->level != $item_level) continue; ?>
+				{{-- <?php if($item['data']->locations[0]->pivot->level != $range_level) continue; ?> --}}
 				<tr{{ 100 > $item_id ? ' class="hidden shard"' : '' }}>
 					<td class='text-left'>
+						<span class='close' rel='tooltip' title='Item Level'>{{ $item_level }}</span>
 						<a href='http://xivdb.com/{{ $item['data']->href }}' target='_blank'>{{ $item['data']->name }}</a>
 					</td>
 					<td class='text-center amount_needed' data-additional='{{ isset($item['data']->quest[0]) ? $item['data']->quest[0]->amount : 0 }}'>
