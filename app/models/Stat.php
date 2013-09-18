@@ -25,9 +25,9 @@ class Stat extends Eloquent
 			'DRG' => $melee_set,
 			'MNK' => $melee_set,
 
-			'CNJ' => array_merge(array('Intelligence'), $magic_set),
-			'SCH' => array_merge(array('Mind'), $magic_set),
-			'THM' => array_merge(array('Mind'), $magic_set),
+			'CNJ' => $magic_set, //array_merge(array('Intelligence'), $magic_set),
+			'SCH' => $magic_set, //array_merge(array('Mind'), $magic_set),
+			'THM' => $magic_set, //array_merge(array('Mind'), $magic_set),
 
 			'WHM' => $magic_set,
 			'BLM' => $magic_set,

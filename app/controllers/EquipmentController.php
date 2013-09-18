@@ -88,29 +88,6 @@ class EquipmentController extends BaseController
 		// Make sure the pieces avoid pieces with certain stats
 		$stats_to_avoid = Stat::avoid($job->abbreviation);
 
-		if ($stats_to_avoid)
-			foreach ($equipment as $use_levelB => $slotsB)
-			{
-				if ($use_levelB == array_keys($equipment)[0])
-					continue;
-
-				foreach ($slotsB as $slotB => $itemsB)
-				{
-					foreach ($itemsB as $key => $itemB)
-						foreach ($stats_to_avoid as $avoid)
-							if (in_array($avoid, array_keys($itemB->stats)))
-								// Remove piece
-								unset($equipment[$use_levelB][$slotB][$key]);
-
-					// Make sure it's not empty: Grab the previous level's item(s)
-					if (empty($equipment[$use_levelB][$slotB]))
-						$equipment[$use_levelB][$slotB] = $equipment[$use_levelB - 1][$slotB];
-
-					// Reset Keys
-					$equipment[$use_levelB][$slotB] = array_values($equipment[$use_levelB][$slotB]);
-				}
-			}
-
 		$changes = array();
 		foreach (range($start, $start + $forecast) as $use_level)
 		{
@@ -118,7 +95,7 @@ class EquipmentController extends BaseController
 
 			$current_bucket =& $equipment[$use_level];
 			$previous_bucket =& $equipment[$use_level - 1];
-
+			
 			if (empty($current_bucket) || empty($previous_bucket))
 				continue;
 

@@ -49,10 +49,13 @@ class Item extends Eloquent
 
 		$equipment_list = array();
 
+		// Make sure the pieces avoid pieces with certain stats
+		$stats_to_avoid = Stat::avoid($job->abbreviation);
+
 		foreach (Slot::where('type', 'equipment')->get() as $slot)
 		{
 			$query = DB::table('items AS i')
-				->select('i.id', 'i.name', 'i.href', 'i.vendors', 'i.gil', 'i.level', DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'))
+				->select('i.id', 'i.name', 'i.href', 'i.vendors', 'i.gil', 'i.level', 'i.ilvl', DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'))
 				->join('item_job AS ij', 'ij.item_id', '=', 'i.id')
 				->join('jobs AS j', 'j.id', '=', 'ij.job_id')
 				->leftJoin('recipes AS r', 'i.id', '=', 'r.item_id')
@@ -67,7 +70,30 @@ class Item extends Eloquent
 			if ($craftable_only)
 				$query->havingRaw('crafted_by IS NOT NULL');
 
-			$equipment_list[$slot->name] = $query->get();
+			$equipment_list[$slot->name] = $query
+				->remember(Config::get('site.cache_length'))
+				->get();
+
+			$list =& $equipment_list[$slot->name];
+
+			// Load the stats on each one
+			foreach ($list as $key => $item)
+			{
+				$item->stats = DB::table('item_stat AS istat')
+					->select('s.name', 'istat.amount', 'istat.maximum')
+					->join('stats AS s', 's.id', '=', 'istat.stat_id')
+					->where('istat.item_id', $item->id)
+					->remember(Config::get('site.cache_length'))
+					->get();
+
+				$stats = array();
+				foreach ($item->stats as $stat)
+					$stats[$stat->name] = rtrim(rtrim(rtrim($stat->amount, '0'), '0'), '.');
+				$item->stats = $stats;
+
+				if (count(array_intersect(array_keys($item->stats), $stats_to_avoid)) > 0)
+					unset($list[$key]);
+			}
 
 			// Go through the list.
 			// If it's not the highest level, remove it
@@ -80,23 +106,13 @@ class Item extends Eloquent
 
 			$i = 0;
 			foreach ($equipment_list[$slot->name] as $key => $item)
-			{
 				if ($i++ != 0 && $item->level != $highest_level)
 					unset($equipment_list[$slot->name][$key]);
-				else
-				{
-					$item->stats = DB::table('item_stat AS istat')
-						->select('s.name', 'istat.amount', 'istat.maximum')
-						->join('stats AS s', 's.id', '=', 'istat.stat_id')
-						->where('istat.item_id', $item->id)
-						->get();
 
-					$stats = array();
-					foreach ($item->stats as $stat)
-						$stats[$stat->name] = rtrim(rtrim(rtrim($stat->amount, '0'), '0'), '.');
-					$item->stats = $stats;
-				}
-			}
+			// Re-key the list
+			$list = array_values($list);
+
+			unset($list);
 		}
 		
 		// Cache the results
