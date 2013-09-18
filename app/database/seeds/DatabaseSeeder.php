@@ -382,6 +382,8 @@ class DataTablesSeeder extends Seeder
 				if ($object->slot == 'Food' && preg_match('/^(\d+).*\s(\d+)\)$/', $value, $matches))
 					list($ignore, $value, $maximum) = $matches;
 
+				$value = preg_replace('/[^0-9\.]/', '', $value);
+
 				$stats[] = array(
 					'item_id' => $item_id,
 					'stat_id' => $this->stats[$a_name],
