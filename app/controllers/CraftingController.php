@@ -242,8 +242,10 @@ class CraftingController extends BaseController
 			if ($include_quests == TRUE)
 			{
 				$run = 0;
-				foreach ($recipe->item->quest as $quest)
-					$run += ceil($quest->amount / $recipe->yields);
+				
+				if ($recipe->item)
+					foreach ($recipe->item->quest as $quest)
+						$run += ceil($quest->amount / $recipe->yields);
 
 				// Run everything at least once
 				$inner_multiplier *= $run ?: 1;

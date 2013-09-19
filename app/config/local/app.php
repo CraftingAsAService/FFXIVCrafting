@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://ffxiv-caas.local.dev',
+	'url' => 'http://caas.local.dev',
 
 	/*
 	|--------------------------------------------------------------------------
