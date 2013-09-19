@@ -113,14 +113,18 @@
 						@endif
 					</th>
 					@endif
-					<td>
+					<td class='text-left'>
 						@if($section == 'Crafted')
 						@foreach($item->recipes as $recipe)
-						<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>{{ $recipe->name }}</a>
+						<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
+							<img src='/img/items/{{ $recipe->icon }}' style='margin-right: 5px;'>{{ $recipe->name }}
+						</a>
 						<?php break; ?>
 						@endforeach
 						@else
-						<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>{{ $item->name }}</a>
+						<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>
+							<img src='/img/items/{{ $item->icon }}' style='margin-right: 5px;'>{{ $item->name }}
+						</a>
 						@endif
 					</td>
 					<td>
@@ -178,6 +182,7 @@
 				@endif
 				</div>
 				<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>
+					<img src='/img/items/{{ $recipe->icon }}' style='margin-right: 5px;'>
 					{{ $recipe->name }}
 				</a>
 				<p><small>Yields: {{ $recipe->yields }}</small></p>
@@ -288,7 +293,7 @@
 	</p>
 	<p>
 		<small><em>
-			<a href='http://xivdb.com/' target='_blank'>XIVDB</a> for their tooltips and data.
+			<a href='http://xivdb.com/' target='_blank'>XIVDB</a> for their tooltips, data and icons.
 			<a href='http://www.daevaofwar.net/index.php?/topic/628-all-crafting-turn-ins-to-50/' target='_blank'>These</a>
 			<a href='http://www.daevaofwar.net/index.php?/topic/629-all-gathering-turn-ins-to-50/' target='_blank'>Posts</a>
 			for some quest knowledge.

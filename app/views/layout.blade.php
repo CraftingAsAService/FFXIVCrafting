@@ -2,7 +2,7 @@
 <html lang='en-us'>
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
-		<title>FFXIV CAAS</title>
+		<title>Crafting as a Service</title>
 		
 		<meta charset='utf-8'>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>

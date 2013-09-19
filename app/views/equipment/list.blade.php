@@ -84,7 +84,9 @@
 						</div>
 						
 						<div class='name-box'>
-							<a href='http://xivdb.com/{{ $item->href }}' target='_blank' class='text-primary'>{{ $item->name }}</a>
+							<a href='http://xivdb.com/{{ $item->href }}' target='_blank' class='text-primary'>
+								<img src='/img/items/{{ $item->icon }}' style='margin-right: 5px;' width='20' height='20'>{{ $item->name }}
+							</a>
 						</div>
 
 						<div class='stats-box row{{ ! $new ? ' hidden' : '' }}'>

@@ -20,6 +20,17 @@
 
 @section('content')
 
+@if($host_warning)
+<div class="panel panel-danger" style='margin-bottom: 60px;'>
+	<div class="panel-heading">
+		<h3 class="panel-title">Domain Notificiation</h3>
+	</div>
+	<div class="panel-body">
+		You're currently using caas.thokk.com.  Please use <a href='http://craftingasaservice.com/'>http://craftingasaservice.com/</a> instead.  Thanks!
+	</div>
+</div>
+@endif
+
 <div class='row'>
 	<div class='col-lg-4'>
 		<h2>Equipment Calculator</h2>

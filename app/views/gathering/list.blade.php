@@ -76,7 +76,9 @@
 				<tr{{ 100 > $item_id ? ' class="hidden shard"' : '' }}>
 					<td class='text-left'>
 						<span class='close' rel='tooltip' title='Item Level'>{{ $item_level }}</span>
-						<a href='http://xivdb.com/{{ $item['data']->href }}' target='_blank'>{{ $item['data']->name }}</a>
+						<a href='http://xivdb.com/{{ $item['data']->href }}' target='_blank'>
+							<img src='/img/items/{{ $item['data']->icon }}' style='margin-right: 5px;'>{{ $item['data']->name }}
+						</a>
 					</td>
 					<td class='text-center amount_needed' data-additional='{{ isset($item['data']->quest[0]) ? $item['data']->quest[0]->amount : 0 }}'>
 						@if(isset($item['data']->quest[0]))
