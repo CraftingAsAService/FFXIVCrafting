@@ -8,7 +8,7 @@
 
 @section('content')
 
-<h1>Quests</h1>
+<h1>Quest Requirements</h1>
 
 <div class='panel'>
 	<div class='panel-body'>
@@ -50,8 +50,8 @@
 		@foreach($quest_list as $q)
 		<tr>
 			<td>
-				<span class='close' rel='tooltip' title='Item Level'>{{ $q->level }}</span>
-				<a href='http://xivdb.com/{{ $q->item->href }}' class='item-name' target='_blank'>
+				<span class='close' rel='tooltip' title='Quest Level'>{{ $q->level }}</span>
+				<a href='http://xivdb.com/{{ $q->recipe ? ('?recipe/' . $q->recipe->id) : $q->item->href }}' class='item-name' target='_blank'>
 					<img src='/img/items/{{ $q->item->icon ?: '../noitemicon.png' }}' style='margin-right: 10px;'>{{ $q->item->name }}
 				</a>
 			</td>

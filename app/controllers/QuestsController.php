@@ -11,7 +11,7 @@ class QuestsController extends BaseController
 			$job_list[$j->abbreviation] = $j->name;
 
 		// All Quests
-		$quest_records = QuestItem::with('job', 'item')
+		$quest_records = QuestItem::with('job', 'item', 'item.recipes')
 			->orderBy('job_id')
 			->orderBy('level')
 			->orderBy('item_id')
@@ -22,6 +22,10 @@ class QuestsController extends BaseController
 		{
 			if ( ! isset($quests[$quest->job->abbreviation]))
 				$quests[$quest->job->abbreviation] = array();
+
+			foreach ($quest->item->recipes as $r)
+				if ($r->job_id == $quest->job_id)
+					$quest->recipe = $r;
 
 			$quests[$quest->job->abbreviation][] = $quest;
 		}
