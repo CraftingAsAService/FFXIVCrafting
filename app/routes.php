@@ -29,6 +29,7 @@ Route::controller('equipment', 'EquipmentController');
 
 Route::controller('crafting', 'CraftingController');
 Route::controller('gathering', 'GatheringController');
+Route::controller('quests', 'QuestsController');
 
 Route::get('thanks', function()
 {

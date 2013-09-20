@@ -267,7 +267,7 @@ class CraftingController extends BaseController
 					if (isset($reagent->jobs[0]))
 					{
 						// Prevent non DOH/DOL jobs from showing up
-						for ($i = count($reagent->jobs) - 1; $i < 0; $i--)
+						for ($i = count($reagent->jobs) - 1; $i >= 0; $i--)
 						{
 							$job = $reagent->jobs[$i];
 							if ( ! in_array($job->disciple, array('DOH', 'DOL'))) 

@@ -117,13 +117,13 @@
 						@if($section == 'Crafted')
 						@foreach($item->recipes as $recipe)
 						<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-							<img src='/img/items/{{ $recipe->icon }}' style='margin-right: 5px;'>{{ $recipe->name }}
+							<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
 						</a>
 						<?php break; ?>
 						@endforeach
 						@else
 						<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>
-							<img src='/img/items/{{ $item->icon }}' style='margin-right: 5px;'>{{ $item->name }}
+							<img src='/img/items/{{ $item->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $item->name }}
 						</a>
 						@endif
 					</td>
@@ -182,8 +182,7 @@
 				@endif
 				</div>
 				<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>
-					<img src='/img/items/{{ $recipe->icon }}' style='margin-right: 5px;'>
-					{{ $recipe->name }}
+					<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
 				</a>
 				<p><small>Yields: {{ $recipe->yields }}</small></p>
 				{{--@foreach($recipe->reagents as $reagent)
