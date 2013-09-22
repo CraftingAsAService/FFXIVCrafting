@@ -3,7 +3,7 @@ var equipment = {
 		job: job,
 		level: level,
 		craftable_only: craftable_only,
-		level_range: 4,
+		level_range: 3,
 		boring_stats: false
 	},
 	init:function() {
@@ -129,7 +129,7 @@ var equipment = {
 			equipment.options.level = lvl;
 
 
-			if ($('td[data-level=' + (lvl + equipment.options.level_range - 2) + ']').length > 0)
+			if ($('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length > 0)
 			{
 				equipment.column_display();
 				equipment.fix_rows();
@@ -137,69 +137,14 @@ var equipment = {
 				equipment.same_cell_heights();
 
 				// preload the next level
-				if (lvl + equipment.options.level_range <= 50 && $('td[data-level=' + (lvl + equipment.options.level_range - 2) + ']').length == 0)
-					equipment.load_column(lvl + equipment.options.level_range - 2, 'Pre');
+				if (lvl + equipment.options.level_range <= 50 && $('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length == 0)
+					equipment.load_column(lvl + equipment.options.level_range - 1, 'Pre');
 				else
 					$('.previous-gear, .next-gear').removeClass('disabled');
 			}
 			else
-				equipment.load_column(lvl + equipment.options.level_range - 2);
+				equipment.load_column(lvl + equipment.options.level_range - 1);
 		});
-
-		/*
-		// Trigger Stat Summary for the first cell of every column
-		
-		$('.stat-toggle').click(function() {
-			var statEl = $(this);
-			var stat = statEl.data('stat');
-
-			statEl.toggleClass('opaque');
-			$('.item .stats-box .stat[data-stat="' + stat + '"]').toggleClass('hidden');
-			$('tfoot .stat[data-stat="' + stat + '"]').toggleClass('hidden');
-		});
-
-		$('#craft_these').click(function() {
-			var column = $('#craft_level').val(),
-				row  = $('#craft_slot').val(),
-				status = $('#craft_status').val();
-
-			// Which columns are we going to analyze
-			var columns = [];
-			if (column == 'all')
-				$('#craft_level option:not(:first-child)').each(function() {
-					columns[columns.length] = $(this).val();
-				});
-			else
-				columns[0] = column;
-
-			// Which rows are we going to analyze
-			var rows = [];
-			if (row == 'all')
-				$('#craft_slot option:not(:first-child)').each(function() {
-					rows[rows.length] = $(this).val();
-				});
-			else
-				rows[0] = row;
-
-			var ids = [];
-
-			for (var i = 0; i < columns.length; i++)
-				for (var j = 0; j < rows.length; j++) {
-					var cell = $('#gear tbody tr:nth-child(' + rows[j] + ') td:nth-child(' + columns[i] + ')');
-					console.log(status, cell);
-					if (status == 'new' && ! cell.hasClass('alert'))
-						continue;
-
-					if (cell.find('.item.active.craftable').length > 0)
-						ids[ids.length] = cell.find('.item.active').data('itemId');
-				}
-
-			ids = unique(ids);
-
-			window.location = '/crafting/gear?' + ids.join(':') + ':1';
-		});
-
-		*/
 	},
 	slim:function(no) {
 		$('#gear')[(no ? 'add' : 'remove') + 'Class']('slim');
@@ -424,6 +369,9 @@ var equipment = {
 			equipment.slim(data.value);
 			$('html, body').animate({ scrollTop: $('#table-options').offset().top }, 'slow');
 		});
+
+		if ($('#toggle-slim').bootstrapSwitch('status'))
+			equipment.options.level_range = 4;
 
 		$('#toggle-all-stats').on('switch-change', function(e, data) {
 			equipment.options.boring_stats = data.value;
