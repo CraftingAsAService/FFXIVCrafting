@@ -78,34 +78,21 @@
 				</div>
 			</div>
 			<div class='form-group'>
-				<label class='col-sm-4 col-md-3 control-label'>Forecast</label>
-				<div class='col-sm-4 col-md-3'>
-					<p>
-						<div id='slider-range-min'></div>
-					</p>
-				</div>
-				<div class='col-sm-4 col-md-6'>
-					<p style='margin-top: 4px;'>
-						See <input type='text' name='forecast' id='forecast' value='3' style='border: 0; font-style: italic; width: 10px; background-color: inherit;' class='text-center'> set<span id='forecast_plural'>s</span> into the future
-					</p>
-				</div>
-			</div>
-			<div class='form-group'>
-				<label class='col-sm-4 col-md-3 control-label'>Hindsight</label>
-				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning'>
-						<input type='checkbox' name='hindsight' value='1'>
-					</div>
-					See back one level
-				</div>
-			</div>
-			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Craftable Only</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='make-switch' data-on='success' data-off='warning'>
 						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
 					</div>
 					Only show craftable items
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Slim Mode</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='make-switch' data-on='success' data-off='warning'>
+						<input type='checkbox' name='slim_mode' value='1' checked='checked'>
+					</div>
+					Show a condensed version
 				</div>
 			</div>
 		</fieldset>
