@@ -129,7 +129,7 @@ var equipment = {
 			equipment.options.level = lvl;
 
 
-			if ($('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length > 0)
+			if ($('td[data-level=' + (lvl + equipment.options.level_range - 2) + ']').length > 0)
 			{
 				equipment.column_display();
 				equipment.fix_rows();
@@ -137,13 +137,13 @@ var equipment = {
 				equipment.same_cell_heights();
 
 				// preload the next level
-				if (lvl + equipment.options.level_range <= 50 && $('td[data-level=' + (lvl + equipment.options.level_range) + ']').length == 0)
-					equipment.load_column(lvl + equipment.options.level_range, 'Pre');
+				if (lvl + equipment.options.level_range <= 50 && $('td[data-level=' + (lvl + equipment.options.level_range - 2) + ']').length == 0)
+					equipment.load_column(lvl + equipment.options.level_range - 2, 'Pre');
 				else
 					$('.previous-gear, .next-gear').removeClass('disabled');
 			}
 			else
-				equipment.load_column(lvl + equipment.options.level_range - 1);
+				equipment.load_column(lvl + equipment.options.level_range - 2);
 		});
 
 		/*
