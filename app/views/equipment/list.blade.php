@@ -102,7 +102,7 @@
 	<div class='panel-body'>
 		<div class='row'>
 			<div class='col-sm-4'>
-				<div class='btn-group'>
+				<div class='btn-group dropup'>
 					<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
 					Change Class <span class='caret'></span>
 					</button>
@@ -131,7 +131,7 @@
 				</div>
 			</div>
 			<div class='col-sm-4'>
-				<div class='btn-group'>
+				<div class='btn-group dropup'>
 					<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
 					Change Level <span class='caret'></span>
 					</button>
