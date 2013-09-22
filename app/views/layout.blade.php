@@ -21,7 +21,7 @@
 	</head>
 	<body>
 		<div id='wrap'>
-			<div class='navbar navbar-inverse navbar-fixed-top'>
+			<div class='navbar navbar-inverse'>
 				<div class='container'>
 					<div class='navbar-header'>
 						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
@@ -87,8 +87,10 @@
 			</div>
 		</div>
 
+		<div id='notifications'></div>
+
 		<!-- jQuery -->
-		<script src='//code.jquery.com/jquery.js'></script>
+		<script src='/js/jquery-2.0.3.min.js'></script>
 		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 		
 		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
