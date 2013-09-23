@@ -1,7 +1,7 @@
 html,
 body {
-  height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
+	height: 100%;
+	/* The html and body elements cannot have any padding or margin. */
 }
 .equipment-icon {
 	border-radius: 5px;
@@ -34,9 +34,9 @@ td.new .stats {
 	padding: 0 0 60px;
 }
 
-#wrap > .container {
-	padding: 60px 15px 48px;
-}
+// #wrap > .container {
+// 	padding: 60px 15px 48px;
+// }
 
 #footer {
 	height: 60px;
@@ -177,4 +177,395 @@ td {
 			padding-top: inherit;
 		}
 	}
+}
+
+.job-border {
+	display: inline-block;
+	border: 3px double #ccc;
+	border-radius: 8px;
+	width: 42px;
+	height: 42px;
+	position: relative;
+	float: left;
+	margin-right: .2em;
+
+	&.DOH, &.DOL {
+		border-color: silver;
+	}
+
+	&.DOW, &.DOM {
+		border-color: gold;
+	}
+
+	img {
+		position: absolute;
+		left: 6px;
+		top: 6px;
+	}
+}
+
+#gear-main {
+	&.table tbody>tr>td.table-holder {
+		padding: 0px;
+			border: 0px;
+		&> table {
+			margin-bottom: 0px;
+		}
+	}
+
+	thead th,
+	tfoot th {
+		border: 1px solid #3f3f3f;
+		background-color: #333;
+		border-color: #3f3f3f;
+		color: #ffffff;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	}
+	thead th {
+		text-align: center;
+		font-size: 2em;
+	}
+
+	.previous-gear, .next-gear {
+		cursor: pointer;
+
+		vertical-align: middle !important;
+		text-align: center;
+
+		font-size: 30px;
+		padding: 0px !important;
+
+		width: 25px;
+
+		border-collapse: separate !important;
+		border-top-width: 0px !important;
+		
+		color: #ffffff;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	}
+
+	.previous-gear {
+		border-radius: 10px 0 0 10px;
+		-moz-border-radius: 10px 0 0 10px;
+		-o-border-radius: 10px 0 0 10px;
+		-ms-border-radius: 10px 0 0 10px;
+		-webkit-border-radius: 10px 0 0 10px;
+
+		background-color: #333;
+		background-image: -moz-linear-gradient(left, #333, #555);
+		background-image: -webkit-linear-gradient(left, #333, #555);
+		background-image: -o-linear-gradient(left, #333, #555);
+		background-image: linear-gradient(to left, #333, #555);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff555555', GradientType=0);
+		border-color: #555555 #555555 #333333;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		*background-color: #555555;
+		/* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+
+		&:hover {
+			background-color: #f9a123;
+			background-image: -moz-linear-gradient(left, #333, #f9a123);
+			background-image: -webkit-linear-gradient(left, #333, #f9a123);
+			background-image: -o-linear-gradient(left, #333, #f9a123);
+			background-image: linear-gradient(to left, #333, #f9a123);
+			background-repeat: repeat-x;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#fff9a123', GradientType=0);
+			border-color: #f9a123 #f9a123 #333333;
+			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		}
+	}
+
+	.next-gear {
+		border-radius: 0 10px 10px 0;
+		-moz-border-radius: 0 10px 10px 0;
+		-o-border-radius: 0 10px 10px 0;
+		-ms-border-radius: 0 10px 10px 0;
+		-webkit-border-radius: 0 10px 10px 0;
+
+		background-color: #333;
+		background-image: -moz-linear-gradient(right, #333, #555);
+		background-image: -webkit-linear-gradient(right, #333, #555);
+		background-image: -o-linear-gradient(right, #333, #555);
+		background-image: linear-gradient(to right, #333, #555);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff555555', GradientType=0);
+		border-color: #555555 #555555 #333333;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		*background-color: #555555;
+		/* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+
+		&:hover {
+			background-color: #f9a123;
+			background-image: -moz-linear-gradient(right, #333, #f9a123);
+			background-image: -webkit-linear-gradient(right, #333, #f9a123);
+			background-image: -o-linear-gradient(right, #333, #f9a123);
+			background-image: linear-gradient(to right, #333, #f9a123);
+			background-repeat: repeat-x;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#fff9a123', GradientType=0);
+			border-color: #f9a123 #f9a123 #333333;
+			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		}
+	}
+
+	td.slot {
+
+		width: 33.3%;
+
+		background-repeat: no-repeat;
+		background-position: center;
+		background-color: #333;
+		border-color: #3f3f3f;
+		//border-width: 0px;
+		padding: 0px;
+
+		&.slot-Primary {
+			background-image: url(/img/equipment/originals/Primary.png);
+		}
+		&.slot-Secondary {
+			background-image: url(/img/equipment/originals/Secondary.png);
+		}
+		&.slot-Head {
+			background-image: url(/img/equipment/originals/Head.png);
+		}
+		&.slot-Body {
+			background-image: url(/img/equipment/originals/Body.png);
+		}
+		&.slot-Hands {
+			background-image: url(/img/equipment/originals/Hands.png);
+		}
+		&.slot-Waist {
+			background-image: url(/img/equipment/originals/Waist.png);
+		}
+		&.slot-Legs {
+			background-image: url(/img/equipment/originals/Legs.png);
+		}
+		&.slot-Feet {
+			background-image: url(/img/equipment/originals/Feet.png);
+		}
+		&.slot-Neck {
+			background-image: url(/img/equipment/originals/Neck.png);
+		}
+		&.slot-Ears {
+			background-image: url(/img/equipment/originals/Ears.png);
+		}
+		&.slot-Wrists {
+			background-image: url(/img/equipment/originals/Wrists.png);
+		}
+		&.slot-Ring {
+			background-image: url(/img/equipment/originals/Ring.png);
+		}
+		&.slot-Ring {
+			background-image: url(/img/equipment/originals/Ring.png);
+		}
+
+		.slot-wrap {
+			min-height: 84px;
+			padding: 8px;
+		}
+
+
+		//$upgrade-color: #005fcc;
+		//$upgrade-color: #41a7c5;
+		//$upgrade-color: #58b058;
+		$upgrade-color: #f9a123;
+		//$upgrade-color: #d14641;
+
+		&.upgrade {
+			.slot-wrap {
+				border: 1px solid $upgrade-color;
+				border-radius: 5px;
+			}
+			.icons {
+				.main-icon {
+					border: 2px solid $upgrade-color;
+					border-radius: 20px;
+				}
+			}
+			.name-box {
+				a {
+					color: $upgrade-color;
+				}
+			}
+		}
+	}
+
+	.icons {
+		width: 40px;
+		margin-right: 10px;
+		position: relative;
+		img {
+			margin-top: 4px;
+		}
+	}
+
+	.name-box {
+		display: table-cell;
+		height: 50px;
+		vertical-align: middle;
+		margin-bottom: 10px;
+		width: 100%;
+
+		a {
+			display: inline-block;
+			color: white;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+		}
+	}
+
+	.stats-box {
+		margin-left: 50px;
+		margin-right: 10px;
+		.stat {
+			span {
+				margin-left: 4px;
+				color: white;
+				text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+				&.text-warning { color:#c09853; }
+				&.text-danger { color:#b94a48; }
+				&.text-success { color:#468847; }
+			}
+		}
+	}
+
+	.td-navigation-buffer {
+		height: 20px;
+		clear: both;
+	}
+
+	.td-navigation {
+		color: #aaa;
+		font-variant: small-caps;
+		font-size: .9em;
+		a {
+			color: #41a7c5;
+		}
+		.current {
+			margin-left: 8px;
+		}
+		.total {
+			margin-right: 8px;
+		}
+	}
+
+	#gear.slim {
+		.stats-box { display: none; }
+		.slot-wrap { min-height: 52px; }
+
+		.icons { margin-right: 5px; }
+		.icons div div {
+			display: inline-block;
+			img {
+				width: 12px;
+				height: 12px;
+			}
+		}
+
+		.main-icon {
+			width: 20px; height: 20px;
+		}
+		.upgrade {
+			.main-icon {
+				border-radius: 5px;
+				border-width: 1px;
+			}
+		}
+		.name-box {
+			height: 25px;
+			font-size: 1em;
+		}
+		.td-navigation-buffer {
+			height: 10px;
+		}
+		.td-navigation {
+			font-size: .75em;
+		}
+
+		td {
+			width: 25%;
+		}
+	}
+}
+
+#notifications {
+	position: fixed;
+	bottom: 15px;
+	right: 10px;
+}
+
+.level-dropdown-menu,
+.class-dropdown-menu {
+	width: 440px;
+	border: 0px;
+	padding-left: 8px;
+	li {
+		margin-right: 3px;
+		margin-bottom: 3px;
+		float: left;
+		a {
+			padding: 6px 12px;
+		}
+	}
+}
+
+.level-dropdown-menu {
+	width: 500px;
+	li {
+		a {
+			color: #fff;
+		}
+	}
+}
+
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
+}
+
+.add-to-list { cursor: pointer; }
+.table tfoot>tr>th.valign,
+.table thead>tr>th.valign,
+.table tbody>tr>td.valign { vertical-align: middle; }
+.delete-list-item { cursor: pointer; }
+
+#recipe-book {
+	tfoot {
+		.pagination {
+			margin: 0;
+			ul {
+				margin: 0;
+			}
+		}
+	}
+}
+
+#min-level,
+#max-level {
+	width: 60px;
 }

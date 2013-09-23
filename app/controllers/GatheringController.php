@@ -17,7 +17,7 @@ class GatheringController extends BaseController
 
 	public function getList($master_class = 'MIN')
 	{
-		if ( ! in_array($master_class, array('MIN', 'BTN')))
+		if ( ! in_array($master_class, array('MIN', 'BTN', 'FSH')))
 			exit('invalid class'); // TODO REAL ERROR
 		
 		// All Jobs
@@ -29,7 +29,7 @@ class GatheringController extends BaseController
 		}
 
 		$level_ranges = array();
-		for($i = 1; $i <= 55; $i += 5)
+		for($i = 1; $i <= 70; $i += 5)
 			$level_ranges[] = $i;
 		
 		$items = $this->_recipes($master_class, $job_list, $level_ranges);

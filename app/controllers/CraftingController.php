@@ -30,7 +30,7 @@ class CraftingController extends BaseController
 		return Redirect::to('/crafting/list?' . implode(':', $values));
 	}
 
-	public function getList($item_ids = array(), $self_sufficient = 1)
+	public function getList()
 	{
 		View::share('active', 'crafting');
 
@@ -39,26 +39,47 @@ class CraftingController extends BaseController
 		foreach (Job::all() as $j)
 			$job_list[$j->abbreviation] = $j->name;
 
-		$include_quests = TRUE;
-
 		View::share('job_list', $job_list);
 
-		if ($item_ids) 
+		$include_quests = TRUE;
+
+		if ( ! Input::all())
+			return Redirect::to('/crafting');
+
+		// Get Options
+		$options = explode(':', array_keys(Input::all())[0]);
+
+		// Parse Options              						// Defaults
+		$desired_job     = isset($options[0]) ? $options[0] : 'CRP';
+		$start           = isset($options[1]) ? $options[1] : 1;
+		$end             = isset($options[2]) ? $options[2] : 5;
+		$self_sufficient = isset($options[3]) ? $options[3] : 1;
+
+		$item_ids = $item_amounts = array();
+
+		$top_level = TRUE;
+
+		if ($desired_job == 'List')
 		{
+			$start = $end = null;
 			$include_quests = FALSE;
+
+			// Get the list
+			$item_amounts = Session::get('list', array());
+
+			$item_ids = array_keys($item_amounts);
+
+			if (empty($item_ids))
+				return Redirect::to('/list');
+
 			View::share('item_ids', $item_ids);
+			View::share('item_amounts', $item_amounts);
+
+			$top_level = $item_amounts;
 		}
-		else
+
+		if ( ! $item_ids)
 		{
-			// Get Options
-			$options = explode(':', array_keys(Input::all())[0]);
-
-			// Parse Options              // Defaults
-			$desired_job     = isset($options[0]) ? $options[0] : 'CRP';
-			$start           = isset($options[1]) ? $options[1] : 1;
-			$end             = isset($options[2]) ? $options[2] : 5;
-			$self_sufficient = isset($options[3]) ? $options[3] : 1;
-
 			// Jobs are capital
 			$desired_job = strtoupper($desired_job);
 
@@ -150,7 +171,7 @@ class CraftingController extends BaseController
 
 		$recipes = $query->get();
 
-		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests);
+		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
 
 		// Look through the list.  Is there something we're already crafting?
 		// Subtract what's being made from needed reagents.
@@ -229,7 +250,7 @@ class CraftingController extends BaseController
 			));
 	}
 
-	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE)
+	private function _reagents($recipes = array(), $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE, $top_level = FALSE)
 	{
 		static $reagent_list = array();
 
@@ -250,6 +271,15 @@ class CraftingController extends BaseController
 				// Run everything at least once
 				$inner_multiplier *= $run ?: 1;
 			}
+			elseif (is_array($top_level))
+			{
+				$run = 0;
+
+				if (in_array($recipe->item_id, array_keys($top_level)))
+					$run += $top_level[$recipe->item_id];
+
+				$inner_multiplier *= $run ?: 1;
+			}
 
 			foreach ($recipe->reagents as $reagent)
 			{
@@ -267,7 +297,7 @@ class CraftingController extends BaseController
 					if (isset($reagent->jobs[0]))
 					{
 						// Prevent non DOH/DOL jobs from showing up
-						for ($i = count($reagent->jobs) - 1; $i < 0; $i--)
+						for ($i = count($reagent->jobs) - 1; $i >= 0; $i--)
 						{
 							$job = $reagent->jobs[$i];
 							if ( ! in_array($job->disciple, array('DOH', 'DOL'))) 
@@ -288,21 +318,9 @@ class CraftingController extends BaseController
 		return $reagent_list;
 	}
 
-	public function getGear()
+	public function postList()
 	{
-		// Get Item IDs
-		$item_ids = explode(':', array_keys(Input::all())[0]);
-		$self_sufficient = count($item_ids) > 1 ? array_pop($item_ids) : 1;
-
-		return $this->getList($item_ids, $self_sufficient);
-	}
-
-	public function postGear()
-	{
-		$item_ids = explode(':', Input::get('ids'));
-		$self_sufficient = Input::get('self_sufficient');
-
-		return $this->getList($item_ids, $self_sufficient);
+		return $this->getList();
 	}
 
 }

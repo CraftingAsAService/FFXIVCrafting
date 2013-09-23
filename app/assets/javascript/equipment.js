@@ -1,13 +1,35 @@
 var equipment = {
-	init:function() {
-		this.events();
+	options: {
+		job: job,
+		level: level,
+		craftable_only: craftable_only,
+		level_range: 3,
+		boring_stats: false
 	},
-	events:function() {
-		$('.td-navigation .next').click(function() {
+	init:function() {
+		$.fn.inlineStyle = function (prop) {
+			return this.prop("style")[$.camelCase(prop)];
+		};
+
+		this.table_events();
+		this.page_events();
+
+		equipment_tour.init();
+	},
+	cell_events:function() {
+		equipment.mark_upgrades();
+		equipment.same_cell_heights();
+
+		if (typeof(initXIVDBTooltips) != 'undefined')
+			initXIVDBTooltips();
+
+		$('#gear tbody td:visible .td-navigation .item-next').on('click', function(event) {
+			event.preventDefault();
+
 			var td = $(this).closest('td');
 			td.trigger('mouseleave');
 			var items = td.find('.items');
-			equipment.el_height(items);
+			//equipment.el_height(items);
 			var active = items.find('.item.active');
 			
 			var next = active.next();
@@ -33,110 +55,219 @@ var equipment = {
 
 			// Fire off the stat summary
 			equipment.stat_summary(td);
+
+			// 
+			$('#gear td:visible .slot-wrap').css('height', 'inherit');
+			equipment.same_cell_heights();
 		});
 
-		$('.td-navigation .previous').click(function() {
-			var td = $(this).closest('td');
-			td.trigger('mouseleave');
-			var items = td.find('.items');
-			equipment.el_height(items);
-			var active = items.find('.item.active');
-			
-			var previous = active.prev();
-			
-			if (previous.length != 1)
-				previous = items.children(':last-child');
+		$('#gear tbody td:visible').on('mouseenter', this.compare);
 
-			active.removeClass('active').addClass('hidden');
-			previous.removeClass('hidden').addClass('active');
+		$('#gear tbody td:visible').on('mouseleave', this.uncompare);
 
-			td.trigger('mouseenter');
+		$('[rel=tooltip]').tooltip();
 
-			// Update 
-			var total = parseInt(td.find('.td-navigation .total').html());
-			var currentEl = td.find('.td-navigation .current');
-			var current = parseInt(currentEl.html());
-
-			current--;
-			if (current == 0)
-				current = total;
-
-			currentEl.html(current);
-
-			// Fire off the stat summary
-			equipment.stat_summary(td);
-		});
-
-		$('td').mouseenter(this.compare);
-
-		$('td').mouseleave(this.uncompare);
-
-		$('#craftable_only_switch').change(function() {
-			$(this).closest('form').submit();
-		});
-
-		// Trigger Stat Summary for the first cell of every column
-		$('tbody tr:first-child td').each(function() {
+		$('#gear tbody tr:first-child td:visible').each(function() {
 			equipment.stat_summary($(this));
 		});
+	},
+	table_events:function() {
 
-		$('.stat-toggle').click(function() {
-			var statEl = $(this);
-			var stat = statEl.data('stat');
+		equipment.cell_events();
 
-			statEl.toggleClass('opaque');
-			$('.item .stats-box .stat[data-stat="' + stat + '"]').toggleClass('hidden');
-			$('tfoot .stat[data-stat="' + stat + '"]').toggleClass('hidden');
+		$('.previous-gear').click(function() {
+			var el = $(this);
+
+			if (el.hasClass('disabled'))
+				return;
+
+			$('.previous-gear, .next-gear').addClass('disabled');
+			
+			var lvl = equipment.options.level - 1;
+
+			if (lvl < 1)
+			{
+				$('.previous-gear, .next-gear').removeClass('disabled');
+				return;
+			}
+
+			equipment.options.level = lvl;
+
+			if ($('td[data-level=' + lvl + ']').length > 0)
+			{
+				equipment.column_display();
+				equipment.fix_rows();
+				equipment.mark_upgrades();
+				equipment.same_cell_heights();
+
+				// preload the next..previous level
+				if (lvl - 1 > 0 && $('td[data-level=' + (lvl - 1) + ']').length == 0)
+					equipment.load_column(lvl - 1, 'Pre');
+				else
+					$('.previous-gear, .next-gear').removeClass('disabled');
+			}
+			else
+				equipment.load_column(lvl);
 		});
 
-		$('#craft_these').click(function() {
-			var column = $('#craft_level').val(),
-				row  = $('#craft_slot').val(),
-				status = $('#craft_status').val();
+		$('.next-gear').click(function() {
+			var el = $(this);
 
-			// Which columns are we going to analyze
-			var columns = [];
-			if (column == 'all')
-				$('#craft_level option:not(:first-child)').each(function() {
-					columns[columns.length] = $(this).val();
-				});
+			if (el.hasClass('disabled'))
+				return;
+
+			$('.previous-gear, .next-gear').addClass('disabled');
+			
+			var lvl = equipment.options.level + 1;
+
+			if (lvl > 48)
+			{
+				$('.previous-gear, .next-gear').removeClass('disabled');
+				return;
+			}
+
+			equipment.options.level = lvl;
+
+
+			if ($('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length > 0)
+			{
+				equipment.column_display();
+				equipment.fix_rows();
+				equipment.mark_upgrades();
+				equipment.same_cell_heights();
+
+				// preload the next level
+				if (lvl + equipment.options.level_range <= 50 && $('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length == 0)
+					equipment.load_column(lvl + equipment.options.level_range - 1, 'Pre');
+				else
+					$('.previous-gear, .next-gear').removeClass('disabled');
+			}
 			else
-				columns[0] = column;
-
-			// Which rows are we going to analyze
-			var rows = [];
-			if (row == 'all')
-				$('#craft_slot option:not(:first-child)').each(function() {
-					rows[rows.length] = $(this).val();
-				});
-			else
-				rows[0] = row;
-
-			var ids = [];
-
-			for (var i = 0; i < columns.length; i++)
-				for (var j = 0; j < rows.length; j++) {
-					var cell = $('#gear tbody tr:nth-child(' + rows[j] + ') td:nth-child(' + columns[i] + ')');
-					console.log(status, cell);
-					if (status == 'new' && ! cell.hasClass('alert'))
-						continue;
-
-					if (cell.find('.item.active.craftable').length > 0)
-						ids[ids.length] = cell.find('.item.active').data('itemId');
-				}
-
-			ids = unique(ids);
-
-			window.location = '/crafting/gear?' + ids.join(':') + ':1';
+				equipment.load_column(lvl + equipment.options.level_range - 1);
 		});
 	},
-	el_height:function(el) {
-		el.css('min-height', el.height());
+	slim:function(no) {
+		$('#gear')[(no ? 'add' : 'remove') + 'Class']('slim');
+		$('td:visible .slot-wrap').css('height', 'inherit');
+		equipment.options.level_range = no ? 4 : 3;
+		equipment.column_display();
+		equipment.same_cell_heights();
+	},
+	same_cell_heights:function() {
+		$('#gear tbody tr').each(function() {
+			var tr = $(this),
+				h = 0;
+
+			$('td:visible .slot-wrap', tr).each(function() {
+				var sw = $(this);
+				var adjust = 0;
+
+				if ($(this).inlineStyle('height') != '')
+					adjust = 16;
+
+				var swh = sw.innerHeight() - adjust;
+
+				if (swh > h)
+					h = swh;
+			});
+
+			$('td:visible .slot-wrap', tr).height(h);
+		});
+	},
+	mark_upgrades:function() {
+		$('#gear tbody td:visible').each(function() {
+			var td = $(this);
+			var level = td.data('level');
+			var ptd = td.closest('tr').find('td[data-level=' + (level - 1) + ']');
+
+			if (ptd.length == 0 && level != 1)
+				return;
+
+			var ilvl = td.find('.item:first-child').data('itemIlvl');
+			var pilvl = ptd.find('.item:first-child').data('itemIlvl');
+
+			td[(ilvl == pilvl ? 'remove' : 'add') + 'Class']('upgrade');
+		});
+	},
+	load_column:function(level, verb) {
+		if (typeof(verb) == 'undefined') verb = '';
+		
+		if (parseInt(level) > 50)
+		{
+			$('.previous-gear, .next-gear').removeClass('disabled');
+			return;
+		}
+
+		$.ajax({
+			url: '/equipment/load',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				'job': equipment.options.job,
+				'level': level,
+				'craftable_only': equipment.options.craftable_only
+			},
+			beforeSend:function() {
+				noty({
+					text: verb + 'Loading Level ' + level,
+					type: 'warning',
+					layout: 'bottomRight',
+					timeout: 2500
+				});
+			},
+			success:function(json) {
+				$.each(json.slots, function(key, value) {
+					$('#gear .slot-row[data-slot=' + key + ']').append(value);
+				});
+
+				$('#gear thead tr').append(json.head);
+				$('#gear tfoot tr').append(json.foot);
+
+				equipment.column_display();
+				equipment.fix_rows();
+
+				equipment.cell_events();
+
+				$('.previous-gear, .next-gear').removeClass('disabled');
+			}
+		});
+	},
+	fix_rows:function() {
+		// Fix the cells to a proper order
+		$('#gear tr').each(function() {
+			var tr = $(this);
+			
+			var list = tr.find('th:visible, td:visible').get();
+			
+			list.sort(function(a, b) {
+				var al = parseInt($(a).data('level')),
+					bl = parseInt($(b).data('level'));
+				return bl > al ? -1 : bl < al ? 1 : 0;
+			});
+
+			for (var i = 0; i < list.length; i++)
+				list[i].parentNode.appendChild(list[i]);
+		});
+	},
+	column_display:function(level) {
+		var start = equipment.options.level;
+
+		if (start > 50 - equipment.options.level_range + 1)
+			start = 50 - equipment.options.level_range + 1;
+
+		$('#gear td[data-level]').addClass('hidden');
+		$('#gear th[data-level]').addClass('hidden');
+
+		for (var i = start; i < equipment.options.level + equipment.options.level_range; i++)
+		{
+			$('#gear td[data-level=' + i + ']').removeClass('hidden');
+			$('#gear th[data-level=' + i + ']').removeClass('hidden');
+		}
 	},
 	compare:function() {
 		var td = $(this);
 
-		equipment.el_height(td.find('.items'));
+		//equipment.el_height(td.find('.items'));
 
 		var current_box = td.find('.item.active .stats-box');
 		var previous_stats = td.prev('td').find('.item.active .stats-box');
@@ -153,34 +284,36 @@ var equipment = {
 			var prevEl = previous_stats.find('.stat[data-stat="' + statEl.data('stat') + '"]');
 
 			if (prevEl.length == 0)
-				statEl.find('span').html('+' + statEl.data('amount'));
+				$('span', statEl)
+					.html(statEl.data('amount'))
+					.addClass('text-success');
 			else
 			{
 				var new_amount = parseInt(statEl.data('amount')) - parseInt(prevEl.data('amount'));
 
-				statEl.find('span').html((new_amount >= 0 ? '+' : '') + new_amount);
+				$('span', statEl)
+					.html(new_amount)
+					.addClass('text-' + (new_amount > 0 ? 'success' : (new_amount < 0 ? 'danger' : 'warning')));
 			}
 		});
 	},
 	uncompare:function() {
 		$(this).find('.stats-box .stat').each(function() {
 			var statEl = $(this);
-			statEl.find('span').html(statEl.data('amount'));
-			//if ( ! statEl.hasClass('always_hidden'))
-			//	statEl.removeClass('hidden');
+			$('span', statEl)
+				.html(statEl.data('amount'))
+				.removeClass('text-success')
+				.removeClass('text-danger')
+				.removeClass('text-warning');
 		});
 	},
 	stat_summary:function(td) {
-		if (td.hasClass('no-summary'))
-			return;
-
-		// Get the index of this td
-		var index = td.closest('tr').children().index(td);
+		var level = $(td).data('level');
 
 		var record = [],
 			hidden = [];
 
-		$('tbody tr td:nth-child(' + (index + 1) + ')').each(function() {
+		$('#gear tbody tr td[data-level=' + level + ']').each(function() {
 			$(this).find('.item.active .stat').each(function() {
 				var statEl = $(this);
 				var stat_data = statEl.data();
@@ -195,7 +328,7 @@ var equipment = {
 			});
 		});
 
-		var box = $('tfoot tr:first-child th:nth-child(' + (index + 1) + ') .stats-box');
+		var box = $('#gear tfoot tr:first-child th[data-level=' + level + '] .stats-box');
 
 		box.html('');
 
@@ -232,6 +365,108 @@ var equipment = {
 
 			box.append(div);
 		}
+	},
+	all_stats:function() {
+		// equipment.options.boring_stats
+		$('#gear td:visible .stats-box .boring').toggleClass('hidden');
+		$('#gear td:visible .slot-wrap').css('height', 'inherit');
+		equipment.same_cell_heights();
+	},
+	page_events:function() {
+		$('#toggle-slim').on('switch-change', function(e, data) {
+			equipment.slim(data.value);
+			$('html, body').animate({ scrollTop: $('#table-options').offset().top }, 'slow');
+		});
+
+		if ($('#toggle-slim').bootstrapSwitch('status'))
+			equipment.options.level_range = 4;
+
+		$('#toggle-all-stats').on('switch-change', function(e, data) {
+			equipment.options.boring_stats = data.value;
+			equipment.all_stats();
+			$('html, body').animate({ scrollTop: $('#table-options').offset().top }, 'slow');
+		});
+
+		$('#craftable_only_switch').change(function() {
+			$(this).closest('form').submit();
+		});
+	}
+}
+
+var equipment_tour = {
+	tour: null,
+	first_run: true,
+	init:function() {
+		var startEl = $('#start_tour');
+
+		equipment_tour.tour = new Tour({
+			orphan: true,
+			onStart:function() {
+				return startEl.addClass('disabled', true);
+			},
+			onEnd:function() {
+				return startEl.removeClass('disabled', true);
+			}
+		});
+
+		startEl.click(function(e) {
+			e.preventDefault();
+
+			if ($('#toggle-slim').bootstrapSwitch('status'))
+				$('#toggle-slim').bootstrapSwitch('setState', false);
+
+			if (equipment_tour.first_run == true)
+				equipment_tour.build();
+			
+			if ($(this).hasClass('disabled'))
+				return;
+
+			equipment_tour.tour.restart();
+		});
+	},
+	build:function() {
+		var upgradeEl = $('#gear td:visible.upgrade')[0];
+		var statsBoxEl = $('.item.active .stats-box .stat', upgradeEl)[0];
+		var craftingEl = $('#gear td:visible .item.active .crafted_by')[0];
+
+		equipment_tour.tour.addSteps([
+			{
+				element: upgradeEl, 
+				title: 'Upgrade',
+				content: 'Boxes with a border and circle icon indicate an upgrade.'
+			},
+			{
+				element: statsBoxEl, 
+				title: 'Stats',
+				content: 'These are the stats for the item.  Hovering on them will tell you how much of an upgrade it is from the previous item.',
+				placement: 'bottom'
+			},
+			{
+				element: craftingEl,
+				title: 'Crafted By & Buyable',
+				content: '<p>This item can be crafted by the class indicated. <strong>Clicking on it will add that item to your Crafting Cart!</strong></p>' + 
+							'<p>The coins indicate that you can buy them from a vendor.</p>'
+			},
+			{
+				element: '.previous-gear', 
+				title: 'Level Traversing',
+				content: 'Click this bar (and the one on the right) to decrease (or increase) the gear level.'
+			},
+			{
+				element: '#toggle-slim',
+				title: 'Slim Mode',
+				content: 'If you don\'t want to see stats, turn this mode on.',
+				placement: 'top'
+			},
+			{
+				element: '#toggle-all-stats',
+				title: 'Boring Stats',
+				content: 'Boring stats are hidden by default.  Use this option to turn them on.  An example of a boring stat would be Magic Damage to a Disciple of War class.',
+				placement: 'top'
+			}
+		]);
+
+		equipment_tour.first_run = false;
 	}
 }
 

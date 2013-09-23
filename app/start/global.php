@@ -51,6 +51,8 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 App::error(function(Exception $exception, $code)
 {
 	Log::error($exception);
+	if (App::environment() != 'local')
+		return Response::view('notifications.500', array(), 500);
 });
 
 /*
@@ -66,7 +68,7 @@ App::error(function(Exception $exception, $code)
 
 App::down(function()
 {
-	return Response::view('maintenance', array(), 503);
+	return Response::view('notifications.maintenance', array(), 503);
 });
 
 /*

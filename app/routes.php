@@ -23,15 +23,23 @@ Route::controller('materia', 'MateriaController');
 
 Route::controller('food', 'FoodController');
 
-Route::get('equipment/list', 'EquipmentController@getList');
-Route::any('equipment/{all}', 'EquipmentController@badUrl')->where('all', '.*');
 Route::controller('equipment', 'EquipmentController');
 
 Route::controller('crafting', 'CraftingController');
 Route::controller('gathering', 'GatheringController');
+Route::controller('quests', 'QuestsController');
+
+Route::controller('list', 'ListController');
+Route::controller('recipes', 'RecipesController');
 
 Route::get('thanks', function()
 {
 	View::share('active', 'thanks');
 	return View::make('thanks');
+});
+
+Route::get('credits', function()
+{
+	View::share('active', 'credits');
+	return View::make('credits');
 });

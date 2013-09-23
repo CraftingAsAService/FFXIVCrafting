@@ -255,6 +255,7 @@ class DataTablesSeeder extends Seeder
 				'item_id' => $object->item_id,
 				'job_id' => $this->jobs[$object->class],
 				'name' => $object->name,
+				'icon' => $object->icon ? preg_replace('/^.*\D(\d+\.\w+)$/', '$1', $object->icon) : '',
 				'yields' => $object->yields,
 				'level' => $object->level, 
 				'job_level' => $object->crafting_level
@@ -312,6 +313,7 @@ class DataTablesSeeder extends Seeder
 				'id' => $item_id,
 				'name' => $object->name,
 				'href' => $object->href,
+				'icon' => $object->icon ? preg_replace('/^.*\D(\d+\.\w+)$/', '$1', $object->icon) : '',
 				'level' => $object->level ?: 0,
 				'vendors' => $object->vendors ?: 0,
 				'gil' => $object->gil ?: 0,
