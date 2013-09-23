@@ -547,3 +547,25 @@ td {
 .cf {
     *zoom: 1;
 }
+
+.add-to-list { cursor: pointer; }
+.table tfoot>tr>th.valign,
+.table thead>tr>th.valign,
+.table tbody>tr>td.valign { vertical-align: middle; }
+.delete-list-item { cursor: pointer; }
+
+#recipe-book {
+	tfoot {
+		.pagination {
+			margin: 0;
+			ul {
+				margin: 0;
+			}
+		}
+	}
+}
+
+#min-level,
+#max-level {
+	width: 60px;
+}

@@ -29,8 +29,17 @@ Route::controller('crafting', 'CraftingController');
 Route::controller('gathering', 'GatheringController');
 Route::controller('quests', 'QuestsController');
 
+Route::controller('list', 'ListController');
+Route::controller('recipes', 'RecipesController');
+
 Route::get('thanks', function()
 {
 	View::share('active', 'thanks');
 	return View::make('thanks');
+});
+
+Route::get('credits', function()
+{
+	View::share('active', 'credits');
+	return View::make('credits');
 });

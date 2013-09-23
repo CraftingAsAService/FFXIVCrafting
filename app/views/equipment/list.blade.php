@@ -26,7 +26,7 @@
 
 <h1>
 	<span class='job-border {{ $job->disciple }}'>
-		<img src='/img/classes/{{ $job->abbreviation }}.png' class='stat-crafted_by' rel='tooltip' title='Crafted By {{ $job_list[$job->abbreviation] }}' width='24' height='24'>
+		<img src='/img/classes/{{ $job->abbreviation }}.png' class='stat-crafted_by' width='24' height='24'>
 	</span>
 	{{ $job->name }}
 </h1>

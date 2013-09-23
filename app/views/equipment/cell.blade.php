@@ -12,7 +12,7 @@
 						@if($item->crafted_by)
 						@foreach(explode(',', $item->crafted_by) as $crafted_by)
 						<div class='crafted_by'>
-							<img src='/img/classes/{{ $crafted_by }}.png' class='stat-crafted_by' rel='tooltip' width='24' height='24' title='Crafted By {{ $job_list[$crafted_by] }}'>
+							<img src='/img/classes/{{ $crafted_by }}.png' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' width='24' height='24' title='Crafted By {{ $job_list[$crafted_by] }}'>
 						</div>
 						@endforeach
 						@endif

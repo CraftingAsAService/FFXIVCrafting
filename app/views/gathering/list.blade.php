@@ -1,11 +1,23 @@
 @extends('layout')
 
+@section('vendor-css')
+	<link href='/css/bootstrap-tour.min.css' rel='stylesheet'>
+@stop
+
 @section('javascript')
 <script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
+<script type='text/javascript' src='/js/bootstrap-tour.min.js'></script>
 <script type='text/javascript' src='/js/gathering.js'></script>
 @stop
 
 @section('content')
+
+{{--
+<a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
+	<i class='glyphicon glyphicon-play'></i>
+	Start Tour
+</a>
+--}}
 
 <h1>{{ $job->name }} Gathering</h1>
 
@@ -56,7 +68,7 @@
 		@endforeach
 	</div>
 	<div class='col-sm-9'>
-		<table class='table table-bordered'>
+		<table class='table table-bordered' id='gathering-table'>
 			<thead>
 				<tr>
 					<th class='text-left'>Item</th>
