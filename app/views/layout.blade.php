@@ -2,13 +2,13 @@
 <html lang='en-us'>
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
-		<title>FFXIV CAAS</title>
+		<title>Crafting as a Service</title>
 		
 		<meta charset='utf-8'>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-		<link href='/css/bootstrap.min.css' rel='stylesheet' />
+		<link href='/css/bootstrap.css' rel='stylesheet' />
 		<link href='/css/bootstrap-theme.min.css' rel='stylesheet' />
 
 		@section('vendor-css')
@@ -21,7 +21,7 @@
 	</head>
 	<body>
 		<div id='wrap'>
-			<div class='navbar navbar-inverse navbar-fixed-top'>
+			<div class='navbar navbar-inverse'>
 				<div class='container'>
 					<div class='navbar-header'>
 						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
@@ -36,9 +36,14 @@
 							<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
 							<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
 							<li{{ isset($active) && $active == 'gathering' ? ' class="active"' : '' }}><a href='/gathering'>Gathering</a></li>
+							<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
+							<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
 							<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
 							<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
 							<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
+						</ul>
+						<ul class='nav navbar-nav navbar-right'>
+							<li{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}><a href='/list'><i class='glyphicon glyphicon-shopping-cart'></i> Crafting List</a></li>
 						</ul>
 					</div>
 				</div>
@@ -56,22 +61,27 @@
 		<div id='footer'>
 			<div class='container text-center'>
 				<div class='row'>
-					<div class='col-xs-3 col-sm-3'>
+					<div class='col-sm-2'>
 						<p class='text-muted credit'>
 							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
 						</p>
 					</div>
-					<div class='col-xs-3 col-sm-3'>
+					<div class='col-sm-2'>
 						<p class='text-muted credit'>
 							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
 						</p>
 					</div>
-					<div class='col-xs-3 col-sm-3'>
+					<div class='col-sm-2'>
 						<p class='text-muted credit'>
 							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
 						</p>
 					</div>
-					<div class='col-xs-3 col-sm-3'>
+					<div class='col-sm-2'>
+						<p class='text-muted credit'>
+							<a href='/credits'>Credits</a> 
+						</p>
+					</div>
+					<div class='col-sm-2'>
 						<p class='text-muted credit'>
 							<a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>
 						</p>
@@ -86,11 +96,17 @@
 			</div>
 		</div>
 
+		<div id='notifications'></div>
+
 		<!-- jQuery -->
-		<script src='//code.jquery.com/jquery.js'></script>
+		<script src='/js/jquery-2.0.3.min.js'></script>
 		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 		
 		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
+
+		<script src='/js/noty.js' type='text/javascript'></script>
+		<script src='/js/noty-bottomRight.js' type='text/javascript'></script>
+		<script src='/js/noty-theme.js' type='text/javascript'></script>
 
 		<script src='/js/global.js' type='text/javascript'></script>
 

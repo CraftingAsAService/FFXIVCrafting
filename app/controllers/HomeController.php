@@ -23,7 +23,8 @@ class HomeController extends BaseController {
 			$job_list[$j->abbreviation] = $j->name;
 
 		return View::make('hello')
-			->with('job_list', $job_list);
+			->with('job_list', $job_list)
+			->with('host_warning', preg_match('/thokk/', $_SERVER['HTTP_HOST']));
 	}
 
 }

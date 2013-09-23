@@ -16,6 +16,8 @@ var gathering = {
 		});
 
 		$('.and_more').popover();
+
+		gathering_tour.init();
 	},
 	collapse_row:function() {
 		var btn = $(this);
@@ -97,6 +99,94 @@ var gathering = {
 		});
 	}
 }
+/*
+var gathering_tour = {
+	tour: null,
+	first_run: true,
+	init:function() {
+		var startEl = $('#start_tour');
+
+		gathering_tour.tour = new Tour({
+			orphan: true,
+			onStart:function() {
+				return startEl.addClass('disabled', true);
+			},
+			onEnd:function() {
+				return startEl.removeClass('disabled', true);
+			}
+		});
+
+		startEl.click(function(e) {
+			e.preventDefault();
+
+			if ($('#toggle-slim').bootstrapSwitch('status'))
+				$('#toggle-slim').bootstrapSwitch('setState', false);
+
+			if (gathering_tour.first_run == true)
+				gathering_tour.build();
+			
+			if ($(this).hasClass('disabled'))
+				return;
+
+			gathering_tour.tour.restart();
+		});
+	},
+	build:function() {
+
+		gathering_tour.tour.addSteps([
+			{
+				element: '#gathering-table tr:visible:first-child td:first-child', 
+				title: 'Gathering List',
+				content: 'The list on the left is your Recipe List.  You will be making these items.  Use the arrow to hide this information.',
+				placement: 'top'
+			},
+			{
+				element: '#obtain-these-items', 
+				title: 'Obtain These Items',
+				content: 'You will be grabbing the items listed in this section.  Some can be bought, gathered or killed for.',
+				placement: 'top'
+			},
+			{
+				element: '#Gathered-section tr:first-child',
+				title: 'Gathered Section',
+				content: 'Items you can gather with MIN, BTN or FSH will appear in the Gathered Section.',
+				placement: 'bottom'
+			},
+			{
+				element: '#Bought-section tr:first-child',
+				title: 'Bought Section',
+				content: 'Items you cannot gather will be thrown into the Bought Section.',
+				placement: 'bottom'
+			},
+			{
+				element: '#Other-section tr:first-child',
+				title: 'Other Section',
+				content: 'Items that cannot be bought or gathered show up in the Other Section.  Most likely these will involve monster drops.',
+				placement: 'bottom'
+			},
+			{
+				element: '#Crafted-section tr:first-child',
+				title: 'Crafted Section',
+				content: 'Why buy what you can craft?  The Crafted Section contains items necessary for your main recipes to finish.  The previous sections will already contain the sub items required.',
+				placement: 'bottom'
+			},
+			{
+				element: '#self-sufficient-form', 
+				title: 'Self Sufficient',
+				content: 'By default it assumes you want to be Self Sufficient.  Turning this option off will eliminate the Gathering and Crafting aspect and appropriately force the items into either Bought or Other.',
+				placement: 'top'
+			},
+			{
+				element: '#leveling-information',
+				title: 'Leveling Information',
+				content: 'Pay attention to the Leveling Information box as it will give you a heads up as to what your next quest turn ins will require.',
+				placement: 'top'
+			}
+		]);
+
+		gathering_tour.first_run = false;
+	}
+}*/
 
 $(gathering.init);
 

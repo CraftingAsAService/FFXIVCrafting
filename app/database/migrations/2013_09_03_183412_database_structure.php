@@ -47,6 +47,7 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('name', 50);
 			$table->string('href', 255);
+			$table->string('icon', 20);
 			$table->smallInteger('level');
 			$table->integer('slot_id');
 			$table->smallInteger('vendors');
@@ -82,6 +83,7 @@ class DatabaseStructure extends Migration {
 			$table->integer('item_id');
 			$table->integer('job_id');
 			$table->string('name', 50);
+			$table->string('icon', 20);
 			$table->smallInteger('yields');
 			$table->smallInteger('level');
 			$table->smallInteger('job_level');
