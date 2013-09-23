@@ -238,6 +238,7 @@
 	</div>
 </div>
 
+{{--
 <div class='well'>
 	<p>
 		<strong>Crafting as a Service</strong> couldn't have done it without these resources.  Please support them!
@@ -252,5 +253,6 @@
 		</em></small>
 	</p>
 </div>
+--}}
 
 @stop
