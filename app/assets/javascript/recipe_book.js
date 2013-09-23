@@ -117,6 +117,9 @@ var recipe_book = {
 			e.preventDefault();
 			recipe_book.search(e.target.search);
 		});
+		
+		if (typeof(initXIVDBTooltips) != 'undefined')
+			initXIVDBTooltips();
 	},
 	disable:function() {
 		$('#name-search input, #name-search button, #min-level, #max-level, #class-search button').addClass('disabled');
