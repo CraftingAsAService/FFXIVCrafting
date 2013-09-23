@@ -191,6 +191,12 @@ var equipment = {
 	},
 	load_column:function(level, verb) {
 		if (typeof(verb) == 'undefined') verb = '';
+		
+		if (parseInt(level) > 50)
+		{
+			$('.previous-gear, .next-gear').removeClass('disabled');
+			return;
+		}
 
 		$.ajax({
 			url: '/equipment/load',
@@ -246,8 +252,8 @@ var equipment = {
 	column_display:function(level) {
 		var start = equipment.options.level;
 
-		if (start > 47)
-			start = 47;
+		if (start > 50 - equipment.options.level_range + 1)
+			start = 50 - equipment.options.level_range + 1;
 
 		$('#gear td[data-level]').addClass('hidden');
 		$('#gear th[data-level]').addClass('hidden');
