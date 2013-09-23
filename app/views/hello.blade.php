@@ -8,19 +8,10 @@
 	<script src='/js/home.js'></script>
 @stop
 
-@section('precontent')
-<div class='home jumbotron'>
-	<div class='content'>
-		<h1>Crafting as a Service</h1>
-		<p>Crafting information and planning for FFXIV: ARR</p>
-	</div>
-</div>
-
-@stop
-
 @section('content')
 
 @if($host_warning)
+
 <div class="panel panel-danger" style='margin-bottom: 60px;'>
 	<div class="panel-heading">
 		<h3 class="panel-title">Domain Notificiation</h3>
@@ -30,6 +21,11 @@
 	</div>
 </div>
 @endif
+
+<div class='home jumbotron'>
+	<h1>Crafting as a Service</h1>
+	<p>Crafting information and planning for FFXIV: ARR</p>
+</div>
 
 <div class='row'>
 	<div class='col-lg-4'>

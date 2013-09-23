@@ -202,10 +202,12 @@ var equipment = {
 				'craftable_only': equipment.options.craftable_only
 			},
 			beforeSend:function() {
-				global.notification('warning', verb + 'Loading Level ' + level, 'n-level-' + level)
-			},
-			complete:function() {
-				global.fade_and_destroy($('#n-level-' + level));
+				noty({
+					text: verb + 'Loading Level ' + level,
+					type: 'warning',
+					layout: 'bottomRight',
+					timeout: 2500
+				});
 			},
 			success:function(json) {
 				$.each(json.slots, function(key, value) {
@@ -436,8 +438,7 @@ var equipment_tour = {
 			{
 				element: craftingEl,
 				title: 'Crafted By & Buyable',
-				//content: '<p>This item can be crafted by the class indicated. <strong>Clicking on it will add that item to your Crafting Cart!</strong></p>' + 
-				content: '<p>This item can be crafted by the class indicated.</p>' + 
+				content: '<p>This item can be crafted by the class indicated. <strong>Clicking on it will add that item to your Crafting Cart!</strong></p>' + 
 							'<p>The coins indicate that you can buy them from a vendor.</p>'
 			},
 			{
