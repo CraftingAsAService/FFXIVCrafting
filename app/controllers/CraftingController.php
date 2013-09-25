@@ -183,10 +183,7 @@ class CraftingController extends BaseController
 			if ( ! isset($reagent_list[$recipe->item_id]))
 				continue;
 
-			$reagent_list[$recipe->item_id]['make_this_many'] -= $recipe->yields;
-
-			if ($reagent_list[$recipe->item_id]['make_this_many'] <= 0)
-				unset($reagent_list[$recipe->item_id]);
+			$reagent_list[$recipe->item_id]['both_list_warning'] = TRUE;
 		}
 
 		// Let's sort them further, group them by..

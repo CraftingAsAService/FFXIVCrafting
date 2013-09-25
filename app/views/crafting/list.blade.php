@@ -80,7 +80,9 @@
 						@endif
 					</td>
 					<td>
-						{{ $reagent['make_this_many'] }}
+						{{ $reagent['make_this_many'] }}@if(isset($reagent['both_list_warning']))
+						<a href='#' class='nowhere tt-force' rel='tooltip' title='Note: Item also exists in main list but is required for another.'>*</a>
+						@endif
 					</td>
 					<td>
 						@if($item->vendors)
@@ -137,9 +139,6 @@
 					<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
 				</a>
 				<p><small>Yields: {{ $recipe->yields }}</small></p>
-				{{--@foreach($recipe->reagents as $reagent)
-
-				@endforeach--}}
 			</div>
 			@endforeach
 		</div>

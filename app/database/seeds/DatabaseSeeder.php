@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
 
 		$this->call('LeveSeeder');
 
+		$this->call('XPSeeder');
+
 		echo "\n";
 	}
 
@@ -656,6 +658,20 @@ class LeveSeeder extends Seeder
 
 		// Return a blank array on purpose, to represent an empty $data
 		return array();
+	}
+
+}
+
+class XPSeeder extends Seeder
+{
+
+	public function run() 
+	{
+		// Insert experience records
+		$xp_list = json_decode(file_get_contents(storage_path() . '/raw-data/experience.json'));
+
+		foreach ($xp_list as $xp_data)
+			DB::table('experience')->insert($xp_data);
 	}
 
 }
