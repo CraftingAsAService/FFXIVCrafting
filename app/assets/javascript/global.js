@@ -10,15 +10,16 @@ var global = {
 
 		$(document).on('click', '.add-to-list', function() {
 			var id = $(this).data('itemId'),
-				name = $(this).data('itemName');
+				name = $(this).data('itemName')
+				qty = $(this).data('itemQuantity');
 
 			$.ajax({
 				url: '/list/add',
 				type: 'post',
-				data: { 'item-id' : id },
+				data: { 'item-id' : id , 'qty' : qty },
 				beforeSend:function() {
 					noty({
-						text: 'Adding ' + name + ' to your list',
+						text: 'Adding ' + (qty > 1 ? (qty + ' x ') : '') + name + ' to your list',
 						type: 'success',
 						layout: 'bottomRight',
 						timeout: 2500

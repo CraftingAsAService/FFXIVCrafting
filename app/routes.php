@@ -28,6 +28,7 @@ Route::controller('equipment', 'EquipmentController');
 Route::controller('crafting', 'CraftingController');
 Route::controller('gathering', 'GatheringController');
 Route::controller('quests', 'QuestsController');
+Route::controller('leve', 'LeveController');
 
 Route::controller('list', 'ListController');
 Route::controller('recipes', 'RecipesController');
