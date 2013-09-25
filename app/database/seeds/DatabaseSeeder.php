@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
 
 		$this->call('QuestSeeder');
 
+		$this->call('LeveSeeder');
+
 		echo "\n";
 	}
 
@@ -460,7 +462,7 @@ class DataTablesSeeder extends Seeder
 		#file_put_contents('app/storage/logs/query-' . $count . '-statement.txt', 'INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values));
 		#file_put_contents('app/storage/logs/query-' . $count . '-pdo.txt', json_encode($pdo)); 
 
-		DB::insert('INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
+		DB::insert('INSERT IGNORE INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
 
 		// Return a blank array on purpose, to represent an empty $data
 		return array();
@@ -476,15 +478,15 @@ class QuestSeeder extends Seeder
 		'4963' => 'Shadow Catfish',
 		'5033' => 'Desert Catfish',
 		'4917' => 'Mazlaya Marlin',
-		'4564' => 'Antidote',
-		'4597' => 'Potion of Intelligence',
-		'4595' => 'Potion of Dexterity',
-		'4575' => 'Weak Blinding Potion',
+		// '4564' => 'Antidote',
+		// '4597' => 'Potion of Intelligence',
+		// '4595' => 'Potion of Dexterity',
+		// '4575' => 'Weak Blinding Potion',
 		'4870' => 'Lominsan Anchovy',
-		'1123' => 'Ether',
-		'4599' => 'Hi-Potion of Strength',
-		'4607' => 'Mega-Potion of Intelligence',
-		'4606' => 'Mega-Potion of Vitality',
+		// '1123' => 'Ether',
+		// '4599' => 'Hi-Potion of Strength',
+		// '4607' => 'Mega-Potion of Intelligence',
+		// '4606' => 'Mega-Potion of Vitality',
 	);
 
 	public function run()
@@ -512,6 +514,148 @@ class QuestSeeder extends Seeder
 				'quality' => $item->quality,
 				'notes' => $item->notes,
 			));
+	}
+}
+
+class LeveSeeder extends Seeder
+{
+
+	public function run() 
+	{
+		// Get all jobs
+		$jobs = array();
+		foreach (Job::all() as $job)
+			$jobs[$job->name] = $job->id;
+
+		// Get all locations
+		$locations = array();
+		foreach (Location::all() as $location)
+			$locations[$location->name] = $location->id;
+
+		$locations_id = max($locations);
+
+		$new_locations = array();
+		$new_leves = array();
+
+		// Insert quest items
+		$leves = explode("\n", (str_replace("\r", '', file_get_contents(storage_path() . '/raw-data/leves.txt'))));
+		// Kill header row
+		$header = array_shift($leves);
+		// Kill "footer"
+		array_pop($leves);
+
+		// Major City	Class	Level	Name	XP	Gil	Type	Minor Location	Location	Quantity	Item	Notes
+		//id, name, job_id, item_id, level, amount, xp, gil, triple, type, major_location_id, minor_location_id, location_id, 	
+
+		foreach ($leves as $leve)
+		{
+			//echo "\n" . $leve . "\n";
+			list($major_location, $class, $level, $name, $xp, $gil, $type, $minor_location, $location, $amount, $item_name, $triple) = explode("\t", $leve);
+			$major_location_id = $minor_location_id = $location_id = 0;
+			//echo $triple . "\n";
+			//echo 'Triple? ' . $triple . ' = ' . ($triple == 'triple' ? 'Yes' : 'No') . "\n";
+
+			// Take care of the locations
+			foreach (array('major_location', 'minor_location', 'location') as $l)
+			{
+				if ($$l == '')
+				{
+					${$l . '_id'} = 0;
+					continue;
+				}
+
+				if ( ! in_array($$l, array_keys($locations)))
+				{
+					$locations[$$l] = ++$locations_id;
+					$new_locations[] = array(
+						'id' => $locations_id,
+						'name' => $$l
+					);
+					${$l . '_id'} = $locations_id;
+				}
+				else
+					${$l . '_id'} = $locations[$$l];
+			}
+
+			// Now the class
+			$class_id = $jobs[$class];
+
+			if (is_numeric($item_name))
+				$item_id = $item_name;
+			else
+			{
+				// Find the item
+				$item = Item::where('name', $item_name)->first();
+
+				if ( ! $item)
+				{
+					$item_id = 0;
+					echo "\n" . 'Could not find ' . $item_name . "\n";
+					echo $leve . "\n\n";
+				}
+				else
+					$item_id = $item->id;
+			}
+
+			$triple = trim($triple);
+
+			$new_leves[] = array(
+				'name' => $name,
+				'job_id' => (int) $class_id,
+				'item_id' => (int) $item_id,
+				'level' => (int) $level,
+				'amount' => (int) $amount,
+				'xp' => (int) $xp,
+				'gil' => (int) $gil,
+				'triple' => empty($triple) ? 0 : 1,
+				'type' => $type,
+				'major_location_id' => (int) $major_location_id,
+				'minor_location_id' => (int) $minor_location_id,
+				'location_id' => (int) $location_id
+			);
+
+		}
+
+
+		// Insert Leves
+		if ($new_leves)
+			$this->_batch_insert($new_leves, 'leves');
+
+		// Insert New Locations
+		if ($new_locations)
+			$this->_batch_insert($new_locations, 'locations');
+
+	}
+
+	private function _batch_insert($data = array(), $table = '')
+	{
+		static $count = 0;
+		$count++;
+
+		echo '.';
+		if ($count % 46 == 0)
+			echo "\n";
+
+		if ( ! $table)
+			return array();
+
+		$values = $pdo = array();
+		foreach ($data as $row)
+		{
+			$values[] = '(' . str_pad('', count($row) * 2 - 1, '?,') . ')';
+			
+			foreach ($row as $value)
+				$pdo[] = $value;
+		}
+
+		# cli crashing... debug
+		#file_put_contents('app/storage/logs/query-' . $count . '-statement.txt', 'INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values));
+		#file_put_contents('app/storage/logs/query-' . $count . '-pdo.txt', json_encode($pdo)); 
+
+		DB::insert('INSERT IGNORE INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
+
+		// Return a blank array on purpose, to represent an empty $data
+		return array();
 	}
 
 }
