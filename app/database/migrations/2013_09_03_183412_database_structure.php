@@ -130,6 +130,25 @@ class DatabaseStructure extends Migration {
 			$table->smallInteger('level');
 		});
 
+		Schema::create('leves', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->string('name', 50);
+			$table->integer('job_id');
+			$table->integer('item_id');
+			$table->smallInteger('level');
+			$table->smallInteger('amount');
+			$table->smallInteger('xp');
+			$table->smallInteger('gil');
+			$table->smallInteger('triple');
+			$table->enum('type', array('Town', 'Courier', 'Field', 'Unknown'));
+			$table->integer('major_location_id');
+			$table->integer('minor_location_id');
+			$table->integer('location_id');
+		});
+
 	}
 
 	/**
