@@ -1,0 +1,384 @@
+Major City	Class	Level	Name	XP	Gil	Type	Location	Area	Quantity	Item	Notes
+Limsa Lominsa	Blacksmith	1	Proly Hatchet	240	86	Town			1	Bronze Hatchet	
+Limsa Lominsa	Blacksmith	1	Hells Bells	240	86	Town			3	Bronze Ingot	
+Limsa Lominsa	Blacksmith	1	Axe Me Anything	364	89	Field	Red Rooster Stead	Lower La Noscea	1	Bronze War Axe	triple
+Limsa Lominsa	Blacksmith	1	The Unkindest Cut	430	88	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Saw	
+Limsa Lominsa	Blacksmith	5	Stainless Chef	1053	127	Town			1	Amateur's Culinary Knife	
+Limsa Lominsa	Blacksmith	5	I, Gladius	1137	150	Town			1	Bronze Gladius	
+Limsa Lominsa	Blacksmith	5	Bring Me the Head Knife of Al'bedo Derssia	1715	125	Courier	Red Rooster Stead	Lower La Noscea	1	Bronze Head Knife	
+Limsa Lominsa	Blacksmith	5	Down on the Pharm	1053	125	Field	Red Rooster Stead	Lower La Noscea	1	Amateur's Mortar	
+Limsa Lominsa	Blacksmith	5	A Hit Job	1137	154	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Chaser Hammer	
+Limsa Lominsa	Blacksmith	10	Farriers of Fortune	2022	156	Town			1	Amateur's Cross-pein Hammer	
+Limsa Lominsa	Blacksmith	10	Anutha Spatha	2566	205	Town			1	Bronze Spatha	
+Limsa Lominsa	Blacksmith	10	Port of Call: Ul'dah	3849	147	Courier	Swiftperch	Western La Noscea	1	Bronze Knuckles	
+Limsa Lominsa	Blacksmith	10	Peddle to the Metal	2022	146	Field	Swiftperch	Western La Noscea	1	Amateur's Chaser Hammer	
+Limsa Lominsa	Blacksmith	10	I'm into Leather	2598	446	Field	Swiftperch	Western La Noscea	1	Brass Head Knife	
+Limsa Lominsa	Blacksmith	15	Smelt and Dealt	4057	217	Town			5	Iron Ingot	
+Limsa Lominsa	Blacksmith	15	Awl or Nothing	4522	205	Town			1	Iron Awl	
+Limsa Lominsa	Blacksmith	15	Riveting Run	6573	150	Courier	Aleport	Western La Noscea	1	Iron Rivets	
+Limsa Lominsa	Blacksmith	15	Get a Little Bit Closer	4057	244	Field	Aleport	Western La Noscea	1	Brass Knuckles	
+Limsa Lominsa	Blacksmith	15	Honest Ballast	4522	191	Field	Aleport	Western La Noscea	1	Initiate's Head Knife	
+Limsa Lominsa	Blacksmith	20	Claw Daddy	7331	421	Town			3	Iron Claw Hammer	triple
+Limsa Lominsa	Blacksmith	20	Unseamly Conditions	6109	234	Town			1	Iron Pickaxe	
+Limsa Lominsa	Blacksmith	20	Hearth Maul	10289	245	Courier	Quarrymill	South Shroud	1	Iron Sledgehammer	
+Limsa Lominsa	Blacksmith	20	The Devil's Workshop	7331	286	Field	Quarrymill	South Shroud	3	Brass Gladius	triple
+Limsa Lominsa	Blacksmith	20	Powderpost Derby	6109	239	Field	Quarrymill	South Shroud	1	Initiate's Saw	
+Limsa Lominsa	Blacksmith	25	Cleaving the Glim	11115	240	Town			3	Iron Round Knife	triple
+Limsa Lominsa	Blacksmith	25	Time to Upgrade	9885	295	Town			1	Iron Ornamental Hammer	
+Limsa Lominsa	Blacksmith	25	Mors Dagger	16550	255	Courier	Quarrymill	South Shroud	1	Steel Baselard	
+Limsa Lominsa	Blacksmith	25	That's Some Fine Grinding	8505	297	Field	Quarrymill	South Shroud	3	Initiate's Mortar	triple
+Limsa Lominsa	Blacksmith	25	Lancers' Creed	9885	233	Field	Quarrymill	South Shroud	1	Crowsbeak Hammer	
+Limsa Lominsa	Blacksmith	30	Can You Spare a Dolabra	19130	643	Town			3	Steel Dolabra	triple
+Limsa Lominsa	Blacksmith	30	Out on a Limb	14725	302	Town			1	Bas-relief Steel Saw	
+Limsa Lominsa	Blacksmith	30	The Naked Blade	22712	323	Courier	Costa del Sol	Eastern La Noscea	1	Steel Falchion	
+Limsa Lominsa	Blacksmith	30	Don't Fear the Reaper	19130	448	Field	Costa del Sol	Eastern La Noscea	3	Steel Scythe	triple
+Limsa Lominsa	Blacksmith	30	Hard Knock Life	14725	293	Field	Costa del Sol	Eastern La Noscea	1	Steel Sledgehammer	
+Limsa Lominsa	Blacksmith	35	Spice Cadet	23940	750	Town			3	Heavy Steel Mortar	triple
+Limsa Lominsa	Blacksmith	35	Awl about Who You Know	20517	734	Town			1	Wrapped Steel Awl	
+Limsa Lominsa	Blacksmith	35	You Spin Me Round	32396	448	Courier	Observatorium	Coerthas	1	Mythril Knife	
+Limsa Lominsa	Blacksmith	35	Seemed Like the Thing to Get	23940	557	Field	Observatorium	Coerthas	3	Wrapped Steel Culinary Knife	triple
+Limsa Lominsa	Blacksmith	35	Colder than Steel	20517	346	Field	Observatorium	Coerthas	1	Steel Round Knife	
+Limsa Lominsa	Blacksmith	40	File That under Whatever	32049	625	Town			3	Mythril File	triple
+Limsa Lominsa	Blacksmith	40	A Mixed Message	27887	418	Town			1	Mythril Pliers	
+Limsa Lominsa	Blacksmith	40	A Weighty Question	40661	483	Courier	Whitebrim	Coerthas	1	Mythril Sledgehammer	
+Limsa Lominsa	Blacksmith	40	Streamlining Operations	32049	661	Field	Whitebrim	Coerthas	3	Mythril Claw Hammer	triple
+Limsa Lominsa	Blacksmith	40	Get Me to the War on Time	28267	420	Field	Whitebrim	Coerthas	1	Cobalt Doming Hammer	
+Limsa Lominsa	Blacksmith	45	[Unknown]	0	0	Unknown			3	Cobalt Sledgehammer	triple
+Limsa Lominsa	Blacksmith	45	[Unknown]	0	0	Unknown			3	Cobalt Pliers	triple
+Limsa Lominsa	Armorer	1	Ain't Got No Ingots	240	94	Town			3	Bronze Ingot	
+Limsa Lominsa	Armorer	1	Skillet Labor	430	96	Town			1	Bronze Skillet	
+Limsa Lominsa	Armorer	1	The Alloyed Truth	364	84	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Rivets	
+Limsa Lominsa	Armorer	1	Don't Hit Me One More Time	885	132	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Hoplon	
+Limsa Lominsa	Armorer	5	You've Got Mail	1053	111	Town			1	Bronze Haubergeon	
+Limsa Lominsa	Armorer	5	Headbanger's Thrall	2022	133	Town			1	Bronze Barbut	
+Limsa Lominsa	Armorer	5	Bronzed and Burnt	1715	134	Courier	Red Rooster Stead	Lower La Noscea	1	Bronze Sallet	
+Limsa Lominsa	Armorer	5	Rodents of Unusual Size	1137	113	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Sollerets	
+Limsa Lominsa	Armorer	5	Strait Ain't the Gate	2022	153	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Scutum	
+Limsa Lominsa	Armorer	10	Waist Not, Want Not	2230	157	Town			1	Bronze Plate Belt	
+Limsa Lominsa	Armorer	10	All Ovo That	3872	313	Town			1	Iron Skillet	
+Limsa Lominsa	Armorer	10	Greavous Losses	3849	259	Field	Swiftperch	Western La Noscea	1	Bronze Sabatons	
+Limsa Lominsa	Armorer	10	Cook Intentions	2230	157	Field	Swiftperch	Western La Noscea	1	Amateur's Skillet	
+Limsa Lominsa	Armorer	10	Still the Best	3872	293	Field	Swiftperch	Western La Noscea	1	Brass Alembic	
+Limsa Lominsa	Armorer	15	Cover Girl	4057	225	Town			1	Decorated Bronze Barbut	
+Limsa Lominsa	Armorer	15	Fashion Weak	6109	316	Town			1	Iron Cuirass	
+Limsa Lominsa	Armorer	15	Kiss the Pan (Good-bye)	6573	254	Courier	Aleport	Western La Noscea	1	Initiate's Skillet	
+Limsa Lominsa	Armorer	15	A Well-rounded Crew	4227	221	Field	Aleport	Western La Noscea	1	Iron Hoplon	
+Limsa Lominsa	Armorer	15	A Firm Hand	6109	322	Field	Aleport	Western La Noscea	1	Iron Gauntlets	
+Limsa Lominsa	Armorer	20	Get Me the Hard Stuff	7331	446	Town			3	Ironclad Bronze Buckler	triple
+Limsa Lominsa	Armorer	20	Night Squawker	6373	286	Town			1	Iron Lantern Shield	
+Limsa Lominsa	Armorer	20	264 Kinds of Cheese	0	0	Courier	Quarrymill	South Shroud	1	Iron Frypan	
+Limsa Lominsa	Armorer	20	Not Enough Headroom	7331	334	Field	Quarrymill	South Shroud	3	Iron Celata	triple
+Limsa Lominsa	Armorer	20	No Hand-Me-Downs	6373	247	Field	Quarrymill	South Shroud	1	Iron Vambraces	
+Limsa Lominsa	Armorer	25	Tisket Tasset	13240	619	Town			3	Steel Tassets	triple
+Limsa Lominsa	Armorer	25	Ingot We Trust	9885	235	Town			1	Steel Ingot	
+Limsa Lominsa	Armorer	25	A Leg to Stand On	13893	269	Courier	Quarrymill	South Shroud	1	Heavy Iron Flanchard	
+Limsa Lominsa	Armorer	25	Get Shirty	13240	567	Field	Quarrymill	South Shroud	3	Steel Chainmail	triple
+Limsa Lominsa	Armorer	25	Need for Mead	9885	338	Field	Quarrymill	South Shroud	1	Conical Alembic	
+Limsa Lominsa	Armorer	30	Romper Stomper	17670	375	Town			3	Steel-plated Jackboots	triple
+Limsa Lominsa	Armorer	30	Auroch Star	15131	399	Town			1	Bull Hoplon	
+Limsa Lominsa	Armorer	30	Eyes on a Hard Body	23912	354	Courier	Costa del Sol	Eastern La Noscea	1	Decorated Buckler	
+Limsa Lominsa	Armorer	30	They've Got Legs	17670	680	Field	Costa del Sol	Eastern La Noscea	3	Steel Sabatons	triple
+Limsa Lominsa	Armorer	30	Kitty Get Your Helm	15141	381	Field	Costa del Sol	Eastern La Noscea	1	Steel Elmo	
+Limsa Lominsa	Armorer	35	Get Me the Usual	23940	789	Town			3	Heavy Steel Flanchard	triple
+Limsa Lominsa	Armorer	35	Hollow Hallmarks	21597	333	Town			1	Mythril Ingot	
+Limsa Lominsa	Armorer	35	Very Slow Array	32396	428	Field	Observatorium	Coerthas	1	Mythril Plate	
+Limsa Lominsa	Armorer	35	I've Got You under My Skin	23940	656	Field	Observatorium	Coerthas	3	Steel-plated Caligae	triple
+Limsa Lominsa	Armorer	35	Skillet to the Stars	20517	346	Field	Observatorium	Coerthas	1	Steel Frypan	
+Limsa Lominsa	Armorer	40	Distill and Know that I'm Right	32049	733	Town			3	Mythril Alembic	triple
+Limsa Lominsa	Armorer	40	Everybody Cut Footloose	27107	693	Town			1	Mythril-plated Jackboots	
+Limsa Lominsa	Armorer	40	Liquid Persuasion	41831	649	Courier	Whitebrim	Coerthas	1	Mythril Chain Coif	
+Limsa Lominsa	Armorer	40	Employee Retention	32049	743	Field	Whitebrim	Coerthas	3	Mythril Elmo	triple
+Limsa Lominsa	Armorer	40	Family Secrets	27107	648	Field	Whitebrim	Coerthas	1	Mythril Barbut	
+Limsa Lominsa	Armorer	45	Some Dragoons Have All the Luck	39087	1032	Town			3	High Mythril Armor	triple
+Limsa Lominsa	Armorer	45	Cobalt Aforethought	28267	416	Town			1	Cobalt Plate	
+Limsa Lominsa	Armorer	45	Feasting the Night Away	53280	637	Courier	Saint Coinach's Find	Mor Dhona	1	Hells' Kitchen	
+Limsa Lominsa	Armorer	45	Dealing with the Tough Stuff	33465	466	Field	Saint Coinach's Find	Mor Dhona	3	Cobalt Ingot	triple
+Limsa Lominsa	Armorer	45	Booty Call	33573	581	Field	Saint Coinach's Find	Mor Dhona	1	Cobalt-plated Jackboots	
+Limsa Lominsa	Culinarian	1	Pork Is a Salty Food	240	91	Town			9	Table Salt	
+Limsa Lominsa	Culinarian	1	Trout Fishing in Limsa	885	91	Town			1	Grilled Trout	
+Limsa Lominsa	Culinarian	1	What a Sap	240	92	Field	Red Rooster Stead	Lower La Noscea	5	Maple Syrup	
+Limsa Lominsa	Culinarian	1	Meat Lover's Special	885	94	Field	Red Rooster Stead	Lower La Noscea	1	Marmot Steak	
+Limsa Lominsa	Culinarian	5	Whip It	1053	105	Town			5	Sweet Cream	
+Limsa Lominsa	Culinarian	5	Jack of All Plates	2022	169	Town			1	Jack-o'-lantern	
+Limsa Lominsa	Culinarian	5	A Real Fungi	1715	105	Courier	Red Rooster Stead	Lower La Noscea	1	Chanterelle Saute	
+Limsa Lominsa	Culinarian	5	Putting the Squeeze On	1053	108	Field	Red Rooster Stead	Lower La Noscea	1	Orange Juice	
+Limsa Lominsa	Culinarian	5	Butter Me Up	2022	133	Field	Red Rooster Stead	Lower La Noscea	5	Kukuru Butter	
+Limsa Lominsa	Culinarian	10	Keep Your Powder Dry	2230	136	Town			5	Kukuru Powder	
+Limsa Lominsa	Culinarian	10	Pretty Enough to Eat	3872	110	Town			1	Grilled Carp	
+Limsa Lominsa	Culinarian	10	Go Ahead and Dig In	3849	152	Courier	Swiftperch	Western La Noscea	1	Mole Loaf	
+Limsa Lominsa	Culinarian	10	Chew the Fat	2230	150	Field	Swiftperch	Western La Noscea	1	Grilled Dodo	
+Limsa Lominsa	Culinarian	10	Fisher of Men	3872	151	Field	Swiftperch	Western La Noscea	1	Salt Cod	
+Limsa Lominsa	Culinarian	15	Omelet's Be Friends	4057	205	Town			1	Dodo Omelette	
+Limsa Lominsa	Culinarian	15	Shy Is the Oyster	4522	157	Town			1	Raw Oyster	
+Limsa Lominsa	Culinarian	15	A Total Nut Job	6573	154	Courier	Aleport	Western La Noscea	1	Walnut Bread	
+Limsa Lominsa	Culinarian	15	Sweet Smell of Success	4057	216	Field	Aleport	Western La Noscea	5	Lavender Oil	
+Limsa Lominsa	Culinarian	15	Rustic Repast	6109	192	Field	Aleport	Western La Noscea	1	Chicken and Mushrooms	
+Limsa Lominsa	Culinarian	20	Brain Food	5259	241	Town			3	Walnut Bread	triple
+Limsa Lominsa	Culinarian	20	A Grape Idea	6373	243	Town			1	Grape Juice	
+Limsa Lominsa	Culinarian	20	Feast of All Soles	10289	199	Courier	Quarrymill	South Shroud	1	Salmon Meuniere	
+Limsa Lominsa	Culinarian	20	Picnic Panic	5259	246	Field	Quarrymill	South Shroud	3	Apple Tart	triple
+Limsa Lominsa	Culinarian	20	For Crumbs Sake	6373	238	Field	Quarrymill	South Shroud	1	Honey Muffin	
+Limsa Lominsa	Culinarian	25	Fever Pitch	8505	186	Town			3	Chamomile Tea	triple
+Limsa Lominsa	Culinarian	25	Convalescence Precedes Essence	9885	225	Town			1	Ginger Cookie	
+Limsa Lominsa	Culinarian	25	Cooking With Gas	16550	227	Courier	Quarrymill	South Shroud	9	Chicken Stock	
+Limsa Lominsa	Culinarian	25	I love Lamprey	11115	253	Field	Quarrymill	South Shroud	3	Eel Pie	triple
+Limsa Lominsa	Culinarian	25	Whirled Peas	9885	233	Field	Quarrymill	South Shroud	1	Pea Soup	
+Limsa Lominsa	Culinarian	30	True Grits	13887	144	Town			6	Cornmeal	triple
+Limsa Lominsa	Culinarian	30	Bloody Good Tart, This	15941	243	Town			1	Blood Currant Tart	
+Limsa Lominsa	Culinarian	30	Pretty as a Picture	22712	287	Courier	Costa del Sol		5	Dark Vinegar	
+Limsa Lominsa	Culinarian	30	Sole Survivor	17670	243	Field	Costa del Sol	Eastern La Noscea	3	Baked Sole	triple
+Limsa Lominsa	Culinarian	30	Point Them with the Sticky End	15941	405	Field	Costa del Sol	Eastern La Noscea	1	Tuna Miq'abob	
+Limsa Lominsa	Culinarian	35	Feeding Frenzy	19600	194	Town			3	Acorn Cookie	triple
+Limsa Lominsa	Culinarian	35	Don't Turn Up Your Nose	20517	404	Town			1	Sauerkraut 	
+Limsa Lominsa	Culinarian	35	No More Dumpster Diving	32396	299	Courier	Observatorium	Coerthas	1	Knight's Bread	
+Limsa Lominsa	Culinarian	40	Made by Apple in Coerthas	32049	590	Town			3	Apple Juice	triple
+Limsa Lominsa	Culinarian	40	The Perks of Life at Sea	27107	364	Town			1	Jerked Beef 	
+Limsa Lominsa	Culinarian	40	Moving up the World	41831	401	Courier	Whitebrim	Coerthas	5	Rolanberry Cheese	
+Limsa Lominsa	Culinarian	45	Bread in the Clouds	39087	311	Town			3	La Noscean Toast	triple
+Limsa Lominsa	Culinarian	45	The Egg Files	33573	485	Town			1	Deviled Eggs 	
+Limsa Lominsa	Culinarian	45	Culture Club	53280	460	Courier	Saint Coinach's Find	Mor Dhona	1	Crowned Pie	
+Gridania	Carpenter	1	In with the New	364	100	Town			1	Bone Harpoon	
+Gridania	Carpenter	1	Touch and Heal	430	99	Town			1	Maple Pattens	
+Gridania	Carpenter	1	Bowing Out	292	102	Field	The Bannock	Central Shroud	1	Maple Shortbow	
+Gridania	Carpenter	1	Got Your Back	885	103	Field	The Bannock	Central Shroud	1	Square Maple Shield	
+Gridania	Carpenter	5	Bows for the Boys	1137	120	Town			1	Maple Longbow	
+Gridania	Carpenter	5	Shields for the Serpents	1257	143	Town			1	Round Shield	
+Gridania	Carpenter	5	Spears and Sorcery	1715	118	Courier	The Bannock	Central Shroud	1	Maple Crook	
+Gridania	Carpenter	5	Leaving without Leave	1053	117	Field	The Bannock	Central Shroud	1	Bronze Spear	
+Gridania	Carpenter	5	A Sword in Hand	2022	150	Field	The Bannock	Central Shroud	1	Ash Macuahuitl	
+Gridania	Carpenter	10	Citizens' Canes	2566	147	Town			1	Ash Radical	
+Gridania	Carpenter	10	On the Move	2330	147	Town			1	Ragstone Grinding Wheel	
+Gridania	Carpenter	10	Raise the Roof	3033	232	Courier	Bentbranch	Central Shroud	3	Ash Lumber	
+Gridania	Carpenter	10	Say It with Spears	2566	140	Field	Bentbranch	Central Shroud	1	Feathered Harpoon	
+Gridania	Carpenter	10	Life's a Stitch	2410	185	Field	Bentbranch	Central Shroud	1	Ash Spinning Wheel	
+Gridania	Carpenter	15	Re-crating the Scene	4227	197	Town			1	Iron Spear	
+Gridania	Carpenter	15	Nightmare on My Street	4382	195	Town			1	Elm Cane	
+Gridania	Carpenter	15	Driving up the Wall	6086	287	Courier	Hawthorne Hut	North Shroud	3	Elm Lumber	
+Gridania	Carpenter	15	Nothing to Hide	6109	196	Field	Hawthorne Hut	North Shroud	1	Ash Mask	Lapis Lazuli
+Gridania	Carpenter	15	What You Need	3872	131	Field	Hawthorne Hut	North Shroud	1	Square Ash Shield	
+Gridania	Carpenter	20	Behind the Mask	7331	400	Town			3	Ash Mask	Lapis Lazuli
+Gridania	Carpenter	20	As the Worm Turns	6373	216	Town			1	Yew Radical	
+Gridania	Carpenter	20	Militia on My Mind	9164	192	Courier	Quarrymill	South Shroud	1	Iron Lance	
+Gridania	Carpenter	20	Polearms Aplenty	5073	195	Field	Quarrymill	South Shroud	3	Iron Spear	triple
+Gridania	Carpenter	20	Grinding It Out	6625	230	Field	Quarrymill	South Shroud	1	Mudstone Grinding Wheel	
+Gridania	Carpenter	25	Armoires of the Rich and Famous	11115	493	Town			5	Walnut Lumber	triple
+Gridania	Carpenter	25	Daddy's Little Girl	9885	285	Town			1	Viper-crested Round Shield	
+Gridania	Carpenter	25	Tools for the Tools	15710	339	Courier	Quarrymill	South Shroud	1	Silver Battle Fork	
+Gridania	Carpenter	25	Heal Away	8505	273	Field	Quarrymill	South Shroud	3	Yew Crook	triple
+Gridania	Carpenter	25	Storm of Swords	11033	260	Field	Quarrymill	South Shroud	1	Elm Macuahuitl	
+Gridania	Carpenter	30	Ceremonial Spears	17670	377	Town			3	Steel Spear	triple
+Gridania	Carpenter	30	An Expected Tourney	15141	353	Town			1	Ash Cavalry Bow	
+Gridania	Carpenter	30	Knock on Wood	24500	343	Courier	Costa del Sol	Eastern La Noscea	1	Walnut Macuahuitl	
+Gridania	Carpenter	30	The Long Lance of the Law	13887	424	Field	Costa del Sol	Eastern La Noscea	3	Steel Halberd	triple
+Gridania	Carpenter	30	Live Freelance or Die	19950	499	Field	Costa del Sol	Eastern La Noscea	1	Heavy Steel Lance	
+Gridania	Carpenter	35	Flintstone Flight	19600	508	Town			3	Walnut Macuahuitl	triple
+Gridania	Carpenter	35	A Tree Grew in Gridania	21057	514	Town			1	Pastoral Oak Cane	
+Gridania	Carpenter	35	Stay on Target	30776	387	Courier	Observatorium	Coerthas	1	Yarzonshell Harpoon	
+Gridania	Carpenter	35	Bend It Like Durendaire	18170	403	Field	Observatorium	Coerthas	3	Ash Cavalry Bow	triple
+Gridania	Carpenter	35	The Cold, Cold Ground	22119	386	Field	Observatorium	Coerthas	1	Oak Pattens	
+Gridania	Carpenter	40	Spin It Like You Mean It	32049	678	Town			3	Mahogany Spinning Wheel	triple
+Gridania	Carpenter	40	Greenstones for Greenhorns	28267	583	Town			1	Jade Crook	
+Gridania	Carpenter	40	The Arsenal of Theocracy	42401	501	Courier	Whitebrim	Coerthas	1	Cobalt Halberd	
+Gridania	Carpenter	40	Ready for a Rematch	25917	714	Field	Whitebrim	Coerthas	3	Mythril Lance	triple
+Gridania	Carpenter	40	The Turning Point	27887	538	Field	Whitebrim	Coerthas	1	Garnet Grinding Wheel	
+Gridania	Carpenter	45	You Do the Heavy Lifting	26543	426	Town			5	Mahogany Lumber	triple
+Gridania	Carpenter	45	Clogs of War	35520	425	Town			1	Mahogany Pattens	
+Gridania	Carpenter	45	Trident and Error	51828	648	Courier	Saint Coinach's Find	Mor Dhona	1	Cobalt Trident	
+Gridania	Carpenter	45	Incant Now, Think Later	33921	754	Field	Saint Coinach's Find	Mor Dhona	3	Jade Crook	triple
+Gridania	Carpenter	45	Bowing to Greater Power	33573	405	Field	Saint Coinach's Find	Mor Dhona	1	Yew Longbow	
+Gridania	Leatherworker	1	Red in the Head	240	87	Town			1	Leather Calot	
+Gridania	Leatherworker	1	Underneath It All	292	87	Town			1	Leather Wristguards	
+Gridania	Leatherworker	1	Packmen	364	101	Field	The Bannock	Central Shroud	1	Merchant's Purse	
+Gridania	Leatherworker	1	Sticking Their Necks Out	885	99	Field	The Bannock	Central Shroud	1	Leather Choker	
+Gridania	Leatherworker	5	Mind over Muzzle	1137	129	Town			1	Leather Wristbands	
+Gridania	Leatherworker	5	From the Sands to the Stage	1137	206	Town			1	Leather Himantes	
+Gridania	Leatherworker	5	In Their Shoes	1715	128	Courier	The Bannock	Central Shroud	1	Leather Leggings	
+Gridania	Leatherworker	5	A Thorn in One's Hide	1053	127	Field	The Bannock	Central Shroud	1	Leather Mitts	
+Gridania	Leatherworker	5	A Place to Call Helm	1143	145	Field	The Bannock	Central Shroud	1	Hard Leather Pot Helm	
+Gridania	Leatherworker	10	Quelling Bloody Rumors	2230	145	Town			1	Hard Leather Shoes	
+Gridania	Leatherworker	10	The Bards' Guards	2022	142	Town			1	Hard Leather Wristguards	
+Gridania	Leatherworker	10	Saddle Sore	1715	150	Courier	Bentbranch	Central Shroud	3	Hard Leather	
+Gridania	Leatherworker	10	Only the Best	2410	148	Field	Bentbranch	Central Shroud	1	Hard Leather Harness	
+Gridania	Leatherworker	10	Simply the Best	2598	149	Field	Bentbranch	Central Shroud	1	Hard Leather Caligae	
+Gridania	Leatherworker	15	Choke Hold	3872	183	Town			1	Hard Leather Choker	
+Gridania	Leatherworker	15	Heads Up	4227	140	Town			1	Hard Leather Skullcap	
+Gridania	Leatherworker	15	Skin off Their Backs	6341	237	Courier	Hawthorne Hut	North Shroud	3	Aldgoat Leather	
+Gridania	Leatherworker	15	Back in the Band	4227	183	Field	Hawthorne Hut	North Shroud	1	Hard Leather Wristbands	
+Gridania	Leatherworker	15	On Their Feet Again	4227	286	Field	Hawthorne Hut	North Shroud	1	Hard Leather Espadrilles	
+Gridania	Leatherworker	20	Fire and Hide	5073	244	Town			5	Aldgoat Leather	triple
+Gridania	Leatherworker	20	Playing the Part	6625	242	Town			1	Goatskin Armguards	
+Gridania	Leatherworker	20	My Sole to Take	9650	178	Courier	Quarrymill	South Shroud	1	Padded Leather Duckbills	
+Gridania	Leatherworker	20	Packing a Punch	5259	227	Field	Quarrymill	South Shroud	3	Hard Leather Cesti	triple
+Gridania	Leatherworker	20	Hands On	9262	224	Field	Quarrymill	South Shroud	1	Fingerless Goatskin Gloves	
+Gridania	Leatherworker	25	Belts Served Cold	8231	369	Town			3	Voyager's Belt	triple
+Gridania	Leatherworker	25	Men Who Scare Up Goats	11572	249	Town			1	Goatskin Targe	
+Gridania	Leatherworker	25	Just Rewards	17358	228	Courier	Quarrymill	South Shroud	1	Goatskin Wristbands	
+Gridania	Leatherworker	25	Quicker than Sand	7648	265	Field	Quarrymill	South Shroud	3	Padded Leather Duckbills	triple
+Gridania	Leatherworker	25	No Risk, No Reward	11033	258	Field	Quarrymill	South Shroud	1	Toadskin Cesti	
+Gridania	Leatherworker	30	Best Served Toad	11862	346	Town			5	Toad Leather	triple
+Gridania	Leatherworker	30	Quality over Quantity	15941	406	Town			1	Boarskin Himantes	
+Gridania	Leatherworker	30	Just Cinch It	23912	366	Courier	Costa del Sol	Eastern La Noscea	1	Boarskin Satchel Belt	
+Gridania	Leatherworker	30	Subordinate Clause	11862	486	Field	Costa del Sol	Eastern La Noscea	3	Goatskin Choker	triple
+Gridania	Leatherworker	30	Slave to Fashion	16333	512	Field	Costa del Sol	Eastern La Noscea	1	Boarskin Choker	
+Gridania	Leatherworker	35	Supply Side Logic	19130	438	Town			5	Boar Leather	triple
+Gridania	Leatherworker	35	Soft Shoe Shuffle	21597	346	Town			1	Peisteskin Crakows	
+Gridania	Leatherworker	35	The Righteous Tools for the Job	30776	392	Courier	Observatorium	Coerthas	1	Boarskin Ringbands	
+Gridania	Leatherworker	35	First They Came for the Heretics	19600	356	Field	Observatorium	Coerthas	3	Boarskin Choker	triple
+Gridania	Leatherworker	35	Through a Glass Brightly	21597	579	Field	Observatorium	Coerthas	1	Fingerless Peisteskin Gloves	
+Gridania	Leatherworker	40	The Tao of Rabbits	25260	521	Town			3	Boarskin Harness	triple
+Gridania	Leatherworker	40	Skirt Chaser	27497	410	Town			1	Boarskin Skirt	
+Gridania	Leatherworker	40	The Birdmen of Ishgard	40661	553	Courier	Whitebrim	Coerthas	1	Boarskin Culottes	
+Gridania	Leatherworker	40	It's Not a Job, It's a Calling	25917	380	Field	Whitebrim	Coerthas	5	Peiste Leather	triple
+Gridania	Leatherworker	40	Not So Alike in Dignity	27887	516	Field	Whitebrim	Coerthas	1	Boarskin Jerkin	
+Gridania	Leatherworker	45	Handle with Care	39087	594	Town			3	Peisteskin Cesti	triple
+Gridania	Leatherworker	45	Too Hot to Handle	33573	468	Town			1	Raptorskin Wristbands	
+Gridania	Leatherworker	45	Hang in There	48858	576	Courier	Saint Coinach's Find	Mor Dhona	1	Raptorskin Artisan's Belt	
+Gridania	Leatherworker	45	Spelling Me Softly	33921	425	Field	Saint Coinach's Find	Mor Dhona	5	Raptor Leather	triple
+Gridania	Leatherworker	45	Tenderfoot Moments	34552	391	Field	Saint Coinach's Find	Mor Dhona	1	Hunting Moccasins	
+Ul'dah	Goldsmith	1	Copper and Robbers	240	104	Town			1	Copper Ingot	
+Ul'dah	Goldsmith	1	Needful Rings	885	106	Town			1	Copper Wristlets	
+Ul'dah	Goldsmith	1	Hora at Me	292	93	Field	Scorpion Crossing	Western Thanalan	1	Bone Hora	
+Ul'dah	Goldsmith	1	Bad Bromance	885	96	Field	Scorpion Crossing	Western Thanalan	1	Bone Staff	
+Ul'dah	Goldsmith	5	Gods of Small Things	1053	121	Town			1	Copper Earrings	
+Ul'dah	Goldsmith	5	I Ram What I Ram	2022	147	Town			1	Ramhorn Claws	
+Ul'dah	Goldsmith	5	Let's Talk about Hex	1715	149	Courier	Scorpion Crossing	Western Thanalan	1	Bone Necklace	
+Ul'dah	Goldsmith	5	A Ringing Success	1137	121	Field	Scorpion Crossing	Western Thanalan	1	Copper Ring	
+Ul'dah	Goldsmith	5	Horn of Plenty	2022	113	Field	Scorpion Crossing	Western Thanalan	1	Bone Armillae	
+Ul'dah	Goldsmith	10	All That Glitters	2230	136	Town			1	Copper Ear Cuffs	
+Ul'dah	Goldsmith	10	The Tusk at Hand	3872	231	Town			1	Fang Earrings	
+Ul'dah	Goldsmith	10	An Offer We Can't Refuse	3849	204	Courier	Horizon	Western Thanalan	1	Decorated Bone Staff	
+Ul'dah	Goldsmith	10	Point of Honor	4057	138	Field	Horizon	Western Thanalan	1	Amateur's Needle	
+Ul'dah	Goldsmith	10	Gorgeous Gorget	3872	244	Field	Horizon	Western Thanalan	1	Brass Gorget	
+Ul'dah	Goldsmith	15	Brothers in Arms	4057	184	Town			1	Brass Wristlets of Crafting	
+Ul'dah	Goldsmith	15	Forever 21K	6109	130	Town			1	Brass Ring	
+Ul'dah	Goldsmith	15	Bad to the Bone	6573	406	Courier	Camp Drybone	Eastern Thanalan	1	2685	
+Ul'dah	Goldsmith	15	Sharp Words	4057	170	Field	Camp Drybone	Eastern Thanalan	1	Bat Fang Needle	
+Ul'dah	Goldsmith	15	Bad Guys Eat Brass	6109	134	Field	Camp Drybone	Eastern Thanalan	1	Brass Ring of Crafting	
+Ul'dah	Goldsmith	20	King for a Day	7331	360	Town			3	Decorated Copper Scepter	triple
+Ul'dah	Goldsmith	20	Perk of Fiction	6373	220	Town			1	Coral Ring	
+Ul'dah	Goldsmith	20	You Burnt It, You Bought It	10289	170	Courier	Quarrymill		1	Wind Brand	
+Ul'dah	Goldsmith	20	Dog Tags Are for Dogs	7331	259	Field	Quarrymill	South Shroud	3	Brass Ring	triple
+Ul'dah	Goldsmith	20	Music to Their Ears	6373	255	Field	Quarrymill	South Shroud	1	Brass Ear Cuffs	
+Ul'dah	Goldsmith	25	All Booked Up	11115	680	Town			3	Silver Magnifiers	triple
+Ul'dah	Goldsmith	25	Love in the Time of Umbra	9885	270	Town			1	Silver Ring	
+Ul'dah	Goldsmith	25	Thaumaturge is Magic	16550	227	Courier	Quarrymill		1	Fluorite Ring	
+Ul'dah	Goldsmith	25	Dancing with the Stars	11115	640	Field	Quarrymill	South Shroud	3	Toothed Staghorn Staff	triple
+Ul'dah	Goldsmith	25	Necklet of Champions	9885	271	Field	Quarrymill	South Shroud	1	Horn Necklace	
+Ul'dah	Goldsmith	30	A Little Bird Told Me	17670	359	Town			3	Malachite Bracelet	triple
+Ul'dah	Goldsmith	30	One Man's Trash	15141	448	Town			1	Horn Ring	
+Ul'dah	Goldsmith	30	He Has His Quartz	23912	394	Courier	Costa del Sol	Eastern La Noscea	1	2737	
+Ul'dah	Goldsmith	30	Get the Green Stuff	17670	362	Field	Costa del Sol	Eastern La Noscea	3	Malachite Earrings	triple
+Ul'dah	Goldsmith	30	It's Only Love	15141	425	Field	Costa del Sol	Eastern La Noscea	1	Silver Choker	
+Ul'dah	Goldsmith	35	Burning the Midnight Oil	23940	349	Town			3	Fire Brand	triple
+Ul'dah	Goldsmith	35	Lode It Up	20517	443	Town			1	Mythril Ring	
+Ul'dah	Goldsmith	35	Actually, It's Loyalty	32396	478	Courier	Observatorium	Coerthas	1	Aquamarine Bracelet	
+Ul'dah	Goldsmith	35	Faith and Fashion	23940	416	Field	Observatorium	Coerthas	3	Mythril Earrings	triple
+Ul'dah	Goldsmith	35	Dead Can't Defang	20517	390	Field	Observatorium	Coerthas	1	Wolf Necklace	
+Ul'dah	Goldsmith	40	It's My Business to Know Things	32049	538	Town			3	Red Coral Armillae	triple
+Ul'dah	Goldsmith	40	When We Were Blings	27107	420	Town			1	Mythril Ear Cuffs	
+Ul'dah	Goldsmith	40	Coral on My Mind	41831	415	Courier	Whitebrim	Coerthas	1	Red Coral Ring	
+Ul'dah	Goldsmith	40	If You've Got It, Flaunt It	32049	688	Field	Whitebrim	Coerthas	3	Peridot Earrings	triple
+Ul'dah	Goldsmith	40	Tough Job Market	27107	299	Field	Whitebrim	Coerthas	1	Horn Staff	
+Ul'dah	Goldsmith	45	The Big Red	39087	601	Town			3	Red Coral Necklace	triple
+Ul'dah	Goldsmith	45	Gold Is So Last Year	33573	629	Town			1	2876	
+Ul'dah	Goldsmith	45	Green and Bear It	53280	584	Courier	Saint Coinach's Find	Mor Dhona	1	Tourmaline Choker	
+Ul'dah	Goldsmith	45	Light in the Darkness	39087	872	Field	Saint Coinach's Find	Mor Dhona	3	Amber Choker	triple
+Ul'dah	Goldsmith	45	Sweet Charity	34552	508	Field	Saint Coinach's Find	Mor Dhona	1	Amber Ring	
+Ul'dah	Weaver	1	The Unmentionables	292	95	Town			1	Hempen Underpants	
+Ul'dah	Weaver	1	Trew Enough	885	97	Town			1	Hempen Chausses	
+Ul'dah	Weaver	1	Hire in the Blood	292	97	Field	Scorpion Crossing	Western Thanalan	1	Hempen Halfgloves	
+Ul'dah	Weaver	1	Burn Me Up	885	100	Field	Scorpion Crossing	Western Thanalan	1	Hempen Cowl	
+Ul'dah	Weaver	5	The Adventurer's New Coat	1053	112	Town			1	Hempen Tabard	
+Ul'dah	Weaver	5	A Taste for Dalmaticae	2022	113	Town			1	Amateur's Dalmatica	
+Ul'dah	Weaver	5	Just for Kecks	1715	136	Courier	Scorpion Crossing	Western Thanalan	1	Hempen Kecks	
+Ul'dah	Weaver	5	Wiggle Room	1053	115	Field	Scorpion Crossing	Western Thanalan	1	Hempen Shepherd's Tunic	
+Ul'dah	Weaver	5	This Is Why You Can't Have Nice Things	2022	116	Field	Scorpion Crossing	Western Thanalan	1	Amateur's Breeches	
+Ul'dah	Weaver	10	Hat in Hand	2230	139	Town			1	Straw Hat	
+Ul'dah	Weaver	10	Workplace Safety	3872	240	Town			1	Cotton Scarf	
+Ul'dah	Weaver	10	Keep It Under Wraps	3849	219	Courier	Horizon	Western Thanalan	1	Cotton Turban	
+Ul'dah	Weaver	10	Making Gloves Out of Nothing at All	2230	131	Field	Horizon	Western Thanalan	1	Hempen Bracers	
+Ul'dah	Weaver	10	Welcome to the Cotton Club	3872	132	Field	Horizon	Western Thanalan	1	Cotton Halfgloves	
+Ul'dah	Weaver	15	Read the Fine Print	4057	184	Town			1	Cotton Shepherd's Tunic	
+Ul'dah	Weaver	15	Don't Trew So Hard	6109	183	Town			1	Initiate's Slops	
+Ul'dah	Weaver	15	Better Shroud than Sorry	6573	230	Courier	Camp Drybone	Eastern Thanalan	1	Cotton Kurta	
+Ul'dah	Weaver	15	Pants Are Not Enough	4057	180	Field	Camp Drybone	Eastern Thanalan	1	Padded Hempen Trousers	
+Ul'dah	Weaver	15	Touch Me If You Can	6109	204	Field	Camp Drybone	Eastern Thanalan	1	Cotton Work Gloves	
+Ul'dah	Weaver	20	Hitting Below the Belt	5427	173	Town			3	Cotton Breeches of Crafting	triple
+Ul'dah	Weaver	20	Don't Sash Me	6373	262	Town			1	Cotton Sash	
+Ul'dah	Weaver	20	Doublet Jeopardy	10289	314	Courier	Quarrymill	South Shroud	1	Cotton Doublet Vest of Gathering	
+Ul'dah	Weaver	20	The Telltale Tress	5427	272	Field	Quarrymill	South Shroud	3	Cotton Coif of Gathering	triple
+Ul'dah	Weaver	20	Getting Handsy	6373	264	Field	Quarrymill	South Shroud	1	Cotton Dress Gloves	
+Ul'dah	Weaver	25	He's Got Legs	11115	479	Town			3	Velveteen Sarouel	triple
+Ul'dah	Weaver	25	Piling It On	9885	264	Town			1	Velveteen Shirt	
+Ul'dah	Weaver	25	I'll Be Your Wailer Today	16550	211	Courier	Quarrymill	South Shroud	1	Velveteen Wedge Cap of Gathering	
+Ul'dah	Weaver	25	Bet You Anything	11115	488	Field	Quarrymill	South Shroud	3	Velveteen Sarouel of Gathering	triple
+Ul'dah	Weaver	25	Pantser Corps	6109	247	Field	Quarrymill	South Shroud	1	Initiate's Slops	
+Ul'dah	Weaver	30	Our Man in Ul'Dah	17670	326	Town			3	Velveteen Work Gloves	triple
+Ul'dah	Weaver	30	By the Short Hairs	15141	362	Town			1	Velveteen Robe	
+Ul'dah	Weaver	30	By the Seat of the Pants	23912	410	Courier	Costa del Sol	Eastern La Noscea	1	Linen Chausses	
+Ul'dah	Weaver	30	Walk Softly and Carry a Big Halberd	17670	334	Field	Costa del Sol	Eastern La Noscea	3	Velveteen Dress Shoes	triple
+Ul'dah	Weaver	30	Put on Your Party Pants	15141	303	Field	Costa del Sol	Eastern La Noscea	1	Velveteen Gaskins	
+Ul'dah	Weaver	35	Crunching the Numbers	23940	529	Town			3	Linen Hat	triple
+Ul'dah	Weaver	35	Private Concerns	20518	401	Town			1	Linen Trousers	
+Ul'dah	Weaver	35	Edmelle's Hair	32396	453	Courier	Observatorium	Coerthas	1	Linen Wedge Cap of Gathering	
+Ul'dah	Weaver	35	A Leg Up on the Cold	23940	484	Field	Observatorium	Coerthas	3	Linen Tights	triple
+Ul'dah	Weaver	35	In over Your Head	20517	427	Field	Observatorium	Coerthas	1	Linen Cowl	
+Ul'dah	Weaver	40	Party Animals	32049	486	Town			3	Linen Deerstalker	triple
+Ul'dah	Weaver	40	After the Smock-down	27107	391	Town			1	Linen Smock	
+Ul'dah	Weaver	40	Cool to Be Southern	41831	479	Courier	Whitebrim	Coerthas	1	Woolen Kecks	
+Ul'dah	Weaver	40	A Matter of Import	32049	608	Field	Whitebrim	Coerthas	3	Woolen Hat	triple
+Ul'dah	Weaver	40	No Country for Old Men	27107	408	Field	Whitebrim	Coerthas	1	Woolen Tights	
+Ul'dah	Weaver	45	Seeing It Through to the End	39087	760	Town			3	Woolen Smock	triple
+Ul'dah	Weaver	45	Glad As a Hatter	33573	666	Town			1	Felt Hat	
+Ul'dah	Weaver	45	Full Moon Fever	51828	631	Courier	Saint Coinach's Find	Mor Dhona	1	Felt Chausses	
+Ul'dah	Weaver	45	Bundle Up, It's Odd Out There	39087	727	Field	Saint Coinach's Find	Mor Dhona	3	Woolen Deerstalker	triple
+Ul'dah	Weaver	45	And a Haircut Wouldn't Hurt	33573	747	Field	Saint Coinach's Find	Mor Dhona	1	Felt Robe	
+Ul'dah	Alchemist	1	Mercury Rising	240	98	Town			3	Quicksilver	
+Ul'dah	Alchemist	1	One for the Books	885	100	Town			1	Leather Grimoire	
+Ul'dah	Alchemist	1	Met a Sticky Eng	292	93	Field	Scorpion Crossing	Western Thanalan	3	Animal Glue	
+Ul'dah	Alchemist	1	Days of Chunder	885	91	Field	Scorpion Crossing	Western Thanalan	3	Antidote	
+Ul'dah	Alchemist	5	On the Drip	1053	114	Town			3	Eye Drops	
+Ul'dah	Alchemist	5	Distill, My Heart	240	140	Town			3	Distilled Water	
+Ul'dah	Alchemist	5	A Jawbreaking Weapon of Staggering Weight	1715	242	Courier	Scorpion Crossing	Western Thanalan	1	Whispering Maple Wand	
+Ul'dah	Alchemist	5	Gotta Bounce	1137	117	Field	Scorpion Crossing	Western Thanalan	3	Rubber	
+Ul'dah	Alchemist	5	Don't Be So Tallow	2022	128	Field	Scorpion Crossing	Western Thanalan	3	Beeswax	
+Ul'dah	Alchemist	10	Wand-full Tonight	2230	145	Town			1	Budding Maple Wand	
+Ul'dah	Alchemist	10	Morning Glass of Ether	3872	130	Town			3	Ether	
+Ul'dah	Alchemist	10	Using Your Arcane Powers for Fun and Profit	3849	179	Courier	Horizon	Western Thanalan	1	Ash Picatrix	
+Ul'dah	Alchemist	10	One for the Road	2410	131	Field	Horizon	Western Thanalan	3	Potion	
+Ul'dah	Alchemist	10	You Grow, Girl	3872	223	Field	Horizon	Western Thanalan	3	Growth Formula Beta	
+Ul'dah	Alchemist	15	Shut Up and Take My	4057	204	Town			1	Ash Wand	
+Ul'dah	Alchemist	15	Book and a Hard Place	6109	418	Town			1	Engraved Hard Leather Grimoire	
+Ul'dah	Alchemist	15	Kiss of Life	6573	154	Courier	Camp Drybone	Eastern Thanalan	3	Potion of Vitality	
+Ul'dah	Alchemist	15	There's Something About Bury	4057	211	Field	Camp Drybone	Eastern Thanalan	1	Hard Leather Grimoire	
+Ul'dah	Alchemist	15	Sanity Points	6109	155	Field	Camp Drybone	Eastern Thanalan	3	Potion of Mind	
+Ul'dah	Alchemist	20	Don't Forget to Take Your Meds	4860	258	Town			5	Potion of Intelligence	triple
+Ul'dah	Alchemist	20	Everything Is Impossible	6373	316	Town			1	Budding Ash Wand	
+Ul'dah	Alchemist	20	The Writing Is Not on the Wall	10289	409	Courier	Quarrymill	South Shroud	3	Enchanted Silver Ink	
+Ul'dah	Alchemist	20	Blind Man's Bluff	5073	239	Field	Quarrymill	South Shroud	5	Potion of Dexterity	triple
+Ul'dah	Alchemist	20	Dripping with Venom	6373	237	Field	Quarrymill	South Shroud	3	Weak Blinding Potion	
+Ul'dah	Alchemist	25	Sophomore Slump	8505	492	Town			3	Goatskin Grimoire	triple
+Ul'dah	Alchemist	25	Automata for the People	9885	281	Town			3	Crab Oil	
+Ul'dah	Alchemist	25	Glazed and Confused	16550	199	Courier	Quarrymill	South Shroud	1	Clear Glass Lens	
+Ul'dah	Alchemist	25	The Wailers' First Law of Potion	11115	279	Field	Quarrymill	South Shroud	5	Hi-Potion	triple
+Ul'dah	Alchemist	25	Conspicuous Conjuration	10473	332	Field	Quarrymill	South Shroud	1	Whispering Ash Wand	
+Ul'dah	Alchemist	30	Stuck in the Moment	17670	396	Town			5	Horn Glue	triple
+Ul'dah	Alchemist	30	Riches' Brew	15141	240	Town			3	Hi-Potion of Mind	
+Ul'dah	Alchemist	30	Just Give Him a Serum	23912	301	Courier	Costa del Sol	Eastern La Noscea	3	Hi-Potion of Strength	
+Ul'dah	Alchemist	30	Growing Is Knowing	17670	160	Field	Costa del Sol	Eastern La Noscea	3	Growth Formula Gamma	triple
+Ul'dah	Alchemist	30	Eye of the Beholder	15141	191	Field	Costa del Sol	Eastern La Noscea	3	Hi-Potion of Dexterity	
+Ul'dah	Alchemist	35	Always Have an Exit Plan	23940	250	Town			5	Poisoning Potion	triple
+Ul'dah	Alchemist	35	The House Always Wins	20517	146	Town			3	Blinding Potion	
+Ul'dah	Alchemist	35	Alive and Unwell	32396	347	Courier	Observatorium	Coerthas	1	Budding Oak Wand	
+Ul'dah	Alchemist	35	Going Nowhere Fast	23940	293	Field	Observatorium	Coerthas	5	Paralyzing Potion	triple
+Ul'dah	Alchemist	35	The Sting of Conscience	20517	226	Field	Observatorium	Coerthas	3	Sleeping Potion	
+Ul'dah	Alchemist	40	Your Courtesy Wake-up Call	32049	392	Town			5	Smelling Salts	triple
+Ul'dah	Alchemist	40	A Bile Business	27107	383	Town			3	Shark Oil	
+Ul'dah	Alchemist	40	A Patch-up Place	41831	373	Courier	Whitebrim	Coerthas	3	Mega-Potion	
+Ul'dah	Alchemist	40	A Real Smooth Move	32049	533	Field	Whitebrim	Coerthas	5	Lanolin	triple
+Ul'dah	Alchemist	40	Arcane Arts for Dummies	27497	434	Field	Whitebrim	Coerthas	1	Book of Mythril	
+Ul'dah	Alchemist	45	A Matter of Vital Importance	40288	381	Town			3	Mega-Potion of Vitality	triple
+Ul'dah	Alchemist	45	Quit Your Jib-jab	33573	454	Town			3	Gold Needle	
+Ul'dah	Alchemist	45	Sleepless in Silvertear	53280	481	Courier	Saint Coinach's Find	Mor Dhona	3	Potent Sleeping Potion	
+Ul'dah	Alchemist	45	Not Taking No for an Answer	39087	401	Field	Saint Coinach's Find	Mor Dhona	5	Mega-Potion of Strength	triple
+Ul'dah	Alchemist	45	Make Up Your Mind or Else	34552	403	Field	Saint Coinach's Find	Mor Dhona	3	Potent Poisoning Potion	
