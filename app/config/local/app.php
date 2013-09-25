@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -145,7 +145,7 @@ return array(
 
 		// Profiler
 		'Profiler' => 'Profiler\Facades\Profiler'
-		
+
 	),
 
 );

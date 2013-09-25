@@ -23,11 +23,6 @@ class QuestsController extends BaseController
 			if ( ! isset($quests[$quest->job->abbreviation]))
 				$quests[$quest->job->abbreviation] = array();
 
-			if (empty($quest->item->recipes))
-			{
-				var_dump($quest);
-				exit;
-			}
 			foreach ($quest->item->recipes as $r)
 				if ($r->job_id == $quest->job_id)
 					$quest->recipe = $r;

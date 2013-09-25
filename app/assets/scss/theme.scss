@@ -1,0 +1,162 @@
+//	TODO: Create each panel color
+
+
+
+
+
+// ----------- ^
+
+
+// Variables
+
+$text_color: #fff8f8;
+$background_color: #1d2524;
+$container_color: #4c605d;
+$accent_color: #2ed8c3;
+$footer_color: #0e1a1b;
+
+$panel_color: #3d5350;
+$panel_border_color: #2b3b39;
+
+
+
+// Global
+
+body {
+	background: $background_color url('/img/theme/background.jpg') top center no-repeat;;
+	color: $text_color;
+}
+
+a {
+	color: $accent_color;
+	&:hover, &:focus {
+		color: $text_color;
+	}
+}
+
+h1 {
+	margin: 0 0 20px;
+	border-bottom: 1px solid $accent_color;
+	padding-bottom: 10px;
+}
+
+#wrap {
+	margin: 0;
+	padding: 0;
+	> .container {
+		padding: 20px;
+	}
+	.container.interior {
+		background: $container_color;
+	}
+}
+
+#header {
+	.menu {
+		ul {
+			float: right;
+			list-style-type: none;
+			padding: 0;
+			margin: 30px 0 0 0;
+			li {
+				float: left;
+				a {
+					color: $text_color;
+					padding: 10px 20px;
+					&:hover {
+						text-decoration: none;
+						border-bottom: 1px solid $accent_color;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Alerts
+.alert-info {
+	color: $text_color;
+	background-color: #31a7c9;
+	border-color: $panel_border_color;
+	background-image: linear-gradient(to bottom,#5e7d8f 0,#31a7c9 100%);
+}
+
+.alert-success {
+	color: $text_color;
+	background-color: #26a696;
+	border-color: $panel_border_color;
+	background-image: linear-gradient(to bottom,#5f8f88 0,#26a696 100%);
+}
+
+.alert-warning {
+	color: $text_color;
+	background-color: #d7d252;
+	border-color: $panel_border_color;
+	background-image: linear-gradient(to bottom,#8b8f5e 0,#d7d252 100%);
+}
+
+// .text-primary {
+// 	color: #428bca;
+// }
+
+.panel {
+	background: $panel_color;
+	border-color: $panel_border_color;
+}
+
+// .panel-info > .panel-heading,
+// .panel-danger > .panel-heading {
+// 	background-image: linear-gradient(to bottom,#5f8f88 0,#26a696 100%);
+// 	color: $text_color;
+// 	background-color: $accent_color;
+// 	border-color: $panel_border_color;
+// }
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
+	border-color: $panel_border_color;
+}
+
+.table-bordered {
+	border-color: $panel_border_color;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+	background-color: $panel_color;
+}
+
+.well {
+	// background-image: linear-gradient(to bottom,#5f8f88 0,#26a696 100%);
+	// // background-image: linear-gradient(to bottom,#e8e8e8 0,#f5f5f5 100%);
+	// background-repeat: repeat-x;
+	// border-color: $panel_border_color;
+	// a {
+	// 	color: $panel_border_color;
+	// }
+}
+
+
+#footer {
+	background: none;
+	height: auto;
+	.container {
+		background: $footer_color;
+		h4 {
+			color: $accent_color;
+		}
+	}
+	.bucket {
+		border-right: 1px solid #233638;
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			li {
+				margin: 0;
+				padding: 0;
+				a {
+					color: $text_color;
+				}
+			}
+		}
+	}
+}

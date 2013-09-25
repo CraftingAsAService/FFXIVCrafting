@@ -35,12 +35,11 @@ class ListController extends BaseController
 
 		// What do we want to add?
 		$item_id = Input::get('item-id');
-		$qty = Input::get('qty') ?: 1;
 
 		if ( ! in_array($item_id, array_keys($list)))
-			$list[$item_id] = $qty;
+			$list[$item_id] = 1;
 		else
-			$list[$item_id] += $qty;
+			$list[$item_id]++;
 
 		// Save the list
 		Session::put('list', $list);

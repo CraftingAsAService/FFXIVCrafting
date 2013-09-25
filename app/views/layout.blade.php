@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
 		<title>Crafting as a Service</title>
-		
+
 		<meta charset='utf-8'>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
@@ -15,38 +15,28 @@
 		@show
 
 		<link href='/css/global.css' rel='stylesheet' />
+		<link href='/css/theme.css' rel='stylesheet' />
 
 		@section('css')
 		@show
 	</head>
 	<body>
 		<div id='wrap'>
-			<div class='navbar navbar-inverse'>
-				<div class='container'>
-					<div class='navbar-header'>
-						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-						</button>
-						<a class='navbar-brand' href='/'>FFXIV CAAS</a>
+			<div id="header" class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<a href="/"><img src="/img/theme/logo.png" alt="Crafting as a Service" title="Crafting as a Service" /></a>
 					</div>
-					<div class='collapse navbar-collapse'>
-						<ul class='nav navbar-nav'>
+					<div class="col-md-8 menu">
+						<ul>
 							<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
 							<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
 							<li{{ isset($active) && $active == 'gathering' ? ' class="active"' : '' }}><a href='/gathering'>Gathering</a></li>
 							<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
 							<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
-							<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
-							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
-								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
-								<ul class='dropdown-menu'>
-									<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
-									<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
-									<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
-								</ul>
-							</li>
+							<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
+							<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
+							<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
 						</ul>
 						<ul class='nav navbar-nav navbar-right'>
 							<li{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}><a href='/list'><i class='glyphicon glyphicon-shopping-cart'></i> Crafting List</a></li>
@@ -56,47 +46,72 @@
 			</div>
 
 			@yield('precontent')
-		
-			<div class='container'>
+
+			<div class="{{ isset($is_homepage) ? '' : 'interior ' }}container">
 
 				@yield('content')
-					
-			</div>
-		</div>
 
-		<div id='footer'>
-			<div class='container text-center'>
-				<div class='row'>
-					<div class='col-sm-2'>
-						<p class='text-muted credit'>
-							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
-						</p>
-					</div>
-					<div class='col-sm-2'>
-						<p class='text-muted credit'>
-							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
-						</p>
-					</div>
-					<div class='col-sm-2'>
-						<p class='text-muted credit'>
-							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
-						</p>
-					</div>
-					<div class='col-sm-2'>
-						<p class='text-muted credit'>
-							<a href='/credits'>Credits</a> 
-						</p>
-					</div>
-					<div class='col-sm-2'>
-						<p class='text-muted credit'>
-							<a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>
-						</p>
-						<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
-							<input type='hidden' name='cmd' value='_s-xclick'>
-							<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
-							<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
-							<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
-						</form>
+			</div>
+			<div id="footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="bucket">
+										<h4>Quick Links</h4>
+										<ul>
+											<li><a href="#">Equipment</a></li>
+											<li><a href="#">Crafting</a></li>
+											<li><a href="#">Gathering</a></li>
+											<li><a href="#">Quests</a></li>
+											<li><a href="#">Stats</a></li>
+											<li><a href="#">Materia</a></li>
+											<li><a href="#">Food</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="bucket">
+										<h4>About</h4>
+										<ul>
+											<li><a href="#">Buy Me a Beer!</a></li>
+											<li><a href="#">My Character</a></li>
+											<li><a href="#">Issue Tracker</a></li>
+											<li><a href="#">Credits</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="row">
+										<h4>Contact</h4>
+										<form role="form">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Email address</label>
+													<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+												</div>
+												<div class="form-group">
+													<label for="exampleInputPassword1">Password</label>
+													<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Email address</label>
+													<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+												</div>
+												<div class="form-group">
+													<label for="exampleInputPassword1">Password</label>
+													<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -107,7 +122,7 @@
 		<!-- jQuery -->
 		<script src='/js/jquery-2.0.3.min.js'></script>
 		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
-		
+
 		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
 
 		<script src='/js/noty.js' type='text/javascript'></script>

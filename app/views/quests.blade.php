@@ -44,10 +44,6 @@
 			<th class='text-center'>Amount Required</th>
 			<th class='text-center'>Quality</th>
 			<th>Notes</th>
-			<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
-				<i class='glyphicon glyphicon-shopping-cart'></i>
-				<i class='glyphicon glyphicon-plus'></i>
-			</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -66,12 +62,6 @@
 				@endif
 			</td>
 			<td>{{ $q->notes }}</td>
-			<td class='text-center valign'>
-				<button class='btn btn-default add-to-list' data-item-id='{{ $q->item->id }}' data-item-name='{{{ $q->item->name }}}'>
-					<i class='glyphicon glyphicon-shopping-cart'></i>
-					<i class='glyphicon glyphicon-plus'></i>
-				</button>
-			</td>
 		</tr>
 		@endforeach
 	</tbody>

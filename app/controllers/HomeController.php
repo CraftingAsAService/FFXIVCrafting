@@ -22,8 +22,11 @@ class HomeController extends BaseController {
 		foreach (Job::all() as $j)
 			$job_list[$j->abbreviation] = $j->name;
 
+		$is_homepage = true;
+
 		return View::make('hello')
 			->with('job_list', $job_list)
+			->with('is_homepage',$is_homepage)
 			->with('host_warning', preg_match('/thokk/', $_SERVER['HTTP_HOST']));
 	}
 

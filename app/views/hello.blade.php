@@ -31,7 +31,7 @@
 	<div class='col-lg-4'>
 		<h2>Equipment Calculator</h2>
 		<p>
-			Want to know what equipment you can craft at a certain level for your class?  
+			Want to know what equipment you can craft at a certain level for your class?
 			Use this tool to select your disciple and level range.
 		</p>
 		<a href='/equipment' class='btn btn-primary'>Gear me out &raquo;</a>
@@ -39,7 +39,7 @@
 	<div class='col-lg-4'>
 		<h2>Crafting Calculator</h2>
 		<p>
-			Want to get everything you need before trying to level Weaver from levels 5 to 10?  
+			Want to get everything you need before trying to level Weaver from levels 5 to 10?
 			Use this tool to select your craft and level range.
 		</p>
 		<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
@@ -47,7 +47,7 @@
 	<div class='col-lg-4'>
 		<h2>Gathering Calculator</h2>
 		<p>
-			Ever ask yourself when mining "What should I be digging up?".  
+			Ever ask yourself when mining "What should I be digging up?".
 			Find the most efficient use of your pickaxe and hatchet with this tool!
 		</p>
 		<a href='/gathering' class='btn btn-primary'>Gather-rific &raquo;</a>
