@@ -92,4 +92,8 @@
 
 @endforeach
 
+<div class='well'>
+	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BluGartr user Seravi Edalborez</a>.  Thanks!
+</div>
+
 @stop
