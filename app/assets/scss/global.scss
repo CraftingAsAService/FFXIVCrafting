@@ -579,3 +579,14 @@ td {
 	-ms-transform:rotate(90deg);
 	-webkit-transform:rotate(90deg);
 }
+
+.popover {
+	.tour_moogle {
+		position: absolute;
+		right: -2px;
+		top: -79px;
+	}
+	h3.popover-title {
+		padding-right: 90px;
+	}
+}
