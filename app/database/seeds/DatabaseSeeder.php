@@ -10,18 +10,25 @@ class DatabaseSeeder extends Seeder
 		// Don't bother logging queries
 		DB::connection()->disableQueryLog();
 
+		echo '** Stat Table **' . "\n";
 		$this->call('StatTableSeeder');
 
+		echo '** Jobs Table **' . "\n";
 		$this->call('JobTableSeeder');
 
+		echo '** Slot Table **' . "\n";
 		$this->call('SlotTableSeeder');
 
+		echo '** Data Table **' . "\n";
 		$this->call('DataTablesSeeder');
 
+		echo '** Quests Table **' . "\n";
 		$this->call('QuestSeeder');
 
+		echo '** Leve Table **' . "\n";
 		$this->call('LeveSeeder');
 
+		echo '** XP Table **' . "\n";
 		$this->call('XPSeeder');
 
 		echo "\n";
