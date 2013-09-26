@@ -156,6 +156,7 @@ class CraftingController extends BaseController
 							// Only Hand Disciples
 							$query->where('disciple', 'DOH');
 						},
+
 			))
 			->select('recipes.*', 'j.abbreviation')
 			->join('jobs AS j', 'j.id', '=', 'recipes.job_id')
@@ -304,8 +305,12 @@ class CraftingController extends BaseController
 
 							$reagent_list[$reagent->id]['self_sufficient'] = $job->abbreviation;
 						}
+
+						if ($reagent_list[$reagent->id]['self_sufficient'])
+							continue;
 					}
-					elseif(isset($reagent->recipes[0]))
+
+					if(isset($reagent->recipes[0]))
 					{
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
 						$this->_reagents($reagent->recipes, $self_sufficient, ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields));
