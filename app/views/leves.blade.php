@@ -58,11 +58,8 @@
 	<tbody>
 		@foreach($leve_list as $leve)
 		<tr>
-			<td>
+			<td{{ $leve->triple ? ' class="triple" rel="tooltip" title="Triple Leve" data-container="body"' : '' }}>
 				<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
-				@if($leve->triple)
-				<img src='/img/triple.png' class='pull-right rotate-90' rel='tooltip' title='Triple Turnin' style='clear: right;' width='16'>
-				@endif
 				<a href='http://xivdb.com/{{ $leve->item->href }}' class='item-name' target='_blank'>
 					<img src='/img/items/{{ $leve->item->icon ?: '../noitemicon.png' }}' style='margin-right: 10px;'>{{ $leve->item->name }}
 				</a>
