@@ -36,7 +36,6 @@
 		<table class='table table-bordered table-striped table-responsive text-center' id='obtain-these-items'>
 			<thead>
 				<tr>
-					<th class='invisible'>&nbsp;</th>
 					<th class='text-center'>Item</th>
 					<th class='text-center'>Needed</th>
 					<th class='text-center'>Can be Bought</th>
@@ -58,22 +57,25 @@
 				@foreach($reagents as $reagent)
 				<?php $item =& $reagent['item']; ?>
 				<tr class='reagent'>
-					@if($i++ == 0)
-					<th rowspan='{{ count($reagents) }}' class='text-center' style='vertical-align: middle; background-color: #f5f5f5;'>
-						@if($level != 0 && $section != 'Bought')
-						{{ $level }}
-						@endif
-					</th>
-					@endif
 					<td class='text-left'>
 						@if($section == 'Crafted')
 						@foreach($item->recipes as $recipe)
+						@if($level != 0)
+						<a class='close' rel='tooltip' title='Level'>
+							{{ $recipe->level }}
+						</a>
+						@endif
 						<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
 							<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
 						</a>
 						<?php break; ?>
 						@endforeach
 						@else
+						@if($level != 0 && $section != 'Bought')
+						<a class='close' rel='tooltip' title='Level'>
+							{{ $item->level }}
+						</a>
+						@endif
 						<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>
 							<img src='/img/items/{{ $item->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $item->name }}
 						</a>
@@ -133,6 +135,13 @@
 				@endif
 				@if($include_quests && isset($recipe->item->quest[0]))
 					<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
+				@endif
+				@if(isset($recipe->item->leve[0]))
+					@if($recipe->item->leve[0]->triple)
+					<img src='/img/triple.png' class='rotate-90' rel='tooltip' title='Triple Leve' style='margin-left: 5px;' width='16'>
+					@else
+					<img src='/img/leve.png' class='rotate-90' rel='tooltip' title='Regular Leve' style='margin-left: 5px;' width='16'>
+					@endif
 				@endif
 				</div>
 				<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>

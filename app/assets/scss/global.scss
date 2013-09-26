@@ -573,3 +573,9 @@ td {
 .tt-force + .tooltip {
 	width: 150px;
 }
+
+.rotate-90 {
+	transform:rotate(90deg);
+	-ms-transform:rotate(90deg);
+	-webkit-transform:rotate(90deg);
+}

@@ -144,6 +144,7 @@ class CraftingController extends BaseController
 		$query = Recipe::with(array(
 				'item', // The recipe's Item
 					'item.quest', // Is the recipe used as a quest turnin?
+					'item.leve', // Is the recipe used to fufil a leve?
 				'reagents', // The reagents for the recipe
 					'reagents.jobs' => function($query) {
 						// Only Land Disciples
@@ -223,7 +224,8 @@ class CraftingController extends BaseController
 			if ( ! isset($sorted_reagent_list[$section][$level]))
 				$sorted_reagent_list[$section][$level] = array();
 
-			$sorted_reagent_list[$section][$level][] = $reagent;
+			$sorted_reagent_list[$section][$level][$reagent['item']->id] = $reagent;
+			ksort($sorted_reagent_list[$section][$level]);
 		}
 
 		foreach ($sorted_reagent_list as $section => $list)
@@ -275,7 +277,7 @@ class CraftingController extends BaseController
 				if (in_array($recipe->item_id, array_keys($top_level)))
 					$run += $top_level[$recipe->item_id];
 
-				$inner_multiplier *= $run ?: 1;
+				$inner_multiplier *= floor($run ?: 1);
 			}
 
 			foreach ($recipe->reagents as $reagent)
@@ -287,7 +289,7 @@ class CraftingController extends BaseController
 						'item' => $reagent,
 					);
 
-				$reagent_list[$reagent->id]['make_this_many'] += $reagent->pivot->amount * $inner_multiplier;
+				$reagent_list[$reagent->id]['make_this_many'] += ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields);
 
 				if ($self_sufficient)
 				{
@@ -306,7 +308,7 @@ class CraftingController extends BaseController
 					elseif(isset($reagent->recipes[0]))
 					{
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents($reagent->recipes, $self_sufficient, $reagent->pivot->amount * $inner_multiplier);
+						$this->_reagents($reagent->recipes, $self_sufficient, ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields));
 					}
 				}
 			}
