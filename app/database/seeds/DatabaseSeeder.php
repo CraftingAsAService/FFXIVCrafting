@@ -678,7 +678,10 @@ class XPSeeder extends Seeder
 		$xp_list = json_decode(file_get_contents(storage_path() . '/raw-data/experience.json'));
 
 		foreach ($xp_list as $xp_data)
-			DB::table('experience')->insert($xp_data);
+			DB::table('experience')->insert(array(
+				'level' => $xp_data->level,
+				'experience' => $xp_data->experience
+			));
 	}
 
 }
