@@ -288,7 +288,7 @@ class CraftingController extends BaseController
 						'make_this_many' => 0,
 						'self_sufficient' => '',
 						'item' => $reagent,
-					);
+					);			
 
 				$reagent_list[$reagent->id]['make_this_many'] += ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields);
 
@@ -313,7 +313,7 @@ class CraftingController extends BaseController
 					if(isset($reagent->recipes[0]))
 					{
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents($reagent->recipes, $self_sufficient, ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields));
+						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields));
 					}
 				}
 			}
