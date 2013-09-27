@@ -149,6 +149,15 @@ class DatabaseStructure extends Migration {
 			$table->integer('location_id');
 		});
 
+		Schema::create('experience', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->smallInteger('level');
+			$table->integer('experience');
+		});
+
 	}
 
 	/**

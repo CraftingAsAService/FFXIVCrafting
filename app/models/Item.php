@@ -31,6 +31,11 @@ class Item extends Eloquent
 		return $this->hasMany('QuestItem');
 	}
 
+	public function leve()
+	{
+		return $this->hasMany('Leve');
+	}
+
 	public function locations()
 	{
 		return $this->belongsToMany('Location')->withPivot('level')->orderBy('level');

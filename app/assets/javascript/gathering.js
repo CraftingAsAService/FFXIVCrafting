@@ -8,11 +8,11 @@ var gathering = {
 
 		$('#hide_shards').change(function() {
 			$('.shard')[($(this).is(':checked') ? 'add' : 'remove') + 'Class']('hidden');
+			$('.shard')[($(this).is(':checked') ? 'add' : 'remove') + 'Class']('shard-hidden');
 			$('.and_more').popover('destroy');
 			$('.and_more').popover();
 			while($('#footer + .popover').length > 0)
 				$('#footer + .popover').remove();
-			
 		});
 
 		$('.and_more').popover();
@@ -41,6 +41,18 @@ var gathering = {
 
 			tfoot.append(tr);
 		});
+
+		var level = el.data('level');
+
+		for (var i = level; i <= level + 4; i++)
+		{
+			$('td.amount_needed[data-level="' + i + '"]').each(function() {
+				$(this)
+					.data('originalAdditional', $(this).data('additional'))
+					.data('additional', 0);
+				$(this).find('img').addClass('hidden');
+			});
+		}
 	},
 	show_levels:function(el) {
 		// Target tr's in the tfoot, as those are invisible
@@ -64,6 +76,16 @@ var gathering = {
 			if (placed == false)
 				tbody.prepend(tr);
 		});
+
+		var level = el.data('level');
+
+		for (var i = level; i <= level + 4; i++)
+		{
+			$('td.amount_needed[data-level="' + i + '"]').each(function() {
+				$(this).data('additional', $(this).data('originalAdditional'));
+				$(this).find('img').removeClass('hidden');
+			});
+		}
 	},
 	toggle_classes:function() {
 		var el = $(this);
@@ -89,6 +111,18 @@ var gathering = {
 			tally += parseInt(amountEl.data('additional'));
 
 			amountEl.find('span').html(tally.formatMoney(0, ',', ''));
+
+			if (tally == 0)
+			{
+				prow.addClass('hidden').addClass('zero-hidden');
+			}
+			else
+			{
+				if ( ! prow.hasClass('shard-hidden') && prow.hasClass('zero-hidden'))
+					prow.removeClass('hidden');
+
+				prow.removeClass('zero-hidden');
+			}
 
 			var costEl = prow.find('.total_cost');
 
