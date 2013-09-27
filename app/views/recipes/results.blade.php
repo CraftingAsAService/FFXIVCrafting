@@ -1,12 +1,7 @@
 {{-- inside a tbody --}}
-@if( ! $list)
-<tr colspan='4'>
-	<td>
-		No Results
-	</td>
-</tr>
-@else
+<?php $count = 0; ?>
 @foreach($list as $recipe)
+<?php $count++; ?>
 <tr>
 	<td class='text-left valign'>
 		<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
@@ -27,4 +22,10 @@
 	</td>
 </tr>
 @endforeach
+@if($count == 0)
+<tr>
+	<td colspan='4'>
+		No Results
+	</td>
+</tr>
 @endif

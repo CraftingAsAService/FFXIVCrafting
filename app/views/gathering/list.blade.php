@@ -39,11 +39,11 @@
 		</div>
 		@endforeach
 
-		<h4>Crafting Levels</h4>
+		<h4>Disciple Levels</h4>
 		@foreach($level_ranges as $start)
 		<div class='checkbox'>
 			<label>
-				<input type='checkbox' id='level_{{ $start }}' class='level_checkbox' checked='checked'>
+				<input type='checkbox' id='level_{{ $start }}' class='level_checkbox' checked='checked' data-level='{{ $start }}'>
 				{{ $start }} - {{ $start + 4 }}
 			</label>
 		</div>
@@ -85,14 +85,14 @@
 				@foreach($items as $item_id => $item)
 				<?php if ($item['data']->level != $item_level) continue; ?>
 				{{-- <?php if($item['data']->locations[0]->pivot->level != $range_level) continue; ?> --}}
-				<tr{{ 100 > $item_id ? ' class="hidden shard"' : '' }}>
+				<tr{{ 100 > $item_id ? ' class="hidden shard shard-hidden"' : '' }}>
 					<td class='text-left'>
 						<span class='close' rel='tooltip' title='Item Level'>{{ $item_level }}</span>
 						<a href='http://xivdb.com/{{ $item['data']->href }}' target='_blank'>
 							<img src='/img/items/{{ $item['data']->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $item['data']->name }}
 						</a>
 					</td>
-					<td class='text-center amount_needed' data-additional='{{ isset($item['data']->quest[0]) ? $item['data']->quest[0]->amount : 0 }}'>
+					<td class='text-center amount_needed' data-level='{{ $item_level }}' data-additional='{{ isset($item['data']->quest[0]) ? $item['data']->quest[0]->amount : 0 }}'>
 						@if(isset($item['data']->quest[0]))
 						<img src='/img/{{ $item['data']->quest[0]->quality ? 'H' : 'N' }}Q.png' style='position: absolute; right: 5px' rel='tooltip' title='{{ $item['data']->quest[0]->amount }}{{ $item['data']->quest[0]->quality ? ' (HQ)' : '' }} are for the Guildmaster at level {{$item['data']->quest[0]->level}}{{ $item['data']->quest[0]->notes ? ', see left for note' : '' }}' width='24' height='24'>
 						@endif

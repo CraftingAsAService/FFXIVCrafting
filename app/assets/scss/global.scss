@@ -569,3 +569,32 @@ td {
 #max-level {
 	width: 60px;
 }
+
+.tt-force + .tooltip {
+	width: 150px;
+}
+
+.rotate-90 {
+	transform:rotate(90deg);
+	-ms-transform:rotate(90deg);
+	-webkit-transform:rotate(90deg);
+}
+
+.popover {
+	.tour_moogle {
+		position: absolute;
+		right: -2px;
+		top: -79px;
+	}
+	h3.popover-title {
+		padding-right: 90px;
+	}
+}
+
+.leve-table {
+	.triple {
+		background-image: url(/img/triple.png);
+		background-position: 99% 30px;
+		background-repeat: no-repeat;
+	}
+}

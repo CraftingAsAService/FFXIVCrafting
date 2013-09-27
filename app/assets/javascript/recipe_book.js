@@ -56,12 +56,12 @@ var recipe_book = {
 		
 		$('#name-search').removeClass('has-error');
 
-		if (val.length < 4 && val.length > 0)
+		if (val.length < 3 && val.length > 0)
 		{
 			$('#name-search').addClass('has-error');
 
 			noty({
-				text: 'Minimum 4 letter search limit',
+				text: 'Minimum 3 letter search limit',
 				type: 'error',
 				layout: 'bottomRight',
 				timeout: 2500
