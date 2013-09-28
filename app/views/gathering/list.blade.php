@@ -29,6 +29,21 @@
 
 <div class='row'>
 	<div class='col-sm-3 selectors'>
+
+		<h4>Options</h4>
+		<div class='checkbox'>
+			<label>
+				<input type='checkbox' id='hide_shards' class='options' checked='checked'>
+				Hide Shards
+			</label>
+		</div>
+		<div class='checkbox'>
+			<label>
+				<input type='checkbox' id='hide_quests' class='options'>
+				Hide Quests
+			</label>
+		</div>
+
 		<h4>Classes</h4>
 		@foreach($job_list as $abbreviation => $name)
 		<div class='checkbox'>
@@ -48,14 +63,6 @@
 			</label>
 		</div>
 		@endforeach
-
-		<h4>Options</h4>
-		<div class='checkbox'>
-			<label>
-				<input type='checkbox' id='hide_shards' class='options' checked='checked'>
-				Hide Shards
-			</label>
-		</div>
 
 		<h4>Quest Details</h4>
 		@foreach($quests as $quest)
@@ -85,7 +92,7 @@
 				@foreach($items as $item_id => $item)
 				<?php if ($item['data']->level != $item_level) continue; ?>
 				{{-- <?php if($item['data']->locations[0]->pivot->level != $range_level) continue; ?> --}}
-				<tr{{ 100 > $item_id ? ' class="hidden shard shard-hidden"' : '' }}>
+				<tr class='{{ 100 > $item_id ? 'hidden shard shard-hidden' : '' }}{{ isset($item['data']->quest[0]) ? ' quest' : '' }}'>
 					<td class='text-left'>
 						<span class='close' rel='tooltip' title='Item Level'>{{ $item_level }}</span>
 						<a href='http://xivdb.com/{{ $item['data']->href }}' target='_blank'>

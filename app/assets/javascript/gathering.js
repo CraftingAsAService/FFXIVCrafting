@@ -15,9 +15,42 @@ var gathering = {
 				$('#footer + .popover').remove();
 		});
 
+		$('#hide_quests').change(function() {
+			var hide_quests = $(this).is(':checked');
+
+			$('.quest').each(function() {
+				var neededEl = $('.amount_needed', $(this));
+				var imgEl = $('img', neededEl);
+
+				// If it's already level-hidden
+				if (imgEl.hasClass('level-hidden'))
+					imgEl[(hide_quests ? 'add' : 'remove') + 'Class']('quest-hidden');
+				else
+				{
+					// It's not level hidden
+					if (hide_quests == true)
+					{
+						neededEl
+							.data('originalAdditional', neededEl.data('additional'))
+							.data('additional', 0);
+
+						imgEl.addClass('hidden').addClass('quest-hidden');
+					}
+					else
+					{
+						neededEl.data('additional', neededEl.data('originalAdditional'));
+						imgEl.removeClass('quest-hidden').removeClass('hidden');
+					}
+				}
+			});
+
+			// Hiding or showing needs some tally love
+			gathering.retally();
+		});
+
 		$('.and_more').popover();
 
-		gathering_tour.init();
+		//gathering_tour.init();
 	},
 	collapse_row:function() {
 		var btn = $(this);
@@ -50,7 +83,7 @@ var gathering = {
 				$(this)
 					.data('originalAdditional', $(this).data('additional'))
 					.data('additional', 0);
-				$(this).find('img').addClass('hidden');
+				$(this).find('img').addClass('hidden').addClass('level-hidden');
 			});
 		}
 	},
@@ -83,7 +116,10 @@ var gathering = {
 		{
 			$('td.amount_needed[data-level="' + i + '"]').each(function() {
 				$(this).data('additional', $(this).data('originalAdditional'));
-				$(this).find('img').removeClass('hidden');
+				var img = $(this).find('img');
+				img.removeClass('level-hidden');
+				if ( ! img.hasClass('quest-hidden'))
+					img.removeClass('hidden');
 			});
 		}
 	},
