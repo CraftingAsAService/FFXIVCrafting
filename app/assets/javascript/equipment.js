@@ -53,6 +53,8 @@ var equipment = {
 
 			currentEl.html(current);
 
+			equipment.mark_cannot_equips();
+
 			// Fire off the stat summary
 			equipment.stat_summary(td);
 
@@ -188,6 +190,32 @@ var equipment = {
 
 			td[(ilvl == pilvl ? 'remove' : 'add') + 'Class']('upgrade');
 		});
+
+		equipment.mark_cannot_equips();
+	},
+	mark_cannot_equips:function() {
+		// Clear any previous equips
+		$('#gear tbody td.cannot-equip').removeClass('cannot-equip');
+		$('.why-cannot-equip').remove();
+
+		// Go through each cannot equip item, mark other cells as cannot_equip
+		$('#gear tbody td:visible .item.active:not([data-cannot-equip=""])').each(function() {
+			var itemEl = $(this);
+			var cannot_equip = itemEl.data('cannotEquip').split(',');
+			var name = $('.name-box a', itemEl).html();
+
+			var td = itemEl.closest('td');
+			var level = td.data('level');
+
+			for(var i = 0; i < cannot_equip.length; i++)
+			{
+				var el = $('.slot-' + cannot_equip[i].capitalize() + '[data-level=' + level + ']');
+				el.append('<div class="why-cannot-equip">' + name + '<br>Cannot equip gear to ' + cannot_equip[i].capitalize() + '</div>')
+				el.addClass('cannot-equip');
+			}
+
+			equipment.stat_summary(td);
+		});
 	},
 	load_column:function(level, verb) {
 		if (typeof(verb) == 'undefined') verb = '';
@@ -313,7 +341,7 @@ var equipment = {
 		var record = [],
 			hidden = [];
 
-		$('#gear tbody tr td[data-level=' + level + ']').each(function() {
+		$('#gear tbody tr td[data-level=' + level + ']:not("cannot-equip")').each(function() {
 			$(this).find('.item.active .stat').each(function() {
 				var statEl = $(this);
 				var stat_data = statEl.data();

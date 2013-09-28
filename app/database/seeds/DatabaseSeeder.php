@@ -329,7 +329,8 @@ class DataTablesSeeder extends Seeder
 				'vendors' => $object->vendors ?: 0,
 				'gil' => $object->gil ?: 0,
 				'slot_id' => $this->slots[$object->slot],
-				'ilvl' => $object->ilvl ?: 0
+				'ilvl' => $object->ilvl ?: 0,
+				'cannot_equip' => isset($object->cannot_equip) ? implode(',', $object->cannot_equip) : NULL
 			);
 
 			// Item Classes
