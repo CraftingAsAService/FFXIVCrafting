@@ -126,6 +126,18 @@ td {
 	margin-top: .5em;
 }
 
+.margin-bottom {
+	margin-bottom: .5em;
+}
+
+.margin-left {
+	margin-left: 1em;
+}
+
+.margin-right {
+	margin-right: 1em;
+}
+
 .crafted_gathered {
 
 }
@@ -612,5 +624,32 @@ $gear_warning_accent: #a46868;
 		background-image: url(/img/triple.png);
 		background-position: 99% 30px;
 		background-repeat: no-repeat;
+	}
+	.item {
+		white-space: nowrap;
+	}
+	.reward {
+		min-width: 90px;
+	}
+	.location {
+		background-position: right bottom;
+		min-height: 60px;
+		width: 180px;
+		max-width: 200px;
+		max-height: 200px;
+		&>div {
+			padding-right: 25px;
+			font-size: .9em;
+		}
+
+		&.limsalominsa {
+			background-image: url(/img/locations/limsalominsa_bg.png);
+		}
+		&.gridania {
+			background-image: url(/img/locations/gridania_bg.png);
+		}
+		&.uldah {
+			background-image: url(/img/locations/uldah_bg.png);
+		}
 	}
 }
