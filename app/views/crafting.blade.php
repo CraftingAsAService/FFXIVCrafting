@@ -16,6 +16,8 @@
 
 	<p>Display all the materials needed to craft one of each item between two levels.</p>
 
+	<p>In general this will not level you to your desired level.  Visit the <a href='/leve'>Leves</a> page when you're done crafting!</p>
+
 	@if(isset($error) && $error)
 	<div class='alert alert-danger'>
 		The job you selected is unrecognized.  Try again.

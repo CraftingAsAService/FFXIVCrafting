@@ -154,9 +154,9 @@ Gridania	Carpenter	10	Life's a Stitch	2410	185	Field	Bentbranch	Central Shroud	1
 Gridania	Carpenter	15	Re-crating the Scene	4227	197	Town			1	Iron Spear	
 Gridania	Carpenter	15	Nightmare on My Street	4382	195	Town			1	Elm Cane	
 Gridania	Carpenter	15	Driving up the Wall	6086	287	Courier	Hawthorne Hut	North Shroud	3	Elm Lumber	
-Gridania	Carpenter	15	Nothing to Hide	6109	196	Field	Hawthorne Hut	North Shroud	1	Ash Mask	Lapis Lazuli
+Gridania	Carpenter	15	Nothing to Hide	6109	196	Field	Hawthorne Hut	North Shroud	1	2703	Lapis Lazuli
 Gridania	Carpenter	15	What You Need	3872	131	Field	Hawthorne Hut	North Shroud	1	Square Ash Shield	
-Gridania	Carpenter	20	Behind the Mask	7331	400	Town			3	Ash Mask	Lapis Lazuli
+Gridania	Carpenter	20	Behind the Mask	7331	400	Town			3	2703	Lapis Lazuli
 Gridania	Carpenter	20	As the Worm Turns	6373	216	Town			1	Yew Radical	
 Gridania	Carpenter	20	Militia on My Mind	9164	192	Courier	Quarrymill	South Shroud	1	Iron Lance	
 Gridania	Carpenter	20	Polearms Aplenty	5073	195	Field	Quarrymill	South Shroud	3	Iron Spear	triple

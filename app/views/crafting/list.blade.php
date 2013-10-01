@@ -137,11 +137,14 @@
 					<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
 				@endif
 				@if(isset($recipe->item->leve[0]))
+					{{-- Disabled because I would also have to do it for class, and I'm lazy right now --}}
+					{{-- <a href='/leve?name={{ $recipe->item->leve[0]->name }}'> --}}
 					@if($recipe->item->leve[0]->triple)
 					<img src='/img/triple.png' class='rotate-90' rel='tooltip' title='Triple Leve' style='margin-left: 5px;' width='16'>
 					@else
 					<img src='/img/leve.png' class='rotate-90' rel='tooltip' title='Regular Leve' style='margin-left: 5px;' width='16'>
 					@endif
+					{{-- </a> --}}
 				@endif
 				</div>
 				<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' class='recipe-name' target='_blank'>
