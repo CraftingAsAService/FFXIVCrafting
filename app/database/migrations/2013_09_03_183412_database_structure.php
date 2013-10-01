@@ -53,6 +53,7 @@ class DatabaseStructure extends Migration {
 			$table->smallInteger('vendors');
 			$table->smallInteger('gil');
 			$table->smallInteger('ilvl');
+			$table->string('cannot_equip', 30);
 		});
 		
 		Schema::create('item_job', function($table)

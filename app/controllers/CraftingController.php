@@ -171,7 +171,7 @@ class CraftingController extends BaseController
 				->whereIn('j.id', $job_ids)
 				->whereBetween('level', array($start, $end));
 
-		$recipes = $query->get();
+		$recipes = $query->remember(Config::get('site.cache_length'))->get();
 
 		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
 
@@ -270,7 +270,7 @@ class CraftingController extends BaseController
 
 				// Run everything at least once
 				$inner_multiplier *= $run ?: 1;
-			}
+			} 
 			elseif (is_array($top_level))
 			{
 				$run = 0;
@@ -280,6 +280,8 @@ class CraftingController extends BaseController
 
 				$inner_multiplier *= floor($run ?: 1);
 			}
+			
+			$inner_multiplier *= $recipe->yields;
 
 			foreach ($recipe->reagents as $reagent)
 			{
@@ -288,9 +290,16 @@ class CraftingController extends BaseController
 						'make_this_many' => 0,
 						'self_sufficient' => '',
 						'item' => $reagent,
-					);			
+					);
 
-				$reagent_list[$reagent->id]['make_this_many'] += ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields);
+				// if ($reagent->name == 'Rye')
+				// {
+				// 	var_dump('Rye');
+				// 	var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
+				// 	exit;
+				// }
+
+				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields);
 
 				if ($self_sufficient)
 				{
@@ -313,7 +322,7 @@ class CraftingController extends BaseController
 					if(isset($reagent->recipes[0]))
 					{
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil(($reagent->pivot->amount * $inner_multiplier) / $recipe->yields));
+						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields));
 					}
 				}
 			}

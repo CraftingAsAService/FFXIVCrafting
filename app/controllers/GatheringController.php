@@ -42,6 +42,8 @@ class GatheringController extends BaseController
 			->with('item')
 			->get();
 
+			var_dump($quests);exit;
+
 		return View::make('gathering.list')
 			->with('active', 'gathering')
 			->with('job', $job)
