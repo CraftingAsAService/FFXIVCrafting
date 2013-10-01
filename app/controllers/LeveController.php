@@ -26,7 +26,9 @@ class LeveController extends BaseController
 			$job_ids[] = 1;
 
 		// All Leves
-		$query = Leve::with('job', 'item', 'major', 'minor', 'location')
+		$query = Leve::with(array(
+				'job', 'item', 'major', 'minor', 'location'
+			))
 			->orderBy('job_id')
 			->orderBy('level')
 			->orderBy('xp')
@@ -51,8 +53,37 @@ class LeveController extends BaseController
 		// Types
 		$query->whereIn('type', Input::get('types'));
 
-		$leve_records = $query->get();
+		// Text Searches
+		if (Input::get('leve_name'))
+			$query->where('name', 'like', '%' . Input::get('leve_name') . '%');
 
+		$leve_records = $query->remember(Config::get('site.cache_length'))->get();
+
+
+		$location_search = strtolower(Input::get('leve_location'));
+		$item_search = strtolower(Input::get('leve_item'));
+
+		foreach ($leve_records as $k => $row)
+		{
+			if ($item_search && ! preg_match('/' . $item_search . '/', strtolower($row->item->name)))
+			{
+				unset($leve_records[$k]);
+				continue;
+			}
+			
+			if ($location_search)
+			{
+				if ( ! preg_match('/' . $location_search . '/', strtolower($row->location)) &&
+					 ! preg_match('/' . $location_search . '/', strtolower($row->major->name)) && 
+					 ! preg_match('/' . $location_search . '/', strtolower($row->minor->name))
+				)
+				{
+					unset($leve_records[$k]);
+					continue;
+				}
+			}
+		}
+		
 		return View::make('leve.rows')
 			->with('leves', $leve_records);
 	}

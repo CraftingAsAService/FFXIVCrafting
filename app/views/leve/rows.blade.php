@@ -3,7 +3,7 @@
 	<td width='24' class='valign'>
 		<img src='/img/classes/{{ $leve->job->abbreviation }}.png' rel='tooltip' title='{{ $leve->job->name }}'>
 	</td>
-	<td class='item{{ $leve->triple ? ' triple\' rel="tooltip" title="Triple Leve" data-container=\'body' : '' }}'>
+	<td class='item{{ $leve->triple ? ' triple\' rel="tooltip" title="Triple Leve" data-placement="right" data-container=\'body' : '' }}'>
 		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
 		<a href='http://xivdb.com/{{ $leve->item->href }}' class='item-name' target='_blank'><img src='/img/items/{{ $leve->item->icon ?: '../noitemicon.png' }}' style='margin-right: 10px;'>{{ $leve->item->name }}</a>
 		@if ($leve->amount > 1)

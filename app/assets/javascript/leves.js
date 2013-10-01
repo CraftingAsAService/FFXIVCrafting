@@ -61,6 +61,17 @@ var leves = {
 			$('.leve-form').submit();
 		});
 
+		$('.toggle-advanced').click(function(e) {
+			e.preventDefault();
+			$('.advanced').toggleClass('hidden');
+			$('.advanced input').val('');
+		});
+
+		$('.leve-text-search').keyup(function(e) {
+			if (e.which == 13)
+				leves.search();
+		})
+
 		leves.search();
 	},
 	search:function() {
@@ -68,7 +79,10 @@ var leves = {
 			types = [], //$('#type-selector + .btn-group input:checked'),
 			triple_only = $('#triple_only').is(':checked'),
 			min_level = parseInt($('#min-level').val()),
-			max_level = parseInt($('#max-level').val());
+			max_level = parseInt($('#max-level').val()),
+			leve_item = $('#leve_item').val(),
+			leve_name = $('#leve_name').val(),
+			leve_location = $('#leve_location').val();
 
 		$('#class-selector + .btn-group input:checked').each(function() {
 			classes[classes.length] = $(this).val();
@@ -86,7 +100,10 @@ var leves = {
 				types : types,
 				triple_only : triple_only,
 				min_level : min_level,
-				max_level : max_level
+				max_level : max_level,
+				leve_item : leve_item,
+				leve_name : leve_name,
+				leve_location : leve_location
 			},
 			beforeStart:function() {
 				noty({
@@ -101,6 +118,8 @@ var leves = {
 
 				if (typeof(initXIVDBTooltips) != 'undefined')
 					initXIVDBTooltips();
+
+				$('[rel=tooltip]').tooltip();
 			}
 		});
 	}

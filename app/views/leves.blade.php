@@ -21,43 +21,62 @@
 	</div>
 	<div class='panel-body'>
 		<form class='leve-form form form-inline'>
-			<button type='button' role='button' class='filter-form btn btn-success pull-right'>
-				Filter &raquo;
-			</button>
+			<div class='row'>
+				<div class='col-sm-12'>
+					<button type='button' role='button' class='filter-form btn btn-success pull-right'>
+						Filter &raquo;
+					</button>
 
-			<div class='form-group'>
-				<label>Class</label>
-				<select class='multiselect hidden' multiple='multiple' id='class-selector'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-					<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
-					@endforeach
-				</select>
+					<small class='pull-right margin-right margin-top'><a href='#' class='toggle-advanced'>Advanced &raquo;</a></small>
+
+					<div class='form-group'>
+						<label>Class</label>
+						<select class='multiselect hidden' multiple='multiple' id='class-selector'>
+							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+							<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+							@endforeach
+						</select>
+					</div>
+
+					<div class='form-group margin-left'>
+						<label>Min Level</label>
+						<input type='number' min='0' max='45' step='5' value='1' class='form-control text-center' id='min-level'>
+					</div>
+
+					<div class='form-group margin-left'>
+						<label>Max Level</label>
+						<input type='number' min='0' max='45' step='5' value='45' class='form-control text-center' id='max-level'>
+					</div>
+
+					<div class='form-group margin-left'>
+						<label>Type</label>
+						<select class='multiselect hidden' multiple='multiple' id='type-selector'>
+							@foreach(array('Town', 'Field', 'Courier', 'Unknown') as $role)
+							<option value='{{ $role }}' selected='selected'>{{ $role }}</option>
+							@endforeach
+						</select>
+					</div>
+
+					<div class='form-group margin-left'>
+						<div class='checkbox'>
+							<label>
+								<input type='checkbox' id='triple_only'> Triples Only
+							</label>
+						</div>
+					</div>
+				</div>
 			</div>
-
-			<div class='form-group margin-left'>
-				<label>Min Level</label>
-				<input type='number' min='0' max='45' step='5' value='1' class='form-control text-center' id='min-level'>
-			</div>
-
-			<div class='form-group margin-left'>
-				<label>Max Level</label>
-				<input type='number' min='0' max='45' step='5' value='45' class='form-control text-center' id='max-level'>
-			</div>
-
-			<div class='form-group margin-left'>
-				<label>Type</label>
-				<select class='multiselect hidden' multiple='multiple' id='type-selector'>
-					@foreach(array('Town', 'Field', 'Courier', 'Unknown') as $role)
-					<option value='{{ $role }}' selected='selected'>{{ $role }}</option>
-					@endforeach
-				</select>
-			</div>
-
-			<div class='form-group margin-left'>
-				<div class='checkbox'>
-					<label>
-						<input type='checkbox' id='triple_only'> Triples Only
-					</label>
+			<div class='row advanced{{ Input::get('name') ? '' : ' hidden' }} margin-top'>
+				<div class='col-sm-12 margin-top'>
+					<div class='form-group margin-left'>
+						<input type='text' id='leve_item' placeholder='Item Name Search' class='form-control leve-text-search'>
+					</div>
+					<div class='form-group margin-left'>
+						<input type='text' id='leve_name' placeholder='Leve Name Search' class='form-control leve-text-search' value='{{ Input::get('name') }}'>
+					</div>
+					<div class='form-group margin-left'>
+						<input type='text' id='leve_location' placeholder='Location Name Search' class='form-control leve-text-search'>
+					</div>
 				</div>
 			</div>
 		</form>
