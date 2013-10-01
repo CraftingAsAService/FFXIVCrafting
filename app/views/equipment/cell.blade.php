@@ -2,7 +2,8 @@
 	<div class='slot-wrap'>
 		<div class='items'>
 			@foreach($items as $key => $item)
-			<div class='item cf {{ $key > 0 ? 'hidden' : 'active' }}{{ $item->crafted_by ? ' craftable' : '' }}' data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}'>
+			<div class='item cf {{ $key > 0 ? 'hidden' : 'active' }}{{ $item->crafted_by ? ' craftable' : '' }}' 
+				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}'>
 
 				<div class='icons pull-left text-center'>
 					<a href='http://xivdb.com/{{{ $item->href }}}' target='_blank'>
@@ -25,9 +26,7 @@
 				</div>
 				
 				<div class='name-box'>
-					<a href='http://xivdb.com/{{{ $item->href }}}' target='_blank' class='text-primary'>
-						{{ $item->name }}
-					</a>
+					<a href='http://xivdb.com/{{{ $item->href }}}' target='_blank' class='text-primary'>{{ $item->name }}</a>
 				</div>
 
 				<div class='stats-box row'>

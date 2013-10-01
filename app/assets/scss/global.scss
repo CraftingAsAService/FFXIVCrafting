@@ -126,6 +126,18 @@ td {
 	margin-top: .5em;
 }
 
+.margin-bottom {
+	margin-bottom: .5em;
+}
+
+.margin-left {
+	margin-left: 1em;
+}
+
+.margin-right {
+	margin-right: 1em;
+}
+
 .crafted_gathered {
 
 }
@@ -204,6 +216,16 @@ td {
 	}
 }
 
+$gear_main_no_hash: 333;
+$gear_fade_no_hash: 555;
+$gear_accent_no_hash: f9a123;
+$gear_main: #333;
+$gear_border: #3f3f3f;
+$gear_fade: #555;
+$gear_text: #fff;
+$gear_accent: #f9a123;
+$gear_warning_accent: #a46868;
+
 #gear-main {
 	&.table tbody>tr>td.table-holder {
 		padding: 0px;
@@ -215,10 +237,10 @@ td {
 
 	thead th,
 	tfoot th {
-		border: 1px solid #3f3f3f;
-		background-color: #333;
-		border-color: #3f3f3f;
-		color: #ffffff;
+		border: 1px solid $gear_border;
+		background-color: $gear_main;
+		border-color: $gear_border;
+		color: $gear_text;
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	}
 	thead th {
@@ -240,7 +262,7 @@ td {
 		border-collapse: separate !important;
 		border-top-width: 0px !important;
 		
-		color: #ffffff;
+		color: $gear_text;
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	}
 
@@ -251,29 +273,29 @@ td {
 		-ms-border-radius: 10px 0 0 10px;
 		-webkit-border-radius: 10px 0 0 10px;
 
-		background-color: #333;
-		background-image: -moz-linear-gradient(left, #333, #555);
-		background-image: -webkit-linear-gradient(left, #333, #555);
-		background-image: -o-linear-gradient(left, #333, #555);
-		background-image: linear-gradient(to left, #333, #555);
+		background-color: $gear_main;
+		background-image: -moz-linear-gradient(left, $gear_main, $gear_fade);
+		background-image: -webkit-linear-gradient(left, $gear_main, $gear_fade);
+		background-image: -o-linear-gradient(left, $gear_main, $gear_fade);
+		background-image: linear-gradient(to left, $gear_main, $gear_fade);
 		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff555555', GradientType=0);
-		border-color: #555555 #555555 #333333;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$gear_main_no_hash', endColorstr='#ff$gear_fade_no_hash', GradientType=0);
+		border-color: $gear_fade $gear_fade $gear_main;
 		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		*background-color: #555555;
+		*background-color: $gear_fade;
 		/* Darken IE7 buttons by default so they stand out more given they won't have borders */
 
 		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 
 		&:hover {
 			background-color: #f9a123;
-			background-image: -moz-linear-gradient(left, #333, #f9a123);
-			background-image: -webkit-linear-gradient(left, #333, #f9a123);
-			background-image: -o-linear-gradient(left, #333, #f9a123);
-			background-image: linear-gradient(to left, #333, #f9a123);
+			background-image: -moz-linear-gradient(left, $gear_main, $gear_accent);
+			background-image: -webkit-linear-gradient(left, $gear_main, $gear_accent);
+			background-image: -o-linear-gradient(left, $gear_main, $gear_accent);
+			background-image: linear-gradient(to left, $gear_main, $gear_accent);
 			background-repeat: repeat-x;
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#fff9a123', GradientType=0);
-			border-color: #f9a123 #f9a123 #333333;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$gear_main_no_hash', endColorstr='#ff$gear_accent_no_hash', GradientType=0);
+			border-color: $gear_accent $gear_accent $gear_main;
 			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 		}
 	}
@@ -285,29 +307,29 @@ td {
 		-ms-border-radius: 0 10px 10px 0;
 		-webkit-border-radius: 0 10px 10px 0;
 
-		background-color: #333;
-		background-image: -moz-linear-gradient(right, #333, #555);
-		background-image: -webkit-linear-gradient(right, #333, #555);
-		background-image: -o-linear-gradient(right, #333, #555);
-		background-image: linear-gradient(to right, #333, #555);
+		background-color: $gear_main;
+		background-image: -moz-linear-gradient(right, $gear_main, $gear_fade);
+		background-image: -webkit-linear-gradient(right, $gear_main, $gear_fade);
+		background-image: -o-linear-gradient(right, $gear_main, $gear_fade);
+		background-image: linear-gradient(to right, $gear_main, $gear_fade);
 		background-repeat: repeat-x;
 		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff555555', GradientType=0);
-		border-color: #555555 #555555 #333333;
+		border-color: $gear_fade $gear_fade $gear_main;
 		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		*background-color: #555555;
+		*background-color: $gear_fade;
 		/* Darken IE7 buttons by default so they stand out more given they won't have borders */
 
 		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 
 		&:hover {
-			background-color: #f9a123;
-			background-image: -moz-linear-gradient(right, #333, #f9a123);
-			background-image: -webkit-linear-gradient(right, #333, #f9a123);
-			background-image: -o-linear-gradient(right, #333, #f9a123);
-			background-image: linear-gradient(to right, #333, #f9a123);
+			background-color: $gear_accent;
+			background-image: -moz-linear-gradient(right, $gear_main, $gear_accent);
+			background-image: -webkit-linear-gradient(right, $gear_main, $gear_accent);
+			background-image: -o-linear-gradient(right, $gear_main, $gear_accent);
+			background-image: linear-gradient(to right, $gear_main, $gear_accent);
 			background-repeat: repeat-x;
 			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#fff9a123', GradientType=0);
-			border-color: #f9a123 #f9a123 #333333;
+			border-color: $gear_accent $gear_accent $gear_main;
 			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 		}
 	}
@@ -318,49 +340,49 @@ td {
 
 		background-repeat: no-repeat;
 		background-position: center;
-		background-color: #333;
-		border-color: #3f3f3f;
+		background-color: $gear_main;
+		border-color: $gear_border;
 		//border-width: 0px;
 		padding: 0px;
 
 		&.slot-Primary {
-			background-image: url(/img/equipment/originals/Primary.png);
+			background-image: url(/img/equipment/2x/Primary.png);
 		}
 		&.slot-Secondary {
-			background-image: url(/img/equipment/originals/Secondary.png);
+			background-image: url(/img/equipment/2x/Secondary.png);
 		}
 		&.slot-Head {
-			background-image: url(/img/equipment/originals/Head.png);
+			background-image: url(/img/equipment/2x/Head.png);
 		}
 		&.slot-Body {
-			background-image: url(/img/equipment/originals/Body.png);
+			background-image: url(/img/equipment/2x/Body.png);
 		}
 		&.slot-Hands {
-			background-image: url(/img/equipment/originals/Hands.png);
+			background-image: url(/img/equipment/2x/Hands.png);
 		}
 		&.slot-Waist {
-			background-image: url(/img/equipment/originals/Waist.png);
+			background-image: url(/img/equipment/2x/Waist.png);
 		}
 		&.slot-Legs {
-			background-image: url(/img/equipment/originals/Legs.png);
+			background-image: url(/img/equipment/2x/Legs.png);
 		}
 		&.slot-Feet {
-			background-image: url(/img/equipment/originals/Feet.png);
+			background-image: url(/img/equipment/2x/Feet.png);
 		}
 		&.slot-Neck {
-			background-image: url(/img/equipment/originals/Neck.png);
+			background-image: url(/img/equipment/2x/Neck.png);
 		}
 		&.slot-Ears {
-			background-image: url(/img/equipment/originals/Ears.png);
+			background-image: url(/img/equipment/2x/Ears.png);
 		}
 		&.slot-Wrists {
-			background-image: url(/img/equipment/originals/Wrists.png);
+			background-image: url(/img/equipment/2x/Wrists.png);
 		}
 		&.slot-Ring {
-			background-image: url(/img/equipment/originals/Ring.png);
+			background-image: url(/img/equipment/2x/Ring.png);
 		}
 		&.slot-Ring {
-			background-image: url(/img/equipment/originals/Ring.png);
+			background-image: url(/img/equipment/2x/Ring.png);
 		}
 
 		.slot-wrap {
@@ -369,27 +391,33 @@ td {
 		}
 
 
-		//$upgrade-color: #005fcc;
-		//$upgrade-color: #41a7c5;
-		//$upgrade-color: #58b058;
-		$upgrade-color: #f9a123;
-		//$upgrade-color: #d14641;
-
 		&.upgrade {
 			.slot-wrap {
-				border: 1px solid $upgrade-color;
+				border: 1px solid $gear_accent;
 				border-radius: 5px;
 			}
 			.icons {
 				.main-icon {
-					border: 2px solid $upgrade-color;
+					border: 2px solid $gear_accent;
 					border-radius: 20px;
 				}
 			}
 			.name-box {
 				a {
-					color: $upgrade-color;
+					color: $gear_accent;
 				}
+			}
+		}
+
+		&.cannot-equip {
+			.slot-wrap {
+				display: none;
+			}
+			.why-cannot-equip {
+				color: darken($gear_text, 50%);
+				font-size: .8em;
+				text-align: center;
+				margin-top: 10px;
 			}
 		}
 	}
@@ -596,5 +624,32 @@ td {
 		background-image: url(/img/triple.png);
 		background-position: 99% 30px;
 		background-repeat: no-repeat;
+	}
+	.item {
+		white-space: nowrap;
+	}
+	.reward {
+		min-width: 90px;
+	}
+	.location {
+		background-position: right bottom;
+		min-height: 60px;
+		width: 180px;
+		max-width: 200px;
+		max-height: 200px;
+		&>div {
+			padding-right: 25px;
+			font-size: .9em;
+		}
+
+		&.limsalominsa {
+			background-image: url(/img/locations/limsalominsa_bg.png);
+		}
+		&.gridania {
+			background-image: url(/img/locations/gridania_bg.png);
+		}
+		&.uldah {
+			background-image: url(/img/locations/uldah_bg.png);
+		}
 	}
 }
