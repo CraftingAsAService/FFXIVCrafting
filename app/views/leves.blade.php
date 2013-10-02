@@ -83,25 +83,27 @@
 	</div>
 </div>
 
-<table class='leve-table table table-bordered table-striped'>
-	<thead>
-		<tr>
-			<th class='invisible'>&nbsp;</th>
-			<th class='valign'>
-				Item, Level and Amount
-			</th>
-			<th class='text-center valign'>Leve Name and Type</th>
-			<th class='text-center'>XP</th>
-			<th class='text-center'>Gil</th>
-			<th class='text-center valign'>Location</th>
-			<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
-				<i class='glyphicon glyphicon-shopping-cart'></i>
-				<i class='glyphicon glyphicon-plus'></i>
-			</th>
-		</tr>
-	</thead>
-	<tbody></tbody>
-</table>
+<div class='table-responsive'>
+	<table class='leve-table table table-bordered table-striped'>
+		<thead>
+			<tr>
+				<th class='invisible'>&nbsp;</th>
+				<th class='valign'>
+					Item, Level and Amount
+				</th>
+				<th class='text-center valign'>Leve Name and Type</th>
+				<th class='text-center'>XP</th>
+				<th class='text-center'>Gil</th>
+				<th class='text-center valign'>Location</th>
+				<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
+					<i class='glyphicon glyphicon-shopping-cart'></i>
+					<i class='glyphicon glyphicon-plus'></i>
+				</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
 
 <div class='well'>
 	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BluGartr user Seravi Edalborez</a>.  Thanks!

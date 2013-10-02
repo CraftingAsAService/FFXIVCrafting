@@ -106,11 +106,9 @@ var leves = {
 				leve_location : leve_location
 			},
 			beforeStart:function() {
-				noty({
-					text: 'Searching for Leves',
+				global.noty({
 					type: 'info',
-					layout: 'bottomRight',
-					timeout: 2500
+					text: 'Searching for Leves'
 				});
 			},
 			success:function(output) {
