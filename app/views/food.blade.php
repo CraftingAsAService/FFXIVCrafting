@@ -22,72 +22,74 @@
 
 @foreach($display_groups as $job => $group_list)
 <h3>{{ $job }}</h3>
-<table class='table table-bordered table-striped'>
-	<tbody>
-		<?php $last = null; ?>
-		@foreach($group_list as $group_name)
-		@foreach($food_groups[$group_name] as $food_name)
-			<?php $food = $food_list[$food_name]; ?>
-			@if ($group_name != $last)
-				<?php $last = $group_name; ?>
-				<tr>
-					<th class='invisible'>&nbsp;</th>
-					@foreach(range(0, count($food['stats']) - 1) as $place)
-					<th colspan='3' class='text-center title'>
-						@if (isset($food['stats'][$place]))
+<div class='table-responsive'>
+	<table class='table table-bordered table-striped'>
+		<tbody>
+			<?php $last = null; ?>
+			@foreach($group_list as $group_name)
+			@foreach($food_groups[$group_name] as $food_name)
+				<?php $food = $food_list[$food_name]; ?>
+				@if ($group_name != $last)
+					<?php $last = $group_name; ?>
+					<tr>
+						<th class='invisible'>&nbsp;</th>
+						@foreach(range(0, count($food['stats']) - 1) as $place)
+						<th colspan='3' class='text-center title'>
+							@if (isset($food['stats'][$place]))
 
-							<img src='/img/stats/{{ $food['stats'][$place]['stat'] }}.png' class='stat-icon'>
-							{{ $food['stats'][$place]['stat'] }} Bonus
+								<img src='/img/stats/{{ $food['stats'][$place]['stat'] }}.png' class='stat-icon'>
+								{{ $food['stats'][$place]['stat'] }} Bonus
 
-						@endif
-					</th>
-					@endforeach
-				</tr>
-				<tr>
-					<th class='invisible'>&nbsp;</th>
-					@foreach(range(1, count($food['stats'])) as $ignore)
-					<th class='text-center'>
-						Percent
-					</th>
-					<th class='text-center'>
-						Maximum
-					</th>
-					<th class='text-center'>
-						Threshold
-					</th>
-					@endforeach
-				</tr>
-			@endif
-			<tr>
-				<th class='text-right'>
-					<a href='http://xivdb.com/{{ $food['href'] }}' target='_blank'>{{ $food_name }}</a>
-				</th>
-				@foreach(range(0, count($food['stats']) - 1) as $place)
-				@if( ! isset($food['stats'][$place]))
-				<td class='text-center no-value'>-</td>
-				<td class='text-center no-value'>-</td>
-				<td class='text-center no-value'>-</td>
-				@else
-				<td class='text-center'>
-					{{ $food['stats'][$place]['amount'] }}%
-				</td>
-				<td class='text-center'>
-					@if($food['stats'][$place]['max'] == 0)
-					None!
-					@else
-					{{ $food['stats'][$place]['max'] }}
-					@endif
-				</td>
-				<td class='text-center'>
-					{{ round($food['stats'][$place]['max'] / ($food['stats'][$place]['amount'] / 100)) }}
-				</td>
+							@endif
+						</th>
+						@endforeach
+					</tr>
+					<tr>
+						<th class='invisible'>&nbsp;</th>
+						@foreach(range(1, count($food['stats'])) as $ignore)
+						<th class='text-center'>
+							Percent
+						</th>
+						<th class='text-center'>
+							Maximum
+						</th>
+						<th class='text-center'>
+							Threshold
+						</th>
+						@endforeach
+					</tr>
 				@endif
-				@endforeach
-			</tr>
-		@endforeach
-		@endforeach
-	</tbody>
-</table>
+				<tr>
+					<th class='text-right'>
+						<a href='http://xivdb.com/{{ $food['href'] }}' target='_blank'>{{ $food_name }}</a>
+					</th>
+					@foreach(range(0, count($food['stats']) - 1) as $place)
+					@if( ! isset($food['stats'][$place]))
+					<td class='text-center no-value'>-</td>
+					<td class='text-center no-value'>-</td>
+					<td class='text-center no-value'>-</td>
+					@else
+					<td class='text-center'>
+						{{ $food['stats'][$place]['amount'] }}%
+					</td>
+					<td class='text-center'>
+						@if($food['stats'][$place]['max'] == 0)
+						None!
+						@else
+						{{ $food['stats'][$place]['max'] }}
+						@endif
+					</td>
+					<td class='text-center'>
+						{{ round($food['stats'][$place]['max'] / ($food['stats'][$place]['amount'] / 100)) }}
+					</td>
+					@endif
+					@endforeach
+				</tr>
+			@endforeach
+			@endforeach
+		</tbody>
+	</table>
+</div>
 @endforeach
 
 @stop
