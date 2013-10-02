@@ -66,37 +66,46 @@
 
 		<div id='footer'>
 			<div class='container text-center'>
-				<div class='row'>
-					<div class='col-sm-2'>
+				<div class='row top'>
+					<?php
+						$choices = array(
+							"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
+							"Keep the site ad free, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+							"Show my wife it's not just a hobby, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+							"Stable servers aren't free, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+							#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
+						);
+					?>
+					<p class='text-muted credit'>
+						{{ $choices[array_rand($choices)] }}
+					</p>
+					<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
+						<input type='hidden' name='cmd' value='_s-xclick'>
+						<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
+						<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
+						<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
+					</form>
+				</div>
+				<div class='row bottom'>
+					<div class='col-sm-3'>
 						<p class='text-muted credit'>
 							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
 						</p>
 					</div>
-					<div class='col-sm-2'>
+					<div class='col-sm-3'>
 						<p class='text-muted credit'>
 							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
 						</p>
 					</div>
-					<div class='col-sm-2'>
+					<div class='col-sm-3'>
 						<p class='text-muted credit'>
 							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
 						</p>
 					</div>
-					<div class='col-sm-2'>
+					<div class='col-sm-3'>
 						<p class='text-muted credit'>
 							<a href='/credits'>Credits</a> 
 						</p>
-					</div>
-					<div class='col-sm-2'>
-						<p class='text-muted credit'>
-							<a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>
-						</p>
-						<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
-							<input type='hidden' name='cmd' value='_s-xclick'>
-							<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
-							<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
-							<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
-						</form>
 					</div>
 				</div>
 			</div>

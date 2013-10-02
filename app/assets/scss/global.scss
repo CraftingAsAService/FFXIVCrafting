@@ -26,31 +26,37 @@ td.new .stats {
 	margin-right: 0px;
 }
 
+$footer-size: 80px;
+
 #wrap {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -60px;
-	padding: 0 0 60px;
+	margin: 0 auto;
+	margin-bottom: -$footer-size;
+	padding: 0 0 $footer-size;
 }
-
-// #wrap > .container {
-// 	padding: 60px 15px 48px;
-// }
 
 #footer {
-	height: 60px;
+	height: $footer-size;
 	background-color: #f5f5f5;
 	overflow: hidden;
-}
 
-#footer > .container {
-	padding-left: 15px;
-	padding-right: 15px;
-}
+	&>.container {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 
-.credit {
-	margin: 20px 0;
+	.top {
+		.credit {
+			margin-top: 15px;
+		}
+	}
+	.bottom {
+		.credit {
+			margin-bottom: 15px;
+		}
+	}
 }
 
 .no-value {
