@@ -19,17 +19,21 @@ var global = {
 				type: 'post',
 				data: { 'item-id' : id , 'qty' : qty },
 				beforeSend:function() {
-					noty({
-						text: 'Adding ' + (qty > 1 ? (qty + ' x ') : '') + name + ' to your list',
-						type: 'success',
-						layout: 'bottomRight',
-						timeout: 2500
+					global.noty({
+						type: 'success', 
+						text: 'Adding ' + (qty > 1 ? (qty + ' x ') : '') + name + ' to your list'
 					});
 				}
 			});
 		});
-
-		
+	},
+	noty:function(options) {
+		noty({
+			text: options.text,
+			type: options.type,
+			layout: 'bottomCenter',
+			timeout: 2500
+		});
 	},
 	notification:function(type, message, id) {
 		$('#notifications').append('<div class="alert alert-' + type + '" id="' + id + '">' + message);
