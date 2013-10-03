@@ -115,7 +115,7 @@ var crafting_tour = {
 				placement: 'bottom'
 			},
 			{
-				element: '#Crafted-section tr:first-child',
+				element: '#PreRequisiteCrafting-section tr:first-child',
 				title: 'Crafted Section',
 				content: 'Why buy what you can craft?  The Crafted Section contains items necessary for your main recipes to finish.  The previous sections will already contain the sub items required.',
 				placement: 'bottom'

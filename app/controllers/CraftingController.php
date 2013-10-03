@@ -198,7 +198,8 @@ class CraftingController extends BaseController
 			'Gathered' => array(),
 			'Bought' => array(),
 			'Other' => array(),
-			'Crafted' => array(),
+			'Pre-Requisite Crafting' => array(),
+			'Crafting List' => array(),
 		);
 
 		foreach ($reagent_list as $reagent)
@@ -213,7 +214,7 @@ class CraftingController extends BaseController
 			}
 			elseif ($reagent['self_sufficient'])
 			{
-				$section = 'Crafted';
+				$section = 'Pre-Requisite Crafting';
 				$level = $reagent['item']->recipes[0]->level;
 			}
 			elseif ($reagent['item']->gil)
@@ -231,7 +232,7 @@ class CraftingController extends BaseController
 
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
-
+		
 		// Was this their first time?
 		$first_time = TRUE;
 
