@@ -44,3 +44,9 @@ Route::get('credits', function()
 	View::share('active', 'credits');
 	return View::make('credits');
 });
+
+Route::get('about', function()
+{
+	View::share('active', 'about');
+	return View::make('about');
+});
