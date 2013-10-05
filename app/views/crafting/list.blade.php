@@ -33,10 +33,10 @@
 		<thead>
 			<tr>
 				<th class='text-center'>Item</th>
-				<th class='text-center'>Needed</th>
+				<th class='text-center' width='75'>Needed</th>
+				<th class='text-center' width='102'>Obtained</th>
 				<th class='text-center'>Can be Bought</th>
 				<th class='text-center'>Source</th>
-				<th class='text-center'><input type='checkbox' disabled='disabled' checked='checked'></th>
 			</tr>
 		</thead>
 		@foreach($reagent_list as $section => $list)
@@ -56,7 +56,7 @@
 				$requires = array();
 				if ($section == 'Pre-Requisite Crafting')
 					foreach ($item->recipes[0]->reagents as $rr_item)
-						$requires[] = $reagent['make_this_many'] . 'x' . $rr_item->id;
+						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
 			?>
 			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}'>
 				<td class='text-left'>
@@ -83,10 +83,18 @@
 					</a>
 					@endif
 				</td>
-				<td>
-					{{ $reagent['make_this_many'] }}@if(isset($reagent['both_list_warning']))
+				<td class='needed valign'>
+					<span>{{ $reagent['make_this_many'] }}</span>@if(isset($reagent['both_list_warning']))
 					<a href='#' class='nowhere tt-force' rel='tooltip' title='Note: Item exists in main list but is also required for another.'>*</a>
 					@endif
+				</td>
+				<td class='valign'>
+					<div class='input-group'>
+						<input type='number' class='form-control obtained text-center' min='0' value='0' style='padding: 6px 3px;'>
+						<div class='input-group-btn'>
+							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
+						</div>
+					</div>
 				</td>
 				<td>
 					@if($item->vendors)
@@ -109,9 +117,6 @@
 					</span>
 					@endforeach
 				</td>
-				<th class='text-center'>
-					<input type='checkbox'>
-				</th>
 			</tr>
 			@endforeach
 			@endforeach
@@ -128,9 +133,9 @@
 			<?php
 				$requires = array();
 				foreach ($recipe->reagents as $item)
-					$requires[] = (@$item_amounts[$recipe->item->id] ?: 1) . 'x' . $item->id;
+					$requires[] = $item->pivot->amount . 'x' . $item->id;
 			?>
-			<tr class='reagent' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}'>
+			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}'>
 				<td class='text-left'>
 					<a class='close' rel='tooltip' title='Level'>
 						{{ $recipe->level }}
@@ -162,8 +167,16 @@
 						@endif
 					</div>
 				</td>
-				<td>
-					<input type='number' class='recipe-amount form-control' value='{{ isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : 1 }}'>
+				<td class='needed valign'>
+					<input type='number' class='recipe-amount form-control text-center' min='0' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : 1) + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0) }}' style='padding: 6px 3px;'>
+				</td>
+				<td class='valign'>
+					<div class='input-group'>
+						<input type='number' class='form-control obtained text-center' min='0' value='0' style='padding: 6px 3px;'>
+						<div class='input-group-btn'>
+							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
+						</div>
+					</div>
 				</td>
 				<td>
 					@if($recipe->item->vendors)
@@ -178,9 +191,6 @@
 						<img src='/img/classes/{{ $recipe['abbreviation'] }}.png' rel='tooltip' title='{{ $job_list[$recipe['abbreviation']] }}'>
 					</span>
 				</td>
-				<th class='text-center'>
-					<input type='checkbox'>
-				</th>
 			</tr>
 			@endforeach
 		</tbody>
@@ -257,7 +267,7 @@
 					@endforeach
 				</ul>
 
-				<p><em>Repeatable Turn-in Leve information coming soon.</em></p>
+				<p><em>Want to level faster?  Visit the <a href='/leve'>Leves</a> page.</em></p>
 			</div>
 		</div>
 		@endif

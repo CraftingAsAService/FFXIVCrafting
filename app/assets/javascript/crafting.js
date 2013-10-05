@@ -1,27 +1,14 @@
 var crafting = {
 	init:function() {
+		crafting.events();
+		crafting_tour.init();
+	},
+	events:function() {
 		$('#self_sufficient_switch').change(function() {
 			$(this).closest('form').submit();
 		});
 
-		$('.reagent').click(function(event) {
-			var tr = $(this);
-
-			// Prevent HREF or Checkbox click
-			if (event.target.nodeName == 'A' || event.target.nodeName == 'TH')
-				return;
-
-			if (event.target.nodeName == 'INPUT')
-				event.preventDefault();
-
-			tr.toggleClass('success');
-
-			var checkbox = tr.find('[type=checkbox]')[0];
-
-			checkbox.checked = ! checkbox.checked;
-		});
-
-		$('.item-list .collapse').click(function() {
+		$('#obtain-these-items .collapse').click(function() {
 			var button = $(this);
 
 			button.toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
@@ -33,20 +20,91 @@ var crafting = {
 			trEls.toggleClass('hidden');
 		});
 
-		$('.crafting-list .collapse').click(function() {
-			var button = $(this);
-
-			button.toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
-
-			var h3 = $(this).closest('h3');
-
-			var trEls = h3.next();
-
-			trEls.toggleClass('hidden');
-
+		// Store the amount needed
+		$('.needed input').each(function() {
+			var el = $(this);
+			el.data('amount', parseInt(el.val()));
 		});
 
-		crafting_tour.init();
+		// If they change needed or obtained
+
+		$('.needed input').change(function() {
+			var el = $(this);
+			var amount = parseInt(el.val()),
+				prev = el.data('amount');
+
+			var diff = amount - prev;
+
+			if (diff == 0)
+				return;
+
+			el.data('amount', amount);
+
+			var tr = el.closest('tr');
+
+			crafting.change_reagents(el.closest('tr'), diff);
+
+			tr.find('input.obtained').trigger('change');
+		});
+
+		$('input.obtained').change(function() {
+			var el = $(this),
+				tr = el.closest('tr'),
+				neededEl = tr.find('.needed input'),
+				neededVal = neededEl.val();
+
+			if (neededEl.length == 0) {
+				neededEl = tr.find('.needed span');
+				neededVal = neededEl.html();
+			}
+
+			tr[(parseInt(el.val()) >= parseInt(neededVal) ? 'add' : 'remove') + 'Class']('success');
+		});
+
+		$('.obtained-ok').click(function() {
+			var tr = $(this).closest('tr'),
+				neededEl = tr.find('.needed input'),
+				neededVal = neededEl.val(),
+				obtainedEl = tr.find('input.obtained');
+
+			if (neededEl.length == 0) {
+				neededEl = tr.find('.needed span');
+				neededVal = neededEl.html();
+			}
+
+			obtainedEl.val(neededVal).trigger('change');
+		})
+	},
+	change_reagents:function(tr, change_amount) {
+		var data = tr.data('requires'),
+			trItemId = tr.data('itemId');
+
+		if (typeof(data) === 'undefined' || data == '')
+			return;
+
+		var requires = data.split('&');
+
+		// Add this item to the list if it's in the pre-req's too
+		if (tr.hasClass('exempt') && $('tr.reagent:not(.exempt)[data-item-id=' + tr.data('itemId') + ']').length > 0)
+			requires[requires.length] = '1x' + trItemId;
+
+		for (var i = 0; i < requires.length; i++) {
+			var t = requires[i].split('x'),
+				quantity = t[0],
+				itemId = t[1];
+
+			var target = $('tr.reagent:not(.exempt)[data-item-id=' + itemId + ']'),
+				neededEl = target.find('.needed span'),
+				current_amount = parseInt(neededEl.html()),
+				change = change_amount * quantity;
+
+			neededEl.html(current_amount + change);
+
+			if (itemId != trItemId)
+				crafting.change_reagents(target, change);
+
+			target.find('input.obtained').trigger('change');
+		}
 	}
 }
 
@@ -85,15 +143,9 @@ var crafting_tour = {
 
 		crafting_tour.tour.addSteps([
 			{
-				element: '#recipe-list', 
+				element: '#CraftingList-section', 
 				title: 'Recipe List',
-				content: 'The list on the left is your Recipe List.  You will be making these items.  Use the arrow to hide this information.',
-				placement: 'top'
-			},
-			{
-				element: '#obtain-these-items', 
-				title: 'Obtain These Items',
-				content: 'You will be grabbing the items listed in this section.  Some can be bought, gathered or killed for.',
+				content: 'The list at the bottom is your official Recipe List.  You will be making these items.',
 				placement: 'top'
 			},
 			{
@@ -116,7 +168,7 @@ var crafting_tour = {
 			},
 			{
 				element: '#PreRequisiteCrafting-section tr:first-child',
-				title: 'Crafted Section',
+				title: 'Pre-Requisite Crafting',
 				content: 'Why buy what you can craft?  The Crafted Section contains items necessary for your main recipes to finish.  The previous sections will already contain the sub items required.',
 				placement: 'bottom'
 			},

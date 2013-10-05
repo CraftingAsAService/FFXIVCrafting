@@ -179,13 +179,14 @@ class CraftingController extends BaseController
 		// Subtract what's being made from needed reagents.
 		//  Example, culinary 11 to 15, you need olive oil for Parsnip Salad (lvl 13)
 		//   But you make 3 olive oil at level 11.  We don't want them crafting another olive oil.
-
+		
 		foreach ($recipes as $recipe)
 		{
 			if ( ! isset($reagent_list[$recipe->item_id]))
 				continue;
 
 			$reagent_list[$recipe->item_id]['both_list_warning'] = TRUE;
+			$reagent_list[$recipe->item_id]['make_this_many'] += 1;
 		}
 
 		// Let's sort them further, group them by..
@@ -232,7 +233,7 @@ class CraftingController extends BaseController
 
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
-		
+
 		// Was this their first time?
 		$first_time = TRUE;
 
@@ -293,11 +294,11 @@ class CraftingController extends BaseController
 						'item' => $reagent,
 					);
 
-				// if ($reagent->name == 'Rye')
+				//  if ($reagent->name == 'Bronze Rivets')
 				// {
-				// 	var_dump('Rye');
 				// 	var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
-				// 	exit;
+				// 	echo '<hr>';
+					
 				// }
 
 				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields);
