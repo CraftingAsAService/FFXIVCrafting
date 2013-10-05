@@ -70,7 +70,7 @@ var leves = {
 		$('.leve-text-search').keyup(function(e) {
 			if (e.which == 13)
 				leves.search();
-		})
+		});
 
 		leves.search();
 	},
