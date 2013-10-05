@@ -90,8 +90,8 @@
 		</div>
 
 		<div id='footer'>
-			<div class='container text-center'>
-				<div class='row top'>
+			<div class='container'>
+				<div class='row top text-center'>
 					<?php
 						$choices = array(
 							"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
@@ -114,24 +114,33 @@
 					</form>
 				</div>
 				<div class='row bottom'>
-					<div class='col-xs-3 col-sm-3'>
+					<div class='col-sm-4'>
+						<h4>Contact</h4>
 						<p class='text-muted credit'>
-							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
+							<a href='mailto:tickthokk@gmail.com'>Email</a>
 						</p>
-					</div>
-					<div class='col-xs-3 col-sm-3'>
-						<p class='text-muted credit'>
-							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
-						</p>
-					</div>
-					<div class='col-xs-3 col-sm-3'>
 						<p class='text-muted credit'>
 							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
 						</p>
 					</div>
-					<div class='col-xs-3 col-sm-3'>
+					<div class='col-sm-4'>
+						<h4>More Info</h4>
 						<p class='text-muted credit'>
-							<a href='/credits'>Credits</a> 
+							<a href='/about'>About Me</a> 
+						</p>
+						<p class='text-muted credit'>
+							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
+						</p>
+					</div>
+					<div class='col-sm-4'>
+						<h4>Other Cool Sites</h4>
+						<p class='text-muted credit'>
+							<a href='http://ffxivclock.com/' target='_blank' rel='tooltip' title='Opens in new window'>
+								FFXIV Clock<span class='glyphicon glyphicon-new-window' style='margin-left: 5px;'></span>
+							</a> 
+						</p>
+						<p class='text-muted credit'>
+							<a href='/credits'>Source Credits &amp; Resources</a> 
 						</p>
 					</div>
 				</div>
