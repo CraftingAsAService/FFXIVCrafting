@@ -277,6 +277,12 @@ class CraftingController extends BaseController
 			{
 				$run = 0;
 
+				// if ($recipe->name == 'Ash Lumber')
+				// {
+				// 	echo $recipe->id, ' ', $recipe->item_id;
+				// 	dd($top_level);
+				// }
+
 				if (in_array($recipe->item_id, array_keys($top_level)))
 					$run += $top_level[$recipe->item_id];
 
@@ -294,11 +300,10 @@ class CraftingController extends BaseController
 						'item' => $reagent,
 					);
 
-				//  if ($reagent->name == 'Bronze Rivets')
+				// if ($reagent->name == 'Ash Lumber')
 				// {
 				// 	var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
 				// 	echo '<hr>';
-					
 				// }
 
 				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields);

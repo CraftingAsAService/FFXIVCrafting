@@ -168,7 +168,7 @@
 					</div>
 				</td>
 				<td class='needed valign'>
-					<input type='number' class='recipe-amount form-control text-center' min='0' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : 1) + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0) }}' style='padding: 6px 3px;'>
+					<input type='number' class='recipe-amount form-control text-center' min='0' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}' style='padding: 6px 3px;'>
 				</td>
 				<td class='valign'>
 					<div class='input-group'>
