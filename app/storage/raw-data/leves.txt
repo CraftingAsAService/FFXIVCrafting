@@ -43,8 +43,11 @@ Limsa Lominsa	Blacksmith	40	A Mixed Message	27887	418	Town			1	Mythril Pliers
 Limsa Lominsa	Blacksmith	40	A Weighty Question	40661	483	Courier	Whitebrim	Coerthas	1	Mythril Sledgehammer	
 Limsa Lominsa	Blacksmith	40	Streamlining Operations	32049	661	Field	Whitebrim	Coerthas	3	Mythril Claw Hammer	triple
 Limsa Lominsa	Blacksmith	40	Get Me to the War on Time	28267	420	Field	Whitebrim	Coerthas	1	Cobalt Doming Hammer	
-Limsa Lominsa	Blacksmith	45	[Unknown]	0	0	Unknown			3	Cobalt Sledgehammer	triple
-Limsa Lominsa	Blacksmith	45	[Unknown]	0	0	Unknown			3	Cobalt Pliers	triple
+Limsa Lominsa	Blacksmith	45	I Maul Right	39087	650	Field	Saint Coinach's Find	Mor Dhona	3	Cobalt Sledgehammer	triple
+Limsa Lominsa	Blacksmith	45	Talon Terrors	33573	450	Field	Saint Coinach's Find	Mor Dhona	1	Cobalt Claw Hammer	
+Limsa Lominsa	Blacksmith	45	You Stay on That Side	39087	673	Town			3	Cobalt Pliers	triple
+Limsa Lominsa	Blacksmith	45	No Refunds, Only Exchanges	33573	588	Town			1	Cobalt File	
+Limsa Lominsa	Blacksmith	45	I'd Rather be Digging	53280	604	Courier	Saint Coinach's Find	Mor Dhona	1	Electrum Head Knife	
 Limsa Lominsa	Armorer	1	Ain't Got No Ingots	240	94	Town			3	Bronze Ingot	
 Limsa Lominsa	Armorer	1	Skillet Labor	430	96	Town			1	Bronze Skillet	
 Limsa Lominsa	Armorer	1	The Alloyed Truth	364	84	Field	Red Rooster Stead	Lower La Noscea	1	Bronze Rivets	
