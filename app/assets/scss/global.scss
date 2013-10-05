@@ -33,6 +33,7 @@ td.new .stats {
 
 #footer {
 	background-color: #f5f5f5;
+	margin-top: 30px;
 
 	.top {
 		.credit {
@@ -46,7 +47,6 @@ td.new .stats {
 	}
 
 	@media (max-width: $tablet_viewport - 1) {
-		margin-top: 30px;
 		text-align: center;
 	}
 }
