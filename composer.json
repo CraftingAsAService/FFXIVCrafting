@@ -2,7 +2,8 @@
 	"name": "tickthokk/ffxiv-cass",
 	"description": "Crafting utility for FFXIV: ARR",
 	"require": {
-		"laravel/framework": "4.0.*"
+		"laravel/framework": "4.0.*",
+		"wardrobe/core": "dev-master"
 	},
 	"require-dev": {
 		"loic-sharma/profiler": "1.0.*"
