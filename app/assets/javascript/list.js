@@ -16,11 +16,9 @@ var list = {
 				type: 'post',
 				data: { 'item-id' : id, 'amount' : amount },
 				beforeSend:function() {
-					noty({
-						text: message,
+					global.noty({
 						type: amount <= 0 ? 'warning' : 'information',
-						layout: 'bottomRight',
-						timeout: 2500
+						text: message
 					});
 				}
 			});
@@ -37,11 +35,9 @@ var list = {
 				type: 'post',
 				data: { 'item-id' : id },
 				beforeSend:function() {
-					noty({
-						text: 'Deleting ' + name + ' from your list',
+					global.noty({
 						type: 'warning',
-						layout: 'bottomRight',
-						timeout: 2500
+						text: 'Deleting ' + name + ' from your list'
 					});
 				},
 				complete:function() {

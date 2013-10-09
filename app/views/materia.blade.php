@@ -21,23 +21,25 @@
 		<h3>{{ $job }}</h3>
 
 		@foreach($stats as $stat)
-		<table class='table table-bordered table-striped'>
-			<tbody>
-				<tr>
-					<th class='invisible'>&nbsp;</th>
-					<th class='text-center fixed-width-50 title'>
-						<img src='/img/stats/{{ $stat }}.png' class='stat-icon'>
-						{{ $stat }} Bonus
-					</th>
-				</tr>
-				@foreach($materia_list[$stat] as $materia)
-				<tr>
-					<th class='text-right'><a href='http://xivdb.com/{{ $materia['href'] }}' target='_blank'>{{ $materia['name'] }}</a></th>
-					<td class='text-center'>+{{ $materia['amount'] }}</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+		<div class='table-responsive'>
+			<table class='table table-bordered table-striped'>
+				<tbody>
+					<tr>
+						<th class='invisible'>&nbsp;</th>
+						<th class='text-center fixed-width-50 title'>
+							<img src='/img/stats/{{ $stat }}.png' class='stat-icon'>
+							{{ $stat }} Bonus
+						</th>
+					</tr>
+					@foreach($materia_list[$stat] as $materia)
+					<tr>
+						<th class='text-right'><a href='http://xivdb.com/{{ $materia['href'] }}' target='_blank'>{{ $materia['name'] }}</a></th>
+						<td class='text-center'>+{{ $materia['amount'] }}</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
 		@endforeach
 	</div>
 	@endforeach

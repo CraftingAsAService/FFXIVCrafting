@@ -1,7 +1,12 @@
 @extends('layout')
 
+@section('vendor-css')
+	<link href='/css/bootstrap-multiselect.css' rel='stylesheet'>
+@stop
+
 @section('javascript')
 	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
 	<script src='/js/home.js'></script>
 	<script src='/js/leves.js'></script>
 @stop
@@ -10,87 +15,95 @@
 
 <h1>Leve Information</h1>
 
-<div class='panel'>
+<div class='panel panel-default'>
+	<div class='panel-heading'>
+		Leve Filter
+	</div>
 	<div class='panel-body'>
-		<div class="btn-toolbar">
-			<div class='btn-group' data-toggle='buttons'>
-				@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-				<label class='btn btn-primary class-selector' data-job='{{ $job }}'>
-					<input type='radio' name='class' value='{{ $job }}'>
-					<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
-				</label>
-				@endforeach
+		<form class='leve-form form form-inline'>
+			<div class='row'>
+				<div class='col-sm-12'>
+					<button type='button' role='button' class='filter-form btn btn-success pull-right'>
+						Filter &raquo;
+					</button>
+
+					<small class='pull-right margin-right margin-top'><a href='#' class='toggle-advanced'>Advanced &raquo;</a></small>
+
+					<div class='form-group'>
+						<label>Class</label>
+						<select class='multiselect hidden' multiple='multiple' id='class-selector'>
+							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+							<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+							@endforeach
+						</select>
+					</div>
+
+					<div class='form-group margin-left'>
+						<label>Min Level</label>
+						<input type='number' min='0' max='45' step='5' value='1' class='form-control text-center' id='min-level'>
+					</div>
+
+					<div class='form-group margin-left'>
+						<label>Max Level</label>
+						<input type='number' min='0' max='45' step='5' value='45' class='form-control text-center' id='max-level'>
+					</div>
+
+					<div class='form-group margin-left'>
+						<label>Type</label>
+						<select class='multiselect hidden' multiple='multiple' id='type-selector'>
+							@foreach(array('Town', 'Field', 'Courier', 'Unknown') as $role)
+							<option value='{{ $role }}' selected='selected'>{{ $role }}</option>
+							@endforeach
+						</select>
+					</div>
+
+					<div class='form-group margin-left'>
+						<div class='checkbox'>
+							<label>
+								<input type='checkbox' id='triple_only'> Triples Only
+							</label>
+						</div>
+					</div>
+				</div>
 			</div>
-			{{--
-			<div class='btn-group' data-toggle='buttons'>
-				@foreach(array('MIN','BTN','FSH') as $job)
-				<label class='btn btn-info class-selector' data-job='{{ $job }}'>
-					<input type='radio' name='class' value='{{ $job }}'> 
-					<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
-				</label>
-				@endforeach
+			<div class='row advanced{{ Input::get('name') ? '' : ' hidden' }} margin-top'>
+				<div class='col-sm-12 margin-top'>
+					<div class='form-group margin-left'>
+						<input type='text' id='leve_item' placeholder='Item Name Search' class='form-control leve-text-search'>
+					</div>
+					<div class='form-group margin-left'>
+						<input type='text' id='leve_name' placeholder='Leve Name Search' class='form-control leve-text-search' value='{{ Input::get('name') }}'>
+					</div>
+					<div class='form-group margin-left'>
+						<input type='text' id='leve_location' placeholder='Location Name Search' class='form-control leve-text-search'>
+					</div>
+				</div>
 			</div>
-			--}}
-		</div>
+		</form>
 	</div>
 </div>
 
-@foreach($leves as $job => $leve_list)
-<table id='{{ $job }}' class='leve-table table table-bordered table-striped'>
-	<thead>
-		<tr>
-			<th>
-				<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
-				{{ $job_list[$job] }} - {{ end($leve_list)->major->name }}
-			</th>
-			<th class='text-center'>Amount</th>
-			<th class='text-center'>Type</th>
-			<th class='text-center'>Leve Name</th>
-			<th class='text-center'>XP<br>Reward</th>
-			<th class='text-center'>Gil<br>Reward</th>
-			<th class='text-center'>Location</th>
-			<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
-				<i class='glyphicon glyphicon-shopping-cart'></i>
-				<i class='glyphicon glyphicon-plus'></i>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach($leve_list as $leve)
-		<tr>
-			<td>
-				<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
-				@if($leve->triple)
-				<img src='/img/HQ.png' class='pull-right' rel='tooltip' title='Triple Turnin' style='clear: right;' width='16' height='16'>
-				@endif
-				<a href='http://xivdb.com/{{ $leve->item->href }}' class='item-name' target='_blank'>
-					<img src='/img/items/{{ $leve->item->icon ?: '../noitemicon.png' }}' style='margin-right: 10px;'>{{ $leve->item->name }}
-				</a>
-			</td>
-			<td class='text-center'>{{ $leve->amount }}</td>
-			<td class='text-center'>{{ $leve->type }}</td>
-			<td class='text-center'>{{ $leve->name }}</td>
-			<td class='text-center'>{{ number_format($leve->xp) }} XP</td>
-			<td class='text-center'>
-				<img src='/img/coin.png' class='stat-vendors' width='24' height='24'>
-				{{ number_format($leve->gil) }}
-			</td>
-			<td class='text-center'>
-				<div>{{ ! empty($leve->minor) ? $leve->minor->name : '' }}</div>
-				<div>{{ ! empty($leve->location) ? $leve->location->name : '' }}</div>
-			</td>
-			<td class='text-center valign'>
-				<button class='btn btn-default add-to-list' data-item-id='{{ $leve->item->id }}' data-item-name='{{{ $leve->item->name }}}' data-item-quantity='{{{ $leve->amount }}}'>
+<div class='table-responsive'>
+	<table class='leve-table table table-bordered table-striped'>
+		<thead>
+			<tr>
+				<th class='invisible'>&nbsp;</th>
+				<th class='valign'>
+					Item, Level and Amount
+				</th>
+				<th class='text-center valign'>Leve Name and Type</th>
+				<th class='text-center'>XP</th>
+				<th class='text-center'>Gil</th>
+				<th class='text-center valign'>Location</th>
+				<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
 					<i class='glyphicon glyphicon-shopping-cart'></i>
 					<i class='glyphicon glyphicon-plus'></i>
-				</button>
-			</td>
-		</tr>
-		@endforeach
-	</tbody>
-</table>
-
-@endforeach
+				</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
 
 <div class='well'>
 	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BluGartr user Seravi Edalborez</a>.  Thanks!

@@ -4,6 +4,7 @@ var equipment = {
 		level: level,
 		craftable_only: craftable_only,
 		level_range: 3,
+		viewport_differential: 0, // Change level range based on viewport
 		boring_stats: false
 	},
 	init:function() {
@@ -11,10 +12,18 @@ var equipment = {
 			return this.prop("style")[$.camelCase(prop)];
 		};
 
-		this.table_events();
-		this.page_events();
+		// Tweak for mobile might happen
+		$(document).on('viewportchanged', equipment.viewport_changed);
+		equipment.viewport_changed();
 
+		equipment.table_events();
+		equipment.page_events();
+		
 		equipment_tour.init();
+	},
+	viewport_changed:function() {
+		// Reaffirm slim mode
+		equipment.slim($('#toggle-slim').bootstrapSwitch('status'));
 	},
 	cell_events:function() {
 		equipment.mark_upgrades();
@@ -53,6 +62,8 @@ var equipment = {
 
 			currentEl.html(current);
 
+			equipment.mark_cannot_equips();
+
 			// Fire off the stat summary
 			equipment.stat_summary(td);
 
@@ -61,9 +72,9 @@ var equipment = {
 			equipment.same_cell_heights();
 		});
 
-		$('#gear tbody td:visible').on('mouseenter', this.compare);
+		$('#gear tbody td:visible').on('mouseenter', equipment.compare);
 
-		$('#gear tbody td:visible').on('mouseleave', this.uncompare);
+		$('#gear tbody td:visible').on('mouseleave', equipment.uncompare);
 
 		$('[rel=tooltip]').tooltip();
 
@@ -128,7 +139,6 @@ var equipment = {
 
 			equipment.options.level = lvl;
 
-
 			if ($('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length > 0)
 			{
 				equipment.column_display();
@@ -150,6 +160,8 @@ var equipment = {
 		$('#gear')[(no ? 'add' : 'remove') + 'Class']('slim');
 		$('td:visible .slot-wrap').css('height', 'inherit');
 		equipment.options.level_range = no ? 4 : 3;
+		// Change the differential
+		equipment.options.viewport_differential = viewport.current == 'mobile' ? 3 - (no ? 0 : 1) : 0;
 		equipment.column_display();
 		equipment.same_cell_heights();
 	},
@@ -188,9 +200,37 @@ var equipment = {
 
 			td[(ilvl == pilvl ? 'remove' : 'add') + 'Class']('upgrade');
 		});
+
+		equipment.mark_cannot_equips();
+	},
+	mark_cannot_equips:function() {
+		// Clear any previous equips
+		$('#gear tbody td.cannot-equip').removeClass('cannot-equip');
+		$('.why-cannot-equip').remove();
+
+		// Go through each cannot equip item, mark other cells as cannot_equip
+		$('#gear tbody td:visible .item.active:not([data-cannot-equip=""])').each(function() {
+			var itemEl = $(this);
+			var cannot_equip = itemEl.data('cannotEquip').split(',');
+			var name = $('.name-box a', itemEl).html();
+
+			var td = itemEl.closest('td');
+			var level = td.data('level');
+
+			for(var i = 0; i < cannot_equip.length; i++)
+			{
+				var el = $('.slot-' + cannot_equip[i].capitalize() + '[data-level=' + level + ']');
+				el.append('<div class="why-cannot-equip">' + name + '<br>Cannot equip gear to ' + cannot_equip[i].capitalize() + '</div>')
+				el.addClass('cannot-equip');
+			}
+
+			equipment.stat_summary(td);
+		});
 	},
 	load_column:function(level, verb) {
 		if (typeof(verb) == 'undefined') verb = '';
+
+		if (viewport.current == 'mobile') verb = 'Pre';
 		
 		if (parseInt(level) > 50)
 		{
@@ -208,11 +248,9 @@ var equipment = {
 				'craftable_only': equipment.options.craftable_only
 			},
 			beforeSend:function() {
-				noty({
-					text: verb + 'Loading Level ' + level,
+				global.noty({
 					type: 'warning',
-					layout: 'bottomRight',
-					timeout: 2500
+					text: verb + 'Loading Level ' + level
 				});
 			},
 			success:function(json) {
@@ -258,7 +296,9 @@ var equipment = {
 		$('#gear td[data-level]').addClass('hidden');
 		$('#gear th[data-level]').addClass('hidden');
 
-		for (var i = start; i < equipment.options.level + equipment.options.level_range; i++)
+		console.log(equipment.options.level, equipment.options.level_range, equipment.options.viewport_differential);
+
+		for (var i = start; i < equipment.options.level + equipment.options.level_range - equipment.options.viewport_differential; i++)
 		{
 			$('#gear td[data-level=' + i + ']').removeClass('hidden');
 			$('#gear th[data-level=' + i + ']').removeClass('hidden');
@@ -313,7 +353,7 @@ var equipment = {
 		var record = [],
 			hidden = [];
 
-		$('#gear tbody tr td[data-level=' + level + ']').each(function() {
+		$('#gear tbody tr td[data-level=' + level + ']:not("cannot-equip")').each(function() {
 			$(this).find('.item.active .stat').each(function() {
 				var statEl = $(this);
 				var stat_data = statEl.data();
@@ -470,7 +510,7 @@ var equipment_tour = {
 	}
 }
 
-$(equipment.init());
+$(equipment.init);
 
 function unique(array){
     return $.grep(array,function(el,index){

@@ -53,6 +53,7 @@ class DatabaseStructure extends Migration {
 			$table->smallInteger('vendors');
 			$table->smallInteger('gil');
 			$table->smallInteger('ilvl');
+			$table->string('cannot_equip', 30);
 		});
 		
 		Schema::create('item_job', function($table)
@@ -147,6 +148,15 @@ class DatabaseStructure extends Migration {
 			$table->integer('major_location_id');
 			$table->integer('minor_location_id');
 			$table->integer('location_id');
+		});
+
+		Schema::create('experience', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->smallInteger('level');
+			$table->integer('experience');
 		});
 
 	}

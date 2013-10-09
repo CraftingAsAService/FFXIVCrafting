@@ -31,6 +31,11 @@ class Item extends Eloquent
 		return $this->hasMany('QuestItem');
 	}
 
+	public function leve()
+	{
+		return $this->hasMany('Leve');
+	}
+
 	public function locations()
 	{
 		return $this->belongsToMany('Location')->withPivot('level')->orderBy('level');
@@ -55,7 +60,7 @@ class Item extends Eloquent
 		foreach (Slot::where('type', 'equipment')->get() as $slot)
 		{
 			$query = DB::table('items AS i')
-				->select('i.id', 'i.name', 'i.href', 'i.vendors', 'i.gil', 'i.level', 'i.ilvl', 'i.icon', DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'))
+				->select('i.id', 'i.name', 'i.href', 'i.vendors', 'i.gil', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'))
 				->join('item_job AS ij', 'ij.item_id', '=', 'i.id')
 				->join('jobs AS j', 'j.id', '=', 'ij.job_id')
 				->leftJoin('recipes AS r', 'i.id', '=', 'r.item_id')

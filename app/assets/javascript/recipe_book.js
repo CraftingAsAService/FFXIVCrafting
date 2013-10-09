@@ -56,15 +56,13 @@ var recipe_book = {
 		
 		$('#name-search').removeClass('has-error');
 
-		if (val.length < 4 && val.length > 0)
+		if (val.length < 3 && val.length > 0)
 		{
 			$('#name-search').addClass('has-error');
 
-			noty({
-				text: 'Minimum 4 letter search limit',
+			global.noty({
 				type: 'error',
-				layout: 'bottomRight',
-				timeout: 2500
+				text: 'Minimum 3 letter search limit'
 			});
 
 			return false;
@@ -95,11 +93,9 @@ var recipe_book = {
 			beforeSend:function() {
 				recipe_book.disable();
 
-				noty({
-					text: 'Searching Recipe Book',
+				global.noty({
 					type: 'information',
-					layout: 'bottomRight',
-					timeout: 2500
+					text: 'Searching Recipe Book'
 				});
 			},
 			success:function(json) {

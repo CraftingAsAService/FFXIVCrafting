@@ -8,16 +8,49 @@ var gathering = {
 
 		$('#hide_shards').change(function() {
 			$('.shard')[($(this).is(':checked') ? 'add' : 'remove') + 'Class']('hidden');
+			$('.shard')[($(this).is(':checked') ? 'add' : 'remove') + 'Class']('shard-hidden');
 			$('.and_more').popover('destroy');
 			$('.and_more').popover();
 			while($('#footer + .popover').length > 0)
 				$('#footer + .popover').remove();
-			
+		});
+
+		$('#hide_quests').change(function() {
+			var hide_quests = $(this).is(':checked');
+
+			$('.quest').each(function() {
+				var neededEl = $('.amount_needed', $(this));
+				var imgEl = $('img', neededEl);
+
+				// If it's already level-hidden
+				if (imgEl.hasClass('level-hidden'))
+					imgEl[(hide_quests ? 'add' : 'remove') + 'Class']('quest-hidden');
+				else
+				{
+					// It's not level hidden
+					if (hide_quests == true)
+					{
+						neededEl
+							.data('originalAdditional', neededEl.data('additional'))
+							.data('additional', 0);
+
+						imgEl.addClass('hidden').addClass('quest-hidden');
+					}
+					else
+					{
+						neededEl.data('additional', neededEl.data('originalAdditional'));
+						imgEl.removeClass('quest-hidden').removeClass('hidden');
+					}
+				}
+			});
+
+			// Hiding or showing needs some tally love
+			gathering.retally();
 		});
 
 		$('.and_more').popover();
 
-		gathering_tour.init();
+		//gathering_tour.init();
 	},
 	collapse_row:function() {
 		var btn = $(this);
@@ -41,6 +74,18 @@ var gathering = {
 
 			tfoot.append(tr);
 		});
+
+		var level = el.data('level');
+
+		for (var i = level; i <= level + 4; i++)
+		{
+			$('td.amount_needed[data-level="' + i + '"]').each(function() {
+				$(this)
+					.data('originalAdditional', $(this).data('additional'))
+					.data('additional', 0);
+				$(this).find('img').addClass('hidden').addClass('level-hidden');
+			});
+		}
 	},
 	show_levels:function(el) {
 		// Target tr's in the tfoot, as those are invisible
@@ -64,6 +109,19 @@ var gathering = {
 			if (placed == false)
 				tbody.prepend(tr);
 		});
+
+		var level = el.data('level');
+
+		for (var i = level; i <= level + 4; i++)
+		{
+			$('td.amount_needed[data-level="' + i + '"]').each(function() {
+				$(this).data('additional', $(this).data('originalAdditional'));
+				var img = $(this).find('img');
+				img.removeClass('level-hidden');
+				if ( ! img.hasClass('quest-hidden'))
+					img.removeClass('hidden');
+			});
+		}
 	},
 	toggle_classes:function() {
 		var el = $(this);
@@ -89,6 +147,18 @@ var gathering = {
 			tally += parseInt(amountEl.data('additional'));
 
 			amountEl.find('span').html(tally.formatMoney(0, ',', ''));
+
+			if (tally == 0)
+			{
+				prow.addClass('hidden').addClass('zero-hidden');
+			}
+			else
+			{
+				if ( ! prow.hasClass('shard-hidden') && prow.hasClass('zero-hidden'))
+					prow.removeClass('hidden');
+
+				prow.removeClass('zero-hidden');
+			}
 
 			var costEl = prow.find('.total_cost');
 

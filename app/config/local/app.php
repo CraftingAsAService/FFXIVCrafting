@@ -91,6 +91,8 @@ return array(
 		// Profiler
 		'Profiler\ProfilerServiceProvider',
 
+		'Wardrobe\Core\WardrobeServiceProvider',
+
 	),
 
 	/*
@@ -144,8 +146,15 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
 		// Profiler
+<<<<<<< HEAD
 		'Profiler' => 'Profiler\Facades\Profiler'
 
+=======
+		'Profiler' => 'Profiler\Facades\Profiler',
+
+		'Wardrobe' => 'Wardrobe\Core\Facades\WardrobeFacade',
+		
+>>>>>>> master
 	),
 
 );

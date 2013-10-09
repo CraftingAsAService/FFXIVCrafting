@@ -27,19 +27,61 @@
 					<div class="col-md-4">
 						<a href="/"><img src="/img/theme/logo.png" alt="Crafting as a Service" title="Crafting as a Service" /></a>
 					</div>
+<<<<<<< HEAD
 					<div class="col-md-8 menu">
 						<ul>
+=======
+					<div class='collapse navbar-collapse'>
+						<ul class='nav navbar-nav navbar-right'>
+							<li{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}><a href='/list'><i class='glyphicon glyphicon-shopping-cart'></i> Crafting List</a></li>
+						</ul>
+						<ul class='nav navbar-nav hidden-sm'>
+>>>>>>> master
 							<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
 							<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
 							<li{{ isset($active) && $active == 'gathering' ? ' class="active"' : '' }}><a href='/gathering'>Gathering</a></li>
 							<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
 							<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
+<<<<<<< HEAD
 							<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
 							<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
 							<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
+=======
+							<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
 						</ul>
-						<ul class='nav navbar-nav navbar-right'>
-							<li{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}><a href='/list'><i class='glyphicon glyphicon-shopping-cart'></i> Crafting List</a></li>
+						<ul class='nav navbar-nav visible-sm'>
+							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
+								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Tools <b class='caret'></b></a>
+								<ul class='dropdown-menu'>
+									<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
+									<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
+									<li{{ isset($active) && $active == 'gathering' ? ' class="active"' : '' }}><a href='/gathering'>Gathering</a></li>
+								</ul>
+							</li>
+							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
+								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Info <b class='caret'></b></a>
+								<ul class='dropdown-menu'>
+									<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
+									<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
+									<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
+								</ul>
+							</li>
+						</ul>
+						<ul class='nav navbar-nav hidden-xs'>
+							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
+								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
+								<ul class='dropdown-menu'>
+									<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
+									<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
+									<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
+								</ul>
+							</li>
+>>>>>>> master
+						</ul>
+						<ul class='nav navbar-nav visible-xs'>
+							<li class='{{ isset($active) && $active == 'stats' ? ' active' : '' }}'><a href='/stats'>Stats</a></li>
+							<li class='{{ isset($active) && $active == 'materia' ? ' active' : '' }}'><a href='/materia'>Materia</a></li>
+							<li class='{{ isset($active) && $active == 'food' ? ' active' : '' }}'><a href='/food'>Food</a></li>
 						</ul>
 					</div>
 				</div>
@@ -112,6 +154,59 @@
 							</div>
 						</div>
 
+<<<<<<< HEAD
+=======
+		<div id='footer'>
+			<div class='container'>
+				<div class='row top text-center'>
+					<?php
+						$choices = array(
+							"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
+							"Keep the site ad free, <a href='#buymeabeer' id='buymeabeer'>The best AdBlock is Donating!</a>",
+							"Show my wife it's not just a hobby, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+							"Stable servers aren't free, <a href='#buymeabeer' id='buymeabeer'>Support the site!</a>",
+							"I've spent more time building this than playing, <a href='#buymeabeer' id='buymeabeer'>Help me relax!</a>",
+							"At least you know I'm not a Nigerian Prince, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+							#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
+						);
+					?>
+					<p class='text-muted credit'>
+						{{ $choices[array_rand($choices)] }}
+					</p>
+					<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
+						<input type='hidden' name='cmd' value='_s-xclick'>
+						<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
+						<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
+						<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
+					</form>
+				</div>
+				<div class='row bottom'>
+					<div class='col-sm-4'>
+						<h4>Contact</h4>
+						<p class='text-muted credit'>
+							<a href='mailto:tickthokk@gmail.com'>Email</a>
+						</p>
+						<p class='text-muted credit'>
+							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
+						</p>
+					</div>
+					<div class='col-sm-4'>
+						<h4>More Info</h4>
+						<p class='text-muted credit'>
+							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
+						</p>
+					</div>
+					<div class='col-sm-4'>
+						<h4>Other Cool Sites</h4>
+						<p class='text-muted credit'>
+							<a href='http://ffxivclock.com/' target='_blank' rel='tooltip' title='Opens in new window'>
+								FFXIV Clock<span class='glyphicon glyphicon-new-window' style='margin-left: 5px;'></span>
+							</a> 
+						</p>
+						<p class='text-muted credit'>
+							<a href='/credits'>Source Credits &amp; Resources</a> 
+						</p>
+>>>>>>> master
 					</div>
 				</div>
 			</div>
@@ -126,8 +221,10 @@
 		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
 
 		<script src='/js/noty.js' type='text/javascript'></script>
-		<script src='/js/noty-bottomRight.js' type='text/javascript'></script>
+		<script src='/js/noty-bottomCenter.js' type='text/javascript'></script>
 		<script src='/js/noty-theme.js' type='text/javascript'></script>
+
+		<script src='/js/viewport.js' type='text/javascript'></script>
 
 		<script src='/js/global.js' type='text/javascript'></script>
 

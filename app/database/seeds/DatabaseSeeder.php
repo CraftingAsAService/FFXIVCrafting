@@ -10,17 +10,26 @@ class DatabaseSeeder extends Seeder
 		// Don't bother logging queries
 		DB::connection()->disableQueryLog();
 
+		echo '** Stat Table **' . "\n";
 		$this->call('StatTableSeeder');
 
+		echo '** Jobs Table **' . "\n";
 		$this->call('JobTableSeeder');
 
+		echo '** Slot Table **' . "\n";
 		$this->call('SlotTableSeeder');
 
+		echo '** Data Table **' . "\n";
 		$this->call('DataTablesSeeder');
 
+		echo '** Quests Table **' . "\n";
 		$this->call('QuestSeeder');
 
+		echo '** Leve Table **' . "\n";
 		$this->call('LeveSeeder');
+
+		echo '** XP Table **' . "\n";
+		$this->call('XPSeeder');
 
 		echo "\n";
 	}
@@ -320,7 +329,8 @@ class DataTablesSeeder extends Seeder
 				'vendors' => $object->vendors ?: 0,
 				'gil' => $object->gil ?: 0,
 				'slot_id' => $this->slots[$object->slot],
-				'ilvl' => $object->ilvl ?: 0
+				'ilvl' => $object->ilvl ?: 0,
+				'cannot_equip' => isset($object->cannot_equip) ? implode(',', $object->cannot_equip) : NULL
 			);
 
 			// Item Classes
@@ -656,6 +666,23 @@ class LeveSeeder extends Seeder
 
 		// Return a blank array on purpose, to represent an empty $data
 		return array();
+	}
+
+}
+
+class XPSeeder extends Seeder
+{
+
+	public function run() 
+	{
+		// Insert experience records
+		$xp_list = json_decode(file_get_contents(storage_path() . '/raw-data/experience.json'));
+
+		foreach ($xp_list as $xp_data)
+			DB::table('experience')->insert(array(
+				'level' => $xp_data->level,
+				'experience' => $xp_data->experience
+			));
 	}
 
 }

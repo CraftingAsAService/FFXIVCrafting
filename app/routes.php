@@ -47,3 +47,8 @@ Route::get('credits', function()
 	View::share('active', 'credits');
 	return View::make('credits');
 });
+
+Route::get('about', function()
+{
+	return Redirect::to('/blog/about');
+});
