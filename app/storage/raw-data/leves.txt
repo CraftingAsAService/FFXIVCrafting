@@ -40,7 +40,7 @@ Limsa Lominsa	Blacksmith	35	Seemed Like the Thing to Get	23940	557	Field	Observa
 Limsa Lominsa	Blacksmith	35	Colder than Steel	20517	346	Field	Observatorium	Coerthas	1	Steel Round Knife	
 Limsa Lominsa	Blacksmith	40	File That under Whatever	32049	625	Town			3	Mythril File	triple
 Limsa Lominsa	Blacksmith	40	A Mixed Message	27887	418	Town			1	Mythril Pliers	
-Limsa Lominsa	Blacksmith	40	A Weighty Question	40661	483	Courier	Whitebrim	Coerthas	1	Mythril Sledgehammer	
+Limsa Lominsa	Blacksmith	40	A Weighty Question	40661	507	Courier	Whitebrim	Coerthas	1	Mythril Sledgehammer	
 Limsa Lominsa	Blacksmith	40	Streamlining Operations	32049	661	Field	Whitebrim	Coerthas	3	Mythril Claw Hammer	triple
 Limsa Lominsa	Blacksmith	40	Get Me to the War on Time	28267	420	Field	Whitebrim	Coerthas	1	Cobalt Doming Hammer	
 Limsa Lominsa	Blacksmith	45	I Maul Right	39087	650	Field	Saint Coinach's Find	Mor Dhona	3	Cobalt Sledgehammer	triple
