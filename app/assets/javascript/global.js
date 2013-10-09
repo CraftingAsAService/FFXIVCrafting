@@ -18,17 +18,9 @@ var global = {
 				type: 'post',
 				data: { 'item-id' : id },
 				beforeSend:function() {
-<<<<<<< HEAD
-					noty({
-						text: 'Adding ' + name + ' to your list',
-						type: 'success',
-						layout: 'bottomRight',
-						timeout: 2500
-=======
 					global.noty({
-						type: 'success', 
+						type: 'success',
 						text: 'Adding ' + (qty > 1 ? (qty + ' x ') : '') + name + ' to your list'
->>>>>>> master
 					});
 				}
 			});
@@ -59,7 +51,7 @@ $(function() {
 	$.fn.popover.Constructor.prototype.show = function() {
 		// Get original template
 		var template = $('<div>').html('<div class="popover tour-tour">          <div class="arrow"></div>          <h3 class="popover-title"></h3>          <div class="popover-content"></div>          <nav class="popover-navigation">            <div class="btn-group">              <button class="btn btn-sm btn-default disabled" data-role="prev">« Prev</button>              <button class="btn btn-sm btn-default" data-role="next">Next »</button>            </div>            <button class="btn btn-sm btn-default" data-role="end">End tour</button>          </nav>        </div>');
-		
+
 		// Add Moogle
 		template.find('h3').before('<img src="/img/tour_moogle.png" class="tour_moogle">');
 

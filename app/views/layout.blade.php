@@ -27,26 +27,18 @@
 					<div class="col-md-4">
 						<a href="/"><img src="/img/theme/logo.png" alt="Crafting as a Service" title="Crafting as a Service" /></a>
 					</div>
-<<<<<<< HEAD
-					<div class="col-md-8 menu">
-						<ul>
-=======
+
 					<div class='collapse navbar-collapse'>
 						<ul class='nav navbar-nav navbar-right'>
 							<li{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}><a href='/list'><i class='glyphicon glyphicon-shopping-cart'></i> Crafting List</a></li>
 						</ul>
 						<ul class='nav navbar-nav hidden-sm'>
->>>>>>> master
+
 							<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
 							<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
 							<li{{ isset($active) && $active == 'gathering' ? ' class="active"' : '' }}><a href='/gathering'>Gathering</a></li>
 							<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
 							<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
-<<<<<<< HEAD
-							<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
-							<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
-							<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
-=======
 							<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
 						</ul>
 						<ul class='nav navbar-nav visible-sm'>
@@ -76,7 +68,6 @@
 									<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
 								</ul>
 							</li>
->>>>>>> master
 						</ul>
 						<ul class='nav navbar-nav visible-xs'>
 							<li class='{{ isset($active) && $active == 'stats' ? ' active' : '' }}'><a href='/stats'>Stats</a></li>
@@ -94,6 +85,7 @@
 				@yield('content')
 
 			</div>
+
 			<div id="footer">
 				<div class="container">
 					<div class="row">
@@ -153,9 +145,9 @@
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
 
-<<<<<<< HEAD
-=======
 		<div id='footer'>
 			<div class='container'>
 				<div class='row top text-center'>
@@ -193,7 +185,7 @@
 					<div class='col-sm-4'>
 						<h4>More Info</h4>
 						<p class='text-muted credit'>
-							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
+							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a>
 						</p>
 					</div>
 					<div class='col-sm-4'>
@@ -201,12 +193,11 @@
 						<p class='text-muted credit'>
 							<a href='http://ffxivclock.com/' target='_blank' rel='tooltip' title='Opens in new window'>
 								FFXIV Clock<span class='glyphicon glyphicon-new-window' style='margin-left: 5px;'></span>
-							</a> 
+							</a>
 						</p>
 						<p class='text-muted credit'>
-							<a href='/credits'>Source Credits &amp; Resources</a> 
+							<a href='/credits'>Source Credits &amp; Resources</a>
 						</p>
->>>>>>> master
 					</div>
 				</div>
 			</div>
