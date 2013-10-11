@@ -677,3 +677,54 @@ $gear_warning_accent: #a46868;
 		}
 	}
 }
+
+.news {
+
+	.glyphicon-new-window {
+		font-size: .6em;
+		margin-left: 8px;
+		color: #428bca; // Bootstrap primary
+	}
+
+	.post {
+		margin-top: 10px;
+		&:first-child {
+			margin-top: 0px;
+		}
+
+		.name {
+			font-size: 1.4em;
+			.glyphicon-bookmark {
+				color: #468847; // Bootstrap green
+				margin-right: 8px;
+			}
+
+			.glyphicon-new-window {
+				font-size: .6em;
+				color: #428bca; // Bootstrap primary
+				margin-left: 8px;
+			}
+		}
+
+		.when_who,
+		.tags {
+			padding-left: 10px;
+			color: #555;
+			font-size: .9em;
+		}
+
+		.when_who {
+			.when {
+
+			}
+			.who {
+
+			}
+		}
+		.tags {
+			.tag {
+				margin-right: 10px;
+			}
+		}
+	}
+}

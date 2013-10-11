@@ -289,21 +289,4 @@
 	</div>
 </div>
 
-{{--
-<div class='well'>
-	<p>
-		<strong>Crafting as a Service</strong> couldn't have done it without these resources.  Please support them!
-	</p>
-	<p>
-		<small><em>
-			<a href='http://xivdb.com/' target='_blank'>XIVDB</a> for their tooltips, data and icons.
-			<a href='http://www.daevaofwar.net/index.php?/topic/628-all-crafting-turn-ins-to-50/' target='_blank'>These</a>
-			<a href='http://www.daevaofwar.net/index.php?/topic/629-all-gathering-turn-ins-to-50/' target='_blank'>Posts</a>
-			for some quest knowledge.
-			And of course <a href='http://www.finalfantasyxiv.com/' target='_blank'>Square Enix</a>.
-		</em></small>
-	</p>
-</div>
---}}
-
 @stop
