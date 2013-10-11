@@ -300,10 +300,13 @@ class CraftingController extends BaseController
 						'item' => $reagent,
 					);
 
-				// if ($reagent->name == 'Ash Lumber')
+				// if ($reagent->name == 'Bronze Pickaxe')
 				// {
-				// 	var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
-				// 	echo '<hr>';
+				// 	//var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
+				// 	var_dump($reagent->recipes[0]->job->abbreviation);
+				// 	var_dump($reagent->recipes[0]->job->disciple);
+				// 	var_dump($reagent->jobs);
+				// 	exit;
 				// }
 
 				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields);
@@ -312,18 +315,27 @@ class CraftingController extends BaseController
 				{
 					if (isset($reagent->jobs[0]))
 					{
-						// Prevent non DOH/DOL jobs from showing up
-						for ($i = count($reagent->jobs) - 1; $i >= 0; $i--)
+						// Maybe it's a recipe though [See Issue #84 for why this exists]
+						if (isset($reagent->recipes[0]) && $reagent->recipes[0]->job->disciple == 'DOH')
 						{
-							$job = $reagent->jobs[$i];
-							if ( ! in_array($job->disciple, array('DOH', 'DOL'))) 
-								continue;
-
-							$reagent_list[$reagent->id]['self_sufficient'] = $job->abbreviation;
+							$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
+							// Don't continue, we still want the materials to register
 						}
+						else
+						{
+							// Prevent non DOH/DOL jobs from showing up, look in reverse order
+							for ($i = count($reagent->jobs) - 1; $i >= 0; $i--)
+							{
+								$job = $reagent->jobs[$i];
+								if ( ! in_array($job->disciple, array('DOH', 'DOL'))) 
+									continue;
 
-						if ($reagent_list[$reagent->id]['self_sufficient'])
-							continue;
+								$reagent_list[$reagent->id]['self_sufficient'] = $job->abbreviation;
+							}
+
+							if ($reagent_list[$reagent->id]['self_sufficient'])
+								continue;
+						}
 					}
 
 					if(isset($reagent->recipes[0]))

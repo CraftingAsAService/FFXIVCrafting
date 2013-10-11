@@ -47,6 +47,5 @@ Route::get('credits', function()
 
 Route::get('about', function()
 {
-	View::share('active', 'about');
-	return View::make('about');
+	return Redirect::to('/blog/about');
 });

@@ -28,23 +28,48 @@
 </div>
 
 <div class='row'>
-	<div class='col-lg-4'>
+	<div class='col-sm-6 col-sm-push-6 news'>
+
+		<h2>News<a href='/blog' target='_blank'><span class='glyphicon glyphicon-new-window'></span></a></h2>
+
+		<?php $wardrobe = new \Wardrobe\Core\Repositories\DbPostRepository(); ?>
+		@foreach($wardrobe->active(5) as $post)
+		<div class='post'>
+			<div class='name'>
+				<a href='/blog/post/{{{ $post->slug }}}' target='_blank'><span class='glyphicon glyphicon-bookmark'></span>{{ $post->title }}<span class='glyphicon glyphicon-new-window'></span></a>
+			</div>
+			<div class='when_who'>
+				Posted on <span class='when'>{{ date("M d, Y", strtotime($post->publish_date)) }}</span> 
+				by <span class='who'>{{ $post->user->first_name }} {{ $post->user->last_name }}</span>
+			</div>
+			<div class='tags'>
+				@foreach(json_decode($post->tags) as $tag)
+				@if($tag->tag)
+				<span class='tag'>
+					<span class='glyphicon glyphicon-tag'></span> {{ $tag->tag }}
+				</span>
+				@endif
+				@endforeach
+			</div>
+		</div>
+		@endforeach
+	</div>
+	<div class='col-sm-6 col-sm-pull-6'>
+
 		<h2>Equipment Calculator</h2>
 		<p>
 			Want to know what equipment you can craft at a certain level for your class?  
 			Use this tool to select your disciple and level range.
 		</p>
 		<a href='/equipment' class='btn btn-primary'>Gear me out &raquo;</a>
-	</div>
-	<div class='col-lg-4'>
+
 		<h2>Crafting Calculator</h2>
 		<p>
 			Want to get everything you need before trying to level Weaver from levels 5 to 10?  
 			Use this tool to select your craft and level range.
 		</p>
 		<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
-	</div>
-	<div class='col-lg-4'>
+
 		<h2>Gathering Calculator</h2>
 		<p>
 			Ever ask yourself when mining "What should I be digging up?".  

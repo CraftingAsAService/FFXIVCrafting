@@ -58,7 +58,7 @@
 		<fieldset>
 			<legend>Options</legend>
 			<div class='form-group'>
-				<label class='col-sm-4 col-md-3 control-label'>Staring Level</label>
+				<label class='col-sm-4 col-md-3 control-label'>Starting Level</label>
 				<div class='col-sm-4 col-md-3'>
 					<input type='number' name='start' value='1' placeholder='Level (e.g. 1)' class='form-control' required='required' min='1' max='100'>
 				</div>

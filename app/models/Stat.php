@@ -73,11 +73,12 @@ class Stat extends Eloquent
 			'GP' => 'DOL',
 			'Perception' => 'DOL',
 
-			// DPS and Tanks
-				
+			// Battle Classes
+
+			'Determination' => 'DOW,DOM',
+			
 			'Accuracy' => 'DPS,RDPS,MDPS',
 			'Critical Hit Rate' => 'DPS,RDPS,MDPS',
-			'Determination' => 'DPS,Tanks',
 
 			'Delay' => 'DPS,RDPS',
 
@@ -107,8 +108,6 @@ class Stat extends Eloquent
 			'Intelligence' => 'Heals,RDPS,ALC,GSM,LTW,BTN',
 
 		);
-		
-		//  'Dexterity' => 'RDPS,Tanks,GSM,WVR,CRP,FSH',
 		
 		$focus = array();
 

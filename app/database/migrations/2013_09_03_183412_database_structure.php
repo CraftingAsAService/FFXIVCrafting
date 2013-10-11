@@ -141,7 +141,7 @@ class DatabaseStructure extends Migration {
 			$table->integer('item_id');
 			$table->smallInteger('level');
 			$table->smallInteger('amount');
-			$table->smallInteger('xp');
+			$table->integer('xp');
 			$table->smallInteger('gil');
 			$table->smallInteger('triple');
 			$table->enum('type', array('Town', 'Courier', 'Field', 'Unknown'));

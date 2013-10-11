@@ -126,9 +126,6 @@
 					<div class='col-sm-4'>
 						<h4>More Info</h4>
 						<p class='text-muted credit'>
-							<a href='/about'>About Me</a> 
-						</p>
-						<p class='text-muted credit'>
 							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
 						</p>
 					</div>
