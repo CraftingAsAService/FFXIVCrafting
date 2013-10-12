@@ -10,22 +10,22 @@ class DatabaseSeeder extends Seeder
 		// Don't bother logging queries
 		DB::connection()->disableQueryLog();
 
-		echo '** Jobs Table **' . "\n";
+		echo "\n" . '** Jobs Table **' . "\n";
 		$this->call('JobTableSeeder');
 
-		echo '** Item Tables **' . "\n";
+		// Call has it's own echos
 		$this->call('ItemTablesSeeder');
 
-		echo '** Recipe Table **' . "\n";
+		echo "\n" . '** Recipe Table **' . "\n";
 		$this->call('RecipeTablesSeeder');
 
-		echo '** Quests Table **' . "\n";
+		echo "\n" . '** Quests Table **' . "\n";
 		$this->call('QuestSeeder');
 
-		echo '** Leve Table **' . "\n";
+		echo "\n" . '** Leve Table **' . "\n";
 		$this->call('LeveSeeder');
 
-		echo '** XP Table **' . "\n";
+		echo "\n" . '** XP Table **' . "\n";
 		$this->call('XPSeeder');
 
 		echo "\n";
@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 class _CommonSeeder extends Seeder
 {
 
-	public $batch_limit = 100;
+	public $batch_limit = 300;
 
 	public
 		$jobs = array(),
@@ -44,7 +44,7 @@ class _CommonSeeder extends Seeder
 
 	public function __construct()
 	{
-		parent::__construct();
+		//parent::__construct();
 
 		foreach (Job::all() as $job)
 			$this->jobs[$job->abbreviation] = $this->job_names[$job->name] = $job->id;
@@ -52,8 +52,14 @@ class _CommonSeeder extends Seeder
 
 	public function _batch_insert($original_data = array(), $table = '')
 	{
-		static $count = 0;
+		$count = 0;
 
+		// $bl = $this->batch_limit;
+
+		// if ($table == 'vendors')
+		// 	$bl = 1;
+
+		// foreach(array_chunk($original_data, $bl) as $data)
 		foreach(array_chunk($original_data, $this->batch_limit) as $data)
 		{
 			$count++;
@@ -159,22 +165,76 @@ class ItemTablesSeeder extends _CommonSeeder
 	
 	public function run()
 	{
+		// Import item files
+		echo "\n" . '* Items *' . "\n";
+		$items = json_decode(file_get_contents(storage_path() . '/seed-data/items.json'), TRUE);
+		
+		$item_job = array();
+		foreach ($items as &$item)
+		{
+			//"requires":["GLA","PLD"]
+			foreach ($item['requires'] as $k => $r)
+				if ($r == 'DOW')
+				{
+					array_push($item['requires'], 'GLA','PGL','MRD','LNC','ARC','MNK','PLD','WAR','DRG','BRD');
+					unset($item['requires'][$k]);
+				}
+				elseif ($r == 'DOM')
+				{
+					array_push($item['requires'], 'CNJ','THM','ACN','SCH','SMN','BLM','WHM');
+					unset($item['requires'][$k]);
+				}
+
+			foreach ($item['requires'] as $r)
+				if ($r)
+					$item_job[] = array(
+						'item_id' => $item['id'],
+						'job_id' => $this->jobs[$r]
+					);
+
+			unset($item['requires']);
+		}
+		
+		$this->_batch_insert($items, 'items');
+		unset($items);
+
+		// Item Jobs
+		echo "\n" . '* Item Job *' . "\n";
+		$this->_batch_insert($item_job, 'item_job');
+		unset($item_job);
+
+		// Vendors
+		echo "\n" . '* Vendors *' . "\n";
+		$vendors = json_decode(file_get_contents(storage_path() . '/seed-data/vendors.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($vendors, 'vendors');
+		unset($vendors);
+
+		// Item Vendor
+		echo "\n" . '* Item Vendor *' . "\n";
+		$item_vendor = json_decode(file_get_contents(storage_path() . '/seed-data/item_vendor.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($item_vendor, 'item_vendor');
+		unset($item_vendor);
+
 		// Stats
+		echo "\n" . '* Stats *' . "\n";
 		$stats = json_decode(file_get_contents(storage_path() . '/seed-data/stats.json'), TRUE); // Decode to Array instead of Object
 		$this->_batch_insert($stats, 'stats');
 		unset($stats);
 
 		// Item Stat
+		echo "\n" . '* Item Stat *' . "\n";
 		$item_stat = json_decode(file_get_contents(storage_path() . '/seed-data/item_stat.json'), TRUE); // Decode to Array instead of Object
 		$this->_batch_insert($item_stat, 'item_stat');
 		unset($item_stat);
 
 		// Locations
+		echo "\n" . '* Locations *' . "\n";
 		$locations = json_decode(file_get_contents(storage_path() . '/seed-data/locations.json'), TRUE); // Decode to Array instead of Object
 		$this->_batch_insert($locations, 'locations');
 		unset($locations);
 
 		// Gathering Nodes
+		echo "\n" . '* Gathering Nodes *' . "\n";
 		$gathering_nodes = json_decode(file_get_contents(storage_path() . '/seed-data/gathering_nodes.json'), TRUE); // Decode to Array instead of Object
 		foreach ($gathering_nodes as &$node)
 		{
@@ -185,39 +245,10 @@ class ItemTablesSeeder extends _CommonSeeder
 		unset($gathering_nodes);
 
 		// Gathering Node Items
+		echo "\n" . '* Gathering Node Item *' . "\n";
 		$gathering_node_item = json_decode(file_get_contents(storage_path() . '/seed-data/gathering_node_item.json'), TRUE); // Decode to Array instead of Object
 		$this->_batch_insert($gathering_node_item, 'gathering_node_item');
 		unset($gathering_node_item);
-
-		// Vendors
-		$vendors = json_decode(file_get_contents(storage_path() . '/seed-data/vendors.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($vendors, 'vendors');
-		unset($vendors);
-
-		// Item Vendor
-		$item_vendor = json_decode(file_get_contents(storage_path() . '/seed-data/item_vendor.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($item_vendor, 'item_vendor');
-		unset($item_vendor);
-
-		// Import item files
-		$items = json_decode(file_get_contents(storage_path() . '/seed-data/items.json')), TRUE);
-		
-		$item_job = array();
-		foreach ($items as &$item)
-		{
-			//"requires":["GLA","PLD"]
-			foreach ($item['requires'] as $r)
-				$item_job[] = array(
-					'item_id' => $item['id'],
-					'job_id' => $this->jobs[$node['class']]
-				);
-
-			unset($item['requires']);
-			unset($item['is_gm']);
-		}
-		
-		$this->_batch_insert($items, 'items');
-		unset($items);
 	}
 
 }
@@ -257,7 +288,7 @@ class QuestSeeder extends _CommonSeeder
 
 		foreach ($quest_items as &$item)
 		{
-			$item['job_id'] = $jobs[$item->job];
+			$item['job_id'] = $this->jobs[$item['job']];
 			unset($item['job']);
 		}
 		

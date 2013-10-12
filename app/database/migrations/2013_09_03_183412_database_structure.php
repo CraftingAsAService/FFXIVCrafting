@@ -11,17 +11,6 @@ class DatabaseStructure extends Migration {
 	 */
 	public function up()
 	{
-		
-		// Schema::create('slots', function($table)
-		// {
-		// 	$table->engine = 'InnoDB';
-
-		// 	$table->increments('id');
-		// 	$table->string('name', 10);
-		// 	$table->smallInteger('rank');
-		// 	$table->enum('type', array('equipment', 'other'));
-		// });
-		
 		Schema::create('jobs', function($table)
 		{
 			$table->engine = 'InnoDB';
@@ -47,8 +36,8 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('name', 50);
 			$table->string('icon', 20);
-			$table->enum('role', array('Main Hand', 'Off Hand', 'Head', 'Body', 'Hands', 'Waist', 'Wrists', 'Ears', 'Feet', 'Right Ring', 'Legs', 'Neck', 'Catalyst', 'Materia', 'Fishing Tackle', 'Meal', 'Medicine', 'Miscellany', 'Other', 'Seafood', 'Soul Crystal', 'Dye', 'Crystal', 'Bone', 'Cloth', 'Ingredient', 'Leather', 'Lumber', 'Metal', 'Part', 'Reagent', 'Stone')
-			$table->string('sub_role', 50);
+			$table->enum('role', array('Main Hand', 'Off Hand', 'Head', 'Body', 'Hands', 'Waist', 'Wrists', 'Ears', 'Feet', 'Right Ring', 'Legs', 'Neck', 'Catalyst', 'Materia', 'Fishing Tackle', 'Meal', 'Medicine', 'Miscellany', 'Other', 'Seafood', 'Soul Crystal', 'Dye', 'Crystal', 'Bone', 'Cloth', 'Ingredient', 'Leather', 'Lumber', 'Metal', 'Part', 'Reagent', 'Stone'));
+			$table->string('sub_role', 35);
 			$table->smallInteger('level');
 			$table->smallInteger('ilvl');
 			$table->smallInteger('stack');
@@ -59,7 +48,7 @@ class DatabaseStructure extends Migration {
 			$table->boolean('untradable');
 			$table->boolean('unique');
 			$table->string('cannot_equip', 30);
-			$table->string('achievement', 30);
+			$table->string('achievement', 50);
 		});
 		
 		Schema::create('item_job', function($table)
@@ -127,17 +116,7 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('name', 50);
 		});
-
-		Schema::create('item_location', function($table)
-		{
-			$table->engine = 'InnoDB';
-
-			$table->increments('id');
-			$table->integer('item_id');
-			$table->integer('location_id');
-			$table->smallInteger('level');
-		});
-
+		
 		Schema::create('leves', function($table)
 		{
 			$table->engine = 'InnoDB';
@@ -193,6 +172,7 @@ class DatabaseStructure extends Migration {
 
 			$table->increments('id');
 			$table->string('name', 50);
+			$table->string('title', 50);
 			$table->integer('location_id');
 			$table->smallInteger('x');
 			$table->smallInteger('y');
