@@ -12,15 +12,15 @@ class DatabaseStructure extends Migration {
 	public function up()
 	{
 		
-		Schema::create('slots', function($table)
-		{
-			$table->engine = 'InnoDB';
+		// Schema::create('slots', function($table)
+		// {
+		// 	$table->engine = 'InnoDB';
 
-			$table->increments('id');
-			$table->string('name', 10);
-			$table->smallInteger('rank');
-			$table->enum('type', array('equipment', 'materia', 'food', 'reagent'));
-		});
+		// 	$table->increments('id');
+		// 	$table->string('name', 10);
+		// 	$table->smallInteger('rank');
+		// 	$table->enum('type', array('equipment', 'other'));
+		// });
 		
 		Schema::create('jobs', function($table)
 		{
@@ -29,7 +29,7 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('abbreviation', 3);
 			$table->string('name', 50);
-			$table->enum('disciple', array('DOH', 'DOL', 'DOW', 'DOM'));
+			$table->enum('disciple', array('DOH', 'DOL', 'DOW', 'DOM', 'ALL'));
 		});
 
 		Schema::create('stats', function($table)
@@ -46,14 +46,20 @@ class DatabaseStructure extends Migration {
 
 			$table->increments('id');
 			$table->string('name', 50);
-			$table->string('href', 255);
 			$table->string('icon', 20);
+			$table->enum('role', array('Main Hand', 'Off Hand', 'Head', 'Body', 'Hands', 'Waist', 'Wrists', 'Ears', 'Feet', 'Right Ring', 'Legs', 'Neck', 'Catalyst', 'Materia', 'Fishing Tackle', 'Meal', 'Medicine', 'Miscellany', 'Other', 'Seafood', 'Soul Crystal', 'Dye', 'Crystal', 'Bone', 'Cloth', 'Ingredient', 'Leather', 'Lumber', 'Metal', 'Part', 'Reagent', 'Stone')
+			$table->string('sub_role', 50);
 			$table->smallInteger('level');
-			$table->integer('slot_id');
-			$table->smallInteger('vendors');
-			$table->smallInteger('gil');
 			$table->smallInteger('ilvl');
+			$table->smallInteger('stack');
+			$table->smallInteger('seals');
+			$table->smallInteger('buy');
+			$table->smallInteger('sell');
+			$table->smallInteger('repair');
+			$table->boolean('untradable');
+			$table->boolean('unique');
 			$table->string('cannot_equip', 30);
+			$table->string('achievement', 30);
 		});
 		
 		Schema::create('item_job', function($table)
@@ -85,6 +91,7 @@ class DatabaseStructure extends Migration {
 			$table->integer('job_id');
 			$table->string('name', 50);
 			$table->string('icon', 20);
+			$table->smallInteger('stars');
 			$table->smallInteger('yields');
 			$table->smallInteger('level');
 			$table->smallInteger('job_level');
@@ -144,7 +151,7 @@ class DatabaseStructure extends Migration {
 			$table->integer('xp');
 			$table->smallInteger('gil');
 			$table->smallInteger('triple');
-			$table->enum('type', array('Town', 'Courier', 'Field', 'Unknown'));
+			$table->enum('type', array('Town', 'Courier', 'Field'));
 			$table->integer('major_location_id');
 			$table->integer('minor_location_id');
 			$table->integer('location_id');
@@ -157,6 +164,47 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->smallInteger('level');
 			$table->integer('experience');
+		});
+
+		Schema::create('gathering_nodes', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('job_id');
+			$table->enum('action', array('Harvesting', 'Logging', 'Mining', 'Quarrying'));
+			$table->smallInteger('level');
+			$table->integer('location_id');
+			$table->smallInteger('location_level');
+		});
+
+		Schema::create('gathering_node_item', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('item_id');
+			$table->integer('gathering_node_id');
+		});
+
+		Schema::create('vendors', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->string('name', 50);
+			$table->integer('location_id');
+			$table->smallInteger('x');
+			$table->smallInteger('y');
+		});
+
+		Schema::create('item_vendor', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('item_id');
+			$table->integer('vendor_id');
 		});
 
 	}
@@ -172,7 +220,7 @@ class DatabaseStructure extends Migration {
 		// Just delete every table
 		foreach (DB::select('SHOW TABLES') as $table)
 		{	
-			$table = (Array) $table;
+			$table = (array) $table;
 			$table = end($table);
 			// Except for migrations
 			if ($table != 'migrations')
