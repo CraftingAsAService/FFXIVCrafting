@@ -68,7 +68,7 @@ var equipment = {
 			equipment.stat_summary(td);
 
 			// 
-			$('#gear td:visible .slot-wrap').css('height', 'inherit');
+			$('#gear td:visible .role-wrap').css('height', 'inherit');
 			equipment.same_cell_heights();
 		});
 
@@ -158,7 +158,7 @@ var equipment = {
 	},
 	slim:function(no) {
 		$('#gear')[(no ? 'add' : 'remove') + 'Class']('slim');
-		$('td:visible .slot-wrap').css('height', 'inherit');
+		$('td:visible .role-wrap').css('height', 'inherit');
 		equipment.options.level_range = no ? 4 : 3;
 		// Change the differential
 		equipment.options.viewport_differential = viewport.current == 'mobile' ? 3 - (no ? 0 : 1) : 0;
@@ -170,7 +170,7 @@ var equipment = {
 			var tr = $(this),
 				h = 0;
 
-			$('td:visible .slot-wrap', tr).each(function() {
+			$('td:visible .role-wrap', tr).each(function() {
 				var sw = $(this);
 				var adjust = 0;
 
@@ -183,7 +183,7 @@ var equipment = {
 					h = swh;
 			});
 
-			$('td:visible .slot-wrap', tr).height(h);
+			$('td:visible .role-wrap', tr).height(h);
 		});
 	},
 	mark_upgrades:function() {
@@ -219,7 +219,7 @@ var equipment = {
 
 			for(var i = 0; i < cannot_equip.length; i++)
 			{
-				var el = $('.slot-' + cannot_equip[i].capitalize() + '[data-level=' + level + ']');
+				var el = $('.role-' + cannot_equip[i].capitalize() + '[data-level=' + level + ']');
 				el.append('<div class="why-cannot-equip">' + name + '<br>Cannot equip gear to ' + cannot_equip[i].capitalize() + '</div>')
 				el.addClass('cannot-equip');
 			}
@@ -254,8 +254,8 @@ var equipment = {
 				});
 			},
 			success:function(json) {
-				$.each(json.slots, function(key, value) {
-					$('#gear .slot-row[data-slot=' + key + ']').append(value);
+				$.each(json.roles, function(key, value) {
+					$('#gear .role-row[data-role="' + key + '"]').append(value);
 				});
 
 				$('#gear thead tr').append(json.head);
@@ -296,7 +296,7 @@ var equipment = {
 		$('#gear td[data-level]').addClass('hidden');
 		$('#gear th[data-level]').addClass('hidden');
 
-		console.log(equipment.options.level, equipment.options.level_range, equipment.options.viewport_differential);
+		//console.log(equipment.options.level, equipment.options.level_range, equipment.options.viewport_differential);
 
 		for (var i = start; i < equipment.options.level + equipment.options.level_range - equipment.options.viewport_differential; i++)
 		{
@@ -409,7 +409,7 @@ var equipment = {
 	all_stats:function() {
 		// equipment.options.boring_stats
 		$('#gear td:visible .stats-box .boring').toggleClass('hidden');
-		$('#gear td:visible .slot-wrap').css('height', 'inherit');
+		$('#gear td:visible .role-wrap').css('height', 'inherit');
 		equipment.same_cell_heights();
 	},
 	page_events:function() {

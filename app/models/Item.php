@@ -6,11 +6,6 @@ class Item extends Eloquent
 	protected $table = 'items';
 	public $timestamps = false;
 
-	public function slot()
-	{
-		return $this->belongsTo('Slot');
-	}
-
 	public function stats()
 	{
 		return $this->belongsToMany('Stat')->withPivot('amount', 'maximum');
@@ -57,16 +52,29 @@ class Item extends Eloquent
 		// Make sure the pieces avoid pieces with certain stats
 		$stats_to_avoid = Stat::avoid($job->abbreviation);
 
-		foreach (Slot::where('type', 'equipment')->get() as $slot)
+		foreach (Config::get('site.equipment_roles') as $role)
 		{
 			$query = DB::table('items AS i')
-				->select('i.id', 'i.name', 'i.href', 'i.vendors', 'i.gil', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'))
+				->select(
+					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 
+					DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'), 
+					DB::raw('COUNT(iv.id) AS vendor_count')
+				)
 				->join('item_job AS ij', 'ij.item_id', '=', 'i.id')
 				->join('jobs AS j', 'j.id', '=', 'ij.job_id')
 				->leftJoin('recipes AS r', 'i.id', '=', 'r.item_id')
 				->leftJoin('jobs AS rj', 'rj.id', '=', 'r.job_id')
-				->where('j.id', $job->id)
-				->where('i.slot_id', $slot->id)
+				->leftJoin('item_vendor AS iv', 'iv.item_id', '=', 'i.id')
+				//->where('j.id', $job->id)
+				->where(function($query) use ($job)
+				{
+					$query->where('j.id', $job->id);
+					
+					// If we're not talking crafting/gathering gear, include ALL
+					if ( ! in_array($job->disciple, array('DOH', 'DOL')))
+						$query->orWhere('j.abbreviation', 'ALL');
+				})
+				->where('i.role', $role)
 				->where('i.level', '<=' , $level)
 				->orderBy('i.level', 'DESC')
 				->orderBy('i.ilvl', 'DESC')
@@ -75,11 +83,11 @@ class Item extends Eloquent
 			if ($craftable_only)
 				$query->havingRaw('crafted_by IS NOT NULL');
 
-			$equipment_list[$slot->name] = $query
+			$equipment_list[$role] = $query
 				->remember(Config::get('site.cache_length'))
 				->get();
 
-			$list =& $equipment_list[$slot->name];
+			$list =& $equipment_list[$role];
 
 			// Load the stats on each one
 			foreach ($list as $key => $item)
@@ -105,14 +113,14 @@ class Item extends Eloquent
 			// Unless it's the very first item
 			// Then get the stats
 			$highest_level = 0;
-			foreach ($equipment_list[$slot->name] as $item)
+			foreach ($equipment_list[$role] as $item)
 				if ($item->level > $highest_level)
 					$highest_level = $item->level;
 
 			$i = 0;
-			foreach ($equipment_list[$slot->name] as $key => $item)
+			foreach ($equipment_list[$role] as $key => $item)
 				if ($i++ != 0 && $item->level != $highest_level)
-					unset($equipment_list[$slot->name][$key]);
+					unset($equipment_list[$role][$key]);
 
 			// Re-key the list
 			$list = array_values($list);

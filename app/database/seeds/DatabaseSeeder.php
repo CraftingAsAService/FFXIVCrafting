@@ -184,7 +184,17 @@ class ItemTablesSeeder extends _CommonSeeder
 					array_push($item['requires'], 'CNJ','THM','ACN','SCH','SMN','BLM','WHM');
 					unset($item['requires'][$k]);
 				}
-
+				elseif ($r == 'DOH')
+				{
+					array_push($item['requires'], 'BSM','GSM','ARM','CRP','LTW','WVR','ALC','CUL');
+					unset($item['requires'][$k]);
+				}
+				elseif ($r == 'DOL')
+				{
+					array_push($item['requires'], 'FSH','BTN','MIN');
+					unset($item['requires'][$k]);
+				}
+			
 			foreach ($item['requires'] as $r)
 				if ($r)
 					$item_job[] = array(
