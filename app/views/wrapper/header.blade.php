@@ -16,6 +16,7 @@
 
 		<link href='/css/global.css' rel='stylesheet' />
 		<link href='/css/theme.css' rel='stylesheet' />
+		<link href='/css/caas-icons.css' rel='stylesheet' />
 
 		@section('css')
 		@show

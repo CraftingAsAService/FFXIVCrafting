@@ -27,6 +27,72 @@
 	<p>Crafting information and planning for FFXIV: ARR</p>
 </div>
 
+<div class="row">
+	<div class="col-md-4">
+		<div class="text-center" style="font-size: 72px">
+			<span class="caas-icon-stack">
+				<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+				<span aria-hidden="true" class="caas-icon-Armor"></span>
+			</span>
+		</div>
+		<!--
+		<span class="caas-icon-stack">
+			<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+			<span aria-hidden="true" class="caas-icon-Crafting"></span>
+		</span>
+		<span class="caas-icon-stack">
+			<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+			<span aria-hidden="true" class="caas-icon-Anvil"></span>
+		</span>
+		<span class="caas-icon-stack">
+			<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+			<span aria-hidden="true" class="caas-icon-Feather"></span>
+		</span>
+		<span class="caas-icon-stack">
+			<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+			<span aria-hidden="true" class="caas-icon-Hammer-Left"></span>
+		</span>
+		<span class="caas-icon-stack">
+			<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+			<span aria-hidden="true" class="caas-icon-Hammer-Right"></span>
+		</span> -->
+		<h2>Equipment Calculator</h2>
+		<p>
+			Want to know what equipment you can craft at a certain level for your class?
+			Use this tool to select your disciple and level range.
+		</p>
+		<a href='/equipment' class='btn btn-primary'>Gear me out &raquo;</a>
+	</div>
+	<div class="col-md-4">
+		<div class="text-center" style="font-size: 72px">
+			<span class="caas-icon-stack">
+				<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+				<span aria-hidden="true" class="caas-icon-Crafting"></span>
+			</span>
+		</div>
+		<h2>Crafting Calculator</h2>
+		<p>
+			Want to get everything you need before trying to level Weaver from levels 5 to 10?
+			Use this tool to select your craft and level range.
+		</p>
+		<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
+	</div>
+	<div class="col-md-4">
+		<div class="text-center" style="font-size: 72px">
+			<span class="caas-icon-stack">
+				<span aria-hidden="true" class="caas-icon-Border caas-icon-stack-base"></span>
+				<span aria-hidden="true" class="caas-icon-Feather"></span>
+			</span>
+		</div>
+		<h2>Gathering Calculator</h2>
+		<p>
+			Ever ask yourself when mining "What should I be digging up?".
+			Find the most efficient use of your pickaxe and hatchet with this tool!
+		</p>
+		<a href='/gathering' class='btn btn-primary'>Gather-rific &raquo;</a>
+	</div>
+</div>
+
 <div class='row'>
 	<div class='col-sm-6 col-sm-push-6 news'>
 
@@ -39,7 +105,7 @@
 				<a href='/blog/post/{{{ $post->slug }}}' target='_blank'><span class='glyphicon glyphicon-bookmark'></span>{{ $post->title }}<span class='glyphicon glyphicon-new-window'></span></a>
 			</div>
 			<div class='when_who'>
-				Posted on <span class='when'>{{ date("M d, Y", strtotime($post->publish_date)) }}</span> 
+				Posted on <span class='when'>{{ date("M d, Y", strtotime($post->publish_date)) }}</span>
 				by <span class='who'>{{ $post->user->first_name }} {{ $post->user->last_name }}</span>
 			</div>
 			<div class='tags'>

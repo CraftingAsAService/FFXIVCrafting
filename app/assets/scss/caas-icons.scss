@@ -1,0 +1,61 @@
+@font-face {
+	font-family: 'Crafting-as-a-Service';
+	src:url('/fonts/Crafting-as-a-Service.eot');
+	src:url('/fonts/Crafting-as-a-Service.svg#Crafting-as-a-Service') format('svg'),
+		url('/fonts/Crafting-as-a-Service.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/Crafting-as-a-Service.woff') format('woff'),
+		url('/fonts/Crafting-as-a-Service.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'Crafting-as-a-Service';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="caas-icon-"] {
+*/
+.caas-icon-Crafting, .caas-icon-Anvil, .caas-icon-Hammer-Left, .caas-icon-Hammer-Right, .caas-icon-Border, .caas-icon-Feather, .caas-icon-Armor {
+	font-family: 'Crafting-as-a-Service';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+.caas-icon-Crafting:before {
+	content: "\e000";
+}
+.caas-icon-Anvil:before {
+	content: "\e001";
+}
+.caas-icon-Hammer-Left:before {
+	content: "\e002";
+}
+.caas-icon-Hammer-Right:before {
+	content: "\e003";
+}
+.caas-icon-Border:before {
+	content: "\e004";
+}
+.caas-icon-Feather:before {
+	content: "\e005";
+}
+.caas-icon-Armor:before {
+	content: "\e006";
+}
