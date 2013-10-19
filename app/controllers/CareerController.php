@@ -54,7 +54,7 @@ class CareerController extends BaseController
 					FROM `item_vendor` AS `iv` 
 					JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
 					LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
-					WHERE `iv`.`item_id` = `I`.`id`
+					WHERE `iv`.`item_id` = `i`.`id`
 				) AS vendors"))
 			->join('items AS i', 'i.id', '=', 'r.item_id')
 			->join('careers AS c', 'c.identifier', '=', 'r.id')
@@ -152,7 +152,7 @@ class CareerController extends BaseController
 					FROM `item_vendor` AS `iv` 
 					JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
 					LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
-					WHERE `iv`.`item_id` = `I`.`id`
+					WHERE `iv`.`item_id` = `i`.`id`
 				) AS vendors"))
 			->join('careers AS c', 'cj.career_id', '=', 'c.id')
 			->join('recipes AS r', 'r.id', '=', 'c.identifier')
