@@ -6,9 +6,7 @@ class EquipmentController extends BaseController
 	public function getIndex()
 	{
 		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
+		$job_list = Job::all()->lists('name', 'abbreviation');
 
 		return View::make('equipment')
 			->with('error', FALSE)
@@ -62,8 +60,8 @@ class EquipmentController extends BaseController
 			return View::make('equipment')
 				->with('error', TRUE);
 
-		// Get all slots
-		$slots = Slot::common();
+		// Get all roles
+		$roles = Config::get('site.equipment_roles');
 
 		// What stats do the class like?
 		$job_focus = Stat::focus($job->abbreviation);
@@ -87,7 +85,7 @@ class EquipmentController extends BaseController
 			View::share('level', $level - 1);
 			
 			$equipment = Item::calculate($job->abbreviation, $level - 1, $craftable_only);
-			$starting_equipment[$level - 1] = $this->getOutput($equipment, $slots);
+			$starting_equipment[$level - 1] = $this->getOutput($equipment, $roles);
 		}
 
 		foreach (range($level, $level + ($slim_mode ? 3 : 2)) as $e_level)
@@ -95,13 +93,13 @@ class EquipmentController extends BaseController
 			View::share('level', $e_level);
 			
 			$equipment = Item::calculate($job->abbreviation, $e_level, $craftable_only);
-			$starting_equipment[$e_level] = $this->getOutput($equipment, $slots);
+			$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
 		}
 
 		return View::make('equipment.list')
 			->with(array(
 				'craftable_only' => $craftable_only,
-				'slots' => $slots,
+				'roles' => $roles,
 				'level' => $level, // Reset view's level variable back to normal
 				'starting_equipment' => $starting_equipment,
 				'slim_mode' => $slim_mode
@@ -130,21 +128,23 @@ class EquipmentController extends BaseController
 		View::share('job_focus', $job_focus);
 		View::share('level', $level);
 
-		$slots = Slot::common();
 		$equipment = Item::calculate($job->abbreviation, $level, $craftable_only);
 
-		$output = $this->getOutput($equipment, $slots);
+		// Get all roles
+		$roles = Config::get('site.equipment_roles');
+
+		$output = $this->getOutput($equipment, $roles);
 
 		exit(json_encode($output));
 	}
 
-	private function getOutput($equipment = array(), $slots = array())
+	private function getOutput($equipment = array(), $roles = array())
 	{
-		$output = array('slots' => array());
-		foreach ($slots as $slot)
-			$output['slots'][$slot->name] = View::make('equipment.cell', array(
-				'items' => $equipment[$slot->name],
-				'slot' => $slot
+		$output = array('roles' => array());
+		foreach ($roles as $role)
+			$output['roles'][$role] = View::make('equipment.cell', array(
+				'items' => $equipment[$role],
+				'role' => $role
 			))->render();
 
 		$output['head'] = View::make('equipment.cell-head')->render();

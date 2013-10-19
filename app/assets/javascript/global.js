@@ -2,10 +2,29 @@ var global = {
 	init:function() {
 		$('[rel=tooltip]').tooltip();
 
+		$('[data-toggle=popover][data-content-id]').each(function() {
+			$(this).data('content', $($(this).data('contentId')).html());
+		})
+
+		$('[data-toggle=popover]').popover();
+
+		$('[data-toggle=popover]').on('show.bs.popover', function() {
+			$('[data-toggle=popover]').popover('hide');
+		});
+
+		$('[data-toggle=popover]').on('shown.bs.popover', function() {
+			$('[rel=tooltip]').tooltip();
+		});
+
 		$('#buymeabeer').click(function(event) {
 			event.preventDefault();
 
 			$('#buymeabeer_button').trigger('click');
+		});
+
+		$(document).click(function(event) {
+			if ($(event.target).closest('.popover').length == 0 && $(event.target).data('toggle') != 'popover')
+				$('[data-toggle=popover]').popover('hide');
 		});
 
 		// Add to "cart"

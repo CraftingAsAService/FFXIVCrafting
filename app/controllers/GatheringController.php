@@ -6,9 +6,7 @@ class GatheringController extends BaseController
 	public function getIndex()
 	{
 		// All Jobs
-		$job_list = array();
-		foreach (Job::whereIn('disciple', array('DOL','DOH'))->get() as $j)
-			$job_list[$j->abbreviation] = $j->name;
+		$job_list = Job::whereIn('disciple', array('DOL','DOH'))->get()->lists('name', 'abbreviation');
 
 		return View::make('gathering')
 			->with('active', 'gathering')
@@ -21,12 +19,8 @@ class GatheringController extends BaseController
 			exit('invalid class'); // TODO REAL ERROR
 		
 		// All Jobs
-		$job_list = $job_ids = array();
-		foreach (Job::whereIn('disciple', array('DOH'))->get() as $j)
-		{
-			$job_ids[$j->abbreviation] = $j->id;
-			$job_list[$j->abbreviation] = $j->name;
-		}
+		$job_list = Job::whereIn('disciple', array('DOH'))->get()->lists('name', 'abbreviation');
+		$job_ids = Job::whereIn('disciple', array('DOH'))->get()->lists('id', 'abbreviation');
 
 		$level_ranges = array();
 		for($i = 1; $i <= 70; $i += 5)
@@ -79,13 +73,13 @@ class GatheringController extends BaseController
 						$recipes = Recipe::with(array(
 								'item', // The recipe's Item
 								'reagents', // The reagents for the recipe
-									'reagents.jobs' => function($query) use ($master_class) {
+									'reagents.nodes.job' => function($query) use ($master_class) {
 										// Only Land Disciples
 										$query->where('abbreviation', $master_class);
 									},
 									'reagents.recipes', 
 										'reagents.recipes.item', 
-											'reagents.recipes.item.locations',
+											'reagents.recipes.item.nodes',
 											'reagents.recipes.item.quest', // Is the item used as a quest turnin?
 										'reagents.recipes.job' => function($query) {
 											// Only Hand Disciples

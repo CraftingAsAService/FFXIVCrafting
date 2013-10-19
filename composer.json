@@ -3,6 +3,7 @@
 	"description": "Crafting utility for FFXIV: ARR",
 	"require": {
 		"laravel/framework": "4.0.*",
+		"intouch/laravel-newrelic": "*",
 		"wardrobe/core": "dev-master"
 	},
 	"require-dev": {
