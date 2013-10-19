@@ -5,7 +5,7 @@
 	</td>
 	<td class='item{{ $leve->triple ? ' triple\' rel="tooltip" title="Triple Leve" data-placement="right" data-container=\'body' : '' }}'>
 		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
-		<a href='http://xivdb.com/?item/{{ $leve->item->id }}' class='item-name' target='_blank'><img src='/img/items/{{ $leve->item->icon ?: '../noitemicon' }}.png' style='margin-right: 10px;'>{{ $leve->item->name }}</a>
+		<a href='http://xivdb.com/?recipe/{{ $leve->item->recipes->first()->id }}' class='item-name' target='_blank'><img src='/img/items/{{ $leve->item->icon ?: '../noitemicon' }}.png' style='margin-right: 10px;'>{{ $leve->item->name }}</a>
 		@if ($leve->amount > 1)
 		<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
 			x {{ $leve->amount }}

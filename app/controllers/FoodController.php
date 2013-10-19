@@ -5,56 +5,60 @@ class FoodController extends BaseController {
 	public function getIndex()
 	{
 		// Items that are Food
-		$results = Slot::with(array('items', 'items.stats' => function($query) {
-				$query->orderBy('item_stat.amount');
-			}))
-			->where('type', 'food')
-			->first();
+		$results = Item::with('stats')
+			->where('role', 'meal')
+			->orderBy('id')
+			->get();
 
-		// Flatten materia list
-		$food_list = array();
-		foreach ($results->items as $item)
-		{
-			$food_list[$item->name] = array(
-				'href' => $item->href,
-				'stats' => array()
-			);
-
-			foreach ($item->stats as $stat)
-			{
-				$food_list[$item->name]['stats'][] = array(
-					'stat' => $stat->name,
-					'amount' => rtrim(rtrim(rtrim($stat->pivot->amount, '0'), '0'), '.'),
-					'max' => $stat->pivot->maximum
-				);
-			}
-		}
-
-		// Group the food into similar buff buckets
-		$food_groups = array(); // Heh
-
-		foreach ($food_list as $name => $attributes)
+		// Group the food up
+		$food_groups = array();
+		foreach($results as $item)
 		{
 			$stats = array();
-			foreach ($attributes['stats'] as $stat)
-				$stats[] = $stat['stat'];
+			foreach ($item->stats as $stat)
+			{
+				if (in_array($stat->name, array('Duration', 'EXP Bonus')))
+					continue;
 
-			sort($stats);
-			$stats = implode(',', $stats);
+				$stats[$stat->name] = array(
+					'amount' => $stat->pivot->amount,
+					'max' => $stat->pivot->maximum,
+					'threshold' => round($stat->pivot->maximum / ($stat->pivot->amount / 100))
+				);
+			}
 
-			if ( ! isset($food_groups[$stats]))
-				$food_groups[$stats] = array();
+			$names = array_keys($stats);
+			sort($names);
 
-			$food_groups[$stats][] = $name;
+			$food_groups[implode('|', $names)][] = array(
+				'id' => $item->id,
+				'icon' => $item->icon,
+				'name' => $item->name,
+				'stats' => $stats
+			);
 		}
+		ksort($food_groups);
+		
+		#	uasort($food_groups[$key], array($this, 'food_stat_sort'));
 
-		// var_dump($food_groups);
-		// var_dump($food_list);
-		// exit;
+		#dd($food_groups);
 
 		return View::make('food')
 			->with('active', 'food')
-			->with('food_list', $food_list)
 			->with('food_groups', $food_groups);
 	}
+
+	// private function food_stat_sort($a, $b)
+	// {
+	// 	// Multi part sort, depending on how many elements are there
+	// 	foreach($a['stats'] as $key => $values)
+	// 	{
+	// 		$return = $values['amount'] < $b['stats'][$key]['amount'] ? -1 : 1;
+	// 		break;
+	// 	}
+
+	// 	dd($a, $b);
+
+	// }
+
 }

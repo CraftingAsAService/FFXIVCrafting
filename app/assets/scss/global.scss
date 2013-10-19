@@ -728,3 +728,31 @@ $gear_warning_accent: #a46868;
 		}
 	}
 }
+
+.inline-input {
+	display: inline-block;
+	width: auto;
+}
+
+.level-input {
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 50px;
+}
+
+.label + .label {
+	margin-left: .5em;
+}
+
+.materia-value {
+	a {
+		text-decoration: none;
+		font-size: 1.25em;
+		line-height: 1.25em;
+	}
+	img {
+		margin-left: 8px;
+		width: 24px;
+		height: 24px;
+	}
+}

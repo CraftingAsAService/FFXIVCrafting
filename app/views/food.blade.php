@@ -10,82 +10,74 @@
 
 <p>
 	Food provides a certain percentage of your stat up to the maximum.  The Threshold is what it takes to reach that percentage and maximum.
-	For example, if you had 65 Craftsmanship, it would be a waist to use <em>Mashed Popotoes</em> when <em>Mint Lassi</em> is available (and assumedly cheaper).
+	For example, if you had 65 Craftsmanship, it would be a waste to use <em>Mashed Popotoes</em> when <em>Mint Lassi</em> is available (and assumedly cheaper).
 </p>
 
-<?php
-	$display_groups = array(
-		'Disciples of the Hand' => array('Control', 'CP', 'Craftsmanship'), 
-		'Disciples of the Land' => array('GP,Perception', 'GP,Gathering', 'Gathering,Perception', 'Perception')
-	);
-?>
+<p>All food lasts 30 minutes and provides a 3% XP Bonus.</p>
 
-@foreach($display_groups as $job => $group_list)
-<h3>{{ $job }}</h3>
+@foreach($food_groups as $stat_names => $group)
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped'>
-		<tbody>
-			<?php $last = null; ?>
-			@foreach($group_list as $group_name)
-			@foreach($food_groups[$group_name] as $food_name)
-				<?php $food = $food_list[$food_name]; ?>
-				@if ($group_name != $last)
-					<?php $last = $group_name; ?>
-					<tr>
-						<th class='invisible'>&nbsp;</th>
-						@foreach(range(0, count($food['stats']) - 1) as $place)
-						<th colspan='3' class='text-center title'>
-							@if (isset($food['stats'][$place]))
-
-								<img src='/img/stats/{{ $food['stats'][$place]['stat'] }}.png' class='stat-icon'>
-								{{ $food['stats'][$place]['stat'] }} Bonus
-
-							@endif
-						</th>
-						@endforeach
-					</tr>
-					<tr>
-						<th class='invisible'>&nbsp;</th>
-						@foreach(range(1, count($food['stats'])) as $ignore)
-						<th class='text-center'>
-							Percent
-						</th>
-						<th class='text-center'>
-							Maximum
-						</th>
-						<th class='text-center'>
-							Threshold
-						</th>
-						@endforeach
-					</tr>
+		<thead>
+			<tr>
+				<th width='19%'>
+					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-up collapse'></button>
+				</th>
+				@foreach(explode('|', $stat_names) as $stat_name)
+				<th colspan='3' class='text-center' width='27%'>
+					<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
+					{{ $stat_name }}
+				</th>
+				@endforeach
+				@if(3 > count(explode('|', $stat_names)))
+				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
 				@endif
-				<tr>
-					<th class='text-right'>
-						<a href='http://xivdb.com/{{ $food['href'] }}' target='_blank'>{{ $food_name }}</a>
-					</th>
-					@foreach(range(0, count($food['stats']) - 1) as $place)
-					@if( ! isset($food['stats'][$place]))
-					<td class='text-center no-value'>-</td>
-					<td class='text-center no-value'>-</td>
-					<td class='text-center no-value'>-</td>
-					@else
-					<td class='text-center'>
-						{{ $food['stats'][$place]['amount'] }}%
-					</td>
-					<td class='text-center'>
-						@if($food['stats'][$place]['max'] == 0)
-						None!
-						@else
-						{{ $food['stats'][$place]['max'] }}
-						@endif
-					</td>
-					<td class='text-center'>
-						{{ round($food['stats'][$place]['max'] / ($food['stats'][$place]['amount'] / 100)) }}
-					</td>
-					@endif
-					@endforeach
-				</tr>
-			@endforeach
+				@if(2 > count(explode('|', $stat_names)))
+				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				@endif
+			</tr>
+		</thead>
+		<tbody class='hidden'>
+			<tr>
+				<th>&nbsp;</th>
+				@foreach(explode('|', $stat_names) as $stat_name)
+				<th class='text-center' width='9%'>
+					Amount
+				</th>
+				<th class='text-center' width='9%'>
+					Maximum
+				</th>
+				<th class='text-center' width='9%'>
+					Threshold
+				</th>
+				@endforeach
+				@if(3 > count(explode('|', $stat_names)))
+				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				@endif
+				@if(2 > count(explode('|', $stat_names)))
+				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				@endif
+			</tr>
+			@foreach($group as $item)
+			<tr>
+				<td>
+					<a href='http://xivdb.com/?item/{{ $item['id'] }}' target='_blank'>
+						<img src='/img/items/{{ $item['icon'] }}.png'>
+						{{ $item['name'] }}
+					</a>
+				</td>
+				@foreach(explode('|', $stat_names) as $stat_name)
+				<td class='text-center'>
+					{{ number_format($item['stats'][$stat_name]['amount']) }}%
+				</td>
+				<td class='text-center'>
+					{{ number_format($item['stats'][$stat_name]['max']) }}
+				</td>
+				<td class='text-center'>
+					{{ number_format($item['stats'][$stat_name]['threshold']) }}
+				</td>
+				@endforeach
+			</tr>
 			@endforeach
 		</tbody>
 	</table>

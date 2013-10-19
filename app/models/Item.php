@@ -31,9 +31,9 @@ class Item extends Eloquent
 		return $this->hasMany('Leve');
 	}
 
-	public function locations()
+	public function nodes()
 	{
-		return $this->belongsToMany('Location')->withPivot('level')->orderBy('level');
+		return $this->belongsToMany('GatheringNode')->orderBy('level');
 	}
 
 	public static function calculate($job = '', $level = 1, $craftable_only = TRUE)

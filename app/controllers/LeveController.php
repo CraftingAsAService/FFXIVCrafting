@@ -27,7 +27,7 @@ class LeveController extends BaseController
 
 		// All Leves
 		$query = Leve::with(array(
-				'job', 'item', 'major', 'minor', 'location'
+				'job', 'item', 'item.recipes', 'major', 'minor', 'location'
 			))
 			->orderBy('job_id')
 			->orderBy('level')

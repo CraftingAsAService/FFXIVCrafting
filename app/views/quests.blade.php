@@ -75,8 +75,8 @@
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $q->level }}</span>
-					<a href='http://xivdb.com/{{ $q->recipe ? ('?recipe/' . $q->recipe->id) : $q->item->href }}' class='item-name' target='_blank'>
-						<img src='/img/items/{{ $q->item->icon ?: '../noitemicon.png' }}' style='margin-right: 10px;'><span class='name'>{{ $q->item->name }}</span>
+					<a href='http://xivdb.com/{{ $q->recipe ? ('?recipe/' . $q->recipe->id) : ('?item/' . $q->item->id) }}' class='item-name' target='_blank'>
+						<img src='/img/items/{{ $q->item->icon ?: '../noitemicon' }}.png' style='margin-right: 10px;'><span class='name'>{{ $q->item->name }}</span>
 					</a>
 				</td>
 				<td class='text-center amount'>{{ $q->amount }}</td>

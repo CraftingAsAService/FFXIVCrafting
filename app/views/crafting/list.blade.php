@@ -68,7 +68,7 @@
 					</a>
 					@endif
 					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
+						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
 					</a>
 					<?php break; ?>
 					@endforeach
@@ -79,7 +79,7 @@
 					</a>
 					@endif
 					<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>
-						<img src='/img/items/{{ $item->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $item->name }}
+						<img src='/img/items/{{ $item->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $item->name }}
 					</a>
 					@endif
 				</td>
@@ -141,7 +141,7 @@
 						{{ $recipe->level }}
 					</a>
 					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
+						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
 					</a>
 					@if ($recipe->yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>

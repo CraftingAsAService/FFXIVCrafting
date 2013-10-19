@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
 		$this->call('JobTableSeeder');
 
 		// Call has it's own echos
+		$this->call('CareerSeeder');
+
+		// Call has it's own echos
 		$this->call('ItemTablesSeeder');
 
 		echo "\n" . '** Recipe Table **' . "\n";
@@ -54,6 +57,9 @@ class _CommonSeeder extends Seeder
 	{
 		$count = 0;
 
+		if ( ! $table)
+			return array();
+
 		// $bl = $this->batch_limit;
 
 		// if ($table == 'vendors')
@@ -67,9 +73,6 @@ class _CommonSeeder extends Seeder
 			echo '.';
 			if ($count % 46 == 0)
 				echo "\n";
-
-			if ( ! $table)
-				return array();
 
 			$values = $pdo = array();
 			foreach ($data as $row)
@@ -158,6 +161,31 @@ class JobTableSeeder extends _CommonSeeder
 		unset($batch_jobs);
 	}
 	
+}
+
+class CareerSeeder extends _CommonSeeder
+{
+
+	public function run()
+	{
+		// Careers
+		echo "\n" . '* Careers *' . "\n";
+		$careers = json_decode(file_get_contents(storage_path() . '/seed-data/careers.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($careers, 'careers');
+		unset($careers);
+
+		// Career Job
+		echo "\n" . '* Career Jobs *' . "\n";
+		$career_job = json_decode(file_get_contents(storage_path() . '/seed-data/career_job.json'), TRUE); // Decode to Array instead of Object
+		foreach ($career_job as &$cj)
+		{
+			$cj['job_id'] = $this->job_names[$cj['class']];
+			unset($cj['class']);
+		}
+		$this->_batch_insert($career_job, 'career_job');
+		unset($career_job);
+	}
+
 }
 
 class ItemTablesSeeder extends _CommonSeeder

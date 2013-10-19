@@ -19,6 +19,9 @@ class DatabaseStructure extends Migration {
 			$table->string('abbreviation', 3);
 			$table->string('name', 50);
 			$table->enum('disciple', array('DOH', 'DOL', 'DOW', 'DOM', 'ALL'));
+
+			$table->index('abbreviation');
+			$table->index('disciple');
 		});
 
 		Schema::create('stats', function($table)
@@ -49,6 +52,9 @@ class DatabaseStructure extends Migration {
 			$table->boolean('unique');
 			$table->string('cannot_equip', 30);
 			$table->string('achievement', 50);
+
+			$table->index('role');
+			$table->index('level');
 		});
 		
 		Schema::create('item_job', function($table)
@@ -58,6 +64,8 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->integer('item_id');
 			$table->integer('job_id');
+
+			$table->index('item_id', 'job_id');
 		});
 		
 		Schema::create('item_stat', function($table)
@@ -69,6 +77,8 @@ class DatabaseStructure extends Migration {
 			$table->integer('stat_id');
 			$table->decimal('amount', 6, 2);
 			$table->smallInteger('maximum');
+
+			$table->index('item_id', 'stat_id');
 		});
 		
 		Schema::create('recipes', function($table)
@@ -84,6 +94,9 @@ class DatabaseStructure extends Migration {
 			$table->smallInteger('yields');
 			$table->smallInteger('level');
 			$table->smallInteger('job_level');
+
+			$table->index('item_id', 'job_id');
+			$table->index('level');
 		});
 		
 		Schema::create('item_recipe', function($table)
@@ -94,6 +107,8 @@ class DatabaseStructure extends Migration {
 			$table->integer('recipe_id');
 			$table->integer('item_id');
 			$table->smallInteger('amount');
+
+			$table->index('item_id', 'recipe_id');
 		});
 		
 		Schema::create('quest_items', function($table)
@@ -107,6 +122,9 @@ class DatabaseStructure extends Migration {
 			$table->smallInteger('amount');
 			$table->smallInteger('quality');
 			$table->string('notes', 50);
+
+			$table->index('item_id', 'job_id');
+			$table->index('level');
 		});
 
 		Schema::create('locations', function($table)
@@ -134,6 +152,10 @@ class DatabaseStructure extends Migration {
 			$table->integer('major_location_id');
 			$table->integer('minor_location_id');
 			$table->integer('location_id');
+
+			$table->index('item_id', 'job_id');
+			$table->index('level');
+			$table->index('type');
 		});
 
 		Schema::create('experience', function($table)
@@ -143,6 +165,8 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->smallInteger('level');
 			$table->integer('experience');
+
+			$table->index('level');
 		});
 
 		Schema::create('gathering_nodes', function($table)
@@ -155,6 +179,10 @@ class DatabaseStructure extends Migration {
 			$table->smallInteger('level');
 			$table->integer('location_id');
 			$table->smallInteger('location_level');
+
+			$table->index('job_id');
+			$table->index('action');
+			$table->index('location_id');
 		});
 
 		Schema::create('gathering_node_item', function($table)
@@ -164,6 +192,9 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->integer('item_id');
 			$table->integer('gathering_node_id');
+
+			$table->index('item_id', 'gathering_node_id');
+			$table->index('gathering_node_id');
 		});
 
 		Schema::create('vendors', function($table)
@@ -185,6 +216,34 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->integer('item_id');
 			$table->integer('vendor_id');
+			
+			$table->index('item_id', 'vendor_id');
+		});
+
+		Schema::create('careers', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->enum('type', array('recipe', 'item'));
+			$table->integer('identifier');
+			$table->smallInteger('level');
+			
+			$table->index('type');
+			$table->index('identifier');
+			$table->index('level');
+		});
+
+		Schema::create('career_job', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->integer('career_id');
+			$table->integer('job_id');
+			$table->decimal('amount', 6, 2);
+			
+			$table->index('career_id', 'job_id');
 		});
 
 	}
