@@ -1,8 +1,12 @@
 <IfModule mod_rewrite.c>
-    Options -MultiViews
-    RewriteEngine On
+	Options -MultiViews
+	RewriteEngine On
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.+)images/20ffxiv/(.+)\.png$ http://xivdb.com/images/20ffxiv/$2.png [L,R=301]
 
 	RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^ index.php [L]
+
 </IfModule>

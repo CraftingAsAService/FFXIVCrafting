@@ -10,25 +10,25 @@ class DatabaseSeeder extends Seeder
 		// Don't bother logging queries
 		DB::connection()->disableQueryLog();
 
-		echo '** Stat Table **' . "\n";
-		$this->call('StatTableSeeder');
-
-		echo '** Jobs Table **' . "\n";
+		echo "\n" . '** Jobs Table **' . "\n";
 		$this->call('JobTableSeeder');
 
-		echo '** Slot Table **' . "\n";
-		$this->call('SlotTableSeeder');
+		// Call has it's own echos
+		$this->call('CareerSeeder');
 
-		echo '** Data Table **' . "\n";
-		$this->call('DataTablesSeeder');
+		// Call has it's own echos
+		$this->call('ItemTablesSeeder');
 
-		echo '** Quests Table **' . "\n";
+		echo "\n" . '** Recipe Table **' . "\n";
+		$this->call('RecipeTablesSeeder');
+
+		echo "\n" . '** Quests Table **' . "\n";
 		$this->call('QuestSeeder');
 
-		echo '** Leve Table **' . "\n";
+		echo "\n" . '** Leve Table **' . "\n";
 		$this->call('LeveSeeder');
 
-		echo '** XP Table **' . "\n";
+		echo "\n" . '** XP Table **' . "\n";
 		$this->call('XPSeeder');
 
 		echo "\n";
@@ -36,81 +36,64 @@ class DatabaseSeeder extends Seeder
 
 }
 
-class StatTableSeeder extends Seeder
+class _CommonSeeder extends Seeder
 {
 
-	public function run()
+	public $batch_limit = 300;
+
+	public
+		$jobs = array(),
+		$job_names = array();
+
+	public function __construct()
 	{
-		$stats = array(
-			// Custom Attributes
-			'Materia',
+		//parent::__construct();
 
-			// Actual Attributes
-			'Defense', 
-
-			'Gathering',
-			'GP',
-			'Perception', 
-
-			'Control', 
-			'CP', 
-			'Craftsmanship', 
-
-			'Strength', 
-			'Vitality',
-			'Dexterity', 
-
-			'Physical Damage', 
-			'Skill Speed', 
-
-			'Block Rate', 
-			'Block Strength', 
-			'Parry', 
-			'Determination', 
-
-			'Intelligence',
-			'Mind',
-			'Piety', 
-
-			'Magic Damage',
-			'Spell Speed', 
-
-			'Accuracy', 
-			'Auto-Attack', 
-			'Critical Hit Rate', 
-			'Delay', 
-			'DPS', 
-			'Magic Defense',
-			
-			'Increased Spiritbond Gain',
-			'Reduced Durability Loss', 
-			
-			'Blind Resistance', 
-			'Blunt Resistance',
-			'Earth Resistance', 
-			'Fire Resistance', 
-			'Heavy Resistance',
-			'Ice Resistance',
-			'Lightning Resistance',
-			'Paralysis Resistance',
-			'Piercing Resistance', 
-			'Poison Resistance', 
-			'Silence Resistance', 
-			'Slashing Resistance', 
-			'Sleep Resistance', 
-			'Water Resistance',
-			'Wind Resistance',
-		);
-
-		foreach ($stats as $stat)
-			Stat::create(array(
-				'name' => $stat
-			));
+		foreach (Job::all() as $job)
+			$this->jobs[$job->abbreviation] = $this->job_names[$job->name] = $job->id;
 	}
-	
+
+	public function _batch_insert($original_data = array(), $table = '')
+	{
+		$count = 0;
+
+		if ( ! $table)
+			return array();
+
+		// $bl = $this->batch_limit;
+
+		// if ($table == 'vendors')
+		// 	$bl = 1;
+
+		// foreach(array_chunk($original_data, $bl) as $data)
+		foreach(array_chunk($original_data, $this->batch_limit) as $data)
+		{
+			$count++;
+
+			echo '.';
+			if ($count % 46 == 0)
+				echo "\n";
+
+			$values = $pdo = array();
+			foreach ($data as $row)
+			{
+				$values[] = '(' . str_pad('', count($row) * 2 - 1, '?,') . ')';
+				
+				// Cleanup value, if FALSE set to NULL
+				foreach ($row as $value)
+					$pdo[] = $value === FALSE ? NULL : $value;
+			}
+
+			# cli crashing... debug
+			#file_put_contents('app/storage/logs/query-' . $count . '-statement.txt', 'INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values));
+			#file_put_contents('app/storage/logs/query-' . $count . '-pdo.txt', json_encode($pdo)); 
+
+			DB::insert('INSERT IGNORE INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
+		}
+	}
 }
 
-class JobTableSeeder extends Seeder
+class JobTableSeeder extends _CommonSeeder
 {
 
 	public function run()
@@ -158,531 +141,283 @@ class JobTableSeeder extends Seeder
 				'WHM' => 'White Mage',
 			),
 
+			'ALL' => array(
+				'ALL' => 'All',
+			)
+
 		);
+
+		$batch_jobs = array();
 
 		foreach ($jobs as $disciple => $classes)
 			foreach ($classes as $abbr => $job)
-				Job::create(array(
+				$batch_jobs[] = array(
 					'abbreviation' => $abbr,
 					'name' => $job,
 					'disciple' => $disciple
-				));
-	}
-	
-}
-
-class SlotTableSeeder extends Seeder
-{
-	public function run()
-	{
-		$slots = array(
-			'equipment' => array(
-				'Primary',
-				'Secondary',
-				'Head',
-				'Body',
-				'Hands',
-				'Waist',
-				'Legs',
-				'Feet',
-				'Neck',
-				'Ears',
-				'Wrists',
-				'Ring',
-				'Ring',
-			),
-			'materia' => array(
-				'Materia',
-			),
-			'food' => array(
-				'Food',
-			),
-			'reagent' => array(
-				'Reagent'
-			),
-		);
-
-		foreach ($slots as $type => $s)
-			foreach ($s as $key => $slot)
-				Slot::create(array(
-					'name' => $slot,
-					'rank' => $key,
-					'type' => $type
-				));
-	}
-	
-}
-
-class DataTablesSeeder extends Seeder
-{
-	private $batch_limit = 100;
-
-	public
-		$stats = array(),
-		$jobs = array(),
-		$job_names = array(),
-		$slots = array(),
-		$disciples = array();
-
-	public function run()
-	{
-		// Get stats, jobs and equipment slots
-		foreach (Stat::all() as $stat)
-			$this->stats[$stat->name] = $stat->id;
-
-		foreach (Slot::all() as $slot)
-			$this->slots[$slot->name] = $slot->id;
-
-		foreach (Job::all() as $job)
-		{
-			if ( ! isset($this->disciples[$job->disciple]))
-				$this->disciples[$job->disciple] = array();
-			$this->disciples[$job->disciple][] = $job->abbreviation;
-			$this->jobs[$job->abbreviation] = $this->job_names[$job->name] = $job->id;
-		}
-
-		// Custom job ID
-		$this->job_names['Achievement:'] = 99;
-
-		// Import item files
-		$this->items(json_decode(file_get_contents(storage_path() . '/raw-data/items.json')));
-		$this->items(json_decode(file_get_contents(storage_path() . '/raw-data/reagents.json')));
-
-		// Import recipes
-		$this->recipes(json_decode(file_get_contents(storage_path() . '/raw-data/recipes.json')));
-	}
-
-	private function recipes($data = array())
-	{
-		echo "+\n";
-		
-		$recipes = array();
-		$reagents = array();
-
-		foreach ($data as $object)
-		{
-			$recipes[] = array(
-				'id' => $object->id,
-				'item_id' => $object->item_id,
-				'job_id' => $this->jobs[$object->class],
-				'name' => $object->name,
-				'icon' => $object->icon ? preg_replace('/^.*\D(\d+\.\w+)$/', '$1', $object->icon) : '',
-				'yields' => $object->yields,
-				'level' => $object->level, 
-				'job_level' => $object->crafting_level
-			);
-
-			// Ingredients
-			foreach ($object->ingredients as $ingredient)
-				$reagents[] = array(
-					'recipe_id' => $object->id,
-					'item_id' => $ingredient->id,
-					'amount' => $ingredient->required
 				);
 
-			// Attempt a batch insert every $this->batch_limit
+		$this->_batch_insert($batch_jobs, 'jobs');
+		unset($batch_jobs);
+	}
+	
+}
 
-			if (count($recipes) > $this->batch_limit)
-				$recipes = $this->_batch_insert($recipes, 'recipes');
+class CareerSeeder extends _CommonSeeder
+{
 
-			if (count($reagents) > $this->batch_limit)
-				$reagents = $this->_batch_insert($reagents, 'item_recipe');
+	public function run()
+	{
+		// Careers
+		echo "\n" . '* Careers *' . "\n";
+		$careers = json_decode(file_get_contents(storage_path() . '/seed-data/careers.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($careers, 'careers');
+		unset($careers);
+
+		// Career Job
+		echo "\n" . '* Career Jobs *' . "\n";
+		$career_job = json_decode(file_get_contents(storage_path() . '/seed-data/career_job.json'), TRUE); // Decode to Array instead of Object
+		foreach ($career_job as &$cj)
+		{
+			$cj['job_id'] = $this->job_names[$cj['class']];
+			unset($cj['class']);
 		}
-
-		// Insert the straglers
-		if ($recipes)
-			$this->_batch_insert($recipes, 'recipes');
-
-		if ($reagents)
-			$this->_batch_insert($reagents, 'item_recipe');
+		$this->_batch_insert($career_job, 'career_job');
+		unset($career_job);
 	}
 
-	private function items($data = array())
+}
+
+class ItemTablesSeeder extends _CommonSeeder
+{
+	
+	public function run()
 	{
-		echo "+\n";
-
-		$items = array();
-		$classes = array();
-		$stats = array();
-
-		static $location_id = 0;
-		$locations = array();
-
-		$item_location = array();
-
-		foreach ($data as $object)
+		// Import item files
+		echo "\n" . '* Items *' . "\n";
+		$items = json_decode(file_get_contents(storage_path() . '/seed-data/items.json'), TRUE);
+		
+		$item_job = array();
+		foreach ($items as &$item)
 		{
-			// Cleanup
-			if (in_array($object->slot, array('Left', 'Right')))
-				$object->slot = 'Ring';
-
-			// Item ID is either set or based on the HREF
-			$item_id = isset($object->xivdb_id) ? $object->xivdb_id : preg_replace('/^.*\/(\d+)\/.*$/', '$1', trim($object->href));
-
-			// Base Item
-			$items[] = array(
-				'id' => $item_id,
-				'name' => $object->name,
-				'href' => $object->href,
-				'icon' => $object->icon ? preg_replace('/^.*\D(\d+\.\w+)$/', '$1', $object->icon) : '',
-				'level' => $object->level ?: 0,
-				'vendors' => $object->vendors ?: 0,
-				'gil' => $object->gil ?: 0,
-				'slot_id' => $this->slots[$object->slot],
-				'ilvl' => $object->ilvl ?: 0,
-				'cannot_equip' => isset($object->cannot_equip) ? implode(',', $object->cannot_equip) : NULL
-			);
-
-			// Item Classes
-			foreach ($object->class as $class)
-			{
-				// Disciple shortcut?
-				if (in_array($class, array_keys($this->disciples)))
-					foreach ($this->disciples[$class] as $cls)
-						$classes[] = array(
-							'item_id' => $item_id,
-							'job_id' => $this->jobs[$cls]
-						);
-				else
+			//"requires":["GLA","PLD"]
+			foreach ($item['requires'] as $k => $r)
+				if ($r == 'DOW')
 				{
-					$classes[] = array(
-						'item_id' => $item_id,
-						'job_id' => $this->jobs[$class]
+					array_push($item['requires'], 'GLA','PGL','MRD','LNC','ARC','MNK','PLD','WAR','DRG','BRD');
+					unset($item['requires'][$k]);
+				}
+				elseif ($r == 'DOM')
+				{
+					array_push($item['requires'], 'CNJ','THM','ACN','SCH','SMN','BLM','WHM');
+					unset($item['requires'][$k]);
+				}
+				elseif ($r == 'DOH')
+				{
+					array_push($item['requires'], 'BSM','GSM','ARM','CRP','LTW','WVR','ALC','CUL');
+					unset($item['requires'][$k]);
+				}
+				elseif ($r == 'DOL')
+				{
+					array_push($item['requires'], 'FSH','BTN','MIN');
+					unset($item['requires'][$k]);
+				}
+			
+			foreach ($item['requires'] as $r)
+				if ($r)
+					$item_job[] = array(
+						'item_id' => $item['id'],
+						'job_id' => $this->jobs[$r]
 					);
 
-					// Items with locations won't use a disciple shortcut
-					// "BTN":["Lv.30 Central Thanalan","Lv.50 Central Thanalan"],
-					// "MIN":["Lv.30 Southern Thanalan"]
-					if ( ! empty($object->location) && isset($object->location->$class))
-					{
-						// Saved it as a separate thing, but I don't think it needs to be used
-						// But FYI, I could alter structure to show a $class' locations.
-						foreach ($object->location->$class as $level_location)
-						{
-							preg_match('/^Lv\.(\d+)\s(.*)$/', trim($level_location), $matches);
-							list($ignore, $ll_level, $ll_location) = $matches;
-							
-							// Create a location id if it doesn't exist
-							if ( ! in_array($ll_location, array_keys($locations)))
-							{
-								$ll_id = ++$location_id;
-								$locations[$ll_location] = $ll_id;
-							}
-							else
-								$ll_id = $locations[$ll_location];
-
-							$item_location[] = array(
-								'item_id' => $item_id,
-								'location_id' => $ll_id,
-								'level' => $ll_level
-							);
-						}
-					}
-				}
-			}
-
-			// Item Stats
-
-			$attributes = (Array) $object->attributes;
-
-			if (isset($attributes['Duration']))
-				unset($attributes['Duration']);
-
-			foreach ($attributes as $a_name => $value)
-			{
-				$maximum = 0;
-
-				// Amount looks like this: 10%(Max: 10)
-				if ($object->slot == 'Food' && preg_match('/^(\d+).*\s(\d+)\)$/', $value, $matches))
-					list($ignore, $value, $maximum) = $matches;
-
-				$value = preg_replace('/[^0-9\.]/', '', $value);
-
-				$stats[] = array(
-					'item_id' => $item_id,
-					'stat_id' => $this->stats[$a_name],
-					'amount' => $value,
-					'maximum' => $maximum
-				);
-			}
-
-			// Attempt a batch insert every $this->batch_limit
-
-			if (count($items) > $this->batch_limit)
-				$items = $this->_batch_insert($items, 'items');
-
-			if (count($classes) > $this->batch_limit)
-				$classes = $this->_batch_insert($classes, 'item_job');
-
-			if (count($stats) > $this->batch_limit)
-				$stats = $this->_batch_insert($stats, 'item_stat');
+			unset($item['requires']);
 		}
+		
+		$this->_batch_insert($items, 'items');
+		unset($items);
 
-		// Insert the straglers
-		if ($items)
-			$this->_batch_insert($items, 'items');
+		// Item Jobs
+		echo "\n" . '* Item Job *' . "\n";
+		$this->_batch_insert($item_job, 'item_job');
+		unset($item_job);
 
-		if ($classes)
-			$this->_batch_insert($classes, 'item_job');
+		// Vendors
+		echo "\n" . '* Vendors *' . "\n";
+		$vendors = json_decode(file_get_contents(storage_path() . '/seed-data/vendors.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($vendors, 'vendors');
+		unset($vendors);
 
-		if ($stats)
-			$this->_batch_insert($stats, 'item_stat');
+		// Item Vendor
+		echo "\n" . '* Item Vendor *' . "\n";
+		$item_vendor = json_decode(file_get_contents(storage_path() . '/seed-data/item_vendor.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($item_vendor, 'item_vendor');
+		unset($item_vendor);
 
-		// Insert Locations
-		if ($locations)
+		// Stats
+		echo "\n" . '* Stats *' . "\n";
+		$stats = json_decode(file_get_contents(storage_path() . '/seed-data/stats.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($stats, 'stats');
+		unset($stats);
+
+		// Item Stat
+		echo "\n" . '* Item Stat *' . "\n";
+		$item_stat = json_decode(file_get_contents(storage_path() . '/seed-data/item_stat.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($item_stat, 'item_stat');
+		unset($item_stat);
+
+		// Locations
+		echo "\n" . '* Locations *' . "\n";
+		$locations = json_decode(file_get_contents(storage_path() . '/seed-data/locations.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($locations, 'locations');
+		unset($locations);
+
+		// Gathering Nodes
+		echo "\n" . '* Gathering Nodes *' . "\n";
+		$gathering_nodes = json_decode(file_get_contents(storage_path() . '/seed-data/gathering_nodes.json'), TRUE); // Decode to Array instead of Object
+		foreach ($gathering_nodes as &$node)
 		{
-			// Make the array ready for the DB
-			$location_batch = array();
-			foreach ($locations as $name => $id)
-				$location_batch[] = array(
-					'id' => $id,
-					'name' => $name
-				);
-
-			$this->_batch_insert($location_batch, 'locations');
+			$node['job_id'] = $this->jobs[$node['class']];
+			unset($node['class']);
 		}
+		$this->_batch_insert($gathering_nodes, 'gathering_nodes');
+		unset($gathering_nodes);
 
-		// Insert Item Job Locations
-		if ($item_location)
-			$this->_batch_insert($item_location, 'item_location');
-	}
-
-	private function _batch_insert($data = array(), $table = '')
-	{
-		static $count = 0;
-		$count++;
-
-		echo '.';
-		if ($count % 46 == 0)
-			echo "\n";
-
-		if ( ! $table)
-			return array();
-
-		$values = $pdo = array();
-		foreach ($data as $row)
-		{
-			$values[] = '(' . str_pad('', count($row) * 2 - 1, '?,') . ')';
-			
-			foreach ($row as $value)
-				$pdo[] = $value;
-		}
-
-		# cli crashing... debug
-		#file_put_contents('app/storage/logs/query-' . $count . '-statement.txt', 'INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values));
-		#file_put_contents('app/storage/logs/query-' . $count . '-pdo.txt', json_encode($pdo)); 
-
-		DB::insert('INSERT IGNORE INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
-
-		// Return a blank array on purpose, to represent an empty $data
-		return array();
+		// Gathering Node Items
+		echo "\n" . '* Gathering Node Item *' . "\n";
+		$gathering_node_item = json_decode(file_get_contents(storage_path() . '/seed-data/gathering_node_item.json'), TRUE); // Decode to Array instead of Object
+		$this->_batch_insert($gathering_node_item, 'gathering_node_item');
+		unset($gathering_node_item);
 	}
 
 }
 
-class QuestSeeder extends Seeder
+class RecipeTablesSeeder extends _CommonSeeder
 {
-	public $manual_items = array(
-		'5599' => 'Grade 1 Carbonized Matter',
-		'4874' => 'Harbor Herring',
-		'4963' => 'Shadow Catfish',
-		'5033' => 'Desert Catfish',
-		'4917' => 'Mazlaya Marlin',
-		// '4564' => 'Antidote',
-		// '4597' => 'Potion of Intelligence',
-		// '4595' => 'Potion of Dexterity',
-		// '4575' => 'Weak Blinding Potion',
-		'4870' => 'Lominsan Anchovy',
-		// '1123' => 'Ether',
-		// '4599' => 'Hi-Potion of Strength',
-		// '4607' => 'Mega-Potion of Intelligence',
-		// '4606' => 'Mega-Potion of Vitality',
-	);
+	public function run()
+	{
+		// Import recipes
+		$recipes = json_decode(file_get_contents(storage_path() . '/seed-data/recipes.json'), TRUE);
+
+		foreach ($recipes as &$recipe)
+		{
+			// Transalte class
+			$recipe['job_id'] = $this->job_names[$recipe['class']];
+			unset($recipe['class']);
+		}
+
+		$this->_batch_insert($recipes, 'recipes');
+		unset($recipes);
+
+		// Recipe Reagents
+		$item_recipe = json_decode(file_get_contents(storage_path() . '/seed-data/item_recipe.json'), TRUE);
+		$this->_batch_insert($item_recipe, 'item_recipe');
+		unset($item_recipe);
+	}
+
+}
+
+class QuestSeeder extends _CommonSeeder
+{
 
 	public function run()
 	{
-		// Get all jobs
-		foreach (Job::all() as $job)
-			$jobs[$job->abbreviation] = $job->id;
-
-		// Insert the manual items (Didn't crawl for them)
-		foreach ($this->manual_items as $id => $name)
-			DB::table('items')->insert(array(
-				'id' => $id,
-				'name' => $name
-			));
-
 		// Insert quest items
-		$quest_items = json_decode(file_get_contents(storage_path() . '/raw-data/quest_items.json'));
+		$quest_items = json_decode(file_get_contents(storage_path() . '/seed-data/quest_items.json'), TRUE); // As array
 
-		foreach ($quest_items as $item)
-			DB::table('quest_items')->insert(array(
-				'item_id' => $item->id,
-				'job_id' => $jobs[$item->job],
-				'level' => $item->level,
-				'amount' => $item->amount,
-				'quality' => $item->quality,
-				'notes' => $item->notes,
-			));
+		foreach ($quest_items as &$item)
+		{
+			$item['job_id'] = $this->jobs[$item['job']];
+			unset($item['job']);
+		}
+		
+		$this->_batch_insert($quest_items, 'quest_items');
+		unset($quest_items);
 	}
 }
 
-class LeveSeeder extends Seeder
+class LeveSeeder extends _CommonSeeder
 {
+	public $locations = array(),
+			$location_id = 0;
+
+	public function get_location_id($location_name = '')
+	{
+		if ( ! isset($this->locations[$location_name]))
+		{
+			DB::table('locations')->insert(array(
+				'id' => ++$this->location_id,
+				'name' => $location_name
+			));
+
+			$this->locations[$location_name] = $this->location_id;
+		}
+
+		return $this->locations[$location_name];
+	}
 
 	public function run() 
 	{
-		// Get all jobs
-		$jobs = array();
-		foreach (Job::all() as $job)
-			$jobs[$job->name] = $job->id;
-
 		// Get all locations
-		$locations = array();
 		foreach (Location::all() as $location)
-			$locations[$location->name] = $location->id;
+			$this->locations[$location->name] = $location->id;
 
-		$locations_id = max($locations);
+		// Set the max id, incase new ones need to be added (which they will be)
+		$this->location_id = max($this->locations);
 
-		$new_locations = array();
-		$new_leves = array();
 
-		// Insert quest items
-		$leves = explode("\n", (str_replace("\r", '', file_get_contents(storage_path() . '/raw-data/leves.txt'))));
-		// Kill header row
-		$header = array_shift($leves);
-		// Kill "footer"
-		array_pop($leves);
-
-		// Major City	Class	Level	Name	XP	Gil	Type	Minor Location	Location	Quantity	Item	Notes
-		//id, name, job_id, item_id, level, amount, xp, gil, triple, type, major_location_id, minor_location_id, location_id, 	
-
-		foreach ($leves as $leve)
+		// Import leves
+		$leves = json_decode(file_get_contents(storage_path() . '/seed-data/leves.json'), TRUE);
+		
+		foreach ($leves as &$leve)
 		{
-			//echo "\n" . $leve . "\n";
-			list($major_location, $class, $level, $name, $xp, $gil, $type, $minor_location, $location, $amount, $item_name, $triple) = explode("\t", $leve);
-			$major_location_id = $minor_location_id = $location_id = 0;
-			//echo $triple . "\n";
-			//echo 'Triple? ' . $triple . ' = ' . ($triple == 'triple' ? 'Yes' : 'No') . "\n";
+			// "class":"Blacksmith",
+			$leve['job_id'] = $this->job_names[$leve['class']];
+			unset($leve['class']);
 
-			// Take care of the locations
-			foreach (array('major_location', 'minor_location', 'location') as $l)
+			// "major_location":"Limsa Lominsa",
+			// "minor_location":"",
+			// "location":"",
+			foreach (array('major_', 'minor_', '') as $prefix)
 			{
-				if ($$l == '')
-				{
-					${$l . '_id'} = 0;
-					continue;
-				}
+				$var = $prefix . 'location';
+				$val = NULL;
 
-				if ( ! in_array($$l, array_keys($locations)))
-				{
-					$locations[$$l] = ++$locations_id;
-					$new_locations[] = array(
-						'id' => $locations_id,
-						'name' => $$l
-					);
-					${$l . '_id'} = $locations_id;
-				}
-				else
-					${$l . '_id'} = $locations[$$l];
+				if ($leve[$var])
+					$val = $this->get_location_id($leve[$var]);
+
+				$leve[$var . '_id'] = $val;
+
+				unset($leve[$var]);
 			}
 
-			// Now the class
-			$class_id = $jobs[$class];
-
-			if (is_numeric($item_name))
-				$item_id = $item_name;
-			else
+			// "item_name":"Bronze Hatchet",
+				# OR
+			// "item_id":2703
+			if (isset($leve['item_name']))
 			{
-				// Find the item
-				$item = Item::where('name', $item_name)->first();
+				$item = Item::where('name', $leve['item_name'])->first();
 
-				if ( ! $item)
-				{
-					$item_id = 0;
-					echo "\n" . 'Could not find ' . $item_name . "\n";
-					echo $leve . "\n\n";
-				}
-				else
-					$item_id = $item->id;
+				$leve['item_id'] = $item->id;
+
+				unset($leve['item_name']);
 			}
-
-			$triple = trim($triple);
-
-			$new_leves[] = array(
-				'name' => $name,
-				'job_id' => (int) $class_id,
-				'item_id' => (int) $item_id,
-				'level' => (int) $level,
-				'amount' => (int) $amount,
-				'xp' => (int) $xp,
-				'gil' => (int) $gil,
-				'triple' => empty($triple) ? 0 : 1,
-				'type' => $type,
-				'major_location_id' => (int) $major_location_id,
-				'minor_location_id' => (int) $minor_location_id,
-				'location_id' => (int) $location_id
-			);
-
 		}
 
-
-		// Insert Leves
-		if ($new_leves)
-			$this->_batch_insert($new_leves, 'leves');
-
-		// Insert New Locations
-		if ($new_locations)
-			$this->_batch_insert($new_locations, 'locations');
-
-	}
-
-	private function _batch_insert($data = array(), $table = '')
-	{
-		static $count = 0;
-		$count++;
-
-		echo '.';
-		if ($count % 46 == 0)
-			echo "\n";
-
-		if ( ! $table)
-			return array();
-
-		$values = $pdo = array();
-		foreach ($data as $row)
-		{
-			$values[] = '(' . str_pad('', count($row) * 2 - 1, '?,') . ')';
-			
-			foreach ($row as $value)
-				$pdo[] = $value;
-		}
-
-		# cli crashing... debug
-		#file_put_contents('app/storage/logs/query-' . $count . '-statement.txt', 'INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values));
-		#file_put_contents('app/storage/logs/query-' . $count . '-pdo.txt', json_encode($pdo)); 
-
-		DB::insert('INSERT IGNORE INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
-
-		// Return a blank array on purpose, to represent an empty $data
-		return array();
+		$this->_batch_insert($leves, 'leves');
+		unset($leves);
 	}
 
 }
 
-class XPSeeder extends Seeder
+class XPSeeder extends _CommonSeeder
 {
 
 	public function run() 
 	{
 		// Insert experience records
-		$xp_list = json_decode(file_get_contents(storage_path() . '/raw-data/experience.json'));
-
-		foreach ($xp_list as $xp_data)
-			DB::table('experience')->insert(array(
-				'level' => $xp_data->level,
-				'experience' => $xp_data->experience
-			));
+		$experience = json_decode(file_get_contents(storage_path() . '/seed-data/experience.json'), TRUE);
+		$this->_batch_insert($experience, 'experience');
+		unset($experience);
 	}
 
 }

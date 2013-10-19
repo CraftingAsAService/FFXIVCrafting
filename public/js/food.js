@@ -1,0 +1,1 @@
+var food={init:function(){$(".collapse").click(function(){var a=$(this);a.toggleClass("glyphicon-chevron-up").toggleClass("glyphicon-chevron-down");a.closest("table").find("tbody").toggleClass("hidden")})}};$(food.init);

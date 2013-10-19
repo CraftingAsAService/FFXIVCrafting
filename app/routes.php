@@ -33,6 +33,8 @@ Route::controller('leve', 'LeveController');
 Route::controller('list', 'ListController');
 Route::controller('recipes', 'RecipesController');
 
+Route::controller('career', 'CareerController');
+
 Route::get('thanks', function()
 {
 	View::share('active', 'thanks');

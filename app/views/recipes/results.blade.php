@@ -5,7 +5,7 @@
 <tr>
 	<td class='text-left valign'>
 		<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-			<img src='/img/items/{{ $recipe->icon ?: '../noitemicon.png' }}' style='margin-right: 5px;'>{{ $recipe->name }}
+			<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
 		</a>
 	</td>
 	<td class='text-center valign'>

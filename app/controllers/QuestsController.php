@@ -6,9 +6,7 @@ class QuestsController extends BaseController
 	public function getIndex()
 	{
 		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
+		$job_list = Job::all()->lists('name', 'abbreviation');
 
 		// All Quests
 		$quest_records = QuestItem::with('job', 'item', 'item.recipes')

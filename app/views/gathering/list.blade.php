@@ -109,12 +109,12 @@
 						<td class='text-left'>
 							<div class='location'>
 								<span class='close' rel='tooltip' title='Node Level'>
-									{{ $item['data']->locations[0]->pivot->level }}
+									{{ $item['data']->nodes[0]->pivot->level }}
 								</span>
-								{{ $item['data']->locations[0]->name }}
-								@if(count($item['data']->locations) > 1)
+								{{ $item['data']->nodes[0]->name }}
+								@if(count($item['data']->nodes) > 1)
 								<span class='faux_link and_more' data-container='body' data-toggle='popover' data-placement='bottom' data-content='
-									@foreach($item['data']->locations as $location)
+									@foreach($item['data']->nodes as $location)
 									<div class="location">
 										{{ $location->name }} (Lv.{{ $location->pivot->level }})
 									</div>

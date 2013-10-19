@@ -358,7 +358,7 @@ $gear_warning_accent: #a46868;
 		}
 	}
 
-	td.slot {
+	td.role {
 
 		width: 33.3%;
 
@@ -369,54 +369,54 @@ $gear_warning_accent: #a46868;
 		//border-width: 0px;
 		padding: 0px;
 
-		&.slot-Primary {
+		&.role-Primary {
 			background-image: url(/img/equipment/2x/Primary.png);
 		}
-		&.slot-Secondary {
+		&.role-Secondary {
 			background-image: url(/img/equipment/2x/Secondary.png);
 		}
-		&.slot-Head {
+		&.role-Head {
 			background-image: url(/img/equipment/2x/Head.png);
 		}
-		&.slot-Body {
+		&.role-Body {
 			background-image: url(/img/equipment/2x/Body.png);
 		}
-		&.slot-Hands {
+		&.role-Hands {
 			background-image: url(/img/equipment/2x/Hands.png);
 		}
-		&.slot-Waist {
+		&.role-Waist {
 			background-image: url(/img/equipment/2x/Waist.png);
 		}
-		&.slot-Legs {
+		&.role-Legs {
 			background-image: url(/img/equipment/2x/Legs.png);
 		}
-		&.slot-Feet {
+		&.role-Feet {
 			background-image: url(/img/equipment/2x/Feet.png);
 		}
-		&.slot-Neck {
+		&.role-Neck {
 			background-image: url(/img/equipment/2x/Neck.png);
 		}
-		&.slot-Ears {
+		&.role-Ears {
 			background-image: url(/img/equipment/2x/Ears.png);
 		}
-		&.slot-Wrists {
+		&.role-Wrists {
 			background-image: url(/img/equipment/2x/Wrists.png);
 		}
-		&.slot-Ring {
+		&.role-Right-Ring {
 			background-image: url(/img/equipment/2x/Ring.png);
 		}
-		&.slot-Ring {
+		&.role-Right-Ring {
 			background-image: url(/img/equipment/2x/Ring.png);
 		}
 
-		.slot-wrap {
+		.role-wrap {
 			min-height: 84px;
 			padding: 8px;
 		}
 
 
 		&.upgrade {
-			.slot-wrap {
+			.role-wrap {
 				border: 1px solid $gear_accent;
 				border-radius: 5px;
 			}
@@ -434,7 +434,7 @@ $gear_warning_accent: #a46868;
 		}
 
 		&.cannot-equip {
-			.slot-wrap {
+			.role-wrap {
 				display: none;
 			}
 			.why-cannot-equip {
@@ -506,7 +506,7 @@ $gear_warning_accent: #a46868;
 
 	#gear.slim {
 		.stats-box { display: none; }
-		.slot-wrap { min-height: 52px; }
+		.role-wrap { min-height: 52px; }
 
 		.icons { margin-right: 5px; }
 		.icons div div {
@@ -726,5 +726,33 @@ $gear_warning_accent: #a46868;
 				margin-right: 10px;
 			}
 		}
+	}
+}
+
+.inline-input {
+	display: inline-block;
+	width: auto;
+}
+
+.level-input {
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 50px;
+}
+
+.label + .label {
+	margin-left: .5em;
+}
+
+.materia-value {
+	a {
+		text-decoration: none;
+		font-size: 1.25em;
+		line-height: 1.25em;
+	}
+	img {
+		margin-left: 8px;
+		width: 24px;
+		height: 24px;
 	}
 }

@@ -51,7 +51,7 @@
 					<div class='form-group margin-left'>
 						<label>Type</label>
 						<select class='multiselect hidden' multiple='multiple' id='type-selector'>
-							@foreach(array('Town', 'Field', 'Courier', 'Unknown') as $role)
+							@foreach(array('Town', 'Field', 'Courier') as $role)
 							<option value='{{ $role }}' selected='selected'>{{ $role }}</option>
 							@endforeach
 						</select>

@@ -54,10 +54,10 @@
 						</tr>
 					</tfoot>
 					<tbody>
-						@foreach($slots as $slot)
-						<tr class='slot-row' data-slot='{{ $slot->name }}'>
+						@foreach($roles as $role)
+						<tr class='role-row' data-role='{{ $role }}'>
 							@foreach($starting_equipment as $equipment)
-							{{ $equipment['slots'][$slot->name] }}
+							{{ $equipment['roles'][$role] }}
 							@endforeach
 						</tr>
 						@endforeach
