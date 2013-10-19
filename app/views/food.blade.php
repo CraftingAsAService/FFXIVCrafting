@@ -2,6 +2,7 @@
 
 @section('javascript')
 <script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
+<script type='text/javascript' src='/js/food.js'></script>
 @stop
 
 @section('content')
