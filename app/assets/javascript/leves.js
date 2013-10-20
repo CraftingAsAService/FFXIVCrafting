@@ -91,6 +91,8 @@ var leves = {
 			types[types.length] = $(this).val();
 		});
 
+		$('.leve_rewards').popover('destroy');
+
 		$.ajax({
 			url: '/leve',
 			type: 'post',
@@ -116,6 +118,8 @@ var leves = {
 
 				if (typeof(initXIVDBTooltips) != 'undefined')
 					initXIVDBTooltips();
+
+				global.reset_popovers();
 
 				$('[rel=tooltip]').tooltip();
 			}

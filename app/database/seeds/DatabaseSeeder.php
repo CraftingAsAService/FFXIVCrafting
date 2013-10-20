@@ -405,6 +405,23 @@ class LeveSeeder extends _CommonSeeder
 
 		$this->_batch_insert($leves, 'leves');
 		unset($leves);
+
+		// Import leves rewards
+		$leve_rewards = json_decode(file_get_contents(storage_path() . '/seed-data/leve_rewards.json'), TRUE);
+
+		foreach ($leve_rewards as &$lr)
+		{
+			// "class":"BSM",
+			$lr['job_id'] = $this->jobs[$lr['class']];
+			unset($lr['class']);
+
+			$item = Item::where('name', $lr['item_name'])->first();
+
+			$lr['item_id'] = $item ? $item->id : NULL;
+		}
+
+		$this->_batch_insert($leve_rewards, 'leve_rewards');
+		unset($leve_rewards, $item);
 	}
 
 }

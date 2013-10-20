@@ -1,0 +1,1646 @@
+[
+	{
+		"class":"MIN",
+		"level":15,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"MIN",
+		"level":20,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"MIN",
+		"level":25,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"MIN",
+		"level":45,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"BTN",
+		"level":20,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"BTN",
+		"level":25,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"BTN",
+		"level":45,
+		"item_name":"Cordial",
+		"amount":1
+	},
+	{
+		"class":"FSH",
+		"level":1,
+		"item_name":"Mobusupa",
+		"amount":12
+	},
+	{
+		"class":"FSH",
+		"level":10,
+		"item_name":"Pirubagu",
+		"amount":12
+	},
+	{
+		"class":"FSH",
+		"level":10,
+		"item_name":"Bloodworm",
+		"amount":12
+	},
+	{
+		"class":"FSH",
+		"level":20,
+		"item_name":"Floating minnow",
+		"amount":3
+	},
+	{
+		"class":"FSH",
+		"level":20,
+		"item_name":"Brass Spoon Lure",
+		"amount":3
+	},
+	{
+		"class":"FSH",
+		"level":25,
+		"item_name":"Silver Spoon Lure",
+		"amount":3
+	},
+	{
+		"class":"FSH",
+		"level":30,
+		"item_name":"Silver Spoon Lure",
+		"amount":3
+	},
+	{
+		"class":"FSH",
+		"level":35,
+		"item_name":"Heavy Iron Jig",
+		"amount":3
+	},
+	{
+		"class":"FSH",
+		"level":40,
+		"item_name":"Mythril Spoon Lure",
+		"amount":3
+	},
+	{
+		"class":"CRP",
+		"level":1,
+		"item_name":"Ice Shard",
+		"amount":24
+	},
+	{
+		"class":"CRP",
+		"level":1,
+		"item_name":"Maple Log",
+		"amount":2
+	},
+	{
+		"class":"CRP",
+		"level":1,
+		"item_name":"Maple Log",
+		"amount":5
+	},
+	{
+		"class":"CRP",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":3
+	},
+	{
+		"class":"CRP",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":8
+	},
+	{
+		"class":"CRP",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":28
+	},
+	{
+		"class":"CRP",
+		"level":5,
+		"item_name":"Maple Log",
+		"amount":2
+	},
+	{
+		"class":"CRP",
+		"level":10,
+		"item_name":"Ice Shard",
+		"amount":4
+	},
+	{
+		"class":"CRP",
+		"level":10,
+		"item_name":"Ice Shard",
+		"amount":10
+	},
+	{
+		"class":"CRP",
+		"level":10,
+		"item_name":"Wind Shard",
+		"amount":4
+	},
+	{
+		"class":"CRP",
+		"level":10,
+		"item_name":"Wind Shard",
+		"amount":32
+	},
+	{
+		"class":"CRP",
+		"level":15,
+		"item_name":"Ice Shard",
+		"amount":4
+	},
+	{
+		"class":"CRP",
+		"level":15,
+		"item_name":"Wind Shard",
+		"amount":4
+	},
+	{
+		"class":"CRP",
+		"level":15,
+		"item_name":"Wind Shard",
+		"amount":11
+	},
+	{
+		"class":"CRP",
+		"level":15,
+		"item_name":"Elm Log",
+		"amount":8
+	},
+	{
+		"class":"CRP",
+		"level":20,
+		"item_name":"Ice Shard",
+		"amount":5
+	},
+	{
+		"class":"CRP",
+		"level":20,
+		"item_name":"Ice Shard",
+		"amount":12
+	},
+	{
+		"class":"CRP",
+		"level":20,
+		"item_name":"You Baraki",
+		"amount":4
+	},
+	{
+		"class":"CRP",
+		"level":25,
+		"item_name":"Ice Shard",
+		"amount":5
+	},
+	{
+		"class":"CRP",
+		"level":25,
+		"item_name":"You Baraki",
+		"amount":4
+	},
+	{
+		"class":"CRP",
+		"level":25,
+		"item_name":"Yew Log",
+		"amount":11
+	},
+	{
+		"class":"CRP",
+		"level":30,
+		"item_name":"Wind Shard",
+		"amount":15
+	},
+	{
+		"class":"CRP",
+		"level":30,
+		"item_name":"Oak Log",
+		"amount":5
+	},
+	{
+		"class":"CRP",
+		"level":35,
+		"item_name":"Ice Shard",
+		"amount":16
+	},
+	{
+		"class":"CRP",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":6
+	},
+	{
+		"class":"CRP",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":16
+	},
+	{
+		"class":"CRP",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":52
+	},
+	{
+		"class":"CRP",
+		"level":40,
+		"item_name":"Ice Shard",
+		"amount":7
+	},
+	{
+		"class":"CRP",
+		"level":40,
+		"item_name":"Ice Shard",
+		"amount":17
+	},
+	{
+		"class":"CRP",
+		"level":40,
+		"item_name":"Ice Shard",
+		"amount":56
+	},
+	{
+		"class":"CRP",
+		"level":40,
+		"item_name":"Wind Shard",
+		"amount":17
+	},
+	{
+		"class":"CRP",
+		"level":45,
+		"item_name":"Ice Shard",
+		"amount":18
+	},
+	{
+		"class":"CRP",
+		"level":45,
+		"item_name":"Wind Shard",
+		"amount":7
+	},
+	{
+		"class":"CRP",
+		"level":45,
+		"item_name":"Rosewood Log",
+		"amount":6
+	},
+	{
+		"class":"CRP",
+		"level":45,
+		"item_name":"Bourimu (Bloody)",
+		"amount":1
+	},
+	{
+		"class":"BSM",
+		"level":1,
+		"item_name":"Earth Shard",
+		"amount":7
+	},
+	{
+		"class":"BSM",
+		"level":1,
+		"item_name":"Earth Shard",
+		"amount":24
+	},
+	{
+		"class":"BSM",
+		"level":1,
+		"item_name":"Tin ore",
+		"amount":2
+	},
+	{
+		"class":"BSM",
+		"level":5,
+		"item_name":"Earth Shard",
+		"amount":3
+	},
+	{
+		"class":"BSM",
+		"level":5,
+		"item_name":"Earth Shard",
+		"amount":28
+	},
+	{
+		"class":"BSM",
+		"level":5,
+		"item_name":"Shard",
+		"amount":8
+	},
+	{
+		"class":"BSM",
+		"level":5,
+		"item_name":"Shard",
+		"amount":28
+	},
+	{
+		"class":"BSM",
+		"level":5,
+		"item_name":"Copper ore",
+		"amount":2
+	},
+	{
+		"class":"BSM",
+		"level":5,
+		"item_name":"Copper ore",
+		"amount":6
+	},
+	{
+		"class":"BSM",
+		"level":10,
+		"item_name":"Shard",
+		"amount":4
+	},
+	{
+		"class":"BSM",
+		"level":10,
+		"item_name":"Shard",
+		"amount":10
+	},
+	{
+		"class":"BSM",
+		"level":10,
+		"item_name":"Shard",
+		"amount":32
+	},
+	{
+		"class":"BSM",
+		"level":10,
+		"item_name":"Copper Ore",
+		"amount":3
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Shard",
+		"amount":4
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Shard",
+		"amount":11
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Shard",
+		"amount":36
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Earth Shard",
+		"amount":11
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Earth Shard",
+		"amount":36
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Iron Ore",
+		"amount":3
+	},
+	{
+		"class":"BSM",
+		"level":15,
+		"item_name":"Iron Ore",
+		"amount":8
+	},
+	{
+		"class":"BSM",
+		"level":20,
+		"item_name":"Shard",
+		"amount":5
+	},
+	{
+		"class":"BSM",
+		"level":20,
+		"item_name":"Shard",
+		"amount":40
+	},
+	{
+		"class":"BSM",
+		"level":20,
+		"item_name":"Earth Shard",
+		"amount":5
+	},
+	{
+		"class":"BSM",
+		"level":20,
+		"item_name":"Iron Ore",
+		"amount":10
+	},
+	{
+		"class":"BSM",
+		"level":25,
+		"item_name":"Earth Shard",
+		"amount":5
+	},
+	{
+		"class":"BSM",
+		"level":25,
+		"item_name":"Earth Shard",
+		"amount":44
+	},
+	{
+		"class":"BSM",
+		"level":25,
+		"item_name":"Shard",
+		"amount":13
+	},
+	{
+		"class":"BSM",
+		"level":25,
+		"item_name":"Bomb Ash",
+		"amount":11
+	},
+	{
+		"class":"BSM",
+		"level":30,
+		"item_name":"Shard",
+		"amount":15
+	},
+	{
+		"class":"BSM",
+		"level":30,
+		"item_name":"Bomb Ash",
+		"amount":5
+	},
+	{
+		"class":"BSM",
+		"level":35,
+		"item_name":"Earth Shard",
+		"amount":16
+	},
+	{
+		"class":"BSM",
+		"level":35,
+		"item_name":"Shard",
+		"amount":16
+	},
+	{
+		"class":"BSM",
+		"level":35,
+		"item_name":"Spirit Ore",
+		"amount":5
+	},
+	{
+		"class":"BSM",
+		"level":40,
+		"item_name":"Shard",
+		"amount":7
+	},
+	{
+		"class":"BSM",
+		"level":40,
+		"item_name":"Shard",
+		"amount":56
+	},
+	{
+		"class":"BSM",
+		"level":40,
+		"item_name":"Earth Shard",
+		"amount":17
+	},
+	{
+		"class":"BSM",
+		"level":40,
+		"item_name":"Spirit Ore",
+		"amount":6
+	},
+	{
+		"class":"BSM",
+		"level":45,
+		"item_name":"Shard",
+		"amount":7
+	},
+	{
+		"class":"BSM",
+		"level":45,
+		"item_name":"Earth Shard",
+		"amount":18
+	},
+	{
+		"class":"BSM",
+		"level":45,
+		"item_name":"Old Aiolia emissions scimitar",
+		"amount":1
+	},
+	{
+		"class":"ARM",
+		"level":1,
+		"item_name":"Earth Shard",
+		"amount":3
+	},
+	{
+		"class":"ARM",
+		"level":1,
+		"item_name":"Earth Shard",
+		"amount":7
+	},
+	{
+		"class":"ARM",
+		"level":1,
+		"item_name":"Earth Shard",
+		"amount":24
+	},
+	{
+		"class":"ARM",
+		"level":1,
+		"item_name":"Tin ore",
+		"amount":2
+	},
+	{
+		"class":"ARM",
+		"level":5,
+		"item_name":"Earth Shard",
+		"amount":3
+	},
+	{
+		"class":"ARM",
+		"level":5,
+		"item_name":"Earth Shard",
+		"amount":8
+	},
+	{
+		"class":"ARM",
+		"level":5,
+		"item_name":"Earth Shard",
+		"amount":28
+	},
+	{
+		"class":"ARM",
+		"level":5,
+		"item_name":"Copper ore",
+		"amount":2
+	},
+	{
+		"class":"ARM",
+		"level":5,
+		"item_name":"Copper ore",
+		"amount":6
+	},
+	{
+		"class":"ARM",
+		"level":10,
+		"item_name":"Water Shard",
+		"amount":10
+	},
+	{
+		"class":"ARM",
+		"level":10,
+		"item_name":"Copper ore",
+		"amount":3
+	},
+	{
+		"class":"ARM",
+		"level":10,
+		"item_name":"Copper ore",
+		"amount":7
+	},
+	{
+		"class":"ARM",
+		"level":15,
+		"item_name":"Ice Shard",
+		"amount":4
+	},
+	{
+		"class":"ARM",
+		"level":15,
+		"item_name":"Ice Shard",
+		"amount":11
+	},
+	{
+		"class":"ARM",
+		"level":15,
+		"item_name":"Ice Shard",
+		"amount":36
+	},
+	{
+		"class":"ARM",
+		"level":15,
+		"item_name":"Water Shard",
+		"amount":11
+	},
+	{
+		"class":"ARM",
+		"level":15,
+		"item_name":"Iron Ore",
+		"amount":3
+	},
+	{
+		"class":"ARM",
+		"level":20,
+		"item_name":"Ice Shard",
+		"amount":5
+	},
+	{
+		"class":"ARM",
+		"level":20,
+		"item_name":"Iron Ore",
+		"amount":10
+	},
+	{
+		"class":"ARM",
+		"level":25,
+		"item_name":"Ice Shard",
+		"amount":44
+	},
+	{
+		"class":"ARM",
+		"level":25,
+		"item_name":"Earth Shard",
+		"amount":5
+	},
+	{
+		"class":"ARM",
+		"level":25,
+		"item_name":"Earth Shard",
+		"amount":13
+	},
+	{
+		"class":"ARM",
+		"level":30,
+		"item_name":"Earth Shard",
+		"amount":6
+	},
+	{
+		"class":"ARM",
+		"level":30,
+		"item_name":"Earth Shard",
+		"amount":15
+	},
+	{
+		"class":"ARM",
+		"level":35,
+		"item_name":"Spirit Ore",
+		"amount":5
+	},
+	{
+		"class":"ARM",
+		"level":40,
+		"item_name":"Spirit Ore",
+		"amount":6
+	},
+	{
+		"class":"ARM",
+		"level":45,
+		"item_name":"Ice Shard",
+		"amount":7
+	},
+	{
+		"class":"ARM",
+		"level":45,
+		"item_name":"Ice Shard",
+		"amount":60
+	},
+	{
+		"class":"ARM",
+		"level":45,
+		"item_name":"Earth Shard",
+		"amount":18
+	},
+	{
+		"class":"ARM",
+		"level":45,
+		"item_name":"Iron glance",
+		"amount":16
+	},
+	{
+		"class":"GSM",
+		"level":1,
+		"item_name":"Shard",
+		"amount":24
+	},
+	{
+		"class":"GSM",
+		"level":1,
+		"item_name":"Wind Shard",
+		"amount":7
+	},
+	{
+		"class":"GSM",
+		"level":1,
+		"item_name":"Copper Ore",
+		"amount":2
+	},
+	{
+		"class":"GSM",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":3
+	},
+	{
+		"class":"GSM",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":8
+	},
+	{
+		"class":"GSM",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":28
+	},
+	{
+		"class":"GSM",
+		"level":10,
+		"item_name":"Shard",
+		"amount":4
+	},
+	{
+		"class":"GSM",
+		"level":10,
+		"item_name":"Shard",
+		"amount":10
+	},
+	{
+		"class":"GSM",
+		"level":10,
+		"item_name":"Wind Shard",
+		"amount":4
+	},
+	{
+		"class":"GSM",
+		"level":10,
+		"item_name":"Wind Shard",
+		"amount":32
+	},
+	{
+		"class":"GSM",
+		"level":10,
+		"item_name":"Zinc ore",
+		"amount":7
+	},
+	{
+		"class":"GSM",
+		"level":15,
+		"item_name":"Shard",
+		"amount":4
+	},
+	{
+		"class":"GSM",
+		"level":15,
+		"item_name":"Shard",
+		"amount":11
+	},
+	{
+		"class":"GSM",
+		"level":15,
+		"item_name":"Wind Shard",
+		"amount":4
+	},
+	{
+		"class":"GSM",
+		"level":15,
+		"item_name":"Zinc ore",
+		"amount":8
+	},
+	{
+		"class":"GSM",
+		"level":20,
+		"item_name":"Shard",
+		"amount":12
+	},
+	{
+		"class":"GSM",
+		"level":20,
+		"item_name":"Wind Shard",
+		"amount":12
+	},
+	{
+		"class":"GSM",
+		"level":20,
+		"item_name":"Silver ore",
+		"amount":4
+	},
+	{
+		"class":"GSM",
+		"level":20,
+		"item_name":"Silver ore",
+		"amount":10
+	},
+	{
+		"class":"GSM",
+		"level":25,
+		"item_name":"Shard",
+		"amount":44
+	},
+	{
+		"class":"GSM",
+		"level":25,
+		"item_name":"Silver ore",
+		"amount":4
+	},
+	{
+		"class":"GSM",
+		"level":25,
+		"item_name":"Shard",
+		"amount":13
+	},
+	{
+		"class":"GSM",
+		"level":30,
+		"item_name":"Wind Shard",
+		"amount":6
+	},
+	{
+		"class":"GSM",
+		"level":30,
+		"item_name":"Wind Shard",
+		"amount":48
+	},
+	{
+		"class":"GSM",
+		"level":30,
+		"item_name":"Shard",
+		"amount":15
+	},
+	{
+		"class":"GSM",
+		"level":30,
+		"item_name":"Shard",
+		"amount":48
+	},
+	{
+		"class":"GSM",
+		"level":30,
+		"item_name":"Spirit Ore",
+		"amount":12
+	},
+	{
+		"class":"GSM",
+		"level":30,
+		"item_name":"Old Cudgel",
+		"amount":1
+	},
+	{
+		"class":"GSM",
+		"level":35,
+		"item_name":"Fire Shard",
+		"amount":6
+	},
+	{
+		"class":"GSM",
+		"level":35,
+		"item_name":"Shard",
+		"amount":16
+	},
+	{
+		"class":"GSM",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":6
+	},
+	{
+		"class":"GSM",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":52
+	},
+	{
+		"class":"GSM",
+		"level":35,
+		"item_name":"Spirit Ore",
+		"amount":13
+	},
+	{
+		"class":"GSM",
+		"level":40,
+		"item_name":"Shard",
+		"amount":7
+	},
+	{
+		"class":"GSM",
+		"level":40,
+		"item_name":"Shard",
+		"amount":17
+	},
+	{
+		"class":"GSM",
+		"level":40,
+		"item_name":"Blue gold",
+		"amount":6
+	},
+	{
+		"class":"GSM",
+		"level":40,
+		"item_name":"Old Hora",
+		"amount":1
+	},
+	{
+		"class":"GSM",
+		"level":45,
+		"item_name":"Shard",
+		"amount":7
+	},
+	{
+		"class":"GSM",
+		"level":45,
+		"item_name":"Blue gold",
+		"amount":6
+	},
+	{
+		"class":"GSM",
+		"level":45,
+		"item_name":"Old Hora",
+		"amount":1
+	},
+	{
+		"class":"GSM",
+		"level":45,
+		"item_name":"Wind Shard",
+		"amount":18
+	},
+	{
+		"class":"LTW",
+		"level":1,
+		"item_name":"Wind Shard",
+		"amount":3
+	},
+	{
+		"class":"LTW",
+		"level":1,
+		"item_name":"Soft Pelt",
+		"amount":5
+	},
+	{
+		"class":"LTW",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":28
+	},
+	{
+		"class":"LTW",
+		"level":5,
+		"item_name":"Earth Shard",
+		"amount":8
+	},
+	{
+		"class":"LTW",
+		"level":5,
+		"item_name":"Rough Pelt",
+		"amount":2
+	},
+	{
+		"class":"LTW",
+		"level":5,
+		"item_name":"Rough Pelt",
+		"amount":6
+	},
+	{
+		"class":"LTW",
+		"level":10,
+		"item_name":"Earth Shard",
+		"amount":4
+	},
+	{
+		"class":"LTW",
+		"level":10,
+		"item_name":"Earth Shard",
+		"amount":10
+	},
+	{
+		"class":"LTW",
+		"level":15,
+		"item_name":"Wind Shard",
+		"amount":4
+	},
+	{
+		"class":"LTW",
+		"level":15,
+		"item_name":"Wind Shard",
+		"amount":11
+	},
+	{
+		"class":"LTW",
+		"level":15,
+		"item_name":"Earth Shard",
+		"amount":36
+	},
+	{
+		"class":"LTW",
+		"level":20,
+		"item_name":"Wind Shard",
+		"amount":12
+	},
+	{
+		"class":"LTW",
+		"level":20,
+		"item_name":"Wind Shard",
+		"amount":40
+	},
+	{
+		"class":"LTW",
+		"level":20,
+		"item_name":"Earth Shard",
+		"amount":5
+	},
+	{
+		"class":"LTW",
+		"level":20,
+		"item_name":"Aldgoat Pelt",
+		"amount":10
+	},
+	{
+		"class":"LTW",
+		"level":25,
+		"item_name":"Wind Shard",
+		"amount":5
+	},
+	{
+		"class":"LTW",
+		"level":25,
+		"item_name":"Wind Shard",
+		"amount":13
+	},
+	{
+		"class":"LTW",
+		"level":30,
+		"item_name":"Bore Pelt",
+		"amount":5
+	},
+	{
+		"class":"LTW",
+		"level":30,
+		"item_name":"Bore Pelt",
+		"amount":12
+	},
+	{
+		"class":"LTW",
+		"level":35,
+		"item_name":"Earth Shard",
+		"amount":6
+	},
+	{
+		"class":"LTW",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":16
+	},
+	{
+		"class":"LTW",
+		"level":35,
+		"item_name":"Pelt bore",
+		"amount":13
+	},
+	{
+		"class":"LTW",
+		"level":40,
+		"item_name":"Wind Shard",
+		"amount":7
+	},
+	{
+		"class":"LTW",
+		"level":40,
+		"item_name":"Earth Shard",
+		"amount":7
+	},
+	{
+		"class":"LTW",
+		"level":40,
+		"item_name":"Paste Pelt",
+		"amount":15
+	},
+	{
+		"class":"LTW",
+		"level":45,
+		"item_name":"Wind Shard",
+		"amount":7
+	},
+	{
+		"class":"LTW",
+		"level":45,
+		"item_name":"Wind Shard",
+		"amount":18
+	},
+	{
+		"class":"LTW",
+		"level":45,
+		"item_name":"Earth Shard",
+		"amount":7
+	},
+	{
+		"class":"WVR",
+		"level":1,
+		"item_name":"Lightning Shard",
+		"amount":3
+	},
+	{
+		"class":"WVR",
+		"level":1,
+		"item_name":"Lightning Shard",
+		"amount":7
+	},
+	{
+		"class":"WVR",
+		"level":1,
+		"item_name":"Lightning Shard",
+		"amount":24
+	},
+	{
+		"class":"WVR",
+		"level":5,
+		"item_name":"Wind Shard",
+		"amount":8
+	},
+	{
+		"class":"WVR",
+		"level":5,
+		"item_name":"Lightning Shard",
+		"amount":3
+	},
+	{
+		"class":"WVR",
+		"level":10,
+		"item_name":"Wind Shard",
+		"amount":4
+	},
+	{
+		"class":"WVR",
+		"level":10,
+		"item_name":"Wind Shard",
+		"amount":10
+	},
+	{
+		"class":"WVR",
+		"level":15,
+		"item_name":"Wind Shard",
+		"amount":36
+	},
+	{
+		"class":"WVR",
+		"level":15,
+		"item_name":"Cotton grass",
+		"amount":3
+	},
+	{
+		"class":"WVR",
+		"level":15,
+		"item_name":"Cotton grass",
+		"amount":8
+	},
+	{
+		"class":"WVR",
+		"level":20,
+		"item_name":"Lightning Shard",
+		"amount":40
+	},
+	{
+		"class":"WVR",
+		"level":20,
+		"item_name":"Diremite Web",
+		"amount":4
+	},
+	{
+		"class":"WVR",
+		"level":25,
+		"item_name":"Lightning Shard",
+		"amount":5
+	},
+	{
+		"class":"WVR",
+		"level":25,
+		"item_name":"Lightning Shard",
+		"amount":13
+	},
+	{
+		"class":"WVR",
+		"level":30,
+		"item_name":"Lightning Shard",
+		"amount":6
+	},
+	{
+		"class":"WVR",
+		"level":30,
+		"item_name":"Lightning Shard",
+		"amount":15
+	},
+	{
+		"class":"WVR",
+		"level":30,
+		"item_name":"Lightning Shard",
+		"amount":48
+	},
+	{
+		"class":"WVR",
+		"level":30,
+		"item_name":"Flax",
+		"amount":12
+	},
+	{
+		"class":"WVR",
+		"level":30,
+		"item_name":"Old Doublet best",
+		"amount":1
+	},
+	{
+		"class":"WVR",
+		"level":35,
+		"item_name":"Wind Shard",
+		"amount":6
+	},
+	{
+		"class":"WVR",
+		"level":35,
+		"item_name":"Flax",
+		"amount":13
+	},
+	{
+		"class":"WVR",
+		"level":40,
+		"item_name":"Wind Shard",
+		"amount":7
+	},
+	{
+		"class":"WVR",
+		"level":40,
+		"item_name":"Wind Shard",
+		"amount":17
+	},
+	{
+		"class":"WVR",
+		"level":40,
+		"item_name":"Fleece",
+		"amount":6
+	},
+	{
+		"class":"WVR",
+		"level":40,
+		"item_name":"Fleece",
+		"amount":15
+	},
+	{
+		"class":"WVR",
+		"level":45,
+		"item_name":"Fleece",
+		"amount":6
+	},
+	{
+		"class":"WVR",
+		"level":45,
+		"item_name":"Fleece",
+		"amount":16
+	},
+	{
+		"class":"WVR",
+		"level":45,
+		"item_name":"Lightning Shard",
+		"amount":18
+	},
+	{
+		"class":"ALC",
+		"level":1,
+		"item_name":"Water Shard",
+		"amount":3
+	},
+	{
+		"class":"ALC",
+		"level":1,
+		"item_name":"Water Shard",
+		"amount":7
+	},
+	{
+		"class":"ALC",
+		"level":1,
+		"item_name":"Water Shard",
+		"amount":24
+	},
+	{
+		"class":"ALC",
+		"level":5,
+		"item_name":"Lightning Shard",
+		"amount":3
+	},
+	{
+		"class":"ALC",
+		"level":5,
+		"item_name":"Lightning Shard",
+		"amount":8
+	},
+	{
+		"class":"ALC",
+		"level":10,
+		"item_name":"Lightning Shard",
+		"amount":4
+	},
+	{
+		"class":"ALC",
+		"level":10,
+		"item_name":"Lightning Shard",
+		"amount":10
+	},
+	{
+		"class":"ALC",
+		"level":10,
+		"item_name":"Copper sand",
+		"amount":7
+	},
+	{
+		"class":"ALC",
+		"level":15,
+		"item_name":"Iron sand",
+		"amount":3
+	},
+	{
+		"class":"ALC",
+		"level":15,
+		"item_name":"Iron sand",
+		"amount":8
+	},
+	{
+		"class":"ALC",
+		"level":20,
+		"item_name":"Water Shard",
+		"amount":5
+	},
+	{
+		"class":"ALC",
+		"level":20,
+		"item_name":"Water Shard",
+		"amount":12
+	},
+	{
+		"class":"ALC",
+		"level":20,
+		"item_name":"Iron sand",
+		"amount":4
+	},
+	{
+		"class":"ALC",
+		"level":25,
+		"item_name":"Lightning Shard",
+		"amount":13
+	},
+	{
+		"class":"ALC",
+		"level":25,
+		"item_name":"Water Shard",
+		"amount":5
+	},
+	{
+		"class":"ALC",
+		"level":25,
+		"item_name":"Water Shard",
+		"amount":13
+	},
+	{
+		"class":"ALC",
+		"level":30,
+		"item_name":"Lightning Shard",
+		"amount":6
+	},
+	{
+		"class":"ALC",
+		"level":30,
+		"item_name":"Water Shard",
+		"amount":6
+	},
+	{
+		"class":"ALC",
+		"level":30,
+		"item_name":"Lightning Shard",
+		"amount":15
+	},
+	{
+		"class":"ALC",
+		"level":30,
+		"item_name":"Water Shard",
+		"amount":15
+	},
+	{
+		"class":"ALC",
+		"level":35,
+		"item_name":"Lightning Shard",
+		"amount":6
+	},
+	{
+		"class":"ALC",
+		"level":35,
+		"item_name":"Water Shard",
+		"amount":16
+	},
+	{
+		"class":"ALC",
+		"level":35,
+		"item_name":"Water Shard",
+		"amount":52
+	},
+	{
+		"class":"ALC",
+		"level":40,
+		"item_name":"Soul silver sand",
+		"amount":6
+	},
+	{
+		"class":"ALC",
+		"level":40,
+		"item_name":"Old Bling bird box",
+		"amount":1
+	},
+	{
+		"class":"ALC",
+		"level":40,
+		"item_name":"Water Shard",
+		"amount":17
+	},
+	{
+		"class":"ALC",
+		"level":45,
+		"item_name":"Blue golden sand",
+		"amount":6
+	},
+	{
+		"class":"ALC",
+		"level":45,
+		"item_name":"Blue golden sand",
+		"amount":16
+	},
+	{
+		"class":"CUL",
+		"level":1,
+		"item_name":"Fire Shard",
+		"amount":3
+	},
+	{
+		"class":"CUL",
+		"level":1,
+		"item_name":"Shard",
+		"amount":7
+	},
+	{
+		"class":"CUL",
+		"level":1,
+		"item_name":"Shard",
+		"amount":24
+	},
+	{
+		"class":"CUL",
+		"level":5,
+		"item_name":"Fire Shard",
+		"amount":3
+	},
+	{
+		"class":"CUL",
+		"level":5,
+		"item_name":"Water Shard",
+		"amount":3
+	},
+	{
+		"class":"CUL",
+		"level":5,
+		"item_name":"Water Shard",
+		"amount":8
+	},
+	{
+		"class":"CUL",
+		"level":5,
+		"item_name":"Water Shard",
+		"amount":28
+	},
+	{
+		"class":"CUL",
+		"level":10,
+		"item_name":"Water Shard",
+		"amount":4
+	},
+	{
+		"class":"CUL",
+		"level":10,
+		"item_name":"Water Shard",
+		"amount":10
+	},
+	{
+		"class":"CUL",
+		"level":15,
+		"item_name":"Water Shard",
+		"amount":11
+	},
+	{
+		"class":"CUL",
+		"level":15,
+		"item_name":"Water Shard",
+		"amount":36
+	},
+	{
+		"class":"CUL",
+		"level":20,
+		"item_name":"Shard",
+		"amount":5
+	},
+	{
+		"class":"CUL",
+		"level":20,
+		"item_name":"Shard",
+		"amount":40
+	},
+	{
+		"class":"CUL",
+		"level":20,
+		"item_name":"Water Shard",
+		"amount":12
+	},
+	{
+		"class":"CUL",
+		"level":25,
+		"item_name":"Shard",
+		"amount":5
+	},
+	{
+		"class":"CUL",
+		"level":25,
+		"item_name":"Shard",
+		"amount":13
+	},
+	{
+		"class":"CUL",
+		"level":25,
+		"item_name":"Shard",
+		"amount":44
+	},
+	{
+		"class":"CUL",
+		"level":30,
+		"item_name":"Fire Shard",
+		"amount":6
+	},
+	{
+		"class":"CUL",
+		"level":30,
+		"item_name":"Shard",
+		"amount":15
+	},
+	{
+		"class":"CUL",
+		"level":30,
+		"item_name":"Shard",
+		"amount":48
+	},
+	{
+		"class":"CUL",
+		"level":35,
+		"item_name":"Water Shard",
+		"amount":6
+	},
+	{
+		"class":"CUL",
+		"level":35,
+		"item_name":"Shard",
+		"amount":16
+	},
+	{
+		"class":"CUL",
+		"level":40,
+		"item_name":"Water Shard",
+		"amount":7
+	},
+	{
+		"class":"CUL",
+		"level":40,
+		"item_name":"Shard",
+		"amount":17
+	},
+	{
+		"class":"CUL",
+		"level":45,
+		"item_name":"Shard",
+		"amount":7
+	},
+	{
+		"class":"CUL",
+		"level":45,
+		"item_name":"Water Shard",
+		"amount":7
+	},
+	{
+		"class":"CUL",
+		"level":45,
+		"item_name":"Water Shard",
+		"amount":18
+	},
+	{
+		"class":"CUL",
+		"level":45,
+		"item_name":"Water Shard",
+		"amount":60
+	}
+]

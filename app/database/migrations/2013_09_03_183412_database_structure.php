@@ -157,6 +157,20 @@ class DatabaseStructure extends Migration {
 			$table->index('level');
 			$table->index('type');
 		});
+		
+		Schema::create('leve_rewards', function($table)
+		{
+			$table->engine = 'InnoDB';
+
+			$table->increments('id');
+			$table->string('item_name', 50);
+			$table->integer('item_id');
+			$table->integer('job_id');
+			$table->smallInteger('level');
+			$table->smallInteger('amount');
+			
+			$table->index('job_id', 'level');
+		});
 
 		Schema::create('experience', function($table)
 		{

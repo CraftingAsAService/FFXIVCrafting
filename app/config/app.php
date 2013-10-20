@@ -116,6 +116,8 @@ return array(
 
 		'Wardrobe\Core\WardrobeServiceProvider',
 
+		'Intouch\LaravelNewrelic\LaravelNewrelicServiceProvider',
+
 	),
 
 	/*
@@ -182,6 +184,8 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
 		'Wardrobe' => 'Wardrobe\Core\Facades\WardrobeFacade',
+
+		'Newrelic'        => 'Intouch\LaravelNewrelic\Facades\Newrelic',
 
 	),
 

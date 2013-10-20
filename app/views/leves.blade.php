@@ -7,7 +7,6 @@
 @section('javascript')
 	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
 	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
-	<script src='/js/home.js'></script>
 	<script src='/js/leves.js'></script>
 @stop
 
@@ -95,7 +94,10 @@
 				<th class='text-center'>XP</th>
 				<th class='text-center'>Gil</th>
 				<th class='text-center valign'>Location</th>
-				<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
+				<th class='text-center valign' rel='tooltip' title='View Leve Rewards' data-container='body'>
+					<i class='glyphicon glyphicon-gift'></i>
+				</th>
+				<th class='text-center valign' rel='tooltip' title='Add to Shopping List' data-container='body'>
 					<i class='glyphicon glyphicon-shopping-cart'></i>
 					<i class='glyphicon glyphicon-plus'></i>
 				</th>

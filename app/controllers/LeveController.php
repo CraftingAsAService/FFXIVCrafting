@@ -27,7 +27,8 @@ class LeveController extends BaseController
 
 		// All Leves
 		$query = Leve::with(array(
-				'job', 'item', 'item.recipes', 'major', 'minor', 'location'
+				'job', 'item', 'item.recipes', 
+				'major', 'minor', 'location'
 			))
 			->orderBy('job_id')
 			->orderBy('level')
@@ -59,9 +60,15 @@ class LeveController extends BaseController
 
 		$leve_records = $query->remember(Config::get('site.cache_length'))->get();
 
-
 		$location_search = strtolower(Input::get('leve_location'));
 		$item_search = strtolower(Input::get('leve_item'));
+
+		$rewards = LeveReward::with('item')
+			->whereBetween('level', array($min, $max))
+			->whereIn('job_id', $job_ids)
+			->get();
+
+		$leve_rewards = array();
 
 		foreach ($leve_records as $k => $row)
 		{
@@ -82,10 +89,15 @@ class LeveController extends BaseController
 					continue;
 				}
 			}
+
+			foreach($rewards as $reward)
+				if ($reward->job_id == $row->job_id && $reward->level == $row->level)
+					$leve_rewards[$row->id][] = $reward;
 		}
 		
 		return View::make('leve.rows')
-			->with('leves', $leve_records);
+			->with('leves', $leve_records)
+			->with('leve_rewards', $leve_rewards);
 	}
 
 	public function getBreakdown($leve_id = 1)
