@@ -114,7 +114,7 @@ return array(
 		'cluster' => false,
 
 		'default' => array(
-			'host'     => '192.237.182.74',
+			'host'     => '10.208.144.210',
 			'port'     => 6379,
 			'database' => 'REDIS_DB',
 		),
