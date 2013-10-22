@@ -220,7 +220,7 @@ class CraftingController extends BaseController
 			{
 				foreach($reagent['item']->vendors as $vendor)
 				{
-					$reagent['vendors'][$vendor->location->name ?: 'Unknown'][] = (object) array(
+					$reagent['vendors'][isset($vendor->location->name) ? $vendor->location->name : 'Unknown'][] = (object) array(
 						'name' => $vendor->name,
 						'title' => $vendor->title,
 						'x' => $vendor->x,

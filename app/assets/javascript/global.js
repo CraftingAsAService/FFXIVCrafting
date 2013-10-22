@@ -1,6 +1,8 @@
 var global = {
 	init:function() {
-		$('[rel=tooltip]').tooltip();
+		$('[rel=tooltip]').tooltip({
+			container: 'body'
+		});
 
 		global.reset_popovers();
 
@@ -75,8 +77,11 @@ var global = {
 		$(document).click(function(event) {
 			if ($(event.target).closest('.popover').length == 0 && $(event.target).data('toggle') != 'popover')
 			{
-				popovers.popover('hide');
+				if (global.visible_popover !== null)
+					global.visible_popover.trigger('click');
+				
 				global.visible_popover = null;
+				popovers.popover('hide');
 			}
 		});
 	},
