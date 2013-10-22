@@ -36,6 +36,11 @@ class Item extends Eloquent
 		return $this->belongsToMany('GatheringNode')->orderBy('level');
 	}
 
+	public function vendors()
+	{
+		return $this->belongsToMany('Vendor');
+	}
+
 	public static function calculate($job = '', $level = 1, $craftable_only = TRUE)
 	{
 		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? 'T' : 'F');

@@ -162,18 +162,19 @@ td {
 	margin-right: 1em;
 }
 
-.crafted_gathered {
 
-}
-
-	.crafted_gathered .alert {
-		padding: 5px 5px 8px;
-		margin-right: 5px;
-	}
-
-		.crafted_gathered .alert:last-child {
-			margin-right: 0px;
+	.crafted_gathered {
+		.btn, .alert {
+			padding: 5px 5px 8px;
+			margin-right: 5px;
+			&:last-child {
+				margin-right: 0px;
+			}
 		}
+		.btn {
+			padding: 3px 5px 3px;
+		}
+	}
 
 .crafting-list {
 
