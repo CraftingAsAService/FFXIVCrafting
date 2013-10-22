@@ -145,18 +145,20 @@ class CraftingController extends BaseController
 				'item', // The recipe's Item
 					'item.quest', // Is the recipe used as a quest turnin?
 					'item.leve', // Is the recipe used to fufil a leve?
+					'item.vendors',
+						'item.vendors.location',
 				'reagents', // The reagents for the recipe
-					'reagents.jobs' => function($query) {
-						// Only Land Disciples
-						$query->where('disciple', 'DOL');
-					},
+					'reagents.vendors',
+						'reagents.vendors.location',
+					'reagents.nodes',
+						'reagents.nodes.location',
+						'reagents.nodes.job',
 					'reagents.recipes', 
 						'reagents.recipes.item', 
 						'reagents.recipes.job' => function($query) {
 							// Only Hand Disciples
 							$query->where('disciple', 'DOH');
-						},
-
+						}
 			))
 			->select('recipes.*', 'j.abbreviation')
 			->join('jobs AS j', 'j.id', '=', 'recipes.job_id')
@@ -171,7 +173,9 @@ class CraftingController extends BaseController
 				->whereIn('j.id', $job_ids)
 				->whereBetween('level', array($start, $end));
 
-		$recipes = $query->remember(Config::get('site.cache_length'))->get();
+		$recipes = $query
+			->remember(Config::get('site.cache_length'))
+			->get();
 
 		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, FALSE, $include_quests, $top_level);
 
@@ -208,6 +212,52 @@ class CraftingController extends BaseController
 			$section = 'Other';
 			$level = 0;
 
+			// Vendors
+			$reagent['vendor_count'] = 0;
+			$reagent['vendors'] = array();
+
+			if (count($reagent['item']->vendors))
+			{
+				foreach($reagent['item']->vendors as $vendor)
+				{
+					$reagent['vendors'][$vendor->location->name ?: 'Unknown'][] = (object) array(
+						'name' => $vendor->name,
+						'title' => $vendor->title,
+						'x' => $vendor->x,
+						'y' => $vendor->y
+					);
+
+					$reagent['vendor_count']++;
+				}
+
+				ksort($reagent['vendors']);
+			}
+
+			// Nodes
+			$new_nodes = array();
+			// Job
+				// Location
+					//Location Level
+						// Action
+							//Level
+			foreach ($reagent['nodes'] as $node)
+				$new_nodes[$node['job']][$node['location']][$node['location_level']][$node['action']][] = $node['level'];
+
+			foreach ($new_nodes as $k => $nn)
+			{
+				foreach ($nn as $j => $nl)
+				{
+					foreach ($nl as $h => $na)
+						ksort($new_nodes[$k][$j][$h]);
+
+					ksort($new_nodes[$k][$j]);
+				}
+				ksort($new_nodes[$k]);
+			}
+
+			$reagent['nodes'] = $new_nodes;
+
+			// Section
 			if (in_array($reagent['self_sufficient'], array('MIN', 'BTN', 'FSH')))
 			{
 				$section = 'Gathered';
@@ -234,19 +284,42 @@ class CraftingController extends BaseController
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
 
-		// Was this their first time?
-		$first_time = TRUE;
+		// Recipe Vendors
+		$recipe_vendors = array();
+		foreach ($recipes as $recipe)
+		{
+			// Vendors
+			$vendor_count = 0;
+			$new_vendors = array();
 
-		if (Session::has('crafting_first_time'))
-			$first_time = FALSE;
-		else
-			Session::put('crafting_first_time', TRUE);
+			if (count($recipe->item->vendors))
+			{
+				foreach($recipe->item->vendors as $vendor)
+				{
+					$new_vendors[isset($vendor->location->name) ? $vendor->location->name : 'Unknown'][] = (object) array(
+						'name' => $vendor->name,
+						'title' => $vendor->title,
+						'x' => $vendor->x,
+						'y' => $vendor->y
+					);
+
+					$vendor_count++;
+				}
+
+				ksort($new_vendors);
+			}
+
+			$recipe_vendors[$recipe->id] = array(
+				'count' => $vendor_count,
+				'vendors' => $new_vendors
+			);
+		}
 
 		return View::make('crafting.list')
 			->with(array(
 				'recipes' => $recipes,
+				'recipe_vendors' => $recipe_vendors,
 				'reagent_list' => $sorted_reagent_list,
-				'first_time' => $first_time,
 				'self_sufficient' => $self_sufficient,
 				'include_quests' => $include_quests
 			));
@@ -298,6 +371,8 @@ class CraftingController extends BaseController
 						'make_this_many' => 0,
 						'self_sufficient' => '',
 						'item' => $reagent,
+						'nodes' => array(),
+						'node_jobs' => array()
 					);
 
 				// if ($reagent->name == 'Bronze Pickaxe')
@@ -313,29 +388,36 @@ class CraftingController extends BaseController
 
 				if ($self_sufficient)
 				{
-					if (isset($reagent->jobs[0]))
+					if (count($reagent->nodes))
 					{
-						// Maybe it's a recipe though [See Issue #84 for why this exists]
-						if (isset($reagent->recipes[0]) && $reagent->recipes[0]->job->disciple == 'DOH')
-						{
-							$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-							// Don't continue, we still want the materials to register
-						}
-						else
-						{
-							// Prevent non DOH/DOL jobs from showing up, look in reverse order
-							for ($i = count($reagent->jobs) - 1; $i >= 0; $i--)
-							{
-								$job = $reagent->jobs[$i];
-								if ( ! in_array($job->disciple, array('DOH', 'DOL'))) 
-									continue;
+						// First, check here because we don't want to re-process the node data
+						if ($reagent_list[$reagent->id]['self_sufficient'])
+							continue;
 
-								$reagent_list[$reagent->id]['self_sufficient'] = $job->abbreviation;
-							}
-
-							if ($reagent_list[$reagent->id]['self_sufficient'])
-								continue;
+						// Compile nodes
+						$node_data = $node_jobs = array();
+						foreach ($reagent->nodes as $node)
+						{
+							@$node_jobs[$node->job->abbreviation]++;
+							$node_data[] = array(
+								'action' => $node->action,
+								'level' => $node->level,
+								'location_level' => $node->location_level,
+								'location' => $node->location->name,
+								'job' => $node->job->abbreviation
+							);
 						}
+						// Get the "highest" job
+						asort($node_jobs);
+
+						$reagent_list[$reagent->id]['self_sufficient'] = array_keys($node_jobs)[count($node_jobs) - 1];
+
+						$reagent_list[$reagent->id]['nodes'] = $node_data;
+						$reagent_list[$reagent->id]['node_jobs'] = $node_jobs;
+
+						// Then check again here to avoid recipe stuff
+						if ($reagent_list[$reagent->id]['self_sufficient'])
+							continue;
 					}
 
 					if(isset($reagent->recipes[0]))

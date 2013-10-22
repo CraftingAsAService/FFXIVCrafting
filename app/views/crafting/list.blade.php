@@ -97,19 +97,56 @@
 					</div>
 				</td>
 				<td>
-					@if($item->vendors)
+					@if($item->buy)
 					<div{{ $reagent['self_sufficient'] ? ' class="opaque"' : '' }}>
+
 						<img src='/img/coin.png' class='stat-vendors' width='24' height='24'>
-						{{ number_format($item->gil) }}
+						{{ number_format($item->buy) }}
+
+						<button class='btn btn-default btn-sm margin-left' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
+							{{ $reagent['vendor_count'] }} Vendor{{ $reagent['vendor_count'] > 1 ? 's' : '' }} 
+							@if($reagent['vendor_count'] > 1 && count($reagent['vendors']) > 1)
+							in {{ count($reagent['vendors']) }} Area{{ count($reagent['vendors']) > 1 ? 's' : '' }}
+							@endif
+						</button>
+						<div class='hidden' id='vendors_for_{{ $item->id }}'>
+							@foreach($reagent['vendors'] as $location_name => $vendors)
+							<p>{{ $location_name }}</p>
+							<ul>
+								@foreach($vendors as $vendor)
+								<li>
+									<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
+									@if($vendor->x && $vendor->y)
+									<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
+									@endif
+								</li>
+								@endforeach
+							</ul>
+							@endforeach
+						</div>
 					</div>
 					@endif
 				</td>
 				<td class='crafted_gathered'>
-					@foreach($item->jobs as $reagent_job)
-					<?php if ( ! in_array($reagent_job->disciple, array('DOH', 'DOL'))) continue; ?>
-					<span class='alert alert-{{ $reagent_job->abbreviation == $reagent['self_sufficient'] ? 'success' : 'info' }}'>
-						<img src='/img/classes/{{ $reagent_job->abbreviation }}.png' rel='tooltip' title='{{ $job_list[$reagent_job->abbreviation] }}'>
+					@foreach(array_reverse(array_keys($reagent['node_jobs'])) as $reagent_job)
+					<span class='btn btn-{{ $reagent_job == $reagent['self_sufficient'] ? 'success' : 'info' }}' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#cg_for_{{ $item->id }}_{{ $reagent_job }}'>
+						<img src='/img/classes/{{ $reagent_job }}.png' rel='tooltip' title='{{ $job_list[$reagent_job] }}'>
 					</span>
+
+					<div class='hidden' id='cg_for_{{ $item->id }}_{{ $reagent_job }}'>
+						@foreach($reagent['nodes'][$reagent_job] as $location_name => $nodes)
+						<p>{{ $location_name }}</p>
+						@foreach($nodes as $node_level => $node_actions)
+						<p>
+							<span class='label label-primary' rel='tooltip' title='Node Level'>&commat;{{ $node_level }}</span>
+							@foreach ($node_actions as $action => $levels)
+							<span class='label label-default' rel='tooltip' title='Action'>{{ $action }}</span>
+							<span class='label label-success' rel='tooltip' title='Item Level'>{{ implode(', ', $levels) }}</span>
+							@endforeach
+						</p>
+						@endforeach
+						@endforeach
+					</div>
 					@endforeach
 					@foreach($item->recipes as $recipe)
 					<span class='alert alert-{{ $recipe->job->abbreviation == $reagent['self_sufficient'] ? 'success' : 'warning' }}'>
@@ -179,10 +216,33 @@
 					</div>
 				</td>
 				<td>
-					@if($recipe->item->vendors)
+					@if($recipe->item->buy)
 					<div{{ $reagent['self_sufficient'] ? ' class="opaque"' : '' }}>
+
 						<img src='/img/coin.png' class='stat-vendors' width='24' height='24'>
-						{{ number_format($recipe->item->gil) }}
+						{{ number_format($recipe->item->buy) }}
+
+						<button class='btn btn-default btn-sm margin-left' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
+							{{ $recipe_vendors[$recipe->id]['count'] }} Vendor{{ $recipe_vendors[$recipe->id]['count'] > 1 ? 's' : '' }} 
+							@if($recipe_vendors[$recipe->id]['count'] > 1 && count($recipe_vendors[$recipe->id]['vendors']) > 1)
+							in {{ count($recipe_vendors[$recipe->id]['vendors']) }} Area{{ count($recipe_vendors[$recipe->id]['vendors']) > 1 ? 's' : '' }}
+							@endif
+						</button>
+						<div class='hidden' id='vendors_for_{{ $item->id }}'>
+							@foreach($recipe_vendors[$recipe->id]['vendors'] as $location_name => $vendors)
+							<p>{{ $location_name }}</p>
+							<ul>
+								@foreach($vendors as $vendor)
+								<li>
+									<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
+									@if($vendor->x && $vendor->y)
+									<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
+									@endif
+								</li>
+								@endforeach
+							</ul>
+							@endforeach
+						</div>
 					</div>
 					@endif
 				</td>

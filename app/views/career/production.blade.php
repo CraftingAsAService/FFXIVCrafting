@@ -32,7 +32,7 @@
 					@if(isset($recipe->job_level))
 					<span class='close' rel='tooltip' title='Job Level'>{{ $recipe->job_level }}</span>
 					@endif
-					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
+					<a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'>
 						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
 					</a>
 				</td>

@@ -70,12 +70,12 @@
 		</p>
 		<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
 
-		<h2>Gathering Calculator</h2>
+		<h2>Career Calculator</h2>
 		<p>
-			Ever ask yourself when mining "What should I be digging up?".  
-			Find the most efficient use of your pickaxe and hatchet with this tool!
+			Ever ask yourself when mining "What should I be digging up?", or when crafting "Just how many total Bronze Ingots do I really need to make?"
+			Find the most efficient use of your pickaxe or needle with this tool!
 		</p>
-		<a href='/gathering' class='btn btn-primary'>Gather-rific &raquo;</a>
+		<a href='/gathering' class='btn btn-primary'>See the totals &raquo;</a>
 	</div>
 </div>
 

@@ -48,7 +48,7 @@ class CareerController extends BaseController
 		DB::statement('SET SESSION group_concat_max_len=16384');
 
 		$results = DB::table('recipes AS r')
-			->select('*', DB::raw('SUM(cj.amount) AS amount'), DB::raw("(
+			->select('*', 'r.id AS recipe_id', DB::raw('SUM(cj.amount) AS amount'), DB::raw("(
 					SELECT
 						GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
 					FROM `item_vendor` AS `iv` 
@@ -146,7 +146,7 @@ class CareerController extends BaseController
 		DB::statement('SET SESSION group_concat_max_len=16384');
 
 		$results = DB::table('career_job as cj')
-			->select('*', DB::raw('SUM(cj.amount) AS amount'), DB::raw("(
+			->select('*', 'r.id AS recipe_id', DB::raw('SUM(cj.amount) AS amount'), DB::raw("(
 					SELECT
 						GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
 					FROM `item_vendor` AS `iv` 
