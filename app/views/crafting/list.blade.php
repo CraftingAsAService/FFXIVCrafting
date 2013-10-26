@@ -112,7 +112,7 @@
 						<img src='/img/coin.png' class='stat-vendors' width='24' height='24'>
 						{{ number_format($item->buy) }}
 
-						<button class='btn btn-default btn-sm margin-left' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
+						<button class='btn btn-default btn-sm margin-left' data-toggle='popover' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
 							{{ $reagent['vendor_count'] }} Vendor{{ $reagent['vendor_count'] > 1 ? 's' : '' }} 
 							@if($reagent['vendor_count'] > 1 && count($reagent['vendors']) > 1)
 							in {{ count($reagent['vendors']) }} Area{{ count($reagent['vendors']) > 1 ? 's' : '' }}
@@ -138,7 +138,7 @@
 				</td>
 				<td class='crafted_gathered'>
 					@foreach(array_reverse(array_keys($reagent['node_jobs'])) as $reagent_job)
-					<span class='btn btn-{{ $reagent_job == $reagent['self_sufficient'] ? 'success' : 'info' }}' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#cg_for_{{ $item->id }}_{{ $reagent_job }}'>
+					<span class='btn btn-{{ $reagent_job == $reagent['self_sufficient'] ? 'success' : 'info' }}' data-toggle='popover' data-placement='left' data-content-id='#cg_for_{{ $item->id }}_{{ $reagent_job }}'>
 						<img src='/img/classes/{{ $reagent_job }}.png' rel='tooltip' title='{{ $job_list[$reagent_job] }}'>
 					</span>
 
