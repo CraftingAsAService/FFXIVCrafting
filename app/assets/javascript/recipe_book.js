@@ -50,6 +50,10 @@ var recipe_book = {
 				recipe_book.search();
 			}
 		});
+
+		$(document).on('change', '#per_page', function() {
+			recipe_book.search();
+		});
 	},
 	check_input_length:function() {
 		var val = $('#name-search input').val();
@@ -75,7 +79,9 @@ var recipe_book = {
 		var name = $('#name-search input').val(),
 			min = $('#min-level').val(),
 			max = $('#max-level').val(),
-			cls = $('#class-search button').data('class');
+			cls = $('#class-search button').data('class'),
+			per_page = $('#per_page').val();
+
 
 		if (typeof(qs) === 'undefined') 
 			qs = '';
@@ -88,7 +94,8 @@ var recipe_book = {
 				name : name,
 				min : min,
 				max : max,
-				'class' : cls
+				'class' : cls,
+				'per_page' : per_page
 			},
 			beforeSend:function() {
 				recipe_book.disable();
