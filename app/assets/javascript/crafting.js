@@ -52,19 +52,23 @@ var crafting = {
 				tr = el.closest('tr'),
 				obtained = parseInt(el.val()),
 				neededEl = tr.find('.needed input'),
-				neededVal = parseInt(neededEl.val());
+				neededVal = neededEl.val();
 
 			if (neededEl.length == 0) {
 				neededEl = tr.find('.needed span');
-				neededVal = parseInt(neededEl.html());
+				neededVal = neededEl.html();
 			}
+
+			neededVal = parseInt(neededVal);
 
 			if (obtained > neededVal)
 			{
 				obtained = neededVal;
-				el.val(obtained);
+				if (neededEl.is('input'))
+					el.val(obtained);
+				else
+					el.html(obtained);
 			}
-
 
 			tr[(obtained >= neededVal ? 'add' : 'remove') + 'Class']('success');
 
@@ -99,7 +103,8 @@ var crafting = {
 	},
 	change_reagents:function(tr, change_amount) {
 		var data = tr.data('requires'),
-			trItemId = tr.data('itemId');
+			trItemId = tr.data('itemId'),
+			yields = tr.data('yields');
 
 		if (typeof(data) === 'undefined' || data == '')
 			return;
@@ -107,7 +112,7 @@ var crafting = {
 		var requires = data.split('&');
 
 		// Add this item to the list if it's in the pre-req's too
-		if (tr.hasClass('exempt') && $('tr.reagent:not(.exempt)[data-item-id=' + tr.data('itemId') + ']').length > 0)
+		if (tr.hasClass('exempt') && $('tr.reagent:not(.exempt)[data-item-id=' + trItemId + ']').length > 0)
 			requires[requires.length] = '1x' + trItemId;
 
 		for (var i = 0; i < requires.length; i++) {
@@ -116,22 +121,31 @@ var crafting = {
 				itemId = t[1];
 
 			var target = $('tr.reagent:not(.exempt)[data-item-id=' + itemId + ']'),
+				current_yields = target.data('yields'),
 				neededEl = target.find('.needed span'),
-				current_amount = parseInt(neededEl.html()),
-				change = change_amount * quantity;
+				current_amount = parseInt(neededEl.html());
 
-			neededEl.html(current_amount + change);
+			// Let's make sure change amount is disible by the amount it yields
+			var this_change_amount = change_amount * current_yields;
+
+			var change = Math.ceil(this_change_amount * quantity / yields),
+				new_amount = current_amount + change;
+
+			neededEl.html(new_amount);
 
 			if (itemId != trItemId)
-				crafting.change_reagents(target, change);
+				crafting.change_reagents(target, change / yields);
 
 			var obtained_el = target.find('input.obtained');
 
 			obtained_el.trigger('change');
 
-			obtained_el[(current_amount + change == 0 ? 'add' : 'remove') + 'Class']('disabled')
-				.prop('disabled', current_amount + change == 0 ? 'disabled' : '');
+			obtained_el[(new_amount <= 0 ? 'add' : 'remove') + 'Class']('disabled')
+				.prop('disabled', new_amount <= 0 ? 'disabled' : '');
+
 		}
+
+		return;
 	}
 }
 

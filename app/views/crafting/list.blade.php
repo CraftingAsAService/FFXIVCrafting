@@ -54,11 +54,15 @@
 			<?php $item =& $reagent['item']; ?>
 			<?php
 				$requires = array();
+				$yields = 1;
 				if ($section == 'Pre-Requisite Crafting')
+				{
+					$yields = $item->recipes[0]->yields;
 					foreach ($item->recipes[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
+				}
 			?>
-			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}'>
+			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
 				<td class='text-left'>
 					@if($section == 'Pre-Requisite Crafting')
 					@foreach($item->recipes as $recipe)
@@ -70,6 +74,11 @@
 					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
 						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
 					</a>
+					@if ($yields > 1)
+					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
+						x {{ $yields }}
+					</span>
+					@endif
 					<?php break; ?>
 					@endforeach
 					@else
@@ -172,7 +181,7 @@
 				foreach ($recipe->reagents as $item)
 					$requires[] = $item->pivot->amount . 'x' . $item->id;
 			?>
-			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}'>
+			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yields }}'>
 				<td class='text-left'>
 					<a class='close' rel='tooltip' title='Level'>
 						{{ $recipe->level }}
@@ -205,11 +214,11 @@
 					</div>
 				</td>
 				<td class='needed valign'>
-					<input type='number' class='recipe-amount form-control text-center' min='0' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}' style='padding: 6px 3px;'>
+					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yields }}' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}' style='padding: 6px 3px;'>
 				</td>
 				<td class='valign'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' value='0' style='padding: 6px 3px;'>
+						<input type='number' class='form-control obtained text-center' min='0' step='{{ $recipe->yields }}' value='0' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>

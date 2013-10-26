@@ -177,6 +177,23 @@ class CraftingController extends BaseController
 			->remember(Config::get('site.cache_length'))
 			->get();
 
+		// Fix the amount of the top level to be evenly divisible by the amount the recipe yields
+		if (is_array($top_level))
+		{
+			foreach ($recipes as $recipe)
+			{
+				$tl_item =& $top_level[$recipe->item_id];
+
+				// If they're not evently divisible
+				if ($tl_item % $recipe->yields != 0)
+					// Make it so
+					$tl_item = ceil($tl_item / $recipe->yields) * $recipe->yields;
+			}
+			unset($tl_item);
+
+			View::share('item_amounts', $top_level);
+		}
+
 		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
 
 		// Look through the list.  Is there something we're already crafting?
@@ -192,6 +209,14 @@ class CraftingController extends BaseController
 			$reagent_list[$recipe->item_id]['both_list_warning'] = TRUE;
 			$reagent_list[$recipe->item_id]['make_this_many'] += 1;
 		}
+
+		// Look through the reagent list, make sure the reagents are evently divisible by what they yield
+		foreach ($reagent_list as &$reagent)
+			// If they're not evently divisible
+			if ($reagent['make_this_many'] % $reagent['yields'] != 0)
+				// Make it so
+				$reagent['make_this_many'] = ceil($reagent['make_this_many'] / $reagent['yields']) * $reagent['yields'];
+		unset($reagent);
 
 		// Let's sort them further, group them by..
 		// Gathered, Then by Level
@@ -361,8 +386,9 @@ class CraftingController extends BaseController
 
 				$inner_multiplier *= floor($run ?: 1);
 			}
-			
-			$inner_multiplier *= $recipe->yields;
+
+			if ( ! is_array($top_level))
+				$inner_multiplier *= $recipe->yields;
 
 			foreach ($recipe->reagents as $reagent)
 			{
@@ -372,10 +398,11 @@ class CraftingController extends BaseController
 						'self_sufficient' => '',
 						'item' => $reagent,
 						'nodes' => array(),
-						'node_jobs' => array()
+						'node_jobs' => array(),
+						'yields' => 1
 					);
 
-				// if ($reagent->name == 'Bronze Pickaxe')
+				// if ($reagent->name == 'Cornmeal')
 				// {
 				// 	//var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
 				// 	var_dump($reagent->recipes[0]->job->abbreviation);
@@ -384,7 +411,7 @@ class CraftingController extends BaseController
 				// 	exit;
 				// }
 
-				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields);
+				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * ceil($inner_multiplier / $recipe->yields));
 
 				if ($self_sufficient)
 				{
@@ -422,8 +449,9 @@ class CraftingController extends BaseController
 
 					if(isset($reagent->recipes[0]))
 					{
+						$reagent_list[$reagent->id]['yields'] = $reagent->recipes[0]->yields;
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * $inner_multiplier / $recipe->yields));
+						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $recipe->yields)));
 					}
 				}
 			}
