@@ -91,8 +91,8 @@ class Item extends Eloquent
 				})
 				->where('i.role', $role)
 				->where('i.level', '<=' , $level)
-				->orderBy('i.level', 'DESC')
 				->orderBy('i.ilvl', 'DESC')
+				->orderBy('i.level', 'DESC')
 				->groupBy('i.name', 'i.level'); // Fight off duplicates :(
 
 			if ($craftable_only)
@@ -154,12 +154,12 @@ class Item extends Eloquent
 			// Then get the stats
 			$highest_level = 0;
 			foreach ($equipment_list[$role] as $item)
-				if ($item->level > $highest_level)
-					$highest_level = $item->level;
+				if ($item->ilvl > $highest_level)
+					$highest_level = $item->ilvl;
 
 			$i = 0;
 			foreach ($equipment_list[$role] as $key => $item)
-				if ($i++ != 0 && $item->level != $highest_level)
+				if ($i++ != 0 && $item->ilvl != $highest_level)
 					unset($equipment_list[$role][$key]);
 
 			// Re-key the list
