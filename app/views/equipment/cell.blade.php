@@ -19,7 +19,7 @@
 						@endif
 						@if($item->buy)
 						<div class='gil'>
-							<img src='/img/coin.png' class='stat-vendors' width='24' height='24' data-toggle='popover' data-placement='bottom' data-content-id='#vendors_for_{{ $item->id }}_{{ $level }}'>
+							<img src='/img/coin.png' class='stat-vendors' width='24' height='24' data-toggle='popover' data-placement='bottom' data-content-id='#vendors_for_{{ $item->id }}_{{ $level }}' title='Available for {{ $item->buy }} gil'>
 						</div>
 						<div class='hidden' id='vendors_for_{{ $item->id }}_{{ $level }}'>
 							@foreach($item->vendors as $location_name => $vendors)
