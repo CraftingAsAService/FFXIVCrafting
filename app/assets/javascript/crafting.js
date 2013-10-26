@@ -21,7 +21,7 @@ var crafting = {
 		});
 
 		// Store the amount needed
-		$('.needed input').each(function() {
+		$('.needed input, input.obtained').each(function() {
 			var el = $(this);
 			el.data('amount', parseInt(el.val()));
 		});
@@ -50,15 +50,37 @@ var crafting = {
 		$('input.obtained').change(function() {
 			var el = $(this),
 				tr = el.closest('tr'),
+				obtained = parseInt(el.val()),
 				neededEl = tr.find('.needed input'),
-				neededVal = neededEl.val();
+				neededVal = parseInt(neededEl.val());
 
 			if (neededEl.length == 0) {
 				neededEl = tr.find('.needed span');
-				neededVal = neededEl.html();
+				neededVal = parseInt(neededEl.html());
 			}
 
-			tr[(parseInt(el.val()) >= parseInt(neededVal) ? 'add' : 'remove') + 'Class']('success');
+			if (obtained > neededVal)
+			{
+				obtained = neededVal;
+				el.val(obtained);
+			}
+
+
+			tr[(obtained >= neededVal ? 'add' : 'remove') + 'Class']('success');
+
+			if (tr.closest('#CraftingList-section').length > 0)
+			{
+				var prev = el.data('amount');
+				el.data('amount', obtained);
+
+					// Different than other as we want the diff inverse
+				var diff = prev - obtained;
+
+				if (diff != 0)
+				{
+					crafting.change_reagents(tr, diff);
+				}
+			}
 		});
 
 		$('.obtained-ok').click(function() {
@@ -103,7 +125,12 @@ var crafting = {
 			if (itemId != trItemId)
 				crafting.change_reagents(target, change);
 
-			target.find('input.obtained').trigger('change');
+			var obtained_el = target.find('input.obtained');
+
+			obtained_el.trigger('change');
+
+			obtained_el[(current_amount + change == 0 ? 'add' : 'remove') + 'Class']('disabled')
+				.prop('disabled', current_amount + change == 0 ? 'disabled' : '');
 		}
 	}
 }

@@ -45,7 +45,7 @@
 			<tr>
 				<th colspan='6'>
 					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
-					Origin: {{ $section }}
+					<div style='margin-top: 4px;'>Origin: {{ $section }}</div>
 				</th>
 			</tr>
 			@foreach($list as $level => $reagents)
@@ -163,7 +163,7 @@
 			<tr>
 				<th colspan='6'>
 					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
-					Crafting List
+					<div style='margin-top: 4px;'>Crafting List</div>
 				</th>
 			</tr>
 			@foreach($recipes as $recipe)
