@@ -17,6 +17,7 @@ class LeveController extends BaseController
 
 	public function postIndex()
 	{
+		dd(Input::all());
 		// Parse the Job IDs
 		$job_ids = array();
 		foreach (Job::whereIn('abbreviation', Input::get('classes'))->get() as $j)
@@ -69,6 +70,8 @@ class LeveController extends BaseController
 			->get();
 
 		$leve_rewards = array();
+
+		dd($leve_records);
 
 		foreach ($leve_records as $k => $row)
 		{

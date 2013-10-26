@@ -2222,8 +2222,8 @@
     "minor_location":"Hawthorne Hut",
     "location":"North Shroud",
     "amount":1,
-    "item_id":2703,
-    "triple":0
+    "triple":0,
+    "item_id":2703
   },
   {
     "major_location":"Gridania",
@@ -2250,8 +2250,8 @@
     "minor_location":"",
     "location":"",
     "amount":3,
-    "item_id":2703,
-    "triple":0
+    "triple":0,
+    "item_id":2703
   },
   {
     "major_location":"Gridania",
@@ -3580,8 +3580,8 @@
     "minor_location":"Camp Drybone",
     "location":"Eastern Thanalan",
     "amount":1,
-    "item_id":2685,
-    "triple":0
+    "triple":0,
+    "item_id":2685
   },
   {
     "major_location":"Ul'dah",
@@ -3790,8 +3790,8 @@
     "minor_location":"Costa del Sol",
     "location":"Eastern La Noscea",
     "amount":1,
-    "item_id":2737,
-    "triple":0
+    "triple":0,
+    "item_id":2737
   },
   {
     "major_location":"Ul'dah",
@@ -3986,8 +3986,8 @@
     "minor_location":"",
     "location":"",
     "amount":1,
-    "item_id":2876,
-    "triple":0
+    "triple":0,
+    "item_id":2876
   },
   {
     "major_location":"Ul'dah",
