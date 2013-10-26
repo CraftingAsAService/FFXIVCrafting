@@ -177,7 +177,7 @@ class CraftingController extends BaseController
 			->remember(Config::get('site.cache_length'))
 			->get();
 
-		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, FALSE, $include_quests, $top_level);
+		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
 
 		// Look through the list.  Is there something we're already crafting?
 		// Subtract what's being made from needed reagents.
