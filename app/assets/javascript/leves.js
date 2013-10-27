@@ -106,6 +106,41 @@ var leves = {
 			if (e.which == 13)
 				leves.search();
 		});
+
+		$('#min-level, #max-level').change(function() {
+			var el = $(this);
+			var this_min = parseInt(el.attr('min')),
+				this_max = parseInt(el.attr('max')),
+				val = parseInt(el.val());
+
+			// Prevent overlapping inputs
+			if (el.is('#max-level'))
+			{
+				var min_el_val = parseInt($('#min-level').val());
+				if (val < min_el_val)
+				{
+					el.val(min_el_val);
+					val = min_el_val;
+				}
+			}
+			else
+			{
+				var max_el_val = parseInt($('#max-level').val());
+				if (val > max_el_val)
+				{
+					el.val(max_el_val);
+					val = max_el_val;
+				}
+			}
+			
+			// Prevent going over/under min/max attributes
+			if (val < this_min) val = this_min;
+			if (val > this_max) val = this_max;
+
+			el.val(val);
+
+			return;
+		});
 	},
 	search:function() {
 		var classes = [], //$('#class-selector + .btn-group input:checked'),
