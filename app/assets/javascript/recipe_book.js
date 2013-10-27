@@ -1,6 +1,36 @@
 var recipe_book = {
 	init:function() {
 		recipe_book.events();
+
+		recipe_book.decipher_hash();
+
+		return;
+	},
+	hash_per_page: null,
+	decipher_hash:function() {
+		var hash = document.location.hash;
+
+		if (hash == '')
+			return false;
+
+		// Take off the #, explode
+		hash = hash.slice(1).split('|');
+
+		// Fill in the fields
+		$('#name-search input').val(hash[0]);
+		$('#min-level').val(hash[2]);
+		$('#max-level').val(hash[3]);
+
+		recipe_book.hash_per_page = hash[4];
+
+		if ($('#class-search button').data('class') == hash[1])
+			recipe_book.search();
+		else
+			$('#class-search [data-class=' + hash[1] + ']').trigger('click');
+
+		recipe_book.hash_per_page = null;
+
+		return true;
 	},
 	events:function() {
 		$('#name-search input').keyup(function(e) {
@@ -33,7 +63,7 @@ var recipe_book = {
 		$('#class-search li a').click(function(e) {
 			e.preventDefault();
 			var el = $(this),
-				main_button = $('#class-search button');;
+				main_button = $('#class-search button');
 
 			var new_cls = el.data('class'),
 				new_img = $('img', el),
@@ -82,9 +112,19 @@ var recipe_book = {
 			cls = $('#class-search button').data('class'),
 			per_page = $('#per_page').val();
 
+		if (recipe_book.hash_per_page != null)
+			per_page = recipe_book.hash_per_page;
 
 		if (typeof(qs) === 'undefined') 
 			qs = '';
+
+		document.location.hash = [
+				name,
+				cls,
+				min, 
+				max, 
+				per_page
+			].join('|');
 
 		$.ajax({
 			url: '/recipes/search' + qs,

@@ -1,5 +1,31 @@
 var quests = {
 	init:function() {
+		quests.events();
+
+		quests.decipher_hash();
+
+		quests.search();
+
+		return;
+	},
+	decipher_hash:function() {
+		var hash = document.location.hash;
+
+		if (hash == '')
+			return false;
+
+		// Take off the #, explode
+		hash = hash.slice(1).split('|');
+
+		// Fill in the fields
+		$('#class-selector').multiselect('deselect', 'CRP').multiselect('select', hash[0].split(','));
+		$('#min-level').val(hash[1]);
+		$('#max-level').val(hash[2]);
+		$('#quest_item').val(hash[3]);
+
+		return true;
+	},
+	events:function() {
 		$('#class-selector').multiselect({
 			buttonClass: 'btn',
 			buttonWidth: 'auto',
@@ -42,8 +68,6 @@ var quests = {
 			if (e.which == 13)
 				quests.search();
 		});
-
-		quests.search();
 	},
 	search:function() {
 		var classes = [], //$('#class-selector + .btn-group input:checked'),
@@ -54,6 +78,13 @@ var quests = {
 		$('#class-selector + .btn-group input:checked').each(function() {
 			classes[classes.length] = $(this).val();
 		});
+
+		document.location.hash = [
+				classes.join(','), 
+				min_level, 
+				max_level, 
+				quest_name
+			].join('|');
 
 		$('tr.quest').each(function() {
 			var tr = $(this),
