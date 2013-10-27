@@ -5,7 +5,7 @@ class FoodController extends BaseController {
 	public function getIndex()
 	{
 		// Items that are Food
-		$results = Item::with('stats')
+		$results = Item::with('stats', 'vendors')
 			->where('role', 'meal')
 			->orderBy('id')
 			->get();
@@ -30,10 +30,34 @@ class FoodController extends BaseController {
 			$names = array_keys($stats);
 			sort($names);
 
+			// Vendors
+			$vendor_count = 0;
+			$vendors = array();
+
+			if (count($item->vendors))
+			{
+				foreach($item->vendors as $vendor)
+				{
+					$vendors[isset($vendor->location->name) ? $vendor->location->name : 'Unknown'][] = (object) array(
+						'name' => $vendor->name,
+						'title' => $vendor->title,
+						'x' => $vendor->x,
+						'y' => $vendor->y
+					);
+
+					$vendor_count++;
+				}
+
+				ksort($vendors);
+			}
+
 			$food_groups[implode('|', $names)][] = array(
 				'id' => $item->id,
 				'icon' => $item->icon,
 				'name' => $item->name,
+				'buy' => $item->buy,
+				'vendors' => $vendors,
+				'vendor_count' => $vendor_count,
 				'stats' => $stats
 			);
 		}

@@ -19,7 +19,22 @@
 						@endif
 						@if($item->buy)
 						<div class='gil'>
-							<img src='/img/coin.png' class='stat-vendors' rel='tooltip'  width='24' height='24' title='Available from {{ $item->vendor_count }} vendor{{ $item->vendor_count != 1 ? 's' : '' }} for {{ number_format($item->buy) }} gil'>
+							<img src='/img/coin.png' class='stat-vendors' width='24' height='24' data-toggle='popover' data-placement='bottom' data-content-id='#vendors_for_{{ $item->id }}_{{ $level }}' title='Available for {{ $item->buy }} gil'>
+						</div>
+						<div class='hidden' id='vendors_for_{{ $item->id }}_{{ $level }}'>
+							@foreach($item->vendors as $location_name => $vendors)
+							<p>{{ $location_name }}</p>
+							<ul>
+								@foreach($vendors as $vendor)
+								<li>
+									<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
+									@if($vendor->x && $vendor->y)
+									<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
+									@endif
+								</li>
+								@endforeach
+							</ul>
+							@endforeach
 						</div>
 						@endif
 					</div>
