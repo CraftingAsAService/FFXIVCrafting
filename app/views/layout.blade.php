@@ -2,7 +2,9 @@
 <html lang='en-us'>
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
-		<title>Crafting as a Service</title>
+		<title>Crafting as a Service | Final Fantasy XIV ARR Crafting Information</title>
+		<meta name='description' content='Final Fantasy XIV ARR Crafting Information and Planning'>
+		<meta name='keywords' content=''
 		
 		<meta charset='utf-8'>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>

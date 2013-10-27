@@ -16,47 +16,69 @@
 
 <p>All food lasts 30 minutes and provides a 3% XP Bonus.</p>
 
+<?php
+	$sections = array(
+		'Crafting' => array(
+			'CP', 'Control', 'Craftsmanship'
+		),
+		'Gathering' => array(
+			'GP|Gathering', 'GP|Perception', 'Gathering|Perception', 'Perception'
+		),
+		'Battle' => array(
+
+		)
+	);
+?>
+
+@foreach($sections as $heading => $section)
+<h2>{{ $heading }}</h2>
 @foreach($food_groups as $stat_names => $group)
-<div class='table-responsive'>
+<?php 
+	if (in_array($heading, array('Crafting', 'Gathering')) && ! in_array($stat_names, $section))
+		continue;
+
+	unset($food_groups[$stat_names]);
+?>
+<div class='table-responsive' data-stat-names='{{{ $stat_names }}}'>
 	<table class='table table-bordered table-striped'>
 		<thead>
 			<tr>
-				<th width='19%'>
+				<th width='27%'>
 					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-up collapse'></button>
 				</th>
 				@foreach(explode('|', $stat_names) as $stat_name)
-				<th colspan='3' class='text-center' width='27%'>
+				<th colspan='3' class='text-center' width='24%'>
 					<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
 					{{ $stat_name }}
 				</th>
 				@endforeach
 				@if(3 > count(explode('|', $stat_names)))
-				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				<th colspan='3' width='24%' class='invisible'>&nbsp;</th>
 				@endif
 				@if(2 > count(explode('|', $stat_names)))
-				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				<th colspan='3' width='24%' class='invisible'>&nbsp;</th>
 				@endif
 			</tr>
 		</thead>
 		<tbody class='hidden'>
 			<tr>
-				<th>&nbsp;</th>
+				<th>Item</th>
 				@foreach(explode('|', $stat_names) as $stat_name)
-				<th class='text-center' width='9%'>
+				<th class='text-center' width='8%'>
 					Amount
 				</th>
-				<th class='text-center' width='9%'>
+				<th class='text-center' width='8%'>
 					Maximum
 				</th>
-				<th class='text-center' width='9%'>
+				<th class='text-center' width='8%'>
 					Threshold
 				</th>
 				@endforeach
 				@if(3 > count(explode('|', $stat_names)))
-				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				<th colspan='3' width='24%' class='invisible'>&nbsp;</th>
 				@endif
 				@if(2 > count(explode('|', $stat_names)))
-				<th colspan='3' width='27%' class='invisible'>&nbsp;</th>
+				<th colspan='3' width='24%' class='invisible'>&nbsp;</th>
 				@endif
 			</tr>
 			@foreach($group as $item)
@@ -66,6 +88,26 @@
 						<img src='/img/items/{{ $item['icon'] }}.png'>
 						{{ $item['name'] }}
 					</a>
+
+					@if($item['buy'])
+					<img src='/img/coin.png' class='stat-vendors pull-right' width='24' height='24' data-toggle='popover' data-placement='bottom' data-content-id='#vendors_for_{{ $item['id'] }}' title='Available for {{ $item['buy'] }} gil'>
+					
+					<div class='hidden' id='vendors_for_{{ $item['id'] }}'>
+						@foreach($item['vendors'] as $location_name => $vendors)
+						<p>{{ $location_name }}</p>
+						<ul>
+							@foreach($vendors as $vendor)
+							<li>
+								<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
+								@if($vendor->x && $vendor->y)
+								<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
+								@endif
+							</li>
+							@endforeach
+						</ul>
+						@endforeach
+					</div>
+					@endif
 				</td>
 				@foreach(explode('|', $stat_names) as $stat_name)
 				<td class='text-center'>
@@ -83,6 +125,7 @@
 		</tbody>
 	</table>
 </div>
+@endforeach
 @endforeach
 
 @stop
