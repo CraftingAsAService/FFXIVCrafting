@@ -45,8 +45,7 @@ var global = {
 		// enable popovers
 		popovers.popover({ 
 			'container': 'body',
-			'html': 'true',
-			'placement': 'left'
+			'html': 'true'
 		});
 
 		// only allow 1 popover at a time

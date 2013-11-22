@@ -1,5 +1,40 @@
 var leves = {
 	init:function() {
+		leves.events();
+
+		leves.decipher_hash();
+			
+		leves.search();
+
+		return;
+	},
+	decipher_hash:function() {
+		var hash = document.location.hash;
+
+		if (hash == '')
+			return false;
+
+		// Take off the #, explode
+		hash = hash.slice(1).split('|');
+
+		// Fill in the fields
+		$('#class-selector').multiselect('deselect', 'CRP').multiselect('select', hash[0].split(','));
+		$('#min-level').val(hash[1]);
+		$('#max-level').val(hash[2]);
+		$('#type-selector').multiselect('deselect', ['Town', 'Courier', 'Field']).multiselect('select', hash[3].split(','));
+		if (hash[4] == '1')
+			$('#triple_only').prop('checked', true);
+
+		if (hash[5] != '' || hash[6] != '' || hash[7] != '')
+			$('.toggle-advanced').trigger('click');
+
+		$('#leve_item').val(hash[5]);
+		$('#leve_name').val(hash[6]);
+		$('#leve_location').val(hash[7]);
+
+		return true;
+	},
+	events:function() {
 		$('#class-selector').multiselect({
 			buttonClass: 'btn',
 			buttonWidth: 'auto',
@@ -72,7 +107,40 @@ var leves = {
 				leves.search();
 		});
 
-		leves.search();
+		$('#min-level, #max-level').change(function() {
+			var el = $(this);
+			var this_min = parseInt(el.attr('min')),
+				this_max = parseInt(el.attr('max')),
+				val = parseInt(el.val());
+
+			// Prevent overlapping inputs
+			if (el.is('#max-level'))
+			{
+				var min_el_val = parseInt($('#min-level').val());
+				if (val < min_el_val)
+				{
+					el.val(min_el_val);
+					val = min_el_val;
+				}
+			}
+			else
+			{
+				var max_el_val = parseInt($('#max-level').val());
+				if (val > max_el_val)
+				{
+					el.val(max_el_val);
+					val = max_el_val;
+				}
+			}
+			
+			// Prevent going over/under min/max attributes
+			if (val < this_min) val = this_min;
+			if (val > this_max) val = this_max;
+
+			el.val(val);
+
+			return;
+		});
 	},
 	search:function() {
 		var classes = [], //$('#class-selector + .btn-group input:checked'),
@@ -90,6 +158,17 @@ var leves = {
 		$('#type-selector + .btn-group input:checked').each(function() {
 			types[types.length] = $(this).val();
 		});
+
+		document.location.hash = [
+				classes.join(','), 
+				min_level, 
+				max_level, 
+				types.join(','),
+				triple_only == true ? 1 : 0,
+				leve_item,
+				leve_name,
+				leve_location
+			].join('|');
 
 		$('.leve_rewards').popover('destroy');
 

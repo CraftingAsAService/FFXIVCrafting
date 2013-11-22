@@ -26,6 +26,10 @@ class RecipesController extends BaseController
 		$min = Input::get('min') ?: 1;
 		$max = Input::get('max') ?: 70;
 		$class = Input::get('class') ?: 'all';
+		$per_page = Input::get('per_page') ?: 10;
+
+		if ( ! in_array($per_page, array(10, 25, 50)))
+			$per_page = 10;
 
 		if ( ! is_numeric($min))
 			$min = 1;
@@ -50,9 +54,10 @@ class RecipesController extends BaseController
 		if (isset($job))
 			$query->where('job_id', $job->id);
 
-		$recipes = $query->paginate(10);
+		$recipes = $query->paginate($per_page);
 
 		View::share('list', $recipes);
+		View::share('per_page', $per_page);
 
 		$output = array(
 			'tbody' => View::make('recipes.results')->render(),

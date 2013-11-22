@@ -69,7 +69,7 @@ class CareerController extends BaseController
 			->having('amount', '>', '1')
 			->get();
 
-		// Cleanup result nodes & vendors
+		// Cleanup result vendors
 		foreach ($results as &$result)
 		{
 			// Vendors

@@ -57,19 +57,29 @@ class Item extends Eloquent
 		// Make sure the pieces avoid pieces with certain stats
 		$stats_to_avoid = Stat::avoid($job->abbreviation);
 
+		DB::statement('SET SESSION group_concat_max_len=16384');
+
 		foreach (Config::get('site.equipment_roles') as $role)
 		{
 			$query = DB::table('items AS i')
 				->select(
 					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 
 					DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'), 
-					DB::raw('COUNT(iv.id) AS vendor_count')
+					#####DB::raw('COUNT(iv.id) AS vendor_count'), 
+					DB::raw("(
+						SELECT
+							GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
+						FROM `item_vendor` AS `iv` 
+						JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
+						LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
+						WHERE `iv`.`item_id` = `i`.`id`
+					) AS vendors")
 				)
 				->join('item_job AS ij', 'ij.item_id', '=', 'i.id')
 				->join('jobs AS j', 'j.id', '=', 'ij.job_id')
 				->leftJoin('recipes AS r', 'i.id', '=', 'r.item_id')
 				->leftJoin('jobs AS rj', 'rj.id', '=', 'r.job_id')
-				->leftJoin('item_vendor AS iv', 'iv.item_id', '=', 'i.id')
+				#######->leftJoin('item_vendor AS iv', 'iv.item_id', '=', 'i.id')
 				//->where('j.id', $job->id)
 				->where(function($query) use ($job)
 				{
@@ -81,8 +91,8 @@ class Item extends Eloquent
 				})
 				->where('i.role', $role)
 				->where('i.level', '<=' , $level)
-				->orderBy('i.level', 'DESC')
 				->orderBy('i.ilvl', 'DESC')
+				->orderBy('i.level', 'DESC')
 				->groupBy('i.name', 'i.level'); // Fight off duplicates :(
 
 			if ($craftable_only)
@@ -111,6 +121,31 @@ class Item extends Eloquent
 
 				if (count(array_intersect(array_keys($item->stats), $stats_to_avoid)) > 0)
 					unset($list[$key]);
+
+				// Vendors
+				$item->vendor_count = 0;
+				
+				if ($item->vendors)
+				{
+					$new_vendors = array();
+					foreach(explode('***', $item->vendors) as $vendor)
+					{
+						list($name, $title, $location, $x, $y) = explode('|', $vendor);
+
+						$new_vendors[$location ?: 'Unknown'][] = (object) array(
+							'name' => $name,
+							'title' => $title,
+							'x' => $x,
+							'y' => $y
+						);
+
+						$item->vendor_count++;
+					}
+
+					ksort($new_vendors);
+
+					$item->vendors = $new_vendors;
+				}
 			}
 
 			// Go through the list.
@@ -119,12 +154,12 @@ class Item extends Eloquent
 			// Then get the stats
 			$highest_level = 0;
 			foreach ($equipment_list[$role] as $item)
-				if ($item->level > $highest_level)
-					$highest_level = $item->level;
+				if ($item->ilvl > $highest_level)
+					$highest_level = $item->ilvl;
 
 			$i = 0;
 			foreach ($equipment_list[$role] as $key => $item)
-				if ($i++ != 0 && $item->level != $highest_level)
+				if ($i++ != 0 && $item->ilvl != $highest_level)
 					unset($equipment_list[$role][$key]);
 
 			// Re-key the list

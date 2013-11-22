@@ -1,6 +1,36 @@
 var recipe_book = {
 	init:function() {
 		recipe_book.events();
+
+		recipe_book.decipher_hash();
+
+		return;
+	},
+	hash_per_page: null,
+	decipher_hash:function() {
+		var hash = document.location.hash;
+
+		if (hash == '')
+			return false;
+
+		// Take off the #, explode
+		hash = hash.slice(1).split('|');
+
+		// Fill in the fields
+		$('#name-search input').val(hash[0]);
+		$('#min-level').val(hash[2]);
+		$('#max-level').val(hash[3]);
+
+		recipe_book.hash_per_page = hash[4];
+
+		if ($('#class-search button').data('class') == hash[1])
+			recipe_book.search();
+		else
+			$('#class-search [data-class=' + hash[1] + ']').trigger('click');
+
+		recipe_book.hash_per_page = null;
+
+		return true;
 	},
 	events:function() {
 		$('#name-search input').keyup(function(e) {
@@ -18,12 +48,33 @@ var recipe_book = {
 
 		$('#min-level, #max-level').change(function() {
 			var el = $(this);
-			var min = parseInt(el.attr('min')),
-				max = parseInt(el.attr('max')),
+			var this_min = parseInt(el.attr('min')),
+				this_max = parseInt(el.attr('max')),
 				val = parseInt(el.val());
-				
-			if (val < min) val = min;
-			if (val > max) val = max;
+
+			// Prevent overlapping inputs
+			if (el.is('#max-level'))
+			{
+				var min_el_val = parseInt($('#min-level').val());
+				if (val < min_el_val)
+				{
+					el.val(min_el_val);
+					val = min_el_val;
+				}
+			}
+			else
+			{
+				var max_el_val = parseInt($('#max-level').val());
+				if (val > max_el_val)
+				{
+					el.val(max_el_val);
+					val = max_el_val;
+				}
+			}
+			
+			// Prevent going over/under min/max attributes
+			if (val < this_min) val = this_min;
+			if (val > this_max) val = this_max;
 
 			el.val(val);
 
@@ -33,7 +84,7 @@ var recipe_book = {
 		$('#class-search li a').click(function(e) {
 			e.preventDefault();
 			var el = $(this),
-				main_button = $('#class-search button');;
+				main_button = $('#class-search button');
 
 			var new_cls = el.data('class'),
 				new_img = $('img', el),
@@ -49,6 +100,10 @@ var recipe_book = {
 
 				recipe_book.search();
 			}
+		});
+
+		$(document).on('change', '#per_page', function() {
+			recipe_book.search();
 		});
 	},
 	check_input_length:function() {
@@ -75,10 +130,22 @@ var recipe_book = {
 		var name = $('#name-search input').val(),
 			min = $('#min-level').val(),
 			max = $('#max-level').val(),
-			cls = $('#class-search button').data('class');
+			cls = $('#class-search button').data('class'),
+			per_page = $('#per_page').val();
+
+		if (recipe_book.hash_per_page != null)
+			per_page = recipe_book.hash_per_page;
 
 		if (typeof(qs) === 'undefined') 
 			qs = '';
+
+		document.location.hash = [
+				name,
+				cls,
+				min, 
+				max, 
+				per_page
+			].join('|');
 
 		$.ajax({
 			url: '/recipes/search' + qs,
@@ -88,7 +155,8 @@ var recipe_book = {
 				name : name,
 				min : min,
 				max : max,
-				'class' : cls
+				'class' : cls,
+				'per_page' : per_page
 			},
 			beforeSend:function() {
 				recipe_book.disable();

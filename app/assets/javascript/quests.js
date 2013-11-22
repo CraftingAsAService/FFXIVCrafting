@@ -1,5 +1,31 @@
 var quests = {
 	init:function() {
+		quests.events();
+
+		quests.decipher_hash();
+
+		quests.search();
+
+		return;
+	},
+	decipher_hash:function() {
+		var hash = document.location.hash;
+
+		if (hash == '')
+			return false;
+
+		// Take off the #, explode
+		hash = hash.slice(1).split('|');
+
+		// Fill in the fields
+		$('#class-selector').multiselect('deselect', 'CRP').multiselect('select', hash[0].split(','));
+		$('#min-level').val(hash[1]);
+		$('#max-level').val(hash[2]);
+		$('#quest_item').val(hash[3]);
+
+		return true;
+	},
+	events:function() {
 		$('#class-selector').multiselect({
 			buttonClass: 'btn',
 			buttonWidth: 'auto',
@@ -43,7 +69,40 @@ var quests = {
 				quests.search();
 		});
 
-		quests.search();
+		$('#min-level, #max-level').change(function() {
+			var el = $(this);
+			var this_min = parseInt(el.attr('min')),
+				this_max = parseInt(el.attr('max')),
+				val = parseInt(el.val());
+
+			// Prevent overlapping inputs
+			if (el.is('#max-level'))
+			{
+				var min_el_val = parseInt($('#min-level').val());
+				if (val < min_el_val)
+				{
+					el.val(min_el_val);
+					val = min_el_val;
+				}
+			}
+			else
+			{
+				var max_el_val = parseInt($('#max-level').val());
+				if (val > max_el_val)
+				{
+					el.val(max_el_val);
+					val = max_el_val;
+				}
+			}
+			
+			// Prevent going over/under min/max attributes
+			if (val < this_min) val = this_min;
+			if (val > this_max) val = this_max;
+
+			el.val(val);
+
+			return;
+		});
 	},
 	search:function() {
 		var classes = [], //$('#class-selector + .btn-group input:checked'),
@@ -54,6 +113,13 @@ var quests = {
 		$('#class-selector + .btn-group input:checked').each(function() {
 			classes[classes.length] = $(this).val();
 		});
+
+		document.location.hash = [
+				classes.join(','), 
+				min_level, 
+				max_level, 
+				quest_name
+			].join('|');
 
 		$('tr.quest').each(function() {
 			var tr = $(this),
