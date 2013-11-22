@@ -57,7 +57,7 @@
 			<tr>
 				<th colspan='6'>
 					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
-					Origin: {{ $section }}
+					<div style='margin-top: 4px;'>Origin: {{ $section }}</div>
 				</th>
 			</tr>
 			@foreach($list as $level => $reagents)
@@ -66,11 +66,15 @@
 			<?php $item =& $reagent['item']; ?>
 			<?php
 				$requires = array();
+				$yields = 1;
 				if ($section == 'Pre-Requisite Crafting')
+				{
+					$yields = $item->recipes[0]->yields;
 					foreach ($item->recipes[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
+				}
 			?>
-			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}'>
+			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
 				<td class='text-left'>
 					@if($section == 'Pre-Requisite Crafting')
 					@foreach($item->recipes as $recipe)
@@ -82,6 +86,11 @@
 					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
 						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
 					</a>
+					@if ($yields > 1)
+					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
+						x {{ $yields }}
+					</span>
+					@endif
 					<?php break; ?>
 					@endforeach
 					@else
@@ -115,7 +124,7 @@
 						<img src='/img/coin.png' class='stat-vendors' width='24' height='24'>
 						{{ number_format($item->buy) }}
 
-						<button class='btn btn-default btn-sm margin-left' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
+						<button class='btn btn-default btn-sm margin-left' data-toggle='popover' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
 							{{ $reagent['vendor_count'] }} Vendor{{ $reagent['vendor_count'] > 1 ? 's' : '' }} 
 							@if($reagent['vendor_count'] > 1 && count($reagent['vendors']) > 1)
 							in {{ count($reagent['vendors']) }} Area{{ count($reagent['vendors']) > 1 ? 's' : '' }}
@@ -141,7 +150,7 @@
 				</td>
 				<td class='crafted_gathered'>
 					@foreach(array_reverse(array_keys($reagent['node_jobs'])) as $reagent_job)
-					<span class='btn btn-{{ $reagent_job == $reagent['self_sufficient'] ? 'success' : 'info' }}' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#cg_for_{{ $item->id }}_{{ $reagent_job }}'>
+					<span class='btn btn-{{ $reagent_job == $reagent['self_sufficient'] ? 'success' : 'info' }}' data-toggle='popover' data-placement='left' data-content-id='#cg_for_{{ $item->id }}_{{ $reagent_job }}'>
 						<img src='/img/classes/{{ $reagent_job }}.png' rel='tooltip' title='{{ $job_list[$reagent_job] }}'>
 					</span>
 
@@ -175,7 +184,7 @@
 			<tr>
 				<th colspan='6'>
 					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
-					Crafting List
+					<div style='margin-top: 4px;'>Crafting List</div>
 				</th>
 			</tr>
 			@foreach($recipes as $recipe)
@@ -184,7 +193,7 @@
 				foreach ($recipe->reagents as $item)
 					$requires[] = $item->pivot->amount . 'x' . $item->id;
 			?>
-			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}'>
+			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yields }}'>
 				<td class='text-left'>
 					<a class='close' rel='tooltip' title='Level'>
 						{{ $recipe->level }}
@@ -217,11 +226,11 @@
 					</div>
 				</td>
 				<td class='needed valign'>
-					<input type='number' class='recipe-amount form-control text-center' min='0' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}' style='padding: 6px 3px;'>
+					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yields }}' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}' style='padding: 6px 3px;'>
 				</td>
 				<td class='valign'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' value='0' style='padding: 6px 3px;'>
+						<input type='number' class='form-control obtained text-center' min='0' step='{{ $recipe->yields }}' value='0' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>

@@ -67,7 +67,7 @@
 				</td>
 				<td class='valign text-center'>
 					@if($recipe->buy)
-					<button class='btn btn-default btn-sm' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#vendors_for_{{ $recipe->id }}'>
+					<button class='btn btn-default btn-sm' data-toggle='popover' data-placement='left' data-content-id='#vendors_for_{{ $recipe->id }}'>
 						{{ $recipe->vendor_count }} Vendor{{ $recipe->vendor_count > 1 ? 's' : '' }} 
 						@if($recipe->vendor_count > 1 && count($recipe->vendors) > 1)
 						in {{ count($recipe->vendors) }} Area{{ count($recipe->vendors) > 1 ? 's' : '' }}
