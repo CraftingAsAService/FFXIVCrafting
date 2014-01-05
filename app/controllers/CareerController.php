@@ -258,7 +258,7 @@ class CareerController extends BaseController
 			$top_query .= "
 					(
 						SELECT 
-							GROUP_CONCAT(DISTINCT CONCAT(gn.action,'|',gn.level,'|',gn.location_level,'|',gnl.name) ORDER BY gn.level , gn.location_level SEPARATOR '***') AS nodes
+							GROUP_CONCAT(DISTINCT CONCAT(gn.action,'|',gn.level,'|',gnl.name) ORDER BY gn.level SEPARATOR '***') AS nodes
 						FROM `gathering_node_item` AS `gni`
 						JOIN `gathering_nodes` AS `gn` ON `gn`.`id` = `gni`.`gathering_node_id`
 						JOIN `locations` AS `gnl` ON `gnl`.`id` = `gn`.`location_id`
@@ -350,11 +350,11 @@ class CareerController extends BaseController
 
 				foreach (explode('***', $result->nodes) as $node)
 				{
-					list($action, $ilvl, $location_level, $location_name) = explode('|', $node);
+					list($action, $ilvl, $location_name) = explode('|', $node);
 					
 					$result->ilvl = $ilvl;
 
-					$new_nodes[$location_name][$action][] = $location_level;
+					$new_nodes[$location_name][] = $action;
 				}
 
 				foreach (array_keys($new_nodes) as $key)
@@ -393,6 +393,7 @@ class CareerController extends BaseController
 		
 		if ($my_class != 'BTL')
 		{
+			$quest_results = array();
 			// Rip out Quest Entries
 			foreach ($results as $k => $result)
 				if ($result->quest_level != NULL)

@@ -75,9 +75,8 @@
 							{{ $location_name }} 
 						</div>
 						<div class='col-sm-6'>
-							@foreach($node as $action => $levels)
+							@foreach($node as $action)
 							<span class='label label-primary' rel='tooltip' title='{{ $action }}' data-container='body'>{{ $action }}</span>
-							<span class='label label-default' rel='tooltip' title='Node Level' data-container='body'>{{ implode(', ', $levels) }}</span>
 							@endforeach
 						</div>
 						@endforeach

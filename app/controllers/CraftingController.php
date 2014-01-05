@@ -262,11 +262,10 @@ class CraftingController extends BaseController
 			$new_nodes = array();
 			// Job
 				// Location
-					//Location Level
-						// Action
-							//Level
+					// Action
+						//Level
 			foreach ($reagent['nodes'] as $node)
-				$new_nodes[$node['job']][$node['location']][$node['location_level']][$node['action']][] = $node['level'];
+				$new_nodes[$node['job']][$node['location']][$node['action']][] = $node['level'];
 
 			foreach ($new_nodes as $k => $nn)
 			{
@@ -429,7 +428,6 @@ class CraftingController extends BaseController
 							$node_data[] = array(
 								'action' => $node->action,
 								'level' => $node->level,
-								'location_level' => $node->location_level,
 								'location' => $node->location->name,
 								'job' => $node->job->abbreviation
 							);
