@@ -18,10 +18,10 @@
 	<strong>Requires:</strong> {{ $leve->amount }} x <a href='http://xivdb.com/{{ $leve->item->href }}' target='_blank'>{{ $leve->item->name }}</a>
 </p>
 <p>
-	Calculations assume you're turning in HQ items for a total reward of <em>{{ number_format($leve->xp * 3) }} XP</em> <small>(and {{ number_format($leve->gil * 3) }} Gil)</small> per allotment.
+	Calculations assume you're turning in HQ items for a total reward of <em>{{ number_format($leve->xp * 2) }} XP</em> <small>(and {{ number_format($leve->gil * 2) }} Gil)</small> per allotment.
 </p>
 <p>
-	You will make a gil profit if you can obtain {{ $leve->amount * ($leve->triple ? 3 : 1) }} items for less than {{ number_format($leve->gil * 3) }} Gil; or {{ number_format(($leve->gil * 3) / ($leve->amount * ($leve->triple ? 3 : 1))) }} each.
+	You will make a gil profit if you can obtain {{ $leve->amount * ($leve->triple ? 3 : 1) }} items for less than {{ number_format($leve->gil * 2) }} Gil; or {{ number_format(($leve->gil * 2) / ($leve->amount * ($leve->triple ? 3 : 1))) }} each.
 
 <table class='table table-bordered table-striped'>
 	<thead>
