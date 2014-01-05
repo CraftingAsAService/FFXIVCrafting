@@ -15,7 +15,12 @@
 						<div class='crafted_by'>
 							<img src='/img/classes/{{ $crafted_by }}.png' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' width='24' height='24' title='Crafted By {{ $job_list[$crafted_by] }}'>
 						</div>
+						<?php break; ?>
 						@endforeach
+						@elseif($item->rewarded)
+						<div class='rewarded'>
+							<img src='/img/reward.png' class='rewarded' width='24' height='24' rel='tooltip' title='Reward from quest, leve, achievement, etc'>
+						</div>
 						@endif
 						@if($item->buy)
 						<div class='gil'>

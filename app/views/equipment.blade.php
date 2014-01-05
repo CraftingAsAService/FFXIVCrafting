@@ -83,7 +83,9 @@
 					<div class='make-switch' data-on='success' data-off='warning'>
 						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
 					</div>
-					Only show craftable items
+					Only show craftable items 
+					<input type='checkbox' name='rewardable_too' value='1' checked='checked'> 
+					and <u rel='tooltip' title='Items that are potential rewards from leves, achievements, quests, etc'>rewardable items</u>
 				</div>
 			</div>
 			<div class='form-group'>

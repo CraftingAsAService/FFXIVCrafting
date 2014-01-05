@@ -41,7 +41,7 @@ class Item extends Eloquent
 		return $this->belongsToMany('Vendor');
 	}
 
-	public static function calculate($job = '', $level = 1, $craftable_only = TRUE)
+	public static function calculate($job = '', $level = 1, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
 		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? 'T' : 'F');
 
@@ -63,7 +63,7 @@ class Item extends Eloquent
 		{
 			$query = DB::table('items AS i')
 				->select(
-					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 'i.sub_role',
+					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 'i.sub_role', 'i.rewarded',
 					DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'), 
 					#####DB::raw('COUNT(iv.id) AS vendor_count'), 
 					DB::raw("(
@@ -101,7 +101,9 @@ class Item extends Eloquent
 				->orderBy('i.level', 'DESC')
 				->groupBy('i.name', 'i.level'); // Fight off duplicates :(
 
-			if ($craftable_only)
+			if ($craftable_only && $rewardable_too)
+				$query->havingRaw('crafted_by IS NOT NULL OR rewarded = 1');
+			elseif ($craftable_only)
 				$query->havingRaw('crafted_by IS NOT NULL');
 
 			$equipment_list[$role] = $query

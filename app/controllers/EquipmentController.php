@@ -21,7 +21,7 @@ class EquipmentController extends BaseController
 
 	public function postIndex()
 	{
-		$vars = array('class' => 'CRP', 'level' => 5, 'craftable_only' => 0, 'slim_mode' => 0);
+		$vars = array('class' => 'CRP', 'level' => 5, 'craftable_only' => 0, 'slim_mode' => 0, 'rewardable_too' => 0);
 		$values = array();
 		foreach ($vars as $var => $default)
 			$values[] = Input::has($var) ? Input::get($var) : $default;
@@ -39,6 +39,7 @@ class EquipmentController extends BaseController
 		$level = isset($options[1]) ? $options[1] : 1;
 		$craftable_only = isset($options[2]) ? $options[2] : 1;
 		$slim_mode = isset($options[3]) ? $options[3] : 1;
+		$rewardable_too = isset($options[4]) ? $options[4] : 1;
 
 		// Make sure level is valid
 		if ($level < 1 || ! is_numeric($level)) $level = 1;
@@ -84,7 +85,7 @@ class EquipmentController extends BaseController
 		{
 			View::share('level', $level - 1);
 			
-			$equipment = Item::calculate($job->abbreviation, $level - 1, $craftable_only);
+			$equipment = Item::calculate($job->abbreviation, $level - 1, $craftable_only, $rewardable_too);
 			$starting_equipment[$level - 1] = $this->getOutput($equipment, $roles);
 		}
 
@@ -92,7 +93,7 @@ class EquipmentController extends BaseController
 		{
 			View::share('level', $e_level);
 			
-			$equipment = Item::calculate($job->abbreviation, $e_level, $craftable_only);
+			$equipment = Item::calculate($job->abbreviation, $e_level, $craftable_only, $rewardable_too);
 			$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
 		}
 
