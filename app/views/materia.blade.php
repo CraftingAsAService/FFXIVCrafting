@@ -55,6 +55,7 @@
 					{{ $materia['stat'] }}
 				</td>
 				@foreach(array('I', 'II', 'III', 'IV') as $power)
+				<?php if ( ! isset($materia['power'][$power])) continue; ?>
 				<td class='valign text-center materia-value'>
 					<a href='http://xivdb.com/?item/{{ $materia['power'][$power]['id'] }}' target='_blank'>
 						{{ number_format($materia['power'][$power]['amount']) }}

@@ -1,0 +1,120 @@
+i.class_icon {
+	// Small - 20 x 20
+	display: inline-block;
+	overflow: hidden;
+	width: 24px;
+	height: 24px;
+	background-image: url(/small-sprites.png);
+	background-repeat: no-repeat;
+	background-size: 24px height-px; // Do not override this in the high-dpi class, these dimensions are used by the highdpi browser to determine how to scale the image- the high dpi image will be twice the size, webkit will see this line, and the math computes to a scale of 1.0 instead of 2.0.
+	
+	&.Alchemist, &.ALC { background-position: 0 0; } 
+	&.Arcanist, &.ACN { background-position: 0 -25px; } 
+	&.Archer, &.ARC { background-position: 0 -50px; } 
+	&.Armorer, &.ARM { background-position: 0 -75px; } 
+	&.Bard, &.BRD { background-position: 0 -100px; } 
+	&.Black_Mage, &.BLM { background-position: 0 -125px; } 
+	&.Blacksmith, &.BSM { background-position: 0 -150px; } 
+	&.Botanist, &.BTN { background-position: 0 -175px; } 
+	&.Carpenter, &.CRP { background-position: 0 -200px; } 
+	&.Conjurer, &.CNJ { background-position: 0 -225px; } 
+	&.Culinarian, &.CUL { background-position: 0 -250px; } 
+	&.Dragoon, &.DRG { background-position: 0 -275px; } 
+	&.Fisher, &.FSH { background-position: 0 -300px; } 
+	&.Gladiator, &.GLA { background-position: 0 -325px; } 
+	&.Goldsmith, &.GSM { background-position: 0 -350px; } 
+	&.Lancer, &.LNC { background-position: 0 -375px; } 
+	&.Leatherworker, &.LTW { background-position: 0 -400px; } 
+	&.Marauder, &.MRD { background-position: 0 -425px; } 
+	&.Miner, &.MIN { background-position: 0 -450px; } 
+	&.Monk, &.MNK { background-position: 0 -475px; } 
+	&.Paladin, &.PLD { background-position: 0 -500px; } 
+	&.Pugilist, &. { background-position: 0 -525px; } 
+	&.Scholar, &.SCH { background-position: 0 -550px; } 
+	&.Summoner, &.SMN { background-position: 0 -575px; } 
+	&.Thaumaturge, &.THM { background-position: 0 -600px; } 
+	&.Warrior, &.WAR { background-position: 0 -625px; } 
+	&.Weaver, &.WVR { background-position: 0 -650px; } 
+	&.White_Mage, &.WHM { background-position: 0 -675px; } 
+
+	@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+	only screen and (-moz-min-device-pixel-ratio: 1.5),
+	only screen and (-o-min-device-pixel-ratio: 3/2),
+	only screen and (min-device-pixel-ratio: 1.5) {
+		background-image: url("/large-sprites.png");
+	}
+
+
+	// &.large { // Large 40 x 40
+	// 	background: url(/large-sprites.png);
+	// 	width: 40px;
+	// 	height: 40px;
+
+	// 	&.Alchemist, &.ALC { background-position: 0 0; } 
+	// 	&.Arcanist, &.ACN { background-position: 0 -50px; } 
+	// 	&.Archer, &.ARC { background-position: 0 -100px; } 
+	// 	&.Armorer, &.ARM { background-position: 0 -150px; } 
+	// 	&.Bard, &.BRD { background-position: 0 -200px; } 
+	// 	&.Black_Mage, &.BLM { background-position: 0 -250px; } 
+	// 	&.Blacksmith, &.BSM { background-position: 0 -300px; } 
+	// 	&.Botanist, &.BTN { background-position: 0 -350px; } 
+	// 	&.Carpenter, &.CRP { background-position: 0 -400px; } 
+	// 	&.Conjurer, &.CNJ { background-position: 0 -450px; } 
+	// 	&.Culinarian, &.CUL { background-position: 0 -500px; } 
+	// 	&.Dragoon, &.DRG { background-position: 0 -550px; } 
+	// 	&.Fisher, &.FSH { background-position: 0 -600px; } 
+	// 	&.Gladiator, &.GLA { background-position: 0 -650px; } 
+	// 	&.Goldsmith, &.GSM { background-position: 0 -700px; } 
+	// 	&.Lancer, &.LNC { background-position: 0 -750px; } 
+	// 	&.Leatherworker, &.LTW { background-position: 0 -800px; } 
+	// 	&.Marauder, &.MRD { background-position: 0 -850px; } 
+	// 	&.Miner, &.MIN { background-position: 0 -900px; } 
+	// 	&.Monk, &.MNK { background-position: 0 -950px; } 
+	// 	&.Paladin, &.PLD { background-position: 0 -1000px; } 
+	// 	&.Pugilist, &. { background-position: 0 -1050px; } 
+	// 	&.Scholar, &.SCH { background-position: 0 -1100px; } 
+	// 	&.Summoner, &.SMN { background-position: 0 -1150px; } 
+	// 	&.Thaumaturge, &.THM { background-position: 0 -1200px; } 
+	// 	&.Warrior, &.WAR { background-position: 0 -1250px; } 
+	// 	&.Weaver, &.WVR { background-position: 0 -1300px; } 
+	// 	&.White_Mage, &.WHM { background-position: 0 -1350px; } 
+	// }
+
+	// &.medium { 
+	// 	// Medium - 24 x 24
+	// 	background: url(/small-sprites.png);
+	// 	width: 20px;
+	// 	height: 20px;
+
+	// 	&.Alchemist, &.ALC { background-position: 0 0; } 
+	// 	&.Arcanist, &.ACN { background-position: 0 -29px; } 
+	// 	&.Archer, &.ARC { background-position: 0 -58px; } 
+	// 	&.Armorer, &.ARM { background-position: 0 -87px; } 
+	// 	&.Bard, &.BRD { background-position: 0 -116px; } 
+	// 	&.Black_Mage, &.BLM { background-position: 0 -145px; } 
+	// 	&.Blacksmith, &.BSM { background-position: 0 -174px; } 
+	// 	&.Botanist, &.BTN { background-position: 0 -203px; } 
+	// 	&.Carpenter, &.CRP { background-position: 0 -232px; } 
+	// 	&.Conjurer, &.CNJ { background-position: 0 -261px; } 
+	// 	&.Culinarian, &.CUL { background-position: 0 -290px; } 
+	// 	&.Dragoon, &.DRG { background-position: 0 -319px; } 
+	// 	&.Fisher, &.FSH { background-position: 0 -348px; } 
+	// 	&.Gladiator, &.GLA { background-position: 0 -377px; } 
+	// 	&.Goldsmith, &.GSM { background-position: 0 -406px; } 
+	// 	&.Lancer, &.LNC { background-position: 0 -435px; } 
+	// 	&.Leatherworker, &.LTW { background-position: 0 -464px; } 
+	// 	&.Marauder, &.MRD { background-position: 0 -493px; } 
+	// 	&.Miner, &.MIN { background-position: 0 -522px; } 
+	// 	&.Monk, &.MNK { background-position: 0 -551px; } 
+	// 	&.Paladin, &.PLD { background-position: 0 -580px; } 
+	// 	&.Pugilist, &. { background-position: 0 -609px; } 
+	// 	&.Scholar, &.SCH { background-position: 0 -638px; } 
+	// 	&.Summoner, &.SMN { background-position: 0 -667px; } 
+	// 	&.Thaumaturge, &.THM { background-position: 0 -696px; } 
+	// 	&.Warrior, &.WAR { background-position: 0 -725px; } 
+	// 	&.Weaver, &.WVR { background-position: 0 -754px; } 
+	// 	&.White_Mage, &.WHM { background-position: 0 -783px; } 
+	// }
+	
+}
+

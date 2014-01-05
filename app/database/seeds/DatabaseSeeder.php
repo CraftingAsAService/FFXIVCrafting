@@ -395,9 +395,13 @@ class LeveSeeder extends _CommonSeeder
 			// "item_id":2703
 			if (isset($leve['item_name']))
 			{
-				$item = Item::where('name', $leve['item_name'])->first();
-
-				$leve['item_id'] = $item->id;
+				$leve['item_id'] = null;
+				if ($leve['item_name'])
+				{
+					$query = Item::where('name', $leve['item_name']);
+					if ($query->count())
+						$leve['item_id'] = $query->first()->id;
+				}
 
 				unset($leve['item_name']);
 			}

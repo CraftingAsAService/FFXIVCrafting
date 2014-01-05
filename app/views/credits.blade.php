@@ -143,12 +143,18 @@
 		</div>
 	</div>
 
-
-
-
-
-
-
-
-
+	<div class='media'>
+		<a href='http://ffxiv.ariyala.com/' class='pull-left' target='_blank'>
+			<img src='/img/credits/gearcalculator.png' class='media-object' width='64' height='64' style='border-radius: 5px;'>
+		</a>
+		<div class='media-body'>
+			<h4 class='media-heading'>
+				<a href='http://ffxiv.ariyala.com/' target='_blank'>FFXIV Gear Calculator</a>
+			</h4>
+			<p>
+				Gear progression for your end-game character
+			</p>
+		</div>
+	</div>
+	
 @stop

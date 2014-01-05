@@ -63,7 +63,7 @@ class Item extends Eloquent
 		{
 			$query = DB::table('items AS i')
 				->select(
-					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 
+					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 'i.sub_role',
 					DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'), 
 					#####DB::raw('COUNT(iv.id) AS vendor_count'), 
 					DB::raw("(
@@ -89,7 +89,13 @@ class Item extends Eloquent
 					if ( ! in_array($job->disciple, array('DOH', 'DOL')))
 						$query->orWhere('j.abbreviation', 'ALL');
 				})
-				->where('i.role', $role)
+				->where(function($query) use ($role)
+				{
+					$query->where('i.role', $role)
+							->orWhere('i.sub_role', $role);
+				})
+				// ->where('i.role', $role)
+				// ->orWhere('i.sub_role', $role)
 				->where('i.level', '<=' , $level)
 				->orderBy('i.ilvl', 'DESC')
 				->orderBy('i.level', 'DESC')
@@ -167,7 +173,12 @@ class Item extends Eloquent
 
 			unset($list);
 		}
-		
+
+		// Look for 2H items and add a cannot_equip to Off Hand
+		foreach ($equipment_list['Main Hand'] as $mh)
+			if (preg_match('/^Two-handed/', $mh->sub_role))
+				$mh->cannot_equip = 'Off-Hand';
+
 		// Cache the results
 		Cache::put($cache_key, $equipment_list, Config::get('site.cache_length'));
 

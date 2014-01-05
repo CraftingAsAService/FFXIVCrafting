@@ -6,6 +6,18 @@
 
 @section('javascript')
 	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
+	<script type='text/javascript'>
+		var xivdb_tooltips = 
+		{ 
+			"language"      : "EN",
+			"frameShadow"   : true,
+			"compact"       : false,
+			"statsOnly"     : false,
+			"replaceName"   : false,
+			"colorName"     : true,
+			"showIcon"      : false,
+		} 
+	</script>
 	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
 	<script src='/js/leves.js'></script>
 @stop
@@ -50,7 +62,7 @@
 					<div class='form-group margin-left'>
 						<label>Type</label>
 						<select class='multiselect hidden' multiple='multiple' id='type-selector'>
-							@foreach(array('Town', 'Field', 'Courier') as $role)
+							@foreach(array('Town', 'Field', 'Courier', 'Reverse Courier') as $role)
 							<option value='{{ $role }}' selected='selected'>{{ $role }}</option>
 							@endforeach
 						</select>
@@ -108,7 +120,7 @@
 </div>
 
 <div class='well'>
-	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BluGartr user Seravi Edalborez</a>.  Thanks!
+	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BlueGartr user Seravi Edalborez</a>.  Thanks Seravi!
 </div>
 
 @stop

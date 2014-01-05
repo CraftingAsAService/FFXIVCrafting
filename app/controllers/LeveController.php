@@ -30,6 +30,7 @@ class LeveController extends BaseController
 				'job', 'item', 'item.recipes', 
 				'major', 'minor', 'location'
 			))
+			->where('item_id', '>', 0) // Avoids mining/botany "bug"
 			->orderBy('job_id')
 			->orderBy('level')
 			->orderBy('xp')
@@ -124,7 +125,7 @@ class LeveController extends BaseController
 		$leve = Leve::with('item')->find($leve_id);
 		$experience = Experience::whereBetween('level', array($leve->level, $leve->level + 9))->get();
 		
-		$xp_rewarded = $leve->xp * 3;
+		$xp_rewarded = $leve->xp * 2; // 2.1 patch changed it from 200% to 100% bonus
 
 		$chart = array();
 		foreach ($experience as $xp)

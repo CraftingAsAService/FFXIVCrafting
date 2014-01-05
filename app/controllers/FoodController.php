@@ -6,7 +6,7 @@ class FoodController extends BaseController {
 	{
 		// Items that are Food
 		$results = Item::with('stats', 'vendors')
-			->where('role', 'meal')
+			->where('sub_role', 'meal')
 			->orderBy('id')
 			->get();
 

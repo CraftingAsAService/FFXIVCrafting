@@ -6,7 +6,7 @@ class MateriaController extends BaseController {
 	{
 		// Items that are Materia
 		$results = Item::with('stats')
-			->where('role', 'materia')
+			->where('sub_role', 'materia')
 			->orderBy('id')
 			->get();
 
@@ -35,6 +35,8 @@ class MateriaController extends BaseController {
 				'amount' => $stat->pivot->amount
 			);
 		}
+
+		// dd($materia);
 
 		// Let's move a few up front
 		// First, Crafters, then Gatherers, then the rest (Battling)
