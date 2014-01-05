@@ -20,6 +20,7 @@ var recipe_book = {
 		$('#name-search input').val(hash[0]);
 		$('#min-level').val(hash[2]);
 		$('#max-level').val(hash[3]);
+		$('#order-by').val(hash[5]);
 
 		recipe_book.hash_per_page = hash[4];
 
@@ -44,6 +45,10 @@ var recipe_book = {
 		$('#name-search button').click(function() {
 			if (recipe_book.check_input_length() == true)
 				recipe_book.search();
+		});
+		
+		$('#order-by').change(function(e) {
+			return recipe_book.search();
 		});
 
 		$('#min-level, #max-level').change(function() {
@@ -131,7 +136,8 @@ var recipe_book = {
 			min = $('#min-level').val(),
 			max = $('#max-level').val(),
 			cls = $('#class-search button').data('class'),
-			per_page = $('#per_page').val();
+			per_page = $('#per_page').val(),
+			order_by = $('#order-by').val();
 
 		if (recipe_book.hash_per_page != null)
 			per_page = recipe_book.hash_per_page;
@@ -144,7 +150,8 @@ var recipe_book = {
 				cls,
 				min, 
 				max, 
-				per_page
+				per_page,
+				order_by
 			].join('|');
 
 		$.ajax({
@@ -156,7 +163,8 @@ var recipe_book = {
 				min : min,
 				max : max,
 				'class' : cls,
-				'per_page' : per_page
+				'per_page' : per_page,
+				'sorting' : order_by
 			},
 			beforeSend:function() {
 				recipe_book.disable();
@@ -186,12 +194,12 @@ var recipe_book = {
 			initXIVDBTooltips();
 	},
 	disable:function() {
-		$('#name-search input, #name-search button, #min-level, #max-level, #class-search button').addClass('disabled');
-		$('#name-search input, #min-level, #max-level').prop('disabled', true);
+		$('#name-search input, #name-search button, #order-by, #min-level, #max-level, #class-search button').addClass('disabled');
+		$('#name-search input, #order-by, #min-level, #max-level').prop('disabled', true);
 	},
 	enable:function() {
-		$('#name-search input, #name-search button, #min-level, #max-level, #class-search button').removeClass('disabled');
-		$('#name-search input, #min-level, #max-level').prop('disabled', false);
+		$('#name-search input, #name-search button, #order-by, #min-level, #max-level, #class-search button').removeClass('disabled');
+		$('#name-search input, #order-by, #min-level, #max-level').prop('disabled', false);
 	}
 }
 
