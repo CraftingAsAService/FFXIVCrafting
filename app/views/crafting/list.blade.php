@@ -99,7 +99,7 @@
 						{{ $item->level }}
 					</a>
 					@endif
-					<a href='http://xivdb.com/{{ $item->href }}' target='_blank'>
+					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
 						<img src='/img/items/{{ $item->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $item->name }}
 					</a>
 					@endif
@@ -160,9 +160,8 @@
 						@foreach($nodes as $node_level => $node_actions)
 						<p>
 							<span class='label label-primary' rel='tooltip' title='Node Level'>&commat;{{ $node_level }}</span>
-							@foreach ($node_actions as $action => $levels)
+							@foreach ($node_actions as $action)
 							<span class='label label-default' rel='tooltip' title='Action'>{{ $action }}</span>
-							<span class='label label-success' rel='tooltip' title='Item Level'>{{ implode(', ', $levels) }}</span>
 							@endforeach
 						</p>
 						@endforeach
