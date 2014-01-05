@@ -13,7 +13,8 @@ class CraftingController extends BaseController
 		return View::make('crafting')
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', $job_list);
+			->with('job_list', $job_list)
+			->with('previous', Cookie::get('previous_crafting_load'));
 	}
 
 	public function postIndex()
@@ -26,8 +27,13 @@ class CraftingController extends BaseController
 		// Overwrite Class var
 		if (Input::has('multi') && Input::has('classes'))
 			$values[0] = implode(',', Input::get('classes'));
+
+		$url = '/crafting/list?' . implode(':', $values);
+
+		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
+		Cookie::queue('previous_crafting_load', $url, 525600); // 1 year's worth of minutes
 		
-		return Redirect::to('/crafting/list?' . implode(':', $values));
+		return Redirect::to($url);
 	}
 
 	public function getList()

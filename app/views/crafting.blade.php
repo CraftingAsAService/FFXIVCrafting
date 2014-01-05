@@ -92,9 +92,17 @@
 		</fieldset>
 		<fieldset>
 			<div class='form-group'>
-				<div class='col-sm-4 col-md-3 col-sm-offset-4 col-md-offset-3'>
+				<div class='col-sm-3 col-sm-offset-4 col-md-offset-3'>
 					<button type='submit' class='btn btn-success btn-block btn-lg'>Build my craft list!</button>
 				</div>
+				@if($previous)
+				<div class='col-sm-1 text-center' style='line-height: 3;'>
+					or 
+				</div>
+				<div class='col-sm-4 col-md-3'>
+					<a href='{{ $previous }}' class='btn btn-warning btn-block btn-lg'>Load Last Setup</a>
+				</div>
+				@endif
 			</div>
 		</fieldset>
 	</form>

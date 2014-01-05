@@ -15,7 +15,13 @@
 
 	<form class='form-horizontal well' action='/career/producer' method='post'>
 		<fieldset>
-			<legend>Crafting Career - Producer POV</legend>
+			
+			<legend>
+				@if($previous_ccp)
+				<a href='{{ $previous_ccp }}' class='btn btn-warning btn-sm pull-right'>Load Last Setup</a>
+				@endif
+				Crafting Career - Producer POV
+			</legend>
 
 			<button type='submit' role='button' class='btn btn-success pull-right'>
 				View Recipes &raquo;
@@ -52,7 +58,12 @@
 
 	<form class='form-horizontal well' action='/career/receiver' method='post'>
 		<fieldset>
-			<legend>Crafting Career - Receiver POV</legend>
+			<legend>
+				@if($previous_ccr)
+				<a href='{{ $previous_ccr }}' class='btn btn-warning btn-sm pull-right'>Load Last Setup</a>
+				@endif
+				Crafting Career - Receiver POV
+			</legend>
 
 			<button type='submit' role='button' class='btn btn-success pull-right'>
 				View Recipes &raquo;
@@ -88,7 +99,12 @@
 
 	<form class='form-horizontal well' action='/career/gathering' method='post'>
 		<fieldset>
-			<legend>Gathering Career</legend>
+			<legend>
+				@if($previous_gc)
+				<a href='{{ $previous_gc }}' class='btn btn-warning btn-sm pull-right'>Load Last Setup</a>
+				@endif
+				Gathering Career
+			</legend>
 
 			<button type='submit' role='button' class='btn btn-success pull-right'>
 				View Items &raquo;
@@ -126,7 +142,12 @@
 	<form class='form-horizontal well' action='/career/gathering' method='post'>
 		<input type='hidden' name='gatherer-class' value='BTL'>
 		<fieldset>
-			<legend>Battling Career</legend>
+			<legend>
+				@if($previous_bc)
+				<a href='{{ $previous_bc }}' class='btn btn-warning btn-sm pull-right'>Load Last Setup</a>
+				@endif
+				Battling Career
+			</legend>
 
 			<button type='submit' role='button' class='btn btn-success pull-right'>
 				View Items &raquo;

@@ -110,6 +110,35 @@ var recipe_book = {
 		$(document).on('change', '#per_page', function() {
 			recipe_book.search();
 		});
+
+		$('#save-setup').click(function(event) {
+			event.preventDefault();
+
+			global.set_cookie('previous_recipe_load', document.location.hash);
+
+			global.noty({
+				type: 'success',
+				text: 'Setup Saved'
+			});
+
+			return;
+		});
+
+		$('#load-setup').click(function(event) {
+			event.preventDefault();
+
+			global.noty({
+				type: 'info',
+				text: 'Loading Setup'
+			});
+
+			document.location.hash = decodeURIComponent(global.get_cookie('previous_recipe_load'));
+
+			recipe_book.decipher_hash();
+			recipe_book.search();
+
+			return;
+		});
 	},
 	check_input_length:function() {
 		var val = $('#name-search input').val();

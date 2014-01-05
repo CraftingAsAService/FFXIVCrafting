@@ -9,7 +9,7 @@ class LeveController extends BaseController
 		$job_list = array();
 		foreach (Job::all() as $j)
 			$job_list[$j->abbreviation] = $j->name;
-
+	
 		return View::make('leves')
 			->with('active', 'leves')
 			->with('job_list', $job_list);

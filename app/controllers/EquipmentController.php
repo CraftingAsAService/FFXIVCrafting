@@ -11,7 +11,8 @@ class EquipmentController extends BaseController
 		return View::make('equipment')
 			->with('error', FALSE)
 			->with('active', 'equipment')
-			->with('job_list', $job_list);
+			->with('job_list', $job_list)
+			->with('previous', Cookie::get('previous_equipment_load'));
 	}
 
 	public function badUrl()
@@ -25,8 +26,13 @@ class EquipmentController extends BaseController
 		$values = array();
 		foreach ($vars as $var => $default)
 			$values[] = Input::has($var) ? Input::get($var) : $default;
+
+		$url = '/equipment/list?' . implode(':', $values);
+
+		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
+		Cookie::queue('previous_equipment_load', $url, 525600); // 1 year's worth of minutes
 		
-		return Redirect::to('/equipment/list?' . implode(':', $values));
+		return Redirect::to($url);
 	}
 
 	public function getList()

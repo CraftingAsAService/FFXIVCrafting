@@ -19,6 +19,9 @@
 
 @section('content')
 
+<a href='/recipes' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
+
 <h1>
 	<i class='glyphicon glyphicon-book'></i>
 	Recipe Book

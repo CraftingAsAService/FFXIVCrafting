@@ -103,6 +103,35 @@ var quests = {
 
 			return;
 		});
+
+		$('#save-setup').click(function(event) {
+			event.preventDefault();
+
+			global.set_cookie('previous_quest_load', document.location.hash);
+
+			global.noty({
+				type: 'success',
+				text: 'Setup Saved'
+			});
+
+			return;
+		});
+
+		$('#load-setup').click(function(event) {
+			event.preventDefault();
+
+			global.noty({
+				type: 'info',
+				text: 'Loading Setup'
+			});
+
+			document.location.hash = decodeURIComponent(global.get_cookie('previous_quest_load'));
+
+			quests.decipher_hash();
+			quests.search();
+
+			return;
+		});
 	},
 	search:function() {
 		var classes = [], //$('#class-selector + .btn-group input:checked'),

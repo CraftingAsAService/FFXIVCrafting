@@ -8,7 +8,7 @@ class GatheringController extends BaseController
 		return Redirect::to('/career');
 	}
 
-	public function getList($master_class = 'MIN')
+	public function getList()
 	{
 		return Redirect::to('/career');
 	}
