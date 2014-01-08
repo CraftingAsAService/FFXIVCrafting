@@ -41,7 +41,7 @@ class Item extends Eloquent
 		return $this->belongsToMany('Vendor');
 	}
 
-	public static function calculate($job = '', $level = 1, $craftable_only = TRUE)
+	public static function calculate($job = '', $level = 1, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
 		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? 'T' : 'F');
 
@@ -63,7 +63,7 @@ class Item extends Eloquent
 		{
 			$query = DB::table('items AS i')
 				->select(
-					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 
+					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 'i.sub_role', 'i.rewarded',
 					DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'), 
 					#####DB::raw('COUNT(iv.id) AS vendor_count'), 
 					DB::raw("(
@@ -89,13 +89,21 @@ class Item extends Eloquent
 					if ( ! in_array($job->disciple, array('DOH', 'DOL')))
 						$query->orWhere('j.abbreviation', 'ALL');
 				})
-				->where('i.role', $role)
+				->where(function($query) use ($role)
+				{
+					$query->where('i.role', $role)
+							->orWhere('i.sub_role', $role);
+				})
+				// ->where('i.role', $role)
+				// ->orWhere('i.sub_role', $role)
 				->where('i.level', '<=' , $level)
 				->orderBy('i.ilvl', 'DESC')
 				->orderBy('i.level', 'DESC')
 				->groupBy('i.name', 'i.level'); // Fight off duplicates :(
 
-			if ($craftable_only)
+			if ($craftable_only && $rewardable_too)
+				$query->havingRaw('crafted_by IS NOT NULL OR rewarded = 1');
+			elseif ($craftable_only)
 				$query->havingRaw('crafted_by IS NOT NULL');
 
 			$equipment_list[$role] = $query
@@ -167,7 +175,12 @@ class Item extends Eloquent
 
 			unset($list);
 		}
-		
+
+		// Look for 2H items and add a cannot_equip to Off Hand
+		foreach ($equipment_list['Main Hand'] as $mh)
+			if (preg_match('/^Two-handed/', $mh->sub_role))
+				$mh->cannot_equip = 'Off-Hand';
+
 		// Cache the results
 		Cache::put($cache_key, $equipment_list, Config::get('site.cache_length'));
 

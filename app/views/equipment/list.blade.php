@@ -176,4 +176,8 @@
 	</div>
 </div>
 
+<div class='well'>
+	Remember, this tool is geared towards finding craftable equipment!  If you're looking for information on how to gear your level 50, please visit the <a href='http://ffxiv.ariyala.com/' target='_blank'>FFXIV Gear Calculator</a>!
+</div>
+
 @stop

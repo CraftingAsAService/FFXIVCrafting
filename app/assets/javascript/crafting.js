@@ -20,71 +20,14 @@ var crafting = {
 			trEls.toggleClass('hidden');
 		});
 
-		// Store the amount needed
-		$('.needed input, input.obtained').each(function() {
-			var el = $(this);
-			el.data('amount', parseInt(el.val()));
-		});
-
 		// If they change needed or obtained
 
 		$('.needed input').change(function() {
-			var el = $(this);
-			var amount = parseInt(el.val()),
-				prev = el.data('amount');
-
-			var diff = amount - prev;
-
-			if (diff == 0)
-				return;
-
-			el.data('amount', amount);
-
-			var tr = el.closest('tr');
-
-			crafting.change_reagents(el.closest('tr'), diff);
-
-			tr.find('input.obtained').trigger('change');
+			return crafting.recalculate_all();
 		});
 
 		$('input.obtained').change(function() {
-			var el = $(this),
-				tr = el.closest('tr'),
-				obtained = parseInt(el.val()),
-				neededEl = tr.find('.needed input'),
-				neededVal = neededEl.val();
-
-			if (neededEl.length == 0) {
-				neededEl = tr.find('.needed span');
-				neededVal = neededEl.html();
-			}
-
-			neededVal = parseInt(neededVal);
-
-			if (obtained > neededVal)
-			{
-				obtained = neededVal;
-				if (neededEl.is('input'))
-					el.val(obtained);
-				else
-					el.html(obtained);
-			}
-
-			tr[(obtained >= neededVal ? 'add' : 'remove') + 'Class']('success');
-
-			if (tr.closest('#CraftingList-section').length > 0)
-			{
-				var prev = el.data('amount');
-				el.data('amount', obtained);
-
-					// Different than other as we want the diff inverse
-				var diff = prev - obtained;
-
-				if (diff != 0)
-				{
-					crafting.change_reagents(tr, diff);
-				}
-			}
+			return crafting.recalculate_all();
 		});
 
 		$('.obtained-ok').click(function() {
@@ -99,12 +42,51 @@ var crafting = {
 			}
 
 			obtainedEl.val(neededVal).trigger('change');
-		})
+		});
+
+		crafting.recalculate_all();
 	},
-	change_reagents:function(tr, change_amount) {
+	recalculate_all:function() {
+		// Reset the fields
+		$('#Gathered-section, #Other-section, #PreRequisiteCrafting-section').find('.needed span').html(0);
+
+		$('#CraftingList-section .needed input').each(function() {
+			var el = $(this),
+				tr = el.closest('tr'),
+				yields = tr.data('yields');
+
+			crafting.change_reagents(tr, Math.ceil((el.val() - tr.find('.obtained').val()) / yields));
+
+			return;
+		});
+
+		// And then take off any obtained
+		$('#Gathered-section, #Other-section, #PreRequisiteCrafting-section').find('.obtained').each(function() {
+			var el = $(this),
+				tr = el.closest('tr'),
+				needed_el = tr.find('.needed span'),
+				obtained = parseInt(el.val()),
+				needed = parseInt(needed_el.html());
+
+			var new_amount = needed - obtained;
+			if (new_amount < 0)
+			{
+				el.val(obtained + new_amount);
+				new_amount = 0;
+			}
+
+			needed_el.html(new_amount);
+
+			tr[(new_amount <= 0 ? 'add' : 'remove') + 'Class']('success');
+
+			return;
+		});
+
+		return;
+	},
+	change_reagents:function(tr, parent_bake, indent) {
 		var data = tr.data('requires'),
-			trItemId = tr.data('itemId'),
-			yields = tr.data('yields');
+			trItemId = tr.data('itemId');
 
 		if (typeof(data) === 'undefined' || data == '')
 			return;
@@ -116,33 +98,35 @@ var crafting = {
 			requires[requires.length] = '1x' + trItemId;
 
 		for (var i = 0; i < requires.length; i++) {
+			// Required data
 			var t = requires[i].split('x'),
-				quantity = t[0],
+				required = t[0],
 				itemId = t[1];
 
+			// Elements
 			var target = $('tr.reagent:not(.exempt)[data-item-id=' + itemId + ']'),
-				current_yields = target.data('yields'),
-				neededEl = target.find('.needed span'),
-				current_amount = parseInt(neededEl.html());
+				obtained_el = target.find('input.obtained'),
+				needed_el = target.find('.needed span');
 
-			// Let's make sure change amount is disible by the amount it yields
-			var this_change_amount = change_amount * current_yields;
+			// Element data and calculations
+			var yields = target.data('yields'),
+				current_amount = parseInt(needed_el.html()),
+				obtained_amount = parseInt(obtained_el.val()),
+				// Bake!
+				bake = Math.ceil(parent_bake * required / yields), // (9 * 1) / 2 == 4.5 =~ 5
+				end_result = bake * yields, // 5 * 2 == 10
+				// Take the old amount and add in the end result of what was baked
+				// Also take off what's already been obtained
+				new_amount = current_amount + end_result;
 
-			var change = Math.ceil(this_change_amount * quantity / yields),
-				new_amount = current_amount + change;
+			// Set the new amount
+			needed_el.html(new_amount);
 
-			neededEl.html(new_amount);
+			obtained_el.attr('max', new_amount);
 
+			// Now go deeper, baking what's needed minus what's been obtained
 			if (itemId != trItemId)
-				crafting.change_reagents(target, change / yields);
-
-			var obtained_el = target.find('input.obtained');
-
-			obtained_el.trigger('change');
-
-			obtained_el[(new_amount <= 0 ? 'add' : 'remove') + 'Class']('disabled')
-				.prop('disabled', new_amount <= 0 ? 'disabled' : '');
-
+				crafting.change_reagents(target, Math.ceil(bake - (obtained_amount / yields)), indent + ' ');
 		}
 
 		return;

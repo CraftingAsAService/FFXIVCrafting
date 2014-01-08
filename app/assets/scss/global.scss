@@ -374,10 +374,12 @@ $gear_warning_accent: #a46868;
 		//border-width: 0px;
 		padding: 0px;
 
-		&.role-Primary {
+		&.role-Primary,
+		&.role-Main-Hand {
 			background-image: url(/img/equipment/2x/Primary.png);
 		}
-		&.role-Secondary {
+		&.role-Secondary,
+		&.role-Off-Hand {
 			background-image: url(/img/equipment/2x/Secondary.png);
 		}
 		&.role-Head {

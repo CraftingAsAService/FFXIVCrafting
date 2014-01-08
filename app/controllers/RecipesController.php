@@ -27,6 +27,7 @@ class RecipesController extends BaseController
 		$max = Input::get('max') ?: 70;
 		$class = Input::get('class') ?: 'all';
 		$per_page = Input::get('per_page') ?: 10;
+		$sorting = Input::get('sorting') ?: 'name_asc';
 
 		if ( ! in_array($per_page, array(10, 25, 50)))
 			$per_page = 10;
@@ -41,9 +42,22 @@ class RecipesController extends BaseController
 
 		if ($class && $class != 'all')
 			$job = Job::where('abbreviation', $class)->first();
+		
+		$sorting = explode('_', $sorting);
+		$order_by = 'name'; $sort = 'asc';
+		if (count($sorting) == 2)
+		{
+			// Only overwrite if need-be (i.e. don't test for "name" or "asc")
 
+			if ($sorting[0] == 'level')
+				$order_by = $sorting[0];
+
+			if ($sorting[1] == 'desc')
+				$sort = $sorting[1];
+		}
+		
 		$query = Recipe::with('item', 'job')
-			->orderBy('name');
+			->orderBy($order_by, $sort);
 		
 		if ($name)
 			$query->where('name', 'like', '%' . $name . '%');

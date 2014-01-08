@@ -98,7 +98,32 @@ var global = {
 	fade_and_destroy:function(el)
 	{
 		el.fadeOut(500, function() { el.remove(); });
-	}
+	},
+	get_cookie:function(name) {
+		name += '=';
+		var cookie_array = document.cookie.split(';');
+
+		for (var x = 0; x < cookie_array.length; x++) {
+			var cookie = cookie_array[x];
+			while (cookie.charAt(0) == ' ')
+				cookie = cookie.substring(1, cookie.length);
+
+			if (cookie.indexOf(name) === 0)
+				return cookie.substring(name.length, cookie.length);
+		}
+
+		return null;
+	},
+	set_cookie:function(name, val) {
+		var expire = new Date();
+		expire.setDate(expire.getDate() + 365);
+
+		val = escape(val) + '; expires=' + expire.toUTCString() + ';path=/';
+
+		document.cookie = name + '=' + val;
+
+		return true;
+	},
 }
 
 $(global.init);

@@ -691,6 +691,12 @@
 	},
 	{
 		"class":"ARM",
+		"level":30,
+		"item_name":"Bomb Ash",
+		"amount":5
+	},
+	{
+		"class":"ARM",
 		"level":35,
 		"item_name":"Spirit Ore",
 		"amount":5

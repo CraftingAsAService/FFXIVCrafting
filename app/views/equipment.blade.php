@@ -83,7 +83,9 @@
 					<div class='make-switch' data-on='success' data-off='warning'>
 						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
 					</div>
-					Only show craftable items
+					Only show craftable items 
+					<input type='checkbox' name='rewardable_too' value='1' checked='checked'> 
+					and <u rel='tooltip' title='Items that are potential rewards from leves, achievements, quests, etc'>rewardable items</u>
 				</div>
 			</div>
 			<div class='form-group'>
@@ -98,9 +100,17 @@
 		</fieldset>
 		<fieldset>
 			<div class='form-group'>
-				<div class='col-sm-4 col-md-3 col-sm-offset-4 col-md-offset-3'>
+				<div class='col-sm-3 col-sm-offset-4 col-md-offset-3'>
 					<button type='submit' class='btn btn-success btn-block btn-lg'>Get my Gear!</button>
 				</div>
+				@if($previous)
+				<div class='col-sm-1 text-center' style='line-height: 3;'>
+					or 
+				</div>
+				<div class='col-sm-4 col-md-3'>
+					<a href='{{ $previous }}' class='btn btn-warning btn-block btn-lg'>Load Last Setup</a>
+				</div>
+				@endif
 			</div>
 		</fieldset>
 	</form>

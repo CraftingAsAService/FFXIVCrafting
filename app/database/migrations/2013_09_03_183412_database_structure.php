@@ -39,19 +39,112 @@ class DatabaseStructure extends Migration {
 			$table->increments('id');
 			$table->string('name', 50);
 			$table->string('icon', 20);
-			$table->enum('role', array('Main Hand', 'Off Hand', 'Head', 'Body', 'Hands', 'Waist', 'Wrists', 'Ears', 'Feet', 'Right Ring', 'Legs', 'Neck', 'Catalyst', 'Materia', 'Fishing Tackle', 'Meal', 'Medicine', 'Miscellany', 'Other', 'Seafood', 'Soul Crystal', 'Dye', 'Crystal', 'Bone', 'Cloth', 'Ingredient', 'Leather', 'Lumber', 'Metal', 'Part', 'Reagent', 'Stone'));
-			$table->string('sub_role', 35);
+			
+			$table->enum('role', array(
+				'Armor',
+				'Ears',
+				'Main Hand',
+				'Neck',
+				'Off Hand',
+				'Other',
+				'Right Ring',
+				'Wrists'
+			));
+
+			$table->enum('sub_role', array(
+				'Crystal',
+				'Head',
+				'Body',
+				'Legs',
+				'Hands',
+				'Feet',
+				'Waist',
+				'Gladiator\\\'s Arm',
+				'Pugilist\\\'s Arm',
+				'Marauder\\\'s Arm',
+				'Lancer\\\'s Arm',
+				'Archer\\\'s Arm',
+				'One-handed Conjurer\\\'s Arm',
+				'Two-handed Conjurer\\\'s Arm',
+				'One-handed Thaumaturge\\\'s Arm',
+				'Two-handed Thaumaturge\\\'s Arm',
+				'Arcanist\\\'s Grimoire',
+				'Shield',
+				'Carpenter\\\'s Primary Tool',
+				'Carpenter\\\'s Secondary Tool',
+				'Blacksmith\\\'s Primary Tool',
+				'Blacksmith\\\'s Secondary Tool',
+				'Armorer\\\'s Primary Tool',
+				'Armorer\\\'s Secondary Tool',
+				'Goldsmith\\\'s Primary Tool',
+				'Goldsmith\\\'s Secondary Tool',
+				'Leatherworker\\\'s Primary Tool',
+				'Leatherworker\\\'s Secondary Tool',
+				'Weaver\\\'s Primary Tool',
+				'Weaver\\\'s Secondary Tool',
+				'Alchemist\\\'s Primary Tool',
+				'Alchemist\\\'s Secondary Tool',
+				'Culinarian\\\'s Primary Tool',
+				'Culinarian\\\'s Secondary Tool',
+				'Miner\\\'s Primary Tool',
+				'Miner\\\'s Secondary Tool',
+				'Botanist\\\'s Primary Tool',
+				'Botanist\\\'s Secondary Tool',
+				'Fisher\\\'s Primary Tool',
+				'Fishing Tackle',
+				'Bracelets',
+				'Earrings',
+				'Ring',
+				'Necklace',
+				'Soul Crystal',
+				'Medicine',
+				'Reagent',
+				'Meal',
+				'Ingredient',
+				'Seafood',
+				'Miscellany',
+				'Metal',
+				'Stone',
+				'Leather',
+				'Cloth',
+				'Lumber',
+				'Bone',
+				'Part',
+				'Catalyst',
+				'Materia',
+				'Dye',
+				'Minion',
+				'Construction Permit',
+				'Roof',
+				'Exterior Wall',
+				'Window',
+				'Door',
+				'Roof Decoration',
+				'Exterior Wall Decoration',
+				'Placard',
+				'Fence',
+				'Interior Wall',
+				'Flooring',
+				'Ceiling Light',
+				'Outdoor Furnishing',
+				'Furnishing',
+				'Table',
+				'Tabletop',
+				'Wall-mounted',
+				'Rug'
+			));
+			
 			$table->smallInteger('level');
 			$table->smallInteger('ilvl');
 			$table->smallInteger('stack');
-			$table->smallInteger('seals');
 			$table->smallInteger('buy');
 			$table->smallInteger('sell');
 			$table->smallInteger('repair');
 			$table->boolean('untradable');
 			$table->boolean('unique');
+			$table->boolean('rewarded');
+			$table->string('stat_wrench', 15);
 			$table->string('cannot_equip', 30);
-			$table->string('achievement', 50);
 
 			$table->index('role');
 			$table->index('level');
@@ -76,6 +169,7 @@ class DatabaseStructure extends Migration {
 			$table->integer('item_id');
 			$table->integer('stat_id');
 			$table->decimal('amount', 6, 2);
+			$table->decimal('hq', 6, 2)->nullable()->default(NULL);
 			$table->smallInteger('maximum');
 
 			$table->index('item_id', 'stat_id');
@@ -148,10 +242,11 @@ class DatabaseStructure extends Migration {
 			$table->integer('xp');
 			$table->smallInteger('gil');
 			$table->smallInteger('triple');
-			$table->enum('type', array('Town', 'Courier', 'Field'));
+			$table->enum('type', array('Town', 'Courier', 'Reverse Courier', 'Field', 'Gathering'));
 			$table->integer('major_location_id');
 			$table->integer('minor_location_id');
 			$table->integer('location_id');
+			$table->string('notes', 100);
 
 			$table->index('item_id', 'job_id');
 			$table->index('level');
@@ -192,11 +287,12 @@ class DatabaseStructure extends Migration {
 			$table->enum('action', array('Harvesting', 'Logging', 'Mining', 'Quarrying'));
 			$table->smallInteger('level');
 			$table->integer('location_id');
-			$table->smallInteger('location_level');
+			$table->integer('area_id');
 
 			$table->index('job_id');
 			$table->index('action');
 			$table->index('location_id');
+			$table->index('area_id');
 		});
 
 		Schema::create('gathering_node_item', function($table)

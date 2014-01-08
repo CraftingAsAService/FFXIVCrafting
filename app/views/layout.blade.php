@@ -121,9 +121,9 @@
 						<p class='text-muted credit'>
 							<a href='mailto:tickthokk@gmail.com'>Email</a>
 						</p>
-						<p class='text-muted credit'>
+						<!-- <p class='text-muted credit'>
 							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
-						</p>
+						</p> -->
 					</div>
 					<div class='col-sm-4'>
 						<h4>More Info</h4>

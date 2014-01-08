@@ -21,8 +21,6 @@
 #### To refresh your data:
 1. `php artisan migrate:refresh --seed` again
 2. `php artisan cache:clear`
-3. Suggested: `curl http://[localdomain.com]/gathering/list/MIN >> NUL&`
-4. Suggested: `curl http://[localdomain.com]/gathering/list/MIN >> NUL&`
 
 Note: `NUL` works in Windows, and `/dev/null` works for Linux.  The ampersand ignores the output and just executes.
 

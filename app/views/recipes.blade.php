@@ -19,6 +19,9 @@
 
 @section('content')
 
+<a href='/recipes' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
+
 <h1>
 	<i class='glyphicon glyphicon-book'></i>
 	Recipe Book
@@ -38,11 +41,22 @@
 			</tr>
 			<tr>
 				<th class='valign'>
-					<div class='input-group' style='margin: 0 auto;' id='name-search'>
-						<input type='text' class='form-control'>
-						<span class='input-group-btn'>
-							<button class='btn btn-success' type='button'><i class='glyphicon glyphicon-search'></i></button>
-						</span>
+					<div class='row'>
+					<div class='col-xs-9'>
+						<div class='input-group' style='margin: 0 auto;' id='name-search'>
+							<input type='text' class='form-control'>
+							<span class='input-group-btn'>
+								<button class='btn btn-success' type='button'><i class='glyphicon glyphicon-search'></i></button>
+							</span>
+						</div>
+					</div>
+					<div class='col-xs-3'>
+						<select name='order-by' id='order-by' class='form-control'>
+							<option value='' selected='selected'>Name: a to z</option>
+							<option value='name_desc'>Name: z to a</option>
+							<option value='level_asc'>Level: low to high</option>
+							<option value='level_desc'>Level: high to low</option>
+						</select>
 					</div>
 				</th>
 				<th class='valign'>

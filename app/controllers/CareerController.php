@@ -7,10 +7,14 @@ class CareerController extends BaseController
 	{
 		// All Jobs
 		$job_list = Job::whereIn('disciple', array('DOL','DOH'))->get()->lists('name', 'abbreviation');
-
+		
 		return View::make('career')
 			->with('active', 'career')
-			->with('job_list', $job_list);
+			->with('job_list', $job_list)
+			->with('previous_ccp', Cookie::get('previous_ccp'))
+			->with('previous_ccr', Cookie::get('previous_ccr'))
+			->with('previous_gc', Cookie::get('previous_gc'))
+			->with('previous_bc', Cookie::get('previous_bc'));
 	}
 
 	public function postProducer()
@@ -20,7 +24,12 @@ class CareerController extends BaseController
 		$min_level = (int) Input::get('supporter-min-level') ?: 1;
 		$max_level = (int) Input::get('supporter-max-level') ?: 70;
 
-		return Redirect::to('/career/producer/' . implode('/', get_defined_vars()));
+		$url = '/career/producer/' . implode('/', get_defined_vars());
+
+		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
+		Cookie::queue('previous_ccp', $url, 525600); // 1 year's worth of minutes
+
+		return Redirect::to($url);
 	}
 
 	public function getProducer($my_class = '', $supported_classes = '', $min_level = 0, $max_level = 0)
@@ -118,7 +127,12 @@ class CareerController extends BaseController
 		$min_level = (int) Input::get('receiver-min-level') ?: 1;
 		$max_level = (int) Input::get('receiver-max-level') ?: 70;
 
-		return Redirect::to('/career/receiver/' . implode('/', get_defined_vars()));
+		$url ='/career/receiver/' . implode('/', get_defined_vars());
+
+		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
+		Cookie::queue('previous_ccr', $url, 525600); // 1 year's worth of minutes
+
+		return Redirect::to($url);
 	}
 
 	public function getReceiver($my_class = '', $supported_classes = '', $min_level = 0, $max_level = 0)
@@ -216,7 +230,15 @@ class CareerController extends BaseController
 		$min_level = (int) Input::get('gathering-min-level') ?: 1;
 		$max_level = (int) Input::get('gathering-max-level') ?: 70;
 
-		return Redirect::to('/career/gathering/' . implode('/', get_defined_vars()));
+		// previous_gc or previous_bc
+		$cookie_name = 'previous_' . ($my_class == 'BTL' ? 'b' : 'g') . 'c';
+
+		$url = '/career/gathering/' . implode('/', get_defined_vars());
+
+		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
+		Cookie::queue($cookie_name, $url, 525600); // 1 year's worth of minutes
+
+		return Redirect::to($url);
 	}
 
 	public function getGathering($my_class = '', $supported_classes = '', $min_level = 0, $max_level = 0)
@@ -258,7 +280,7 @@ class CareerController extends BaseController
 			$top_query .= "
 					(
 						SELECT 
-							GROUP_CONCAT(DISTINCT CONCAT(gn.action,'|',gn.level,'|',gn.location_level,'|',gnl.name) ORDER BY gn.level , gn.location_level SEPARATOR '***') AS nodes
+							GROUP_CONCAT(DISTINCT CONCAT(gn.action,'|',gn.level,'|',gnl.name) ORDER BY gn.level SEPARATOR '***') AS nodes
 						FROM `gathering_node_item` AS `gni`
 						JOIN `gathering_nodes` AS `gn` ON `gn`.`id` = `gni`.`gathering_node_id`
 						JOIN `locations` AS `gnl` ON `gnl`.`id` = `gn`.`location_id`
@@ -350,11 +372,11 @@ class CareerController extends BaseController
 
 				foreach (explode('***', $result->nodes) as $node)
 				{
-					list($action, $ilvl, $location_level, $location_name) = explode('|', $node);
+					list($action, $ilvl, $location_name) = explode('|', $node);
 					
 					$result->ilvl = $ilvl;
 
-					$new_nodes[$location_name][$action][] = $location_level;
+					$new_nodes[$location_name][] = $action;
 				}
 
 				foreach (array_keys($new_nodes) as $key)
@@ -393,6 +415,7 @@ class CareerController extends BaseController
 		
 		if ($my_class != 'BTL')
 		{
+			$quest_results = array();
 			// Rip out Quest Entries
 			foreach ($results as $k => $result)
 				if ($result->quest_level != NULL)

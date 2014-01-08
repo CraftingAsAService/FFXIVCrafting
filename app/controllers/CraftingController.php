@@ -13,7 +13,8 @@ class CraftingController extends BaseController
 		return View::make('crafting')
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', $job_list);
+			->with('job_list', $job_list)
+			->with('previous', Cookie::get('previous_crafting_load'));
 	}
 
 	public function postIndex()
@@ -26,8 +27,13 @@ class CraftingController extends BaseController
 		// Overwrite Class var
 		if (Input::has('multi') && Input::has('classes'))
 			$values[0] = implode(',', Input::get('classes'));
+
+		$url = '/crafting/list?' . implode(':', $values);
+
+		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
+		Cookie::queue('previous_crafting_load', $url, 525600); // 1 year's worth of minutes
 		
-		return Redirect::to('/crafting/list?' . implode(':', $values));
+		return Redirect::to($url);
 	}
 
 	public function getList()
@@ -262,11 +268,10 @@ class CraftingController extends BaseController
 			$new_nodes = array();
 			// Job
 				// Location
-					//Location Level
-						// Action
-							//Level
+					// Action
+						//Level
 			foreach ($reagent['nodes'] as $node)
-				$new_nodes[$node['job']][$node['location']][$node['location_level']][$node['action']][] = $node['level'];
+				$new_nodes[$node['job']][$node['location']][$node['action']][] = $node['level'];
 
 			foreach ($new_nodes as $k => $nn)
 			{
@@ -375,12 +380,6 @@ class CraftingController extends BaseController
 			{
 				$run = 0;
 
-				// if ($recipe->name == 'Ash Lumber')
-				// {
-				// 	echo $recipe->id, ' ', $recipe->item_id;
-				// 	dd($top_level);
-				// }
-
 				if (in_array($recipe->item_id, array_keys($top_level)))
 					$run += $top_level[$recipe->item_id];
 
@@ -392,6 +391,8 @@ class CraftingController extends BaseController
 
 			foreach ($recipe->reagents as $reagent)
 			{
+				$reagent_yields = isset($reagent->recipes[0]) ? $reagent->recipes[0]->yields : 1;
+
 				if ( ! isset($reagent_list[$reagent->id]))
 					$reagent_list[$reagent->id] = array(
 						'make_this_many' => 0,
@@ -402,16 +403,8 @@ class CraftingController extends BaseController
 						'yields' => 1
 					);
 
-				// if ($reagent->name == 'Cornmeal')
-				// {
-				// 	//var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
-				// 	var_dump($reagent->recipes[0]->job->abbreviation);
-				// 	var_dump($reagent->recipes[0]->job->disciple);
-				// 	var_dump($reagent->jobs);
-				// 	exit;
-				// }
-
-				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * ceil($inner_multiplier / $recipe->yields));
+				$make_this_many = ceil($reagent->pivot->amount * $inner_multiplier); // ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yields))
+				$reagent_list[$reagent->id]['make_this_many'] += $make_this_many;
 
 				if ($self_sufficient)
 				{
@@ -429,7 +422,6 @@ class CraftingController extends BaseController
 							$node_data[] = array(
 								'action' => $node->action,
 								'level' => $node->level,
-								'location_level' => $node->location_level,
 								'location' => $node->location->name,
 								'job' => $node->job->abbreviation
 							);
@@ -451,7 +443,7 @@ class CraftingController extends BaseController
 					{
 						$reagent_list[$reagent->id]['yields'] = $reagent->recipes[0]->yields;
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $recipe->yields)));
+						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yields)));
 					}
 				}
 			}
