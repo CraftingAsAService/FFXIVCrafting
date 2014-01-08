@@ -105,7 +105,7 @@
 					@endif
 				</td>
 				<td class='needed valign'>
-					<span>{{ $reagent['make_this_many'] }}</span>@if(isset($reagent['both_list_warning']))
+					<span>...<!--{{ $reagent['make_this_many'] }}--></span>@if(isset($reagent['both_list_warning']))
 					<a href='#' class='nowhere tt-force' rel='tooltip' title='Note: Item exists in main list but is also required for another.'>*</a>
 					@endif
 				</td>

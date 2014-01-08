@@ -380,12 +380,6 @@ class CraftingController extends BaseController
 			{
 				$run = 0;
 
-				// if ($recipe->name == 'Ash Lumber')
-				// {
-				// 	echo $recipe->id, ' ', $recipe->item_id;
-				// 	dd($top_level);
-				// }
-
 				if (in_array($recipe->item_id, array_keys($top_level)))
 					$run += $top_level[$recipe->item_id];
 
@@ -397,6 +391,8 @@ class CraftingController extends BaseController
 
 			foreach ($recipe->reagents as $reagent)
 			{
+				$reagent_yields = isset($reagent->recipes[0]) ? $reagent->recipes[0]->yields : 1;
+
 				if ( ! isset($reagent_list[$reagent->id]))
 					$reagent_list[$reagent->id] = array(
 						'make_this_many' => 0,
@@ -407,16 +403,8 @@ class CraftingController extends BaseController
 						'yields' => 1
 					);
 
-				// if ($reagent->name == 'Cornmeal')
-				// {
-				// 	//var_dump($reagent->pivot->amount, '*', $inner_multiplier, '/', $recipe->yields);
-				// 	var_dump($reagent->recipes[0]->job->abbreviation);
-				// 	var_dump($reagent->recipes[0]->job->disciple);
-				// 	var_dump($reagent->jobs);
-				// 	exit;
-				// }
-
-				$reagent_list[$reagent->id]['make_this_many'] += ceil($reagent->pivot->amount * ceil($inner_multiplier / $recipe->yields));
+				$make_this_many = ceil($reagent->pivot->amount * $inner_multiplier); // ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yields))
+				$reagent_list[$reagent->id]['make_this_many'] += $make_this_many;
 
 				if ($self_sufficient)
 				{
@@ -455,7 +443,7 @@ class CraftingController extends BaseController
 					{
 						$reagent_list[$reagent->id]['yields'] = $reagent->recipes[0]->yields;
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $recipe->yields)));
+						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yields)));
 					}
 				}
 			}
