@@ -52,8 +52,11 @@ var crafting = {
 
 		$('#CraftingList-section .needed input').each(function() {
 			var el = $(this),
-				tr = el.closest('tr');
-			crafting.change_reagents(tr, el.val() - tr.find('.obtained').val());
+				tr = el.closest('tr'),
+				yields = tr.data('yields');
+
+			crafting.change_reagents(tr, Math.ceil((el.val() - tr.find('.obtained').val()) / yields));
+
 			return;
 		});
 
