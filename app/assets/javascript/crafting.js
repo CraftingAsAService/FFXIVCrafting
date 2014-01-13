@@ -23,110 +23,198 @@ var crafting = {
 		// If they change needed or obtained
 
 		$('.needed input').change(function() {
-			return crafting.recalculate_all();
+			var root_engaged = $(this).closest('#CraftingList-section').length > 0;
+			return crafting.recalculate_all(root_engaged);
 		});
 
 		$('input.obtained').change(function() {
-			return crafting.recalculate_all();
+			var root_engaged = $(this).closest('#CraftingList-section').length > 0;
+			return crafting.recalculate_all(root_engaged);
 		});
 
 		$('.obtained-ok').click(function() {
 			var tr = $(this).closest('tr'),
-				neededEl = tr.find('.needed input'),
-				neededVal = neededEl.val(),
-				obtainedEl = tr.find('input.obtained');
+				needed = $('td.needed span', tr).length > 0 ? $('td.needed span', tr).html() : $('td.needed input', tr).val();
 
-			if (neededEl.length == 0) {
-				neededEl = tr.find('.needed span');
-				neededVal = neededEl.html();
-			}
-
-			obtainedEl.val(neededVal).trigger('change');
-		});
-
-		crafting.recalculate_all();
-	},
-	recalculate_all:function() {
-		// Reset the fields
-		$('#Gathered-section, #Other-section, #PreRequisiteCrafting-section').find('.needed span').html(0);
-
-		$('#CraftingList-section .needed input').each(function() {
-			var el = $(this),
-				tr = el.closest('tr'),
-				yields = tr.data('yields');
-
-			crafting.change_reagents(tr, Math.ceil((el.val() - tr.find('.obtained').val()) / yields));
+			$('input.obtained', tr).val(needed).trigger('change');
 
 			return;
 		});
 
-		// And then take off any obtained
-		$('#Gathered-section, #Other-section, #PreRequisiteCrafting-section').find('.obtained').each(function() {
-			var el = $(this),
-				tr = el.closest('tr'),
-				needed_el = tr.find('.needed span'),
-				obtained = parseInt(el.val()),
-				needed = parseInt(needed_el.html());
+		crafting.init_reagents();
 
-			var new_amount = needed - obtained;
-			if (new_amount < 0)
-			{
-				el.val(obtained + new_amount);
-				new_amount = 0;
-			}
-
-			needed_el.html(new_amount);
-
-			tr[(new_amount <= 0 ? 'add' : 'remove') + 'Class']('success');
-
-			return;
-		});
+		crafting.recalculate_all(true);
 
 		return;
 	},
-	change_reagents:function(tr, parent_bake, indent) {
-		var data = tr.data('requires'),
-			trItemId = tr.data('itemId');
+	reagents:[],
+	init_reagents:function() {
+		$('.reagent').each(function() {
+			var tr = $(this),
+				data = {
+					name: tr.find('a[href^="http"]').text().trim(), // Debug
+					exempt: tr.hasClass('exempt'),
+					item_id: tr.data('itemId'),
+					yields: tr.data('yields'),
+					reagents: [],
+					needed: 0,
+					obtained: 0,
+					total: 0,
+					elements: {
+						'row': tr,
+						'needed': $('td.needed span', tr).length > 0 ? $('td.needed span', tr) : $('td.needed input', tr),
+						'obtained': $('input.obtained', tr),
+						'total': $('td.total', tr)
+					}
+				};
 
-		if (typeof(data) === 'undefined' || data == '')
+			requires = tr.data('requires').split('&');
+
+			// Add this item to the list if it's in the pre-req's too
+			if (data.exempt && $('tr.reagent:not(.exempt)[data-item-id=' + data.item_id + ']').length > 0)
+				requires[requires.length] = '1x' + data.item_id;
+
+			if (requires.length == 1 && requires[0] == '')
+				data.reagents = null;
+			else
+				for (var i = 0; i < requires.length; i++) 
+				{
+					// Required data
+					var t = requires[i].split('x');
+
+					data.reagents[data.reagents.length] = {
+						'item_id': t[1],
+						'quantity': parseInt(t[0]) 
+					};
+				}
+
+			crafting.reagents[crafting.reagents.length] = data;
+
 			return;
+		});
 
-		var requires = data.split('&');
+		//console.log(crafting.reagents);
 
-		// Add this item to the list if it's in the pre-req's too
-		if (tr.hasClass('exempt') && $('tr.reagent:not(.exempt)[data-item-id=' + trItemId + ']').length > 0)
-			requires[requires.length] = '1x' + trItemId;
+		return;
+	},
+	recalculate_all:function(root_engaged) {
 
-		for (var i = 0; i < requires.length; i++) {
-			// Required data
-			var t = requires[i].split('x'),
-				required = t[0],
-				itemId = t[1];
+		// Update "obtained" for each item
+		// If it's Exempt, that means use it as a starting point
+		for (var i = 0; i < crafting.reagents.length; i++)
+		{
+			var recipe = crafting.reagents[i];
+			recipe.obtained = parseInt(recipe.elements.obtained.val());
 
-			// Elements
-			var target = $('tr.reagent:not(.exempt)[data-item-id=' + itemId + ']'),
-				obtained_el = target.find('input.obtained'),
-				needed_el = target.find('.needed span');
+			recipe.total = 0;
 
-			// Element data and calculations
-			var yields = target.data('yields'),
-				current_amount = parseInt(needed_el.html()),
-				obtained_amount = parseInt(obtained_el.val()),
-				// Bake!
-				bake = Math.ceil(parent_bake * required / yields), // (9 * 1) / 2 == 4.5 =~ 5
-				end_result = bake * yields, // 5 * 2 == 10
-				// Take the old amount and add in the end result of what was baked
-				// Also take off what's already been obtained
-				new_amount = current_amount + end_result;
+			if (recipe.exempt == true)
+			{
+				recipe.needed = parseInt(recipe.elements.needed.val());
+				recipe.elements.obtained.attr('max', recipe.needed);
 
-			// Set the new amount
-			needed_el.html(new_amount);
+				// Highlight the exempt row if needed
+				recipe.elements.row[(recipe.needed - recipe.obtained == 0 ? 'add' : 'remove') + 'Class']('success');
 
-			obtained_el.attr('max', new_amount);
+				// Ex. I need 20 of these, but already have 3.  The recipe yields 3
+				// Ex. So 17 / 3 = 5.6, rounded up is 6.  We need to bake this recipe at least 6 times
+				var bake = Math.ceil(Math.max(recipe.needed - recipe.obtained, 0) / recipe.yields);
+				
+				// Loop through all of it's children
+				crafting.oven(recipe, bake, root_engaged);
+			}
+			else
+				recipe.needed = 0; // Non exempt?  Reset needed.
+				// This only works because of the natural order of things: exempt rows last.
+		}
 
-			// Now go deeper, baking what's needed minus what's been obtained
-			if (itemId != trItemId)
-				crafting.change_reagents(target, Math.ceil(bake - (obtained_amount / yields)), indent + ' ');
+		// Now we have to take the obtained into account.
+		// This means looking at each recipe with reagent that isn't exempt, and re-doing it
+		for (var i = 0; i < crafting.reagents.length; i++)
+		{
+			var recipe = crafting.reagents[i];
+
+			if (recipe.exempt == true || recipe.reagents == null)
+				continue;
+
+			// Let's "undo" some bakes
+			var bake = Math.ceil(Math.min(0 - recipe.obtained, 0) / recipe.yields);
+			
+			// Loop through all of it's children
+			crafting.oven(recipe, bake, root_engaged);
+		}
+
+		// Update fields
+		for (var i = 0; i < crafting.reagents.length; i++)
+		{
+			var recipe = crafting.reagents[i];
+
+			// Don't update exempt items
+			if (recipe.exempt == true)
+				continue;
+
+			recipe.needed = recipe.needed - recipe.obtained;
+
+			if (recipe.needed < 0)
+			{
+				recipe.obtained += recipe.needed; // Take the amount off of obtained
+				if (recipe.obtained < 0)
+					recipe.obtained = 0;
+
+				recipe.elements.obtained.val(recipe.obtained);
+
+				recipe.needed = 0; // Add the (absolute value) amount back to needed
+			}
+
+			recipe.elements.needed.html(recipe.needed);
+			recipe.elements.obtained.attr('max', recipe.total);
+
+			if (recipe.total < 0)
+				recipe.total = 0;
+			recipe.elements.total.html(recipe.total);
+
+			recipe.elements.row[(recipe.needed == 0 ? 'add' : 'remove') + 'Class']('success');
+		}
+
+		return;
+	},
+	oven:function(recipe, parent_bake, root_engaged) {
+
+		if (recipe.reagents == null)
+			return;
+		
+		// Loop through all our reagents
+		top: // Label for loop
+		for (var i = 0; i < recipe.reagents.length; i++)
+		{
+			var reagent = recipe.reagents[i];
+
+			// Loop through all known reagents
+			for (var j = 0; j < crafting.reagents.length; j++)
+			{
+				var new_recipe = crafting.reagents[j];
+
+				// If both match, bake it!
+				if (new_recipe.item_id == reagent.item_id)
+				{
+					// Ex. Parent recipe is being baked 6 times.  The reagent indicates 2 are required.
+					// Ex. 6 * 2 = 12; That's our immediate need, so add it to the total and needed
+					var needed = parent_bake * reagent.quantity;
+					new_recipe.needed += needed;
+					new_recipe.total += needed;
+
+					// Ex. Our needed now says 12.  How many times do we need to bake?
+					// The recipe says it yields 3.  
+					// Well, we already have 2, so (12 - 2) / 3 = 3.33; 4 bakes, rounded up
+
+					var bake = Math.ceil(needed / new_recipe.yields);
+
+					// Put it in the oven!
+					crafting.oven(new_recipe, bake, root_engaged);
+					
+					continue top; // Jump to the next recipe's reagent
+				}
+			}
 		}
 
 		return;

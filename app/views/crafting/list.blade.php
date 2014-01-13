@@ -47,6 +47,7 @@
 				<th class='text-center'>Item</th>
 				<th class='text-center' width='75'>Needed</th>
 				<th class='text-center' width='102'>Obtained</th>
+				<th class='text-center' width='75'>Total</th>
 				<th class='text-center'>Can be Bought</th>
 				<th class='text-center'>Source</th>
 			</tr>
@@ -117,6 +118,7 @@
 						</div>
 					</div>
 				</td>
+				<td class='valign total'>0</td>
 				<td>
 					@if($item->buy)
 					<div{{ $reagent['self_sufficient'] ? ' class="opaque"' : '' }}>
@@ -235,6 +237,7 @@
 						</div>
 					</div>
 				</td>
+				<td class='valign total'>{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}</td>
 				<td>
 					@if($recipe->item->buy)
 					<div{{ $reagent['self_sufficient'] ? ' class="opaque"' : '' }}>
