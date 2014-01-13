@@ -43,7 +43,7 @@ class Item extends Eloquent
 
 	public static function calculate($job = '', $level = 1, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
-		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? 'T' : 'F');
+		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');
 
 		// Does cache exist?  Return that instead
 		if (Cache::has($cache_key))
