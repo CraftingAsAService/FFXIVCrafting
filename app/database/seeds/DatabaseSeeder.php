@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
 		DB::connection()->disableQueryLog();
 
 		echo "\n" . '** Initializing Translations **' . "\n";
-		Translations::init();
+		TranslationsMapper::init();
 
 		echo "\n" . '** Race **' . "\n";
 		$this->call('RaceSeeder');
@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
 
 		// Setting translations early as Leves and Quests need that data
 		echo "\n" . '** Setting Translations **' . "\n";
-		Translations::set();
+		TranslationsMapper::set();
 
 		echo "\n" . '** Crafting Quests **' . "\n";
 		$this->call('QuestSeeder');
@@ -94,10 +94,10 @@ class _LibraSeeder extends Seeder
 		foreach ($data as $row)
 			$batch[] = array(
 				'id' => $row['id'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de'])
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de'])
 			);
 
 		$batch = Batch::insert($batch, $table_name);
@@ -105,7 +105,7 @@ class _LibraSeeder extends Seeder
 
 }
 
-class Translations extends _LibraSeeder
+class TranslationsMapper extends _LibraSeeder
 {
 	private static $t = array(),
 					$new = array(),
@@ -216,14 +216,14 @@ class ClassJobSeeder extends _LibraSeeder
 				'id' => $row['id'],
 				'is_job' => $row['is_job'],
 				'rank' => $row['rank'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de']),
-				'abbr_en' => Translations::get($row['abbr']['en']),
-				'abbr_ja' => Translations::get($row['abbr']['ja']),
-				'abbr_fr' => Translations::get($row['abbr']['fr']),
-				'abbr_de' => Translations::get($row['abbr']['de']),
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+				'abbr_en' => TranslationsMapper::get($row['abbr']['en']),
+				'abbr_ja' => TranslationsMapper::get($row['abbr']['ja']),
+				'abbr_fr' => TranslationsMapper::get($row['abbr']['fr']),
+				'abbr_de' => TranslationsMapper::get($row['abbr']['de']),
 			);
 
 		$batch = Batch::insert($batch, 'classjob');
@@ -245,10 +245,10 @@ class ClassJobCategorySeeder extends _LibraSeeder
 		{
 			$cjc_batch[] = array(
 				'id' => $row['id'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de']),
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
 			);
 
 			foreach (explode(',', $row['classjob']) as $cj_id)
@@ -277,10 +277,10 @@ class PlaceNameSeeder extends _LibraSeeder
 			$batch[] = array(
 				'id' => $row['id'],
 				'region' => $row['region'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de']),
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
 			);
 
 		$batch = Batch::insert($batch, 'place_name');
@@ -312,10 +312,10 @@ class ItemUICategorySeeder extends _LibraSeeder
 				'id' => $row['id'],
 				'itemuikind_id' => $row['kind'],
 				'rank' => $row['rank'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de']),
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
 			);
 
 		$batch = Batch::insert($batch, 'item_ui_category');
@@ -406,10 +406,10 @@ class ItemSeeder extends _LibraSeeder
 				'itemcategory_id' => $row['category'],
 				'itemuicategory_id' => $row['ui_category'],
 				'classjobcategory_id' => isset($row['extra']['classjob_category']) ? $row['extra']['classjob_category'] : null,
-				'name_en' => Translations::get($row['ui_name']['en']),
-				'name_ja' => Translations::get($row['ui_name']['ja']),
-				'name_fr' => Translations::get($row['ui_name']['fr']),
-				'name_de' => Translations::get($row['ui_name']['de']),
+				'name_en' => TranslationsMapper::get($row['ui_name']['en']),
+				'name_ja' => TranslationsMapper::get($row['ui_name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['ui_name']['fr']),
+				'name_de' => TranslationsMapper::get($row['ui_name']['de']),
 				'level' => $row['level'],
 				'equip_level' => $row['equip_level'],
 				'rarity' => $row['rarity'],
@@ -453,7 +453,7 @@ class ItemSeeder extends _LibraSeeder
 
 				$bpi_batch[] = array(
 					'item_id' => $row['id'],
-					'baseparam_id' => Translations::get($stat_names[$name]),
+					'baseparam_id' => TranslationsMapper::get($stat_names[$name]),
 					'nq_amount' => $nq_val == 0 ? null : $nq_val,
 					'hq_amount' => $hq_val == 0 ? null : $hq_val,
 					'nq_limit' => null,
@@ -576,10 +576,10 @@ class BNpcNameSeeder extends _LibraSeeder
 		{
 			$npc_batch[] = array(
 				'id' => $row['id'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de']),
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
 				'genus' => 'beast'
 			);
 
@@ -611,7 +611,7 @@ class BNpcNameSeeder extends _LibraSeeder
 		$loc_batch = Batch::insert($loc_batch, 'npcs_place_name');
 
 		// echo "\n" . '** Setting Translations **' . "\n";
-		// Translations::set();
+		// TranslationsMapper::set();
 		// exit;
 	}
 
@@ -636,10 +636,10 @@ class ENpcResidentSeeder extends _LibraSeeder
 
 			$npc_batch[] = array(
 				'id' => $row['id'],
-				'name_en' => Translations::get($row['name']['en']),
-				'name_ja' => Translations::get($row['name']['ja']),
-				'name_fr' => Translations::get($row['name']['fr']),
-				'name_de' => Translations::get($row['name']['de']),
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
 				'genus' => 'shop'
 			);
 
