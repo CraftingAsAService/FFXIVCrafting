@@ -37,7 +37,8 @@ var quests = {
 					return 'None selected <b class="caret"></b>';
 				}
 				else if (options.length == 1) {
-					return '<img src="/img/classes/' + $(options[0]).val() + '.png"> <b class="caret"></b>';
+					return '<i class="class-icon ' + $(options[0]).val() + '" style="position: relative; top: 3px;"></i>';
+					//return '<img src="/img/classes/' + $(options[0]).val() + '.png"> <b class="caret"></b>';
 				}
 				else if (options.length > 1) {
 					return options.length + ' selected  <b class="caret"></b>';
@@ -154,7 +155,7 @@ var quests = {
 			var tr = $(this),
 				name = $('td span.name', tr).html().toLowerCase(),
 				lvl = parseInt($('td span.level', tr).html()),
-				cls = $('td img.class-icon', tr).data('abbr');
+				cls = tr.data('abbr');
 
 			var matches = true;
 

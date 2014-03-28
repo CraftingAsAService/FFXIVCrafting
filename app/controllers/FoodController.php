@@ -5,8 +5,8 @@ class FoodController extends BaseController {
 	public function getIndex()
 	{
 		// Items that are Food
-		$results = Item::with('stats', 'vendors')
-			->where('sub_role', 'meal')
+		$results = Item::with('name', 'baseparam', 'baseparam.name', 'vendors')
+			->where('itemcategory_id', 5)
 			->orderBy('id')
 			->get();
 
@@ -15,56 +15,38 @@ class FoodController extends BaseController {
 		foreach($results as $item)
 		{
 			$stats = array();
-			foreach ($item->stats as $stat)
+			foreach ($item->baseparam as $baseparam)
 			{
-				if (in_array($stat->name, array('Duration', 'EXP Bonus')))
-					continue;
-
-				$stats[$stat->name] = array(
-					'amount' => $stat->pivot->amount,
-					'max' => $stat->pivot->maximum,
-					'threshold' => round($stat->pivot->maximum / ($stat->pivot->amount / 100))
+				$stats[$baseparam->name->term] = array(
+					'nq' => array(
+						'amount' => (int) $baseparam->pivot->nq_amount,
+						'limit' => $baseparam->pivot->nq_limit,
+						'threshold' => round($baseparam->pivot->nq_limit / ($baseparam->pivot->nq_amount / 100))
+					), 
+					'hq' => array(
+						'amount' => (int) $baseparam->pivot->hq_amount,
+						'limit' => $baseparam->pivot->hq_limit,
+						'threshold' => $baseparam->pivot->hq_amount == 0 ? 0 : round($baseparam->pivot->hq_limit / ($baseparam->pivot->hq_amount / 100))
+					)
 				);
 			}
 
 			$names = array_keys($stats);
 			sort($names);
 
-			// Vendors
-			$vendor_count = 0;
-			$vendors = array();
-
-			if (count($item->vendors))
-			{
-				foreach($item->vendors as $vendor)
-				{
-					$vendors[isset($vendor->location->name) ? $vendor->location->name : 'Unknown'][] = (object) array(
-						'name' => $vendor->name,
-						'title' => $vendor->title,
-						'x' => $vendor->x,
-						'y' => $vendor->y
-					);
-
-					$vendor_count++;
-				}
-
-				ksort($vendors);
-			}
+			if (empty($names))
+				continue;
 
 			$food_groups[implode('|', $names)][] = array(
 				'id' => $item->id,
-				'icon' => $item->icon,
-				'name' => $item->name,
-				'buy' => $item->buy,
-				'vendors' => $vendors,
-				'vendor_count' => $vendor_count,
+				'name' => $item->name->term,
+				'min_price' => $item->min_price,
+				'vendor_count' => count($item->vendors),
 				'stats' => $stats
 			);
 		}
 		ksort($food_groups);
 		
-		#	uasort($food_groups[$key], array($this, 'food_stat_sort'));
-
 		#dd($food_groups);
 
 		return View::make('food')

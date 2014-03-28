@@ -14,12 +14,12 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<!--<script type='text/javascript' src='/js/career.recipes.js'></script>-->
+<script type='text/javascript' src='/js/career.js'></script>
 @stop
 
 @section('content')
 
-<h1>{{ $job->name }}'s Producing Career</h1>
+<h1>{{ $job->name->term }}'s Producing Career</h1>
 
 <p>List supports the following class{{ count($jobs) > 1 ? 'es' : '' }} between levels {{ $min_level }} and {{ $max_level }}:</p>
 <p>@foreach($jobs as $j) <span class='label label-default'>{{ $j }}</span> @endforeach</p>
@@ -33,19 +33,24 @@
 				@if($show_quests)
 				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!' data-container='body'>Quest</th>
 				@endif
-				<th class='text-center'>Buy</th>
-				<th class='text-center'>Vendors</th>
+				<th class='text-center'>Purchase</th>
+				<th class='text-center valign' rel='tooltip' title='Add to Shopping List'>
+					<i class='glyphicon glyphicon-shopping-cart'></i>
+					<i class='glyphicon glyphicon-plus'></i>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
+			<?php $total = 0; ?>
 			@foreach($recipies as $recipe)
+			<?php if($recipe->vendors) $total += round($recipe->amount + .49) * $recipe->min_price; ?>
 			<tr>
 				<td>
 					@if(isset($recipe->job_level))
 					<span class='close' rel='tooltip' title='Job Level'>{{ $recipe->job_level }}</span>
 					@endif
 					<a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'>
-						<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
+						<img src='/img/items/nq/{{ $recipe->item_id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->term }}
 					</a>
 				</td>
 				<td class='valign text-center'>
@@ -60,35 +65,18 @@
 				</td>
 				@endif
 				<td class='valign text-center'>
-					@if($recipe->buy)
-						<img src='/img/coin.png' class='stat-vendors pull-left' width='24' height='24'>
-						{{ number_format($recipe->buy) }}
+					@if($recipe->vendors)
+					<a href='#' class='btn btn-default vendors' data-item-id='{{ $recipe->item_id }}' rel='tooltip' title='Available for {{ $recipe->min_price }} gil, Click to load Vendors'>
+						<img src='/img/coin.png' width='24' height='24'>
+						{{ number_format($recipe->min_price) }}
+					</a>
 					@endif
 				</td>
-				<td class='valign text-center'>
-					@if($recipe->buy)
-					<button class='btn btn-default btn-sm' data-toggle='popover' data-placement='left' data-content-id='#vendors_for_{{ $recipe->id }}'>
-						{{ $recipe->vendor_count }} Vendor{{ $recipe->vendor_count > 1 ? 's' : '' }} 
-						@if($recipe->vendor_count > 1 && count($recipe->vendors) > 1)
-						in {{ count($recipe->vendors) }} Area{{ count($recipe->vendors) > 1 ? 's' : '' }}
-						@endif
+				<td class='text-center valign'>
+					<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->term }}}'>
+						<i class='glyphicon glyphicon-shopping-cart'></i>
+						<i class='glyphicon glyphicon-plus'></i>
 					</button>
-					<div class='hidden' id='vendors_for_{{ $recipe->id }}'>
-						@foreach($recipe->vendors as $location_name => $vendors)
-						<p>{{ $location_name }}</p>
-						<ul>
-							@foreach($vendors as $vendor)
-							<li>
-								<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
-								@if($vendor->x && $vendor->y)
-								<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
-								@endif
-							</li>
-							@endforeach
-						</ul>
-						@endforeach
-					</div>
-					@endif
 				</td>
 			</tr>
 			@endforeach
@@ -99,5 +87,9 @@
 <p><small>Amounts are simply an estimate; the math should be correct but I'm not going to guarantee it.  In the least you will need more for Leves or failed syntheses.</small></p>
 
 <p><small>Recipes requiring only one production are not shown.</small></p>
+
+@if($total)
+<p><small>If you were to purchase all of these items it would cost {{ number_format($total) }} gil.</small></p>
+@endif
 
 @stop

@@ -5,21 +5,16 @@ class CraftingController extends BaseController
 
 	public function getIndex()
 	{
-		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
-
 		return View::make('crafting')
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', $job_list)
+			->with('job_list', ClassJob::get_name_abbr_list())
 			->with('previous', Cookie::get('previous_crafting_load'));
 	}
 
 	public function postIndex()
 	{
-		$vars = array('class' => 'CRP', 'start' => 1, 'end' => 5, 'self_sufficient' => 0);
+		$vars = array('class' => 'CRP', 'start' => 1, 'end' => 5, 'self_sufficient' => 0, 'misc_items' => 0);
 		$values = array();
 		foreach ($vars as $var => $default)
 			$values[] = Input::has($var) ? Input::get($var) : $default;
@@ -41,10 +36,7 @@ class CraftingController extends BaseController
 		View::share('active', 'crafting');
 
 		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
-
+		$job_list = ClassJob::get_name_abbr_list();
 		View::share('job_list', $job_list);
 
 		$include_quests = TRUE;
@@ -60,6 +52,7 @@ class CraftingController extends BaseController
 		$start           = isset($options[1]) ? $options[1] : 1;
 		$end             = isset($options[2]) ? $options[2] : 5;
 		$self_sufficient = isset($options[3]) ? $options[3] : 1;
+		$misc_items	 = isset($options[4]) ? $options[4] : 0;
 
 		$item_ids = $item_amounts = array();
 
@@ -90,26 +83,23 @@ class CraftingController extends BaseController
 			$desired_job = strtoupper($desired_job);
 
 			// Make sure it's a real job, jobs might be multiple
-			$job = Job::whereIn('abbreviation', explode(',', $desired_job))->get();
+			$job = array();
+			foreach (explode(',', $desired_job) as $ds)
+				$job[] = ClassJob::get_by_abbr($ds);
 
 			// If the job isn't real, error out
 			if ( ! isset($job[0]))
 			{
-				// All Jobs
-				$job_list = $job_ids = array();
-				foreach (Job::all() as $j)
-				{
-					$job_ids[$j->abbreviation] = $j->id;
-					$job_list[$j->abbreviation] = $j->name;
-				}
-
 				// Check for DOL quests
 				$quests = array();
 				foreach (array('MIN','BTN','FSH') as $job)
-					$quests[$job] = QuestItem::where('job_id', $job_ids[$job])
+				{
+					$job = ClassJob::get_by_abbr($job);
+					$quests[$job] = QuestItem::where('classjob_id', $job->id)
 						->orderBy('level')
 						->with('item')
 						->get();
+				}
 
 				return View::make('crafting')
 					->with('error', TRUE)
@@ -129,9 +119,9 @@ class CraftingController extends BaseController
 			if ($end - $start > 9) $end = $start + 9;
 
 			// Check for quests
-			$quest_items = QuestItem::with('job')
+			$quest_items = QuestItem::with('classjob')
 				->whereBetween('level', array($start, $end))
-				->whereIn('job_id', $job_ids)
+				->whereIn('classjob_id', $job_ids)
 				->orderBy('level')
 				->with('item')
 				->get();
@@ -147,36 +137,55 @@ class CraftingController extends BaseController
 
 		// Gather Recipes and Reagents
 
-		$query = Recipe::with(array(
+		$query = Recipes::with(
+				'name',
+				'classjob',
+					'classjob.name',
+					'classjob.abbr',
 				'item', // The recipe's Item
+					'item.name',
 					'item.quest', // Is the recipe used as a quest turnin?
 					'item.leve', // Is the recipe used to fufil a leve?
 					'item.vendors',
-						'item.vendors.location',
+					'item.beasts',
+					'item.clusters',
+						'item.clusters.classjob',
+							'item.clusters.classjob.abbr',
 				'reagents', // The reagents for the recipe
 					'reagents.vendors',
-						'reagents.vendors.location',
-					'reagents.nodes',
-						'reagents.nodes.location',
-						'reagents.nodes.job',
-					'reagents.recipes', 
-						'reagents.recipes.item', 
-						'reagents.recipes.job' => function($query) {
-							// Only Hand Disciples
-							$query->where('disciple', 'DOH');
-						}
-			))
-			->select('recipes.*', 'j.abbreviation')
-			->join('jobs AS j', 'j.id', '=', 'recipes.job_id')
+					'reagents.beasts',
+					'reagents.clusters',
+						'reagents.clusters.classjob',
+							'reagents.clusters.classjob.abbr',
+					'reagents.recipe',
+						'reagents.recipe.name',
+						'reagents.recipe.item', 
+							'reagents.recipe.item.name', 
+							'reagents.recipe.item.vendors',
+							'reagents.recipe.item.beasts',
+							'reagents.recipe.item.clusters',
+								'reagents.recipe.item.clusters.classjob',
+									'reagents.recipe.item.clusters.classjob.abbr',
+						'reagents.recipe.classjob',
+							'reagents.recipe.classjob.abbr'
+			)
 			->groupBy('recipes.item_id')
-			->orderBy('level');
+			->orderBy('rank');
+
+		if ($misc_items == 0)
+			$query
+				->whereHas('item', function($query) {
+					$query->whereNotIn('itemcategory_id', array(14, 15)); // ItemCategory 14 == 'Furnishing', 15 == 'Dye'
+				});
 
 		if ($item_ids)
 			$query
 				->whereIn('recipes.item_id', $item_ids);
 		else
 			$query
-				->whereIn('j.id', $job_ids)
+				->whereHas('classjob', function($query) use ($job_ids) {
+					$query->whereIn('classjob.id', $job_ids);
+				})
 				->whereBetween('level', array($start, $end));
 
 		$recipes = $query
@@ -243,50 +252,6 @@ class CraftingController extends BaseController
 			$section = 'Other';
 			$level = 0;
 
-			// Vendors
-			$reagent['vendor_count'] = 0;
-			$reagent['vendors'] = array();
-
-			if (count($reagent['item']->vendors))
-			{
-				foreach($reagent['item']->vendors as $vendor)
-				{
-					$reagent['vendors'][isset($vendor->location->name) ? $vendor->location->name : 'Unknown'][] = (object) array(
-						'name' => $vendor->name,
-						'title' => $vendor->title,
-						'x' => $vendor->x,
-						'y' => $vendor->y
-					);
-
-					$reagent['vendor_count']++;
-				}
-
-				ksort($reagent['vendors']);
-			}
-
-			// Nodes
-			$new_nodes = array();
-			// Job
-				// Location
-					// Action
-						//Level
-			foreach ($reagent['nodes'] as $node)
-				$new_nodes[$node['job']][$node['location']][$node['action']][] = $node['level'];
-
-			foreach ($new_nodes as $k => $nn)
-			{
-				foreach ($nn as $j => $nl)
-				{
-					foreach ($nl as $h => $na)
-						ksort($new_nodes[$k][$j][$h]);
-
-					ksort($new_nodes[$k][$j]);
-				}
-				ksort($new_nodes[$k]);
-			}
-
-			$reagent['nodes'] = $new_nodes;
-
 			// Section
 			if (in_array($reagent['self_sufficient'], array('MIN', 'BTN', 'FSH')))
 			{
@@ -296,12 +261,12 @@ class CraftingController extends BaseController
 			elseif ($reagent['self_sufficient'])
 			{
 				$section = 'Pre-Requisite Crafting';
-				$level = $reagent['item']->recipes[0]->level;
+				$level = $reagent['item']->recipe[0]->level;
 			}
-			elseif ($reagent['item']->gil)
+			elseif (count($reagent['item']->vendors))
 			{
 				$section = 'Bought';
-				$level = $reagent['item']->gil;
+				$level = $reagent['item']->min_price;
 			}
 
 			if ( ! isset($sorted_reagent_list[$section][$level]))
@@ -314,43 +279,12 @@ class CraftingController extends BaseController
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
 
-		// Recipe Vendors
-		$recipe_vendors = array();
-		foreach ($recipes as $recipe)
-		{
-			// Vendors
-			$vendor_count = 0;
-			$new_vendors = array();
-
-			if (count($recipe->item->vendors))
-			{
-				foreach($recipe->item->vendors as $vendor)
-				{
-					$new_vendors[isset($vendor->location->name) ? $vendor->location->name : 'Unknown'][] = (object) array(
-						'name' => $vendor->name,
-						'title' => $vendor->title,
-						'x' => $vendor->x,
-						'y' => $vendor->y
-					);
-
-					$vendor_count++;
-				}
-
-				ksort($new_vendors);
-			}
-
-			$recipe_vendors[$recipe->id] = array(
-				'count' => $vendor_count,
-				'vendors' => $new_vendors
-			);
-		}
-
 		return View::make('crafting.list')
 			->with(array(
 				'recipes' => $recipes,
-				'recipe_vendors' => $recipe_vendors,
 				'reagent_list' => $sorted_reagent_list,
 				'self_sufficient' => $self_sufficient,
+				'misc_items' => $misc_items,
 				'include_quests' => $include_quests
 			));
 	}
@@ -391,15 +325,14 @@ class CraftingController extends BaseController
 
 			foreach ($recipe->reagents as $reagent)
 			{
-				$reagent_yields = isset($reagent->recipes[0]) ? $reagent->recipes[0]->yields : 1;
+				$reagent_yields = isset($reagent->recipe[0]) ? $reagent->recipe[0]->yields : 1;
 
 				if ( ! isset($reagent_list[$reagent->id]))
 					$reagent_list[$reagent->id] = array(
 						'make_this_many' => 0,
 						'self_sufficient' => '',
 						'item' => $reagent,
-						'nodes' => array(),
-						'node_jobs' => array(),
+						'cluster_jobs' => array(),
 						'yields' => 1
 					);
 
@@ -408,42 +341,33 @@ class CraftingController extends BaseController
 
 				if ($self_sufficient)
 				{
-					if (count($reagent->nodes))
+					if (count($reagent->clusters))
 					{
 						// First, check here because we don't want to re-process the node data
 						if ($reagent_list[$reagent->id]['self_sufficient'])
 							continue;
 
-						// Compile nodes
-						$node_data = $node_jobs = array();
-						foreach ($reagent->nodes as $node)
-						{
-							@$node_jobs[$node->job->abbreviation]++;
-							$node_data[] = array(
-								'action' => $node->action,
-								'level' => $node->level,
-								'location' => $node->location->name,
-								'job' => $node->job->abbreviation
-							);
-						}
+						// Compile cluster jobs
+						$cluster_jobs = array();
+						foreach ($reagent->clusters as $cluster)
+							@$cluster_jobs[$cluster->classjob->abbr->term]++;
+
 						// Get the "highest" job
-						asort($node_jobs);
+						asort($cluster_jobs);
 
-						$reagent_list[$reagent->id]['self_sufficient'] = array_keys($node_jobs)[count($node_jobs) - 1];
-
-						$reagent_list[$reagent->id]['nodes'] = $node_data;
-						$reagent_list[$reagent->id]['node_jobs'] = $node_jobs;
+						$reagent_list[$reagent->id]['self_sufficient'] = array_keys($cluster_jobs)[count($cluster_jobs) - 1];
+						$reagent_list[$reagent->id]['cluster_jobs'] = $cluster_jobs;
 
 						// Then check again here to avoid recipe stuff
 						if ($reagent_list[$reagent->id]['self_sufficient'])
 							continue;
 					}
 
-					if(isset($reagent->recipes[0]))
+					if(isset($reagent->recipe[0]))
 					{
-						$reagent_list[$reagent->id]['yields'] = $reagent->recipes[0]->yields;
-						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbreviation;
-						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yields)));
+						$reagent_list[$reagent->id]['yields'] = $reagent->recipe[0]->yields;
+						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipe[0]->classjob->abbr->term;
+						$this->_reagents(array($reagent->recipe[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yields)));
 					}
 				}
 			}

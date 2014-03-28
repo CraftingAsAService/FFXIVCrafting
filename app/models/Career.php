@@ -4,21 +4,20 @@ class Career extends Eloquent
 {
 
 	protected $table = 'careers';
-	public $timestamps = false;
 
-	public function item()
+	public function scopeOfType($query, $type)
 	{
-		return $this->belongsTo('Item', 'identifier');
+		return $query->whereType($type);
+	}
+
+	public function classjob()
+	{
+		return $this->belongsToMany('ClassJob', 'career_classjob', 'career_id', 'classjob_id')->withPivot('amount');
 	}
 
 	public function recipe()
 	{
-		return $this->belongsTo('Recipe', 'identifier');
-	}
-
-	public function job()
-	{
-		return $this->belongsToMany('Job')->withPivot('amount');
+		return $this->hasOne('Recipe', 'id', 'identifier');
 	}
 
 }

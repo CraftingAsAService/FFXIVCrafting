@@ -5,27 +5,27 @@ class ListController extends BaseController
 
 	public function getIndex()
 	{
-		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
-
 		// Get the list
 		$list = Session::get('list', array());
 
 		foreach ($list as $k => &$l)
+		{
 			// $l starts as the amount integer and we're transforming it to an array
 			$l = array(
 				'amount' => $l, 
-				'item' => Item::with(array('recipes' => function($query) {
+				'item' => Item::with(array('recipe' => function($query) {
 					$query->limit(1);
-				}))->find($k)
+				}, 'name'))->find($k)
 			);
+
+			if (count($l['item']->recipe) == 0)
+				unset($list[$k]);
+		}
 
 		return View::make('list')
 			->with('active', 'list')
 			->with('list', $list)
-			->with('job_list', $job_list);
+			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 
 	public function postAdd()

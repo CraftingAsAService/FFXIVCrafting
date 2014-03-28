@@ -17,14 +17,31 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
+
+		// $x = Item::with('vendors', 'vendors.npc', 'vendors.npc.name', 'vendors.npc.location', 'vendors.npc.location.name')->find(5540);
+		// d($x->vendors[0]->npc->name->term);
+		// d($x->vendors[0]->npc->location[0]->name->term);
+		// d($x->vendors[0]->npc->location);
+
+		// $job = ClassJob::get_by_abbr('CRP');
+		// #$a = Item::calculate($job->id, 6, 4, true, true);
+		// $b = Item::calculate($job->id, 9, 0, 0, 0);
+
+		// d(
+		// 	// $a[6],
+		// 	// $a[7],
+		// 	// $a[8],
+		// 	// $a[9],
+		// 	$b[9]['Right Ring']['11'][0]->vendors
+		// );
+
+
+		############################
+		#return View::make('_blank');
+		############################
 
 		return View::make('hello')
-			->with('job_list', $job_list)
-			->with('host_warning', preg_match('/thokk/', $_SERVER['HTTP_HOST']));
+			->with('host_warning', preg_match('/thokk/', Request::getHost()));
 	}
 
 }

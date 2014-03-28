@@ -4,7 +4,7 @@ var crafting = {
 		crafting_tour.init();
 	},
 	events:function() {
-		$('#self_sufficient_switch').change(function() {
+		$('#self_sufficient_switch, #misc_items_switch').change(function() {
 			$(this).closest('form').submit();
 		});
 
@@ -34,9 +34,9 @@ var crafting = {
 
 		$('.obtained-ok').click(function() {
 			var tr = $(this).closest('tr'),
-				needed = $('td.needed span', tr).length > 0 ? $('td.needed span', tr).html() : $('td.needed input', tr).val();
+				total = $('td.total', tr).html();
 
-			$('input.obtained', tr).val(needed).trigger('change');
+			$('input.obtained', tr).val(total).trigger('change');
 
 			return;
 		});
@@ -44,6 +44,136 @@ var crafting = {
 		crafting.init_reagents();
 
 		crafting.recalculate_all(true);
+
+		$('.vendors').on('click', function(event) {
+			event.preventDefault();
+			
+			var el = $(this),
+				id = el.closest('.reagent').data('itemId');
+
+			if (el.hasClass('loading'))
+				return;
+
+			var modal = $('#vendors_for_' + id);
+
+			if (modal.length == 0)
+			{
+
+				$.ajax({
+					url: '/vendors/view/' + id,
+					dataType: 'json',
+					beforeSend:function() {
+
+						el.addClass('loading');
+
+						global.noty({
+							type: 'warning',
+							text: 'Loading Vendors'
+						});
+					},
+					success:function(json) {
+						$('body').append(json.html);
+
+						$('#vendors_for_' + id).modal();
+
+						el.removeClass('loading');
+					}
+				});
+			}
+			else
+			{
+				$('#vendors_for_' + id).modal('show');
+			}
+
+			return;
+		});
+
+		$('.clusters').on('click', function(event) {
+			event.preventDefault();
+			
+			var el = $(this),
+				id = el.closest('.reagent').data('itemId'),
+				classjob_id = el.data('classjobId');
+
+			if (el.hasClass('loading'))
+				return;
+
+			var modal = $('#clusters_for_' + id);
+
+			if (modal.length == 0)
+			{
+
+				$.ajax({
+					url: '/gathering/clusters/' + id,
+					dataType: 'json',
+					beforeSend:function() {
+
+						el.addClass('loading');
+
+						global.noty({
+							type: 'warning',
+							text: 'Loading Clusters'
+						});
+					},
+					success:function(json) {
+						$('body').append(json.html);
+
+						$('#clusters_for_' + id).modal();
+
+						el.removeClass('loading');
+					}
+				});
+			}
+			else
+			{
+				$('#clusters_for_' + id).modal('show');
+			}
+
+			return;
+		});
+		
+		$('.beasts').on('click', function(event) {
+			event.preventDefault();
+			
+			var el = $(this),
+				id = el.data('itemId');
+
+			if (el.hasClass('loading'))
+				return;
+
+			var modal = $('#beasts_for_' + id);
+
+			if (modal.length == 0)
+			{
+
+				$.ajax({
+					url: '/gathering/beasts/' + id,
+					dataType: 'json',
+					beforeSend:function() {
+
+						el.addClass('loading');
+
+						global.noty({
+							type: 'warning',
+							text: 'Loading Beasts'
+						});
+					},
+					success:function(json) {
+						$('body').append(json.html);
+
+						$('#beasts_for_' + id).modal();
+
+						el.removeClass('loading');
+					}
+				});
+			}
+			else
+			{
+				$('#beasts_for_' + id).modal('show');
+			}
+
+			return;
+		});
 
 		return;
 	},

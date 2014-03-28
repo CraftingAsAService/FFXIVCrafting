@@ -4,13 +4,10 @@ class CareerController extends BaseController
 {
 
 	public function getIndex()
-	{
-		// All Jobs
-		$job_list = Job::whereIn('disciple', array('DOL','DOH'))->get()->lists('name', 'abbreviation');
-		
+	{	
 		return View::make('career')
 			->with('active', 'career')
-			->with('job_list', $job_list)
+			->with('job_list', ClassJob::get_name_abbr_list())
 			->with('previous_ccp', Cookie::get('previous_ccp'))
 			->with('previous_ccr', Cookie::get('previous_ccr'))
 			->with('previous_gc', Cookie::get('previous_gc'))
@@ -42,14 +39,21 @@ class CareerController extends BaseController
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$supported_classes = Job::whereIn('abbreviation', $supported_classes)->get()->lists('id');
+		$all_classes = ClassJob::get_id_abbr_list();
+		foreach ($supported_classes as $k => $v)
+			if (in_array($v, array_keys($all_classes)))
+				$supported_classes[$k] = $all_classes[$v];
+			else
+				unset($supported_classes[$k]);
 
 		if (empty($supported_classes))
 			exit('No supported class recognized...'); // TODO
 
-		$jobs = Job::whereIn('id', $supported_classes)->lists('name');
+		$jobs = ClassJob::with('name')->whereIn('id', $supported_classes)->get();
+		foreach ($jobs as $k => $v)
+			$jobs[$k] = $v->name->term;
 	
-		$job = Job::where('abbreviation', $my_class)->first();
+		$job = ClassJob::get_by_abbr($my_class);
 
 		if (empty($job))
 			exit('No primary class recognized...'); // TODO
@@ -57,57 +61,37 @@ class CareerController extends BaseController
 		DB::statement('SET SESSION group_concat_max_len=16384');
 
 		$results = DB::table('recipes AS r')
-			->select('*', 'r.id AS recipe_id', DB::raw('SUM(cj.amount) AS amount'), DB::raw("(
-					SELECT
-						GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
-					FROM `item_vendor` AS `iv` 
-					JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
-					LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
-					WHERE `iv`.`item_id` = `i`.`id`
-				) AS vendors"))
+			->select('*', 'r.id AS recipe_id', DB::raw('SUM(cj.amount) AS amount'), 
+				DB::raw('
+					(
+						SELECT COUNT(*)
+						FROM  `items_npcs_shops` AS `ins`
+						WHERE `ins`.`item_id` = `i`.`id`
+					) AS vendors
+				')
+				// , 
+				// DB::raw('
+				// 	(
+				// 		SELECT COUNT(*)
+				// 		FROM `npcs_items` AS `ni`
+				// 		WHERE `ni`.`item_id` = `i`.`id`
+				// 	) AS beasts
+				// ')
+			)
 			->join('items AS i', 'i.id', '=', 'r.item_id')
 			->join('careers AS c', 'c.identifier', '=', 'r.id')
-			->join('career_job as cj', 'cj.career_id', '=', 'c.id')
+			->join('career_classjob AS cj', 'cj.career_id', '=', 'c.id')
+			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
 			->whereBetween('c.level', array($min_level, $max_level))
-			->where('r.job_id', $job->id)
+			->where('r.classjob_id', $job->id)
 			->where('c.type', 'recipe')
-			->whereIn('cj.job_id', $supported_classes)
+			->whereIn('cj.classjob_id', $supported_classes)
 			->groupBy('r.id')
 			->orderBy('c.level')
-			->orderBy('i.ilvl')
+			->orderBy('i.level')
 			->having('amount', '>', '1')
+			->remember(Config::get('site.cache_length'))
 			->get();
-
-		// Cleanup result vendors
-		foreach ($results as &$result)
-		{
-			// Vendors
-			$result->vendor_count = 0;
-
-			if ($result->vendors)
-			{
-				$new_vendors = array();
-				
-				foreach(explode('***', $result->vendors) as $vendor)
-				{
-					list($name, $title, $location, $x, $y) = explode('|', $vendor);
-
-					$new_vendors[$location ?: 'Unknown'][] = (object) array(
-						'name' => $name,
-						'title' => $title,
-						'x' => $x,
-						'y' => $y
-					);
-
-					$result->vendor_count++;
-				}
-
-				ksort($new_vendors);
-
-				$result->vendors = $new_vendors;
-			}
-		}
-		unset($result);
 
 		return View::make('career.production')
 			->with(array(
@@ -145,72 +129,51 @@ class CareerController extends BaseController
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$supported_classes = Job::whereIn('abbreviation', $supported_classes)->get()->lists('id');
+		$all_classes = ClassJob::get_id_abbr_list();
+		foreach ($supported_classes as $k => $v)
+			if (in_array($v, array_keys($all_classes)))
+				$supported_classes[$k] = $all_classes[$v];
+			else
+				unset($supported_classes[$k]);
 
 		if (empty($supported_classes))
 			exit('No supported class recognized...'); // TODO
 
-		$jobs = Job::whereIn('id', $supported_classes)->lists('name');
+		$jobs = ClassJob::with('name')->whereIn('id', $supported_classes)->get();
+		foreach ($jobs as $k => $v)
+			$jobs[$k] = $v->name->term;
 	
-		$job = Job::where('abbreviation', $my_class)->first();
+		$job = ClassJob::get_by_abbr($my_class);
 
 		if (empty($job))
 			exit('No primary class recognized...'); // TODO
 
 		DB::statement('SET SESSION group_concat_max_len=16384');
 
-		$results = DB::table('career_job as cj')
-			->select('*', 'r.id AS recipe_id', DB::raw('SUM(cj.amount) AS amount'), DB::raw("(
-					SELECT
-						GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
-					FROM `item_vendor` AS `iv` 
-					JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
-					LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
-					WHERE `iv`.`item_id` = `i`.`id`
-				) AS vendors"))
+		$results = DB::table('career_classjob as cj')
+			->select('*', 'r.id AS recipe_id', DB::raw('SUM(cj.amount) AS amount'), 
+				DB::raw('
+					(
+						SELECT COUNT(*)
+						FROM  `items_npcs_shops` AS `ins`
+						WHERE `ins`.`item_id` = `i`.`id`
+					) AS vendors
+				')
+			)
 			->join('careers AS c', 'cj.career_id', '=', 'c.id')
 			->join('recipes AS r', 'r.id', '=', 'c.identifier')
-			->join('jobs AS j', 'j.id', '=', 'r.job_id')
+			->join('classjob AS j', 'j.id', '=', 'r.classjob_id')
 			->join('items AS i', 'i.id', '=', 'r.item_id')
+			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
 			->whereBetween('c.level', array($min_level, $max_level))
-			->where('cj.job_id', $job->id)
+			->where('cj.classjob_id', $job->id)
 			->where('c.type', 'recipe')
-			->whereIn('r.job_id', $supported_classes)
+			->whereIn('r.classjob_id', $supported_classes)
 			->groupBy('r.id')
-			->orderBy('r.job_level')
+			->orderBy('r.level')
 			->having('amount', '>', '1')
+			->remember(Config::get('site.cache_length'))
 			->get();
-
-		// Cleanup result nodes & vendors
-		foreach ($results as &$result)
-		{
-			// Vendors
-			$result->vendor_count = 0;
-
-			if ($result->vendors)
-			{
-				$new_vendors = array();
-				
-				foreach(explode('***', $result->vendors) as $vendor)
-				{
-					list($name, $title, $location, $x, $y) = explode('|', $vendor);
-
-					$new_vendors[$location ?: 'Unknown'][] = (object) array(
-						'name' => $name,
-						'title' => $title,
-						'x' => $x,
-						'y' => $y
-					);
-
-					$result->vendor_count++;
-				}
-
-				ksort($new_vendors);
-
-				$result->vendors = $new_vendors;
-			}
-		}
-		unset($result);
 
 		return View::make('career.receiver')
 			->with(array(
@@ -250,15 +213,22 @@ class CareerController extends BaseController
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$supported_classes = Job::whereIn('abbreviation', $supported_classes)->get()->lists('id');
+		$all_classes = ClassJob::get_id_abbr_list();
+		foreach ($supported_classes as $k => $v)
+			if (in_array($v, array_keys($all_classes)))
+				$supported_classes[$k] = $all_classes[$v];
+			else
+				unset($supported_classes[$k]);
 
 		if (empty($supported_classes))
 			exit('No supported class recognized...'); // TODO
 
-		$jobs = Job::whereIn('id', $supported_classes)->lists('name');
+		$jobs = ClassJob::with('name')->whereIn('id', $supported_classes)->get();
+		foreach ($jobs as $k => $v)
+			$jobs[$k] = $v->name->term;
 		
 		if ($my_class != 'BTL')
-			$job = Job::where('abbreviation', $my_class)->first();
+			$job = ClassJob::get_by_abbr($my_class);
 		else
 			$job = $my_class;
 
@@ -272,34 +242,30 @@ class CareerController extends BaseController
 
 		if (in_array($my_class, array('MIN', 'BTN')))
 		{
-			$actions = $my_class == 'MIN' 
-				? array('Mining','Quarrying') 
-				: array('Harvesting','Logging');
-
 			// Add Nodes
 			$top_query .= "
 					(
-						SELECT 
-							GROUP_CONCAT(DISTINCT CONCAT(gn.action,'|',gn.level,'|',gnl.name) ORDER BY gn.level SEPARATOR '***') AS nodes
-						FROM `gathering_node_item` AS `gni`
-						JOIN `gathering_nodes` AS `gn` ON `gn`.`id` = `gni`.`gathering_node_id`
-						JOIN `locations` AS `gnl` ON `gnl`.`id` = `gn`.`location_id`
-						WHERE `gn`.`action` in (" . str_pad('', count($actions) * 2 - 1, '?,') . ")
-							AND `gni`.`item_id` = `x`.`id`
+						SELECT
+							COUNT(*)
+						FROM `cluster_items` AS `ci`
+						JOIN `clusters` AS `c` ON `c`.`id` = `ci`.`cluster_id`
+						WHERE `c`.`classjob_id` = ? AND `ci`.`item_id` = `x`.`item_id`
 					) AS nodes,
 			";
 
-			$parameters = array_merge($parameters, $actions);
+			$parameters[] = $job->id;
 
-			$having = "HAVING nodes != ''";
+			$having = "HAVING nodes > 0";
 		} else {
 			// Battling or Fishing
-			$join = "LEFT JOIN `gathering_node_item` AS `gni` ON `gni`.`item_id` = `i`.`id`";
+			$join = "LEFT JOIN `cluster_items` AS `ci` ON `ci`.`item_id` = `i`.`id` " . 
+				'LEFT JOIN `item_ui_category` AS `iuc` ON `iuc`.`id` = `i`.`itemuicategory_id` ' . 
+				'LEFT JOIN `translations` AS `iuct` ON `iuct`.`id` = `iuc`.`name_en`';
 
 			// FSH where the item is "seafood"
 			// BTL where the item is not "seafood"
-			$where = "AND `i`.`role` " . ($my_class == 'BTL' ? '!' : '') . "= 'Seafood'";
-			$where .= " AND `gni`.`id` IS NULL";
+			$where = "AND `iuct`.`term` " . ($my_class == 'BTL' ? '!' : '') . "= 'Seafood'";
+			$where .= " AND `ci`.`id` IS NULL";
 		}
 
 		$parameters[] = $min_level;
@@ -312,11 +278,12 @@ class CareerController extends BaseController
 					UNION
 
 					SELECT
-						`i`.`id`, `i`.`name`, `i`.`icon`, `i`.`role`, `i`.`stack`, `i`.`buy`, qi.amount AS amount, 
+						`i`.`id`, t.term AS name, `i`.level, `i`.`min_price`, qi.amount AS amount, 
 						qi.level AS quest_level, qi.quality AS quest_quality
 					FROM quest_items AS qi
 					JOIN items AS i ON i.id = qi.item_id
-					JOIN jobs AS j ON j.id = qi.job_id
+					JOIN classjob AS j ON j.id = qi.classjob_id
+					JOIN translations AS t ON t.id = i.name_" . Config::get('language') . "
 					WHERE j.id = ?
 						AND qi.level BETWEEN ? AND ?
 			";
@@ -332,86 +299,38 @@ class CareerController extends BaseController
 			SELECT x.*,
 				" . $top_query . "
 				(
-					SELECT
-						GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
-					FROM `item_vendor` AS `iv` 
-					JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
-					LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
-					WHERE `iv`.`item_id` = `x`.`id`
-				) AS vendors
+					SELECT COUNT(*)
+					FROM `items_npcs_shops` AS `ins`
+					WHERE `ins`.`item_id` = `x`.`item_id`
+				) AS vendors, 
+				(
+					SELECT COUNT(*)
+					FROM `npcs_items` AS `ni`
+					WHERE `ni`.`item_id` = `x`.`item_id`
+				) AS beasts
 			FROM (
 				SELECT 
-					`i`.`id`, `i`.`name`, `i`.`icon`, `i`.`role`, `i`.`stack`, `i`.`buy`, SUM(cj.amount) AS amount,
+					`i`.`id` AS `item_id`, t.term AS name, `i`.level, `i`.`min_price`, SUM(cj.amount) AS amount,
 					NULL AS quest_level, NULL AS quest_quality
 				FROM `careers` AS `c`
 				JOIN `items` AS `i` ON `i`.`id` = `c`.`identifier`
-				JOIN `career_job` AS `cj` ON `cj`.`career_id` = `c`.`id`
+				JOIN `career_classjob` AS `cj` ON `cj`.`career_id` = `c`.`id`
+				JOIN translations AS t ON t.id = i.name_" . Config::get('language') . "
 				" . $join . "
 				WHERE
 					`c`.`type` = 'item'
 					AND `c`.`level` BETWEEN ? AND ?
-					AND `cj`.`job_id` in (" . str_pad('', count($supported_classes) * 2 - 1, '?,') . ")
+					AND `cj`.`classjob_id` in (" . str_pad('', count($supported_classes) * 2 - 1, '?,') . ")
 					" . $where . "
 				GROUP BY `c`.`identifier`
 
 				" . $union . "
 				
-				ORDER BY `id` ASC
+				ORDER BY `item_id` ASC
 			) AS x
 			" . $having, 
 			$parameters
 		);
-		
-		// Cleanup result nodes & vendors
-		foreach ($results as &$result)
-		{
-			// Nodes
-			if (isset($result->nodes) && $result->nodes)
-			{
-				$new_nodes = array();
-
-				foreach (explode('***', $result->nodes) as $node)
-				{
-					list($action, $ilvl, $location_name) = explode('|', $node);
-					
-					$result->ilvl = $ilvl;
-
-					$new_nodes[$location_name][] = $action;
-				}
-
-				foreach (array_keys($new_nodes) as $key)
-					ksort($new_nodes[$key]);
-
-				$result->nodes = $new_nodes;
-			}
-
-			// Vendors
-			$result->vendor_count = 0;
-
-			if ($result->vendors)
-			{
-				$new_vendors = array();
-				
-				foreach(explode('***', $result->vendors) as $vendor)
-				{
-					list($name, $title, $location, $x, $y) = explode('|', $vendor);
-
-					$new_vendors[$location ?: 'Unknown'][] = (object) array(
-						'name' => $name,
-						'title' => $title,
-						'x' => $x,
-						'y' => $y
-					);
-
-					$result->vendor_count++;
-				}
-
-				ksort($new_vendors);
-
-				$result->vendors = $new_vendors;
-			}
-		}
-		unset($result);
 		
 		if ($my_class != 'BTL')
 		{
@@ -430,7 +349,7 @@ class CareerController extends BaseController
 				{
 					foreach($results as $k => $result)
 					{
-						if ($quest_item->id == $result->id)
+						if ($quest_item->item_id == $result->item_id)
 						{
 							// Merge
 							$original_amount = $result->amount;
@@ -454,11 +373,11 @@ class CareerController extends BaseController
 			{
 				$sortable_results = array();
 				foreach ($results as $row)
-					$sortable_results[$row->ilvl][] = $row;
+					$sortable_results[$row->level][] = $row;
 				ksort($sortable_results);
 
 				$results = array();
-				foreach($sortable_results as $ilvl => $rows)
+				foreach($sortable_results as $rows)
 					foreach ($rows as $row)
 						$results[] = $row;
 				unset($sortable_results);

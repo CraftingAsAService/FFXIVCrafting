@@ -13,7 +13,15 @@
 
 App::before(function($request)
 {
-	//
+
+	preg_match("/^(..)/", Request::getHost(), $parts);
+	
+	Config::set('language', 
+		in_array($parts[1], Config::get('site.available_languages')) 
+			? $parts[1] 
+			: Config::get('site.default_language')
+	);
+	
 });
 
 

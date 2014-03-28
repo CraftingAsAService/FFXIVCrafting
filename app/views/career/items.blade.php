@@ -14,13 +14,13 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<!--<script type='text/javascript' src='/js/career.items.js'></script>-->
+<script type='text/javascript' src='/js/career.js'></script>
 @stop
 
 @section('content')
 
 @if ($job != 'BTL')
-<h1>{{ $job->name }}'s Gathering Career</h1>
+<h1>{{ $job->name->term }}'s Gathering Career</h1>
 @else
 <h1>Battling Career</h1>
 @endif
@@ -37,23 +37,24 @@
 				@if($show_quests)
 				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!' data-container='body'>Quest</th>
 				@endif
-				@if($job != 'BTL' && $job->abbreviation != 'FSH')
-				<th class='text-center' width='400'>Locations</th>
+				@if($job == 'BTL')
+				<th class='text-center'>Beasts</th>
+				@elseif ($job->abbr->term != 'FSH')
+				<th class='text-center'>Gathering</th>
 				@endif
-				<th class='text-center'>Buy</th>
-				<th class='text-center'>Vendors</th>
+				<th class='text-center'>Purchase</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach($items as $item)
-			<?php if ($item->id < 30) continue; ?>
-			<tr data-role='{{ $item->role }}'>
+			<?php if ($item->item_id < 30) continue; ?>
+			<tr>
 				<td>
-					@if(isset($item->ilvl))
-					<span class='close' rel='tooltip' title='Item Level'>{{ $item->ilvl }}</span>
+					@if($item->level)
+					<span class='close' rel='tooltip' title='Item Level'>{{ $item->level }}</span>
 					@endif
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
-						<img src='/img/items/{{ $item->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $item->name }}
+					<a href='http://xivdb.com/?item/{{ $item->item_id }}' target='_blank'>
+						<img src='/img/items/nq/{{ $item->item_id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $item->name }}
 					</a>
 				</td>
 				<td class='valign text-center'>
@@ -67,51 +68,28 @@
 					@endif
 				</td>
 				@endif
-				@if($job != 'BTL' && $job->abbreviation != 'FSH')
-				<td>
-					<div class='row'>
-						@foreach($item->nodes as $location_name => $node)
-						<div class='col-sm-6 text-right'>
-							{{ $location_name }} 
-						</div>
-						<div class='col-sm-6'>
-							@foreach($node as $action)
-							<span class='label label-primary' rel='tooltip' title='{{ $action }}' data-container='body'>{{ $action }}</span>
-							@endforeach
-						</div>
-						@endforeach
-					</div>
+				@if($job == 'BTL')
+				<td class='text-center'>
+					@if($item->beasts)
+					<a href='#' class='btn btn-default beasts' data-item-id='{{ $item->item_id }}' rel='tooltip' title='Click to load Beasts'>
+						<img src='/img/mob.png' width='24' height='24'>
+						{{ number_format($item->beasts) }}
+					</a>
+					@endif
+				</td>
+				@elseif ($job->abbr->term != 'FSH')
+				<td class='text-center'>
+					@if ($item->nodes)
+					<i class='class-icon class-id-{{ $job->id }} clusters' data-item-id='{{ $item->item_id }}'></i>
+					@endif
 				</td>
 				@endif
 				<td class='valign text-center'>
-					@if($item->buy)
-						<img src='/img/coin.png' class='stat-vendors pull-left' width='24' height='24'>
-						{{ number_format($item->buy) }}
-					@endif
-				</td>
-				<td class='valign text-center'>
-					@if($item->buy)
-					<button class='btn btn-default btn-sm' data-toggle='popover' data-container='body' data-html='true' data-placement='left' data-content-id='#vendors_for_{{ $item->id }}'>
-						{{ $item->vendor_count }} Vendor{{ $item->vendor_count > 1 ? 's' : '' }} 
-						@if($item->vendor_count > 1 && count($item->vendors) > 1)
-						in {{ count($item->vendors) }} Area{{ count($item->vendors) > 1 ? 's' : '' }}
-						@endif
-					</button>
-					<div class='hidden' id='vendors_for_{{ $item->id }}'>
-						@foreach($item->vendors as $location_name => $vendors)
-						<p>{{ $location_name }}</p>
-						<ul>
-							@foreach($vendors as $vendor)
-							<li>
-								<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
-								@if($vendor->x && $vendor->y)
-								<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
-								@endif
-							</li>
-							@endforeach
-						</ul>
-						@endforeach
-					</div>
+					@if($item->vendors)
+					<a href='#' class='btn btn-default vendors' data-item-id='{{ $item->item_id }}' rel='tooltip' title='Available for {{ $item->min_price }} gil, Click to load Vendors'>
+						<img src='/img/coin.png' width='24' height='24'>
+						{{ number_format($item->min_price) }}
+					</a>
 					@endif
 				</td>
 			</tr>
@@ -120,7 +98,7 @@
 	</table>
 </div>
 
-@if($job != 'BTL' && $job->abbreviation != 'FSH')
+@if($job != 'BTL' && $job->abbr->term != 'FSH')
 <p><em><small>Shards not shown.</small></em></p>
 @endif
 <p><small>Amounts are simply an estimate; the math should be correct but I'm not going to guarantee it.  In the least you will need more for Leves or failed syntheses.</small></p>

@@ -1,63 +1,58 @@
-<td class='role role-{{ str_replace(' ', '-', $role) }}{{ isset($original_level) && $original_level > $level ? ' hidden' : '' }}' data-level='{{ $level }}'>
+<td class='role role-{{ str_replace(' ', '-', $role) }}{{ isset($original_level) && ($original_level > $level || ( ! $slim_mode && $original_level + 3 == $level)) ? ' hidden' : '' }}' data-level='{{ $level }}'>
 	<div class='role-wrap'>
 		<div class='items'>
-			@foreach($items as $key => $item)
-			<div class='item cf {{ $key > 0 ? 'hidden' : 'active' }}{{ $item->crafted_by ? ' craftable' : '' }}' 
-				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}'>
+			<?php $i = 0; ?>
+			@foreach($items as $ilvl => $gear)
+			@foreach($gear as $item)
+			
+			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ count($item->recipe) ? ' craftable' : '' }}' 
+				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->level }}' data-cannot-equip='{{{ $item->cannot_equip }}}'>
 
 				<div class='icons pull-left text-center'>
 					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
-						<img src='/img/items/{{ $item->icon ?: '../noitemicon.png' }}.png' width='40' height='40' class='main-icon'>
+						<img src='/img/items/nq/{{ $item->id }}.png' width='40' height='40' class='main-icon nq'>
+						@if ($item->can_hq)
+						<img src='/img/items/hq/{{ $item->id }}.png' width='40' height='40' class='main-icon hq hidden'>
+						@endif
 					</a>
 					<div>
-						@if($item->crafted_by)
-						@foreach(explode(',', $item->crafted_by) as $crafted_by)
+						@if(count($item->recipe))
 						<div class='crafted_by'>
-							<img src='/img/classes/{{ $crafted_by }}.png' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' width='24' height='24' title='Crafted By {{ $job_list[$crafted_by] }}'>
+							<i class='class-icon class-id-{{ $item->recipe[0]->classjob_id }} stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name->term }}}' rel='tooltip' title='Crafted By {{ $item->recipe[0]->classjob->name->term }}, Click to Add to List'></i>
 						</div>
-						<?php break; ?>
-						@endforeach
-						@elseif($item->rewarded)
+						@elseif($item->rewarded || $item->achievable)
 						<div class='rewarded'>
-							<img src='/img/reward.png' class='rewarded' width='24' height='24' rel='tooltip' title='Reward from quest, leve, achievement, etc'>
+							<img src='/img/reward.png' class='rewarded' width='20' height='20' rel='tooltip' title='Reward from {{ $item->achievable ? 'an Achievement' : 'a Quest' }}'>
 						</div>
 						@endif
-						@if($item->buy)
+						@if(count($item->vendors))
 						<div class='gil'>
-							<img src='/img/coin.png' class='stat-vendors' width='24' height='24' data-toggle='popover' data-placement='bottom' data-content-id='#vendors_for_{{ $item->id }}_{{ $level }}' title='Available for {{ $item->buy }} gil'>
-						</div>
-						<div class='hidden' id='vendors_for_{{ $item->id }}_{{ $level }}'>
-							@foreach($item->vendors as $location_name => $vendors)
-							<p>{{ $location_name }}</p>
-							<ul>
-								@foreach($vendors as $vendor)
-								<li>
-									<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
-									@if($vendor->x && $vendor->y)
-									<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
-									@endif
-								</li>
-								@endforeach
-							</ul>
-							@endforeach
+							<img src='/img/coin.png' class='vendors' width='24' height='24' rel='tooltip' title='Available for {{ $item->min_price }} gil, Click to load Vendors'>
 						</div>
 						@endif
 					</div>
 				</div>
 				
 				<div class='name-box'>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary'>{{ $item->name }}</a>
+					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary'>{{ $item->name->term }}</a>
 				</div>
 
 				<div class='stats-box row'>
-					@foreach($item->stats as $stat => $amount)
-					<div class='col-sm-6 text-center stat{{ ! in_array($stat, $job_focus) ? ' hidden boring' : '' }}' data-stat='{{ $stat }}' data-amount='{{ $amount }}'>
-						<img src='/img/stats/{{ $stat }}.png' class='stat-icon' rel='tooltip' title='{{ $stat }}'>
-						<span>{{ $amount }}</span>
+					@foreach($item->baseparam as $param)
+					<div class='col-sm-6 text-center nq stat{{ ! in_array($param->id, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $param->name->term }}' data-amount='{{ (int) $param->pivot->nq_amount }}'>
+						<img src='/img/stats/nq/{{ $param->name->term }}.png' class='stat-icon' rel='tooltip' title='{{ $param->name->term }}'>
+						<span>{{ (int) $param->pivot->nq_amount }}</span>
 					</div>
+					@if($param->pivot->hq_amount)
+					<div class='col-sm-6 text-center hq hidden stat{{ ! in_array($param->id, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $param->name->term }}' data-amount='{{ (int) $param->pivot->hq_amount }}'>
+						<img src='/img/stats/hq/{{ $param->name->term }}.png' class='stat-icon' rel='tooltip' title='{{ $param->name->term }}'>
+						<span>{{ (int) $param->pivot->hq_amount }}</span>
+					</div>
+					@endif
 					@endforeach
 				</div>
 			</div>
+			@endforeach
 			@endforeach
 		</div>
 		@if(count($items) > 1)

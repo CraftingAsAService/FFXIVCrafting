@@ -1,8 +1,10 @@
 {
 	"name": "tickthokk/ffxiv-cass",
 	"description": "Crafting utility for FFXIV: ARR",
+	"license": "proprietary",
 	"require": {
-		"laravel/framework": "4.0.*",
+		"raveren/kint": "dev-master",
+		"laravel/framework": "4.1.*",
 		"intouch/laravel-newrelic": "*",
 		"wardrobe/core": "dev-master"
 	},
@@ -16,6 +18,7 @@
 			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
+			"app/libraries",
 			"app/tests/TestCase.php"
 		]
 	},

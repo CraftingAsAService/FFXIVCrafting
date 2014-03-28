@@ -50,14 +50,14 @@
 			</tr>
 			--}}
 		@else
-			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name }}}'>
+			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name->term }}}'>
 				<td class='text-left'>
-					<a href='http://xivdb.com/?recipe/{{ $list_item['item']->recipes[0]->id }}' target='_blank'>
-						<img src='/img/items/{{ $list_item['item']->recipes[0]->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $list_item['item']->recipes[0]->name }}
+					<a href='http://xivdb.com/?recipe/{{ $list_item['item']->recipe[0]->id }}' target='_blank'>
+						<img src='/img/items/nq/{{ $list_item['item']->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name->term }}
 					</a>
 				</td>
 				<td class='text-center valign'>
-					{{ $list_item['item']->recipes[0]->yields }}
+					{{ $list_item['item']->recipe[0]->yields }}
 				</td>
 				<td class='text-center valign'>
 					<input type='number' class='form-control update-list-item text-center' value='{{ $list_item['amount'] }}'>

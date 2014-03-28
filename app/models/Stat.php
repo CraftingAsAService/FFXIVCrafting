@@ -1,10 +1,7 @@
 <?php
 
-class Stat extends Eloquent
+class Stat
 {
-
-	protected $table = 'stats';
-	public $timestamps = false;
 
 	public static function avoid($job = 'CRP')
 	{
@@ -41,7 +38,7 @@ class Stat extends Eloquent
 	public static function focus($job = 'CRP')
 	{
 
-		$look_for = array('CRP');
+		$look_for = array($job);
 
 		$shortcuts = array(
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
@@ -84,7 +81,7 @@ class Stat extends Eloquent
 
 			'Defense' => 'Tanks',
 			'Magic Defense' => 'Tanks',
-			'Vitality' => 'Tanks,CRP,ARM,LTW,MIN',
+			'Vitality' => 'Tanks',//,CRP,ARM,LTW,MIN',
 
 			'Skill Speed' => 'DPS,RDPS,Tanks',
 			'Physical Damage' => 'DPS,RDPS',
@@ -95,20 +92,18 @@ class Stat extends Eloquent
 			'Block Strength' => 'Tanks',
 			'Parry' => 'Tanks',
 
-			'Strength' => 'Tanks,DPS,BSM,ARM,BTN',
+			'Strength' => 'Tanks,DPS',//,BSM,ARM,BTN',
 
-			'Dexterity' => 'RDPS,Tanks,GSM,WVR,CRP,FSH',
+			'Dexterity' => 'RDPS,Tanks',//,GSM,WVR,CRP,FSH',
 
 			'Spell Speed' => 'MDPS,Heals',
-			'Intelligence' => 'MDPS,Heals,ALC,GSM,LTW',
+			'Intelligence' => 'MDPS,Heals',//,ALC,GSM,LTW',
 			'Magic Damage' => 'MDPS',
-			'Mind' => 'Heals,CUL,BSM,WVR,MIN',
-			'Piety' => 'Heals,RDPS,ALC,CUL,FSH',
-
-			'Intelligence' => 'Heals,RDPS,ALC,GSM,LTW,BTN',
+			'Mind' => 'Heals',//,CUL,BSM,WVR,MIN',
+			'Piety' => 'Heals,RDPS',//,ALC,CUL,FSH',
 
 		);
-		
+
 		$focus = array();
 
 		foreach ($benefactors as $stat => $roles)
@@ -145,6 +140,17 @@ class Stat extends Eloquent
 			'Water Resistance',
 			'Wind Resistance',
 		);
+	}
+
+	public static function get_ids($stats)
+	{
+		if (empty($stats))
+			return array();
+
+		return BaseParam::with('name_en')
+			->whereHas('name_en', function($q) use ($stats) {
+				$q->whereIn('term', $stats);
+			})->remember(Config::get('site.cache_length'))->lists('id');
 	}
 
 }

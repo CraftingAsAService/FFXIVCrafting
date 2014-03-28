@@ -5,11 +5,11 @@
 <tr>
 	<td class='text-left valign'>
 		<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-			<img src='/img/items/{{ $recipe->icon ?: '../noitemicon' }}.png' style='margin-right: 5px;'>{{ $recipe->name }}
+			<img src='/img/items/nq/{{ $recipe->item_id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name->term }}
 		</a>
 	</td>
 	<td class='text-center valign'>
-		<img src='/img/classes/{{ $recipe->job->abbreviation }}.png' rel='tooltip' title='{{ $recipe->job->name }}' class='add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->name }}}'>
+		<i class='class-icon class-id-{{ $recipe->classjob_id }} add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->item->name }}}'></i>
 	</td>
 	<td class='text-center valign'>
 		{{ $recipe->level }}

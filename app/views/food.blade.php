@@ -60,7 +60,7 @@
 				</th>
 				@foreach(explode('|', $stat_names) as $stat_name)
 				<th colspan='3' class='text-center' width='24%'>
-					<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
+					<img src='/img/stats/nq/{{ $stat_name }}.png' class='stat-icon'>
 					{{ $stat_name }}
 				</th>
 				@endforeach
@@ -94,42 +94,40 @@
 				@endif
 			</tr>
 			@foreach($group as $item)
-			<tr>
+			<tr class='show-nq'>
 				<td>
+					@if($item['vendor_count'])
+					<a href='#' class='btn btn-default vendors pull-right' data-item-id='{{ $item['id'] }}' rel='tooltip' title='Available for {{ $item['min_price'] }} gil, Click to load Vendors'>
+						<img src='/img/coin.png' width='24' height='24'>
+						{{ number_format($item['min_price']) }}
+					</a>
+					@endif
+
 					<a href='http://xivdb.com/?item/{{ $item['id'] }}' target='_blank'>
-						<img src='/img/items/{{ $item['icon'] }}.png'>
+						<img src='/img/items/nq/{{ $item['id'] }}.png' width='36' height='36'>
 						{{ $item['name'] }}
 					</a>
-
-					@if($item['buy'])
-					<img src='/img/coin.png' class='stat-vendors pull-right' width='24' height='24' data-toggle='popover' data-placement='bottom' data-content-id='#vendors_for_{{ $item['id'] }}' title='Available for {{ $item['buy'] }} gil'>
-					
-					<div class='hidden' id='vendors_for_{{ $item['id'] }}'>
-						@foreach($item['vendors'] as $location_name => $vendors)
-						<p>{{ $location_name }}</p>
-						<ul>
-							@foreach($vendors as $vendor)
-							<li>
-								<em>{{ $vendor->name }}</em>@if($vendor->title), {{ $vendor->title }}@endif
-								@if($vendor->x && $vendor->y)
-								<span class='label label-default' rel='tooltip' title='Coordinates' data-container='body'>{{ $vendor->x }}x{{ $vendor->y }}</span>
-								@endif
-							</li>
-							@endforeach
-						</ul>
-						@endforeach
-					</div>
-					@endif
 				</td>
 				@foreach(explode('|', $stat_names) as $stat_name)
-				<td class='text-center'>
-					{{ number_format($item['stats'][$stat_name]['amount']) }}%
+				<td class='text-center nq-only'>
+					{{ number_format($item['stats'][$stat_name]['nq']['amount']) }}%
 				</td>
-				<td class='text-center'>
-					{{ number_format($item['stats'][$stat_name]['max']) }}
+				<td class='text-center nq-only'>
+					{{ number_format($item['stats'][$stat_name]['nq']['limit']) }}
 				</td>
-				<td class='text-center'>
-					{{ number_format($item['stats'][$stat_name]['threshold']) }}
+				<td class='text-center nq-only'>
+					{{ number_format($item['stats'][$stat_name]['nq']['threshold']) }}
+				</td>
+				@endforeach
+				@foreach(explode('|', $stat_names) as $stat_name)
+				<td class='text-center hq-only hidden'>
+					{{ number_format($item['stats'][$stat_name]['hq']['amount']) }}%
+				</td>
+				<td class='text-center hq-only hidden'>
+					{{ number_format($item['stats'][$stat_name]['hq']['limit']) }}
+				</td>
+				<td class='text-center hq-only hidden'>
+					{{ number_format($item['stats'][$stat_name]['hq']['threshold']) }}
 				</td>
 				@endforeach
 			</tr>

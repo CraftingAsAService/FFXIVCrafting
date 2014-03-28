@@ -3,6 +3,7 @@ var equipment = {
 		job: job,
 		level: level,
 		craftable_only: craftable_only,
+		rewardable_too: rewardable_too,
 		level_range: 3,
 		viewport_differential: 0, // Change level range based on viewport
 		boring_stats: false
@@ -31,6 +32,47 @@ var equipment = {
 
 		if (typeof(initXIVDBTooltips) != 'undefined')
 			initXIVDBTooltips();
+
+		$('.vendors').on('click', function() {
+			var el = $(this),
+				id = el.closest('.item').data('itemId');
+
+			if (el.hasClass('loading'))
+				return;
+
+			var modal = $('#vendors_for_' + id);
+
+			if (modal.length == 0)
+			{
+
+				$.ajax({
+					url: '/vendors/view/' + id,
+					dataType: 'json',
+					beforeSend:function() {
+
+						el.addClass('loading');
+
+						global.noty({
+							type: 'warning',
+							text: 'Loading Vendors'
+						});
+					},
+					success:function(json) {
+						$('body').append(json.html);
+
+						$('#vendors_for_' + id).modal();
+
+						el.removeClass('loading');
+					}
+				});
+			}
+			else
+			{
+				$('#vendors_for_' + id).modal('show');
+			}
+
+			return;
+		});
 
 		$('#gear tbody td:visible .td-navigation .item-next').on('click', function(event) {
 			event.preventDefault();
@@ -245,7 +287,8 @@ var equipment = {
 			data: {
 				'job': equipment.options.job,
 				'level': level,
-				'craftable_only': equipment.options.craftable_only
+				'craftable_only': equipment.options.craftable_only,
+				'rewardable_too': equipment.options.rewardable_too
 			},
 			beforeSend:function() {
 				global.noty({
@@ -254,12 +297,12 @@ var equipment = {
 				});
 			},
 			success:function(json) {
-				$.each(json.roles, function(key, value) {
-					$('#gear .role-row[data-role="' + key + '"]').append(value);
+				$.each(json.gear, function(key, value) {
+					$('#gear .role-row[data-role="' + key + '"]').append(value[level]);
 				});
 
-				$('#gear thead tr').append(json.head);
-				$('#gear tfoot tr').append(json.foot);
+				$('#gear thead tr').append(json.head[level]);
+				$('#gear tfoot tr').append(json.foot[level]);
 
 				equipment.column_display();
 				equipment.fix_rows();
@@ -354,7 +397,7 @@ var equipment = {
 			hidden = [];
 
 		$('#gear tbody tr td[data-level=' + level + ']:not("cannot-equip")').each(function() {
-			$(this).find('.item.active .stat').each(function() {
+			$(this).find('.item.active .nq.stat').each(function() {
 				var statEl = $(this);
 				var stat_data = statEl.data();
 
@@ -395,7 +438,7 @@ var equipment = {
 			var img = $('<img>');
 
 			img
-				.attr('src', '/img/stats/' + stat + '.png')
+				.attr('src', '/img/stats/nq/' + stat + '.png')
 				.addClass('stat-icon')
 				.attr('rel', 'tooltip')
 				.attr('title', stat);
