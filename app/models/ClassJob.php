@@ -5,10 +5,10 @@ class ClassJob extends _LibraBasic
 
 	protected $table = 'classjob';
 
-	public function abbr_en() { return $this->hasOne('translations', 'id', 'abbr_en'); }
-	public function abbr_ja() { return $this->hasOne('translations', 'id', 'abbr_ja'); }
-	public function abbr_fr() { return $this->hasOne('translations', 'id', 'abbr_fr'); }
-	public function abbr_de() { return $this->hasOne('translations', 'id', 'abbr_de'); }
+	public function abbr_en() { return $this->hasOne('Translations', 'id', 'abbr_en'); }
+	public function abbr_ja() { return $this->hasOne('Translations', 'id', 'abbr_ja'); }
+	public function abbr_fr() { return $this->hasOne('Translations', 'id', 'abbr_fr'); }
+	public function abbr_de() { return $this->hasOne('Translations', 'id', 'abbr_de'); }
 
 	public function abbr() { return $this->{'abbr_' . Config::get('language')}(); }
 
