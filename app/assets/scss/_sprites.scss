@@ -1,0 +1,84 @@
+i.class-icon {
+	// Small - 20 x 20
+	display: inline-block;
+	overflow: hidden;
+	width: 20px;
+	height: 20px;
+	background-image: url(/img/classes/small-sprites.png);
+	background-repeat: no-repeat;
+	background-size: 20px height-px; // Do not override this in the high-dpi class, these dimensions are used by the highdpi browser to determine how to scale the image- the high dpi image will be twice the size, webkit will see this line, and the math computes to a scale of 1.0 instead of 2.0.
+	
+	&.Alchemist, &.ALC, &.class-id-14 { background-position: 0 0; } 
+	&.Arcanist, &.ACN, &.class-id-26 { background-position: 0 -25px; } 
+	&.Archer, &.ARC, &.class-id-5 { background-position: 0 -50px; } 
+	&.Armorer, &.ARM, &.class-id-10 { background-position: 0 -75px; } 
+	&.Bard, &.BRD, &.class-id-23 { background-position: 0 -100px; } 
+	&.Black_Mage, &.BLM, &.class-id-25 { background-position: 0 -125px; } 
+	&.Blacksmith, &.BSM, &.class-id-9 { background-position: 0 -150px; } 
+	&.Botanist, &.BTN, &.class-id-17 { background-position: 0 -175px; } 
+	&.Carpenter, &.CRP, &.class-id-8 { background-position: 0 -200px; } 
+	&.Conjurer, &.CNJ, &.class-id-6 { background-position: 0 -225px; } 
+	&.Culinarian, &.CUL, &.class-id-15 { background-position: 0 -250px; } 
+	&.Dragoon, &.DRG, &.class-id-22 { background-position: 0 -275px; } 
+	&.Fisher, &.FSH, &.class-id-18 { background-position: 0 -300px; } 
+	&.Gladiator, &.GLA, &.class-id-1 { background-position: 0 -325px; } 
+	&.Goldsmith, &.GSM, &.class-id-11 { background-position: 0 -350px; } 
+	&.Lancer, &.LNC, &.class-id-4 { background-position: 0 -375px; } 
+	&.Leatherworker, &.LTW, &.class-id-12 { background-position: 0 -400px; } 
+	&.Marauder, &.MRD, &.class-id-3 { background-position: 0 -425px; } 
+	&.Miner, &.MIN, &.class-id-16 { background-position: 0 -450px; } 
+	&.Monk, &.MNK, &.class-id-20 { background-position: 0 -475px; } 
+	&.Paladin, &.PLD, &.class-id-19 { background-position: 0 -500px; } 
+	&.Pugilist, &.PGL, &.class-id-2 { background-position: 0 -525px; } 
+	&.Scholar, &.SCH, &.class-id-28 { background-position: 0 -550px; } 
+	&.Summoner, &.SMN, &.class-id-27 { background-position: 0 -575px; } 
+	&.Thaumaturge, &.THM, &.class-id-7 { background-position: 0 -600px; } 
+	&.Warrior, &.WAR, &.class-id-21 { background-position: 0 -625px; } 
+	&.Weaver, &.WVR, &.class-id-13 { background-position: 0 -650px; } 
+	&.White_Mage, &.WHM, &.class-id-24 { background-position: 0 -675px; } 
+
+	@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+	only screen and (-moz-min-device-pixel-ratio: 1.5),
+	only screen and (-o-min-device-pixel-ratio: 3/2),
+	only screen and (min-device-pixel-ratio: 1.5) {
+		background-image: url("/img/classes/large-sprites.png");
+	}
+
+
+	&.large {
+		background: url(/img/classes/large-sprites.png);
+		width: 40px;
+		height: 40px;
+
+		&.Alchemist, &.ALC, &.class-id-14 { background-position: 0 0; } 
+		&.Arcanist, &.ACN, &.class-id-26 { background-position: 0 -50px; } 
+		&.Archer, &.ARC, &.class-id-5 { background-position: 0 -100px; } 
+		&.Armorer, &.ARM, &.class-id-10 { background-position: 0 -150px; } 
+		&.Bard, &.BRD, &.class-id-23 { background-position: 0 -200px; } 
+		&.Black_Mage, &.BLM, &.class-id-25 { background-position: 0 -250px; } 
+		&.Blacksmith, &.BSM, &.class-id-9 { background-position: 0 -300px; } 
+		&.Botanist, &.BTN, &.class-id-17 { background-position: 0 -350px; } 
+		&.Carpenter, &.CRP, &.class-id-8 { background-position: 0 -400px; } 
+		&.Conjurer, &.CNJ, &.class-id-6 { background-position: 0 -450px; } 
+		&.Culinarian, &.CUL, &.class-id-15 { background-position: 0 -500px; } 
+		&.Dragoon, &.DRG, &.class-id-22 { background-position: 0 -550px; } 
+		&.Fisher, &.FSH, &.class-id-18 { background-position: 0 -600px; } 
+		&.Gladiator, &.GLA, &.class-id-1 { background-position: 0 -650px; } 
+		&.Goldsmith, &.GSM, &.class-id-11 { background-position: 0 -700px; } 
+		&.Lancer, &.LNC, &.class-id-4 { background-position: 0 -750px; } 
+		&.Leatherworker, &.LTW, &.class-id-12 { background-position: 0 -800px; } 
+		&.Marauder, &.MRD, &.class-id-3 { background-position: 0 -850px; } 
+		&.Miner, &.MIN, &.class-id-16 { background-position: 0 -900px; } 
+		&.Monk, &.MNK, &.class-id-20 { background-position: 0 -950px; } 
+		&.Paladin, &.PLD, &.class-id-19 { background-position: 0 -1000px; } 
+		&.Pugilist, &.PGL, &.class-id-2 { background-position: 0 -1050px; } 
+		&.Scholar, &.SCH, &.class-id-28 { background-position: 0 -1100px; } 
+		&.Summoner, &.SMN, &.class-id-27 { background-position: 0 -1150px; } 
+		&.Thaumaturge, &.THM, &.class-id-7 { background-position: 0 -1200px; } 
+		&.Warrior, &.WAR, &.class-id-21 { background-position: 0 -1250px; } 
+		&.Weaver, &.WVR, &.class-id-13 { background-position: 0 -1300px; } 
+		&.White_Mage, &.WHM, &.class-id-24 { background-position: 0 -1350px; } 
+	}
+	
+}
+
