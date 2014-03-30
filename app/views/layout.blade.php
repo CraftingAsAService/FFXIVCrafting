@@ -2,6 +2,8 @@
 <html lang='en-us'>
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		
 		<title>Crafting as a Service | Final Fantasy XIV ARR Crafting Information</title>
 		<meta name='description' content='Final Fantasy XIV ARR Crafting Information and Planning'>
 		<meta name='keywords' content=''
@@ -117,16 +119,19 @@
 				</div>
 				<div class='row bottom'>
 					<div class='col-sm-4'>
-						<h4>Contact</h4>
+						<h4>Site</h4>
 						<p class='text-muted credit'>
-							<a href='mailto:tickthokk@gmail.com'>Email</a>
+							Patch 2.1 Ready
 						</p>
-						<!-- <p class='text-muted credit'>
-							<a href='https://github.com/Tickthokk/ffxiv-caas/issues' target='_blank'>Issue Tracker</a>
-						</p> -->
+						<p class='text-muted credit'>
+							Patch 2.2 Coming Soon!
+						</p>
 					</div>
 					<div class='col-sm-4'>
-						<h4>More Info</h4>
+						<h4>Contact</h4>
+						<p class='text-muted credit'>
+							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
+						</p>
 						<p class='text-muted credit'>
 							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
 						</p>

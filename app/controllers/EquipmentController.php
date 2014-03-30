@@ -5,13 +5,10 @@ class EquipmentController extends BaseController
 
 	public function getIndex()
 	{
-		// All Jobs
-		$job_list = Job::all()->lists('name', 'abbreviation');
-
 		return View::make('equipment')
 			->with('error', FALSE)
 			->with('active', 'equipment')
-			->with('job_list', $job_list)
+			->with('job_list', ClassJob::get_name_abbr_list())
 			->with('previous', Cookie::get('previous_equipment_load'));
 	}
 
@@ -52,15 +49,13 @@ class EquipmentController extends BaseController
 		elseif ($level > 50) $level = 50;
 
 		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
+		$job_list = ClassJob::get_name_abbr_list();
 
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);
 
 		// Make sure it's a real job
-		$job = Job::where('abbreviation', $desired_job)->first();
+		$job = ClassJob::get_by_abbr($desired_job);
 
 		// If the job isn't real, error out
 		if ( ! $job)
@@ -71,11 +66,11 @@ class EquipmentController extends BaseController
 		$roles = Config::get('site.equipment_roles');
 
 		// What stats do the class like?
-		$job_focus = Stat::focus($job->abbreviation);
+		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
 
 		View::share('job_list', $job_list);
 		View::share('job', $job);
-		View::share('job_focus', $job_focus);
+		View::share('stat_ids_to_focus', $stat_ids_to_focus);
 
 		$limit = 48;
 		if ($slim_mode)
@@ -86,30 +81,40 @@ class EquipmentController extends BaseController
 
 		View::share('original_level', $level);
 
-		$starting_equipment = array();
-		if ($level > 1)
-		{
-			View::share('level', $level - 1);
-			
-			$equipment = Item::calculate($job->abbreviation, $level - 1, $craftable_only, $rewardable_too);
-			$starting_equipment[$level - 1] = $this->getOutput($equipment, $roles);
-		}
+		View::share('slim_mode', $slim_mode);
 
-		foreach (range($level, $level + ($slim_mode ? 3 : 2)) as $e_level)
-		{
-			View::share('level', $e_level);
+		#$starting_equipment = array();
+
+		// 3 + ($slim_mode ? 1 : 0)
+		$equipment = Item::calculate($job->id, $level - 1, 4, $craftable_only, $rewardable_too);
+		$equipment = $this->getOutput($equipment);
+
+		//dd($equipment);
+		//dd($equipment['46']);
+
+		// if ($level > 1)
+		// {
+		// 	View::share('level', $level - 1);
 			
-			$equipment = Item::calculate($job->abbreviation, $e_level, $craftable_only, $rewardable_too);
-			$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
-		}
+		// 	$starting_equipment[$level - 1] = $this->getOutput($equipment, $roles);
+		// }
+
+
+		// foreach (range($level, $level + ($slim_mode ? 3 : 2)) as $e_level)
+		// {
+		// 	View::share('level', $e_level);
+			
+		// 	$equipment = Item::calculate($job->id, $e_level, $craftable_only, $rewardable_too);
+		// 	$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
+		// }
 
 		return View::make('equipment.list')
 			->with(array(
 				'craftable_only' => $craftable_only,
+				'rewardable_too' => $rewardable_too,
 				'roles' => $roles,
 				'level' => $level, // Reset view's level variable back to normal
-				'starting_equipment' => $starting_equipment,
-				'slim_mode' => $slim_mode
+				'equipment' => $equipment
 			));
 	}
 
@@ -118,44 +123,54 @@ class EquipmentController extends BaseController
 		$job = Input::get('job');
 		$level = Input::get('level');
 		$craftable_only = Input::get('craftable_only');
+		$rewardable_too = Input::get('rewardable_too');
 
 		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
+		$job_list = ClassJob::get_name_abbr_list();
 
-		// Make sure it's a real job
-		$job = Job::where('abbreviation', strtoupper($job))->first();
+		// Jobs are capital
+		$desired_job = strtoupper($job);
+
+		$job = ClassJob::get_by_abbr($desired_job);
 
 		// What stats do the class like?
-		$job_focus = Stat::focus($job->abbreviation);
+		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
 
 		View::share('job_list', $job_list);
 		View::share('job', $job);
-		View::share('job_focus', $job_focus);
+		View::share('stat_ids_to_focus', $stat_ids_to_focus);
 		View::share('level', $level);
 
-		$equipment = Item::calculate($job->abbreviation, $level, $craftable_only);
-
-		// Get all roles
-		$roles = Config::get('site.equipment_roles');
-
-		$output = $this->getOutput($equipment, $roles);
-
-		exit(json_encode($output));
+		$equipment = Item::calculate($job->id, $level, 0, $craftable_only, $rewardable_too);
+		
+		exit(json_encode($this->getOutput($equipment)));
 	}
 
-	private function getOutput($equipment = array(), $roles = array())
+	private function getOutput($equipment = array(), $solo = false)
 	{
-		$output = array('roles' => array());
-		foreach ($roles as $role)
-			$output['roles'][$role] = View::make('equipment.cell', array(
-				'items' => $equipment[$role],
-				'role' => $role
+		$output = array(
+			'head' => array(),
+			'foot' => array(),
+			'gear' => array()
+		);
+
+		foreach ($equipment as $level => $gear)
+		{
+			$output['head'][$level] = View::make('equipment.cell-head', array(
+				'level' => $level
 			))->render();
 
-		$output['head'] = View::make('equipment.cell-head')->render();
-		$output['foot'] = View::make('equipment.cell-foot')->render();
+			$output['foot'][$level] = View::make('equipment.cell-foot', array(
+				'level' => $level
+			))->render();
+
+			foreach ($gear as $role => $items)
+				$output['gear'][$role][$level] = View::make('equipment.cell', array(
+					'level' => $level,
+					'items' => $items,
+					'role' => $role
+				))->render();
+		}
 
 		return $output;
 	}

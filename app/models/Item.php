@@ -1,25 +1,56 @@
 <?php
 
-class Item extends Eloquent
+class Item extends _LibraBasic
 {
 
 	protected $table = 'items';
-	public $timestamps = false;
 
-	public function stats()
+	public function classjob()
 	{
-		return $this->belongsToMany('Stat')->withPivot('amount', 'maximum');
+		return $this->belongsToMany('ClassJob', 'classjob_items', 'item_id', 'classjob_id');
 	}
 
-	public function jobs()
+	public function recipe()
 	{
-		return $this->belongsToMany('Job');
+		return $this->hasMany('Recipes');
 	}
 
-	public function recipes()
+	public function baseparam()
 	{
-		return $this->hasMany('Recipe');
+		return $this->belongsToMany('BaseParam', 'baseparam_items', 'item_id', 'baseparam_id')->withPivot('nq_amount', 'hq_amount', 'nq_limit', 'hq_limit', 'bonus');
 	}
+
+	public function vendors()
+	{
+		return $this->belongsToMany('Shop', 'items_npcs_shops', 'item_id', 'npcs_shop_id')->withPivot('color');
+	}
+
+	public function clusters()
+	{
+		return $this->belongsToMany('Cluster', 'cluster_items', 'item_id', 'cluster_id');
+	}
+
+	public function beasts()
+	{
+		return $this->belongsToMany('NPC', 'npcs_items', 'item_id', 'npcs_id');
+	}
+	
+	#select `classjob`.*, `classjob_items`.`classjob_id` as `pivot_classjob_id`, `classjob_items`.`item_id` as `pivot_item_id` from `classjob` inner join `classjob_items` on `classjob`.`id` = `classjob_items`.`item_id` where `classjob_items`.`classjob_id` in ('2222')
+
+	// public function stats()
+	// {
+	// 	return $this->belongsToMany('Stat')->withPivot('amount', 'maximum');
+	// }
+
+	// public function jobs()
+	// {
+	// 	return $this->belongsToMany('Job');
+	// }
+
+	// public function recipes()
+	// {
+	// 	return $this->hasMany('Recipe');
+	// }
 
 	public function quest()
 	{
@@ -31,160 +62,165 @@ class Item extends Eloquent
 		return $this->hasMany('Leve');
 	}
 
-	public function nodes()
-	{
-		return $this->belongsToMany('GatheringNode')->orderBy('level');
-	}
+	// public function nodes()
+	// {
+	// 	return $this->belongsToMany('GatheringNode')->orderBy('level');
+	// }
 
-	public function vendors()
-	{
-		return $this->belongsToMany('Vendor');
-	}
+	// public function vendors()
+	// {
+	// 	return $this->belongsToMany('Vendor');
+	// }
 
-	public static function calculate($job = '', $level = 1, $craftable_only = TRUE, $rewardable_too = TRUE)
+	public static function calculate($job_id = 0, $level = 1, $range = 0, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
-		$cache_key = __METHOD__ . '|' . $job . $level . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');
-
+		$cache_key = __METHOD__ . '|' . $job_id . ',' . $level . ',' . $range . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');
+		
 		// Does cache exist?  Return that instead
 		if (Cache::has($cache_key))
 			return Cache::get($cache_key);
 
 		// Get the job IDs
-		$job = Job::where('abbreviation', $job)->first();
+		$job = ClassJob::with('abbr')->find($job_id);
 
-		$equipment_list = array();
+		$equipment_list = array_flip(Config::get('site.equipment_roles'));
+		array_walk($equipment_list, function(&$i) { $i = array(); });
+		
+		// Slot data
+		$slots = Config::get('site.defined_slots');
+		$slot_alias = Config::get('site.slot_alias');
+		$slot_cannot_equip = Config::get('site.slot_cannot_equip');
+		foreach ($slot_cannot_equip as &$sce)
+			foreach ($sce as &$ce)
+				$ce = $slots[$ce];
+		unset($sce, $ce);
 
-		// Make sure the pieces avoid pieces with certain stats
-		$stats_to_avoid = Stat::avoid($job->abbreviation);
+		// Make sure the slot avoids pieces with certain stats
+		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->abbr->term));
+		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
+		$boring_stat_ids = Stat::get_ids(Stat::boring());
 
-		DB::statement('SET SESSION group_concat_max_len=16384');
+		// Get all items where:
+		// Slot isn't zero
+		// It's between the level & level - 10
+		// The class can use it
+		// craftable only?
+		// rewardable?
 
-		foreach (Config::get('site.equipment_roles') as $role)
+		foreach ($slots as $slot_identifier => $slot_name)
 		{
-			$query = DB::table('items AS i')
-				->select(
-					'i.id', 'i.name', 'i.buy', 'i.level', 'i.ilvl', 'i.icon', 'i.cannot_equip', 'i.sub_role', 'i.rewarded',
-					DB::raw('GROUP_CONCAT(DISTINCT rj.abbreviation) AS crafted_by'), 
-					#####DB::raw('COUNT(iv.id) AS vendor_count'), 
-					DB::raw("(
-						SELECT
-							GROUP_CONCAT(DISTINCT CONCAT(v.name,'|',v.title,'|',IFNULL(vl.name, ''),'|',v.x,'|',v.y) ORDER BY vl.name SEPARATOR '***') AS vendors
-						FROM `item_vendor` AS `iv` 
-						JOIN `vendors` AS `v` ON `v`.`id` = `iv`.`vendor_id`
-						LEFT JOIN `locations` AS `vl` ON `vl`.`id` = `v`.`location_id`
-						WHERE `iv`.`item_id` = `i`.`id`
-					) AS vendors")
-				)
-				->join('item_job AS ij', 'ij.item_id', '=', 'i.id')
-				->join('jobs AS j', 'j.id', '=', 'ij.job_id')
-				->leftJoin('recipes AS r', 'i.id', '=', 'r.item_id')
-				->leftJoin('jobs AS rj', 'rj.id', '=', 'r.job_id')
-				#######->leftJoin('item_vendor AS iv', 'iv.item_id', '=', 'i.id')
-				//->where('j.id', $job->id)
-				->where(function($query) use ($job)
-				{
-					$query->where('j.id', $job->id);
-					
-					// If we're not talking crafting/gathering gear, include ALL
-					if ( ! in_array($job->disciple, array('DOH', 'DOL')))
-						$query->orWhere('j.abbreviation', 'ALL');
+			$query = Item::with('name', 'baseparam', 'baseparam.name', 'vendors', 'recipe', 'recipe.classjob', 'recipe.classjob.name')
+			//, 'vendors.npc', 'vendors.npc.name', 'vendors.npc.location', 'vendors.npc.location.name')
+				->where('slot', $slot_identifier)
+				->whereBetween('equip_level', array($level - 10, $level + $range))
+				->whereHas('classjob', function($query) use ($job_id) {
+					$query->where('classjob.id', $job_id);
 				})
-				->where(function($query) use ($role)
-				{
-					$query->where('i.role', $role)
-							->orWhere('i.sub_role', $role);
+				->whereHas('baseparam', function($query) use ($stat_ids_to_focus) {
+					$query->whereIn('baseparam.id', $stat_ids_to_focus);
 				})
-				// ->where('i.role', $role)
-				// ->orWhere('i.sub_role', $role)
-				->where('i.level', '<=' , $level)
-				->orderBy('i.ilvl', 'DESC')
-				->orderBy('i.level', 'DESC')
-				->groupBy('i.name', 'i.level'); // Fight off duplicates :(
+				->orderBy('items.equip_level', 'DESC')
+				->orderBy('items.level', 'DESC')
+				->limit(10);
 
 			if ($craftable_only && $rewardable_too)
-				$query->havingRaw('crafted_by IS NOT NULL OR rewarded = 1');
+				$query->where(function($query) {
+					$query
+						->whereHas('recipe', function($query) {
+							$query->where('recipes.item_id', DB::raw('items.id'));
+						})
+						->orWhere('items.achievable', '1')
+						->orWhere('items.rewarded', '1');
+				});
 			elseif ($craftable_only)
-				$query->havingRaw('crafted_by IS NOT NULL');
+				$query->whereHas('recipe', function($query) {
+					$query->where('recipes.item_id', DB::raw('items.id'));
+				});
 
-			$equipment_list[$role] = $query
-				->remember(Config::get('site.cache_length'))
-				->get();
+			$items = $query
+						//->remember(Config::get('site.cache_length'))
+						->get();
 
-			$list =& $equipment_list[$role];
+			$slot = isset($slot_alias[$slot_identifier]) ? $slot_alias[$slot_identifier] : $slot_identifier;
+			$role = $slots[$slot];
 
-			// Load the stats on each one
-			foreach ($list as $key => $item)
+			foreach ($items as $item)
 			{
-				$item->stats = DB::table('item_stat AS istat')
-					->select('s.name', 'istat.amount', 'istat.maximum')
-					->join('stats AS s', 's.id', '=', 'istat.stat_id')
-					->where('istat.item_id', $item->id)
-					->remember(Config::get('site.cache_length'))
-					->get();
-
-				$stats = array();
-				foreach ($item->stats as $stat)
-					$stats[$stat->name] = rtrim(rtrim(rtrim($stat->amount, '0'), '0'), '.');
-				$item->stats = $stats;
-
-				if (count(array_intersect(array_keys($item->stats), $stats_to_avoid)) > 0)
-					unset($list[$key]);
-
-				// Vendors
-				$item->vendor_count = 0;
+				// Kick it to the curb because of attributes?
+				// Compare the focused vs the avoids
+				$focus = $avoid = 0;
+				foreach ($item->baseparam as $param)
+					if (in_array($param->id, $stat_ids_to_avoid))
+						$avoid++;
+					elseif (in_array($param->id, $stat_ids_to_focus))
+						$focus++;
 				
-				if ($item->vendors)
-				{
-					$new_vendors = array();
-					foreach(explode('***', $item->vendors) as $vendor)
-					{
-						list($name, $title, $location, $x, $y) = explode('|', $vendor);
+				# echo '<strong>' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . ' (' . $focus . ',' . $avoid . ')<br>';
 
-						$new_vendors[$location ?: 'Unknown'][] = (object) array(
-							'name' => $name,
-							'title' => $title,
-							'x' => $x,
-							'y' => $y
-						);
+				if ($avoid >= $focus || $focus == 0)
+					continue;
+				
+				// Cannot equip attribute?
+				if (isset($slot_cannot_equip[$slot]))
+					$item->cannot_equip = $slot_cannot_equip[$slot];
 
-						$item->vendor_count++;
-					}
+				$equipment_list[$role][] = $item;
 
-					ksort($new_vendors);
-
-					$item->vendors = $new_vendors;
-				}
+				# echo '<strong>+ ' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . '<br>';
 			}
 
-			// Go through the list.
-			// If it's not the highest level, remove it
-			// Unless it's the very first item
-			// Then get the stats
-			$highest_level = 0;
-			foreach ($equipment_list[$role] as $item)
-				if ($item->ilvl > $highest_level)
-					$highest_level = $item->ilvl;
-
-			$i = 0;
-			foreach ($equipment_list[$role] as $key => $item)
-				if ($i++ != 0 && $item->ilvl != $highest_level)
-					unset($equipment_list[$role][$key]);
-
-			// Re-key the list
-			$list = array_values($list);
-
-			unset($list);
+			unset($items);
 		}
 
-		// Look for 2H items and add a cannot_equip to Off Hand
-		foreach ($equipment_list['Main Hand'] as $mh)
-			if (preg_match('/^Two-handed/', $mh->sub_role))
-				$mh->cannot_equip = 'Off-Hand';
+		$two_handed_weapon_ids = ItemUICategory::two_handed_weapon_ids();
+
+		$leveled_equipment = array();
+
+		// We now have a proper list, but now we need to widdle down further by ilvl
+		foreach (range($level, $level + $range) as $l)
+		{
+			$leveled_equipment[$l] = array();
+			foreach ($equipment_list as $role => $items)
+			{
+				$leveled_equipment[$l][$role] = array();
+
+				$max_equip_level = 0;
+
+				// Find max
+				foreach ($items as $item)
+					if ($item->equip_level <= $l && $item->equip_level > $max_equip_level)
+						$max_equip_level = $item->equip_level;
+
+				// Drop lesser items
+				// OR figure out cannot equip stuff for weapons
+				foreach ($items as $key => $item)
+					if ($item->equip_level == $max_equip_level)
+					{
+						if (empty($item->cannot_equip) && in_array($item->itemuicategory_id, $two_handed_weapon_ids))
+							$item->cannot_equip = array_flip(Config::get('site.defined_slots'))['Off Hand'];
+
+						if ( ! isset($leveled_equipment[$l][$role][$item->level]))
+							$leveled_equipment[$l][$role][$item->level] = array();
+
+						$leveled_equipment[$l][$role][$item->level][] = $item;
+					}
+
+				// Place highest ilvl first
+				krsort($leveled_equipment[$l][$role]);
+
+				// Re-key the list for good measure
+				//$items = array_values($items);
+
+				//$leveled_equipment[$l][$role] = $items;
+			}
+		}
+
+		// We should mostly have a list of just single items now
 
 		// Cache the results
-		Cache::put($cache_key, $equipment_list, Config::get('site.cache_length'));
+		Cache::put($cache_key, $leveled_equipment, Config::get('site.cache_length'));
 
-		return $equipment_list;
+		return $leveled_equipment;
 	}
 
 }

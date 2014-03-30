@@ -5,39 +5,34 @@ class LeveController extends BaseController
 
 	public function getIndex()
 	{
-		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
-	
 		return View::make('leves')
 			->with('active', 'leves')
-			->with('job_list', $job_list);
+			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 
 	public function postIndex()
 	{
 		// Parse the Job IDs
-		$job_ids = array();
-		foreach (Job::whereIn('abbreviation', Input::get('classes'))->get() as $j)
-			$job_ids[] = $j->id;
+		$selected_classes = Input::get('classes');
+		foreach (ClassJob::get_id_abbr_list() as $abbr => $id)
+			if (in_array($abbr, $selected_classes))
+				$job_ids[] = $id;
 
 		if (empty($job_ids))
 			$job_ids[] = 1;
 
 		// All Leves
 		$query = Leve::with(array(
-				'job', 'item', 'item.recipes', 
-				'major', 'minor', 'location'
+				'classjob', 'item', 'item.name', 'item.recipe',
 			))
 			->where('item_id', '>', 0) // Avoids mining/botany "bug"
-			->orderBy('job_id')
+			->orderBy('classjob_id')
 			->orderBy('level')
 			->orderBy('xp')
 			->orderBy('gil');
 
 		// Job IDs
-		$query->whereIn('job_id', $job_ids);
+		$query->whereIn('classjob_id', $job_ids);
 
 		// Level Range
 		$min = Input::get('min_level');
@@ -66,24 +61,25 @@ class LeveController extends BaseController
 
 		$rewards = LeveReward::with('item')
 			->whereBetween('level', array($min, $max))
-			->whereIn('job_id', $job_ids)
+			->whereIn('classjob_id', $job_ids)
 			->get();
 
 		$leve_rewards = array();
 
 		foreach ($leve_records as $k => $row)
 		{
-			if ($item_search && ! preg_match('/' . $item_search . '/', strtolower($row->item->name)))
+			if ($item_search && ! preg_match('/' . $item_search . '/', strtolower($row->item->name->term)))
 			{
 				unset($leve_records[$k]);
 				continue;
 			}
 			
+			// TODO this can be moved into the query itself now, most likely
 			if ($location_search)
 			{
 				if ( ! preg_match('/' . $location_search . '/', strtolower($row->location)) &&
-					 ! preg_match('/' . $location_search . '/', strtolower($row->major->name)) && 
-					 ! preg_match('/' . $location_search . '/', strtolower($row->minor->name))
+					 ! preg_match('/' . $location_search . '/', strtolower($row->major_location)) && 
+					 ! preg_match('/' . $location_search . '/', strtolower($row->minor_location))
 				)
 				{
 					unset($leve_records[$k]);
@@ -92,7 +88,7 @@ class LeveController extends BaseController
 			}
 
 			foreach($rewards as $reward)
-				if ($reward->job_id == $row->job_id && $reward->level == $row->level)
+				if ($reward->classjob_id == $row->classjob_id && $reward->level == $row->level)
 					$leve_rewards[$row->id][] = $reward;
 		}
 		
@@ -108,7 +104,7 @@ class LeveController extends BaseController
 
 		// Get other Leve's at this level
 		$other_leves = Leve::where('level', $leve->level)
-			->where('job_id', $leve->job_id)
+			->where('classjob_id', $leve->classjob_id)
 			->where('id', '!=', $leve->id)
 			->get();
 
@@ -122,7 +118,7 @@ class LeveController extends BaseController
 
 	private function _breakdown($leve_id = 0)
 	{
-		$leve = Leve::with('item')->find($leve_id);
+		$leve = Leve::with('item', 'item.name')->find($leve_id);
 		$experience = Experience::whereBetween('level', array($leve->level, $leve->level + 9))->get();
 		
 		$xp_rewarded = $leve->xp * 2; // 2.1 patch changed it from 200% to 100% bonus

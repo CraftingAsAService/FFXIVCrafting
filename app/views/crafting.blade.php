@@ -89,6 +89,21 @@
 					</span>
 				</div>
 			</div>
+
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Misc Items</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
+						<input type='checkbox' name='misc_items' id='misc_items_switch' value='1'>
+					</div>
+					<span class='mi_yes hidden'>
+						"Include housing and dye items"
+					</span>
+					<span class='mi_no'>
+						"Do not include housing and dye items"
+					</span>
+				</div>
+			</div>
 		</fieldset>
 		<fieldset>
 			<div class='form-group'>

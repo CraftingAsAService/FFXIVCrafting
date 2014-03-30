@@ -1,3 +1,5 @@
+@import 'sprites';
+
 $tablet_viewport: 768px;
 $desktop_viewport: 992px;
 $large_viewport: 1200px;
@@ -462,6 +464,11 @@ $gear_warning_accent: #a46868;
 		}
 	}
 
+	.crafted_by {
+		position: relative;
+		top: 5px;
+	}
+		
 	.name-box {
 		display: table-cell;
 		height: 50px;
@@ -525,7 +532,7 @@ $gear_warning_accent: #a46868;
 		}
 
 		.main-icon {
-			width: 20px; height: 20px;
+			width: 30px; height: 30px;
 		}
 		.upgrade {
 			.main-icon {
@@ -763,4 +770,61 @@ $gear_warning_accent: #a46868;
 		width: 24px;
 		height: 24px;
 	}
+}
+
+.globe {
+	position: relative;
+	cursor: move;
+	height: 512px;
+	overflow: hidden;
+	padding: 0;
+	max-width: 1000px;
+	border: 1px solid black;
+	background-color: #E6D6AC;
+
+	.area {
+		position: absolute;
+		width: 1000px;
+		img {
+			width: 1000px;
+		}
+	}
+
+	img {
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-o-user-select: none;
+		user-select: none;
+	}
+
+	.region {
+		position: absolute;
+	}
+}
+
+.color-square {
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+}
+
+.vendors, .clusters {
+	cursor: pointer;
+}
+
+ul.plain {
+	list-style-type: none;
+	margin-left: 0;
+}
+
+.mob-icon {
+	cursor: pointer;
+	border-radius: 2px;
+	position: relative;
+	top: -6px;
+}
+
+.crafted_gathered {
+	padding-top: 16px !important;
 }

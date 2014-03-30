@@ -5,12 +5,9 @@ class QuestsController extends BaseController
 
 	public function getIndex()
 	{
-		// All Jobs
-		$job_list = Job::all()->lists('name', 'abbreviation');
-
 		// All Quests
-		$quest_records = QuestItem::with('job', 'item', 'item.recipes')
-			->orderBy('job_id')
+		$quest_records = QuestItem::with('classjob', 'classjob.abbr', 'item', 'item.name', 'item.recipe')
+			->orderBy('classjob_id')
 			->orderBy('level')
 			->orderBy('item_id')
 			->get();
@@ -18,25 +15,25 @@ class QuestsController extends BaseController
 		$quests = array();	
 		foreach($quest_records as $quest)
 		{
-			if ( ! isset($quests[$quest->job->abbreviation]))
-				$quests[$quest->job->abbreviation] = array();
+			if ( ! isset($quests[$quest->classjob->abbr->term]))
+				$quests[$quest->classjob->abbr->term] = array();
 
-			if (empty($quest->item->recipes))
+			if (empty($quest->item->recipe))
 			{
 				var_dump($quest);
 				exit;
 			}
-			foreach ($quest->item->recipes as $r)
-				if ($r->job_id == $quest->job_id)
+			foreach ($quest->item->recipe as $r)
+				if ($r->classjob_id == $quest->classjob_id)
 					$quest->recipe = $r;
 
-			$quests[$quest->job->abbreviation][] = $quest;
+			$quests[$quest->classjob->abbr->term][] = $quest;
 		}
 
 		return View::make('quests')
 			->with('active', 'quests')
 			->with('quests', $quests)
-			->with('job_list', $job_list);
+			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 
 }

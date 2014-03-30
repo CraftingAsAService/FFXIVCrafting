@@ -51,7 +51,7 @@
 			<tr>
 				<td class='text-right valign'>{{ $name }} Materia</td>
 				<td class='valign'>
-					<img src='/img/stats/{{ $materia['stat'] }}.png' class='stat-icon'>
+					<img src='/img/stats/nq/{{ $materia['stat'] }}.png' class='stat-icon'>
 					{{ $materia['stat'] }}
 				</td>
 				@foreach(array('I', 'II', 'III', 'IV') as $power)
@@ -59,7 +59,7 @@
 				<td class='valign text-center materia-value'>
 					<a href='http://xivdb.com/?item/{{ $materia['power'][$power]['id'] }}' target='_blank'>
 						{{ number_format($materia['power'][$power]['amount']) }}
-						<img src='/img/items/{{ $materia['power'][$power]['icon'] }}.png'>
+						<img src='/img/items/nq/{{ $materia['power'][$power]['id'] }}.png'>
 					</a>
 				</td>
 				@endforeach

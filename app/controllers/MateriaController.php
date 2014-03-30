@@ -1,12 +1,13 @@
 <?php
 
-class MateriaController extends BaseController {
+class MateriaController extends BaseController
+{
 
 	public function getIndex()
 	{
 		// Items that are Materia
-		$results = Item::with('stats')
-			->where('sub_role', 'materia')
+		$results = Item::with('name', 'en_name', 'baseparam', 'baseparam.name')
+			->where('itemcategory_id', 13)
 			->orderBy('id')
 			->get();
 
@@ -14,29 +15,21 @@ class MateriaController extends BaseController {
 		$materia = array();
 		foreach ($results as $row)
 		{
-			$stat = $row->stats->first();
-
-			if ( ! $stat) 
-				continue;
-
-			preg_match('/^(.*)\sMateria\s(.*)$/', $row->name, $matches);
+			preg_match('/^(.*)\sMateria\s(.*)$/', $row->en_name->term, $matches);
 			
 			list($ignore, $name, $power) = $matches;
 
 			if ( ! isset($materia[$name]))
 				$materia[$name] = array(
-					'stat' => $stat->name,
+					'stat' => $row->baseparam[0]->name->term,
 					'power' => array()
 				);
 
 			$materia[$name]['power'][$power] = array(
 				'id' => $row->id,
-				'icon' => $row->icon,
-				'amount' => $stat->pivot->amount
+				'amount' => $row->baseparam[0]->pivot->nq_amount
 			);
 		}
-
-		// dd($materia);
 
 		// Let's move a few up front
 		// First, Crafters, then Gatherers, then the rest (Battling)
@@ -45,4 +38,5 @@ class MateriaController extends BaseController {
 			->with('active', 'materia')
 			->with('materia_list', $materia);
 	}
+
 }

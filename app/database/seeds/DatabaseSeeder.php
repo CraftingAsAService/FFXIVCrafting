@@ -5,68 +5,167 @@ class DatabaseSeeder extends Seeder
 
 	public function run()
 	{
+		$start = new DateTime('now');
+		
 		Eloquent::unguard();
 
 		// Don't bother logging queries
 		DB::connection()->disableQueryLog();
 
-		echo "\n" . '** Jobs Table **' . "\n";
-		$this->call('JobTableSeeder');
+		echo "\n" . '** Initializing Translations **' . "\n";
+		TranslationsMapper::init();
 
-		// Call has it's own echos
+		echo "\n" . '** Race **' . "\n";
+		$this->call('RaceSeeder');
+		echo "\n" . '** RecipeElement **' . "\n";
+		$this->call('RecipeElementSeeder');
+		echo "\n" . '** NotebookDivision **' . "\n";
+		$this->call('NotebookDivisionSeeder');
+		echo "\n" . '** GuardianDeity **' . "\n";
+		$this->call('GuardianDeitySeeder');
+		echo "\n" . '** ClassJob **' . "\n";
+		$this->call('ClassJobSeeder');
+		echo "\n" . '** ClassJobCategory **' . "\n";
+		$this->call('ClassJobCategorySeeder');
+		echo "\n" . '** PlaceName **' . "\n";
+		$this->call('PlaceNameSeeder');
+		echo "\n" . '** ItemUIKind **' . "\n";
+		$this->call('ItemUIKindSeeder');
+		echo "\n" . '** ItemUICategory **' . "\n";
+		$this->call('ItemUICategorySeeder');
+		echo "\n" . '** ItemCategory **' . "\n";
+		$this->call('ItemCategorySeeder');
+		echo "\n" . '** ItemSeries **' . "\n";
+		$this->call('ItemSeriesSeeder');
+		echo "\n" . '** ItemSpecialBonus **' . "\n";
+		$this->call('ItemSpecialBonusSeeder');
+		echo "\n" . '** BaseParam **' . "\n";
+		$this->call('BaseParamSeeder');
+		echo "\n" . '** Item **' . "\n";
+		$this->call('ItemSeeder');
+		echo "\n" . '** BNpcName **' . "\n";
+		$this->call('BNpcNameSeeder');
+		echo "\n" . '** ENpcResident **' . "\n";
+		$this->call('ENpcResidentSeeder');
+		echo "\n" . '** Shop **' . "\n";
+		$this->call('ShopSeeder');
+		echo "\n" . '** Recipe **' . "\n";
+		$this->call('RecipeSeeder');
+		echo "\n" . '** Experience **' . "\n";
+		$this->call('XPSeeder');
+		echo "\n" . '** Careers **' . "\n";
 		$this->call('CareerSeeder');
+		echo "\n" . '** Clusters **' . "\n";
+		$this->call('ClusterSeeder');
 
-		// Call has it's own echos
-		$this->call('ItemTablesSeeder');
+		// Setting translations early as Leves and Quests need that data
+		echo "\n" . '** Setting Translations **' . "\n";
+		TranslationsMapper::set();
 
-		echo "\n" . '** Recipe Table **' . "\n";
-		$this->call('RecipeTablesSeeder');
-
-		echo "\n" . '** Quests Table **' . "\n";
+		echo "\n" . '** Crafting Quests **' . "\n";
 		$this->call('QuestSeeder');
-
-		echo "\n" . '** Leve Table **' . "\n";
+		echo "\n" . '** Crafting Leves **' . "\n";
 		$this->call('LeveSeeder');
 
-		echo "\n" . '** XP Table **' . "\n";
-		$this->call('XPSeeder');
+		echo "\n" . 'Time Elapsed: ' . $start->diff(new DateTime('now'))->format('%I:%S') . "\n";
 
-		echo "\n";
+		return;
 	}
 
 }
 
-class _CommonSeeder extends Seeder
+// Useful SQL
+
+// select bp.id, t_en.term from baseparam as bp join translations as t_en on t_en.id = bp.name_en
+
+
+class _LibraSeeder extends Seeder
 {
 
-	public $batch_limit = 300;
-
-	public
-		$jobs = array(),
-		$job_names = array();
-
-	public function __construct()
+	public function get_json($filename = '', $directory = 'libra-data')
 	{
-		//parent::__construct();
-
-		foreach (Job::all() as $job)
-			$this->jobs[$job->abbreviation] = $this->job_names[$job->name] = $job->id;
+		return json_decode(file_get_contents(storage_path() . '/' . $directory . '/' . $filename . '.json'), TRUE); // Decode to Array instead of Object
 	}
 
-	public function _batch_insert($original_data = array(), $table = '')
+	public function common_run($table_name = '', $data = array())
+	{
+		$batch = array();
+
+		foreach ($data as $row)
+			$batch[] = array(
+				'id' => $row['id'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de'])
+			);
+
+		$batch = Batch::insert($batch, $table_name);
+	}
+
+}
+
+class TranslationsMapper extends _LibraSeeder
+{
+	private static $t = array(),
+					$new = array(),
+					$id = 0;
+
+	public static function init()
+	{
+		// Load all existing translations, put them in array
+		// Term is the 'key', id is the value
+		self::$t = DB::table('translations')->lists('id', 'term');
+		self::$id = (count(self::$t) ? max(self::$t) : 0) + 1;
+	}
+
+	// Receive a term, return an id
+	public static function get($term)
+	{
+		// If the term starts with a digit...
+		if (preg_match('/^\d/', $term))
+			$term = '\x20' . $term; // Add a space to the beginning
+
+		if ( ! in_array($term, array_keys(self::$t)))
+		{
+			self::$new[$term] = ++self::$id;
+			self::$t[$term] = self::$id;
+		}
+
+		return self::$t[$term];
+	}
+
+	// set the new ones
+	public static function set()
+	{
+		$batch = array();
+		foreach (self::$new as $term => $id)
+			$batch[] = array(
+				'id' => $id,
+				'term' => $term
+			);
+
+		$batch = Batch::insert($batch, 'translations');
+	}
+
+}
+
+class Batch extends Seeder
+{
+	public static $batch_limit = 300;
+
+	public static function insert($original_data = array(), $table = '', $tsv = FALSE)
 	{
 		$count = 0;
 
-		if ( ! $table)
+		if ( ! $table || empty($original_data))
 			return array();
 
-		// $bl = $this->batch_limit;
-
-		// if ($table == 'vendors')
-		// 	$bl = 1;
+		if ($tsv)
+			$original_data = explode("\n", $original_data);
 
 		// foreach(array_chunk($original_data, $bl) as $data)
-		foreach(array_chunk($original_data, $this->batch_limit) as $data)
+		foreach(array_chunk($original_data, self::$batch_limit) as $data)
 		{
 			$count++;
 
@@ -77,6 +176,9 @@ class _CommonSeeder extends Seeder
 			$values = $pdo = array();
 			foreach ($data as $row)
 			{
+				if ($tsv)
+					$row = explode("\t", $row);
+
 				$values[] = '(' . str_pad('', count($row) * 2 - 1, '?,') . ')';
 				
 				// Cleanup value, if FALSE set to NULL
@@ -88,357 +190,744 @@ class _CommonSeeder extends Seeder
 			#file_put_contents('app/storage/logs/query-' . $count . '-statement.txt', 'INSERT INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values));
 			#file_put_contents('app/storage/logs/query-' . $count . '-pdo.txt', json_encode($pdo)); 
 
-			DB::insert('INSERT IGNORE INTO ' . $table . ' (`' . implode('`,`', array_keys($data[0])) . '`) VALUES ' . implode(',', $values), $pdo);
+			$keys = $tsv ? '' : ' (`' . implode('`,`', array_keys($data[0])) . '`)';
+
+			DB::insert('INSERT IGNORE INTO ' . $table . $keys . ' VALUES ' . implode(',', $values), $pdo);
 		}
+	
+		echo "\n";
+
+		return array();
 	}
+
 }
 
-class JobTableSeeder extends _CommonSeeder
+class ClassJobSeeder extends _LibraSeeder
 {
 
 	public function run()
 	{
-		$jobs = array(
-			'DOH' => array(
-				'BSM' => 'Blacksmith',
-				'GSM' => 'Goldsmith',
-				'ARM' => 'Armorer',
-				'CRP' => 'Carpenter',
-				'LTW' => 'Leatherworker',
-				'WVR' => 'Weaver',
-				'ALC' => 'Alchemist',
-				'CUL' => 'Culinarian',
-			),
+		$batch = array();
 
-			'DOL' => array(
-				'FSH' => 'Fisher',
-				'BTN' => 'Botanist',
-				'MIN' => 'Miner',
-			),
+		$data = $this->get_json('ClassJob')['data'];
 
-			'DOW' => array(
-				'GLA' => 'Gladiator',
-				'PGL' => 'Pugilist',
-				'MRD' => 'Marauder',
-				'LNC' => 'Lancer',
-				'ARC' => 'Archer',
+		foreach ($data as $row)
+			$batch[] = array(
+				'id' => $row['id'],
+				'is_job' => $row['is_job'],
+				'rank' => $row['rank'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+				'abbr_en' => TranslationsMapper::get($row['abbr']['en']),
+				'abbr_ja' => TranslationsMapper::get($row['abbr']['ja']),
+				'abbr_fr' => TranslationsMapper::get($row['abbr']['fr']),
+				'abbr_de' => TranslationsMapper::get($row['abbr']['de']),
+			);
 
-				'MNK' => 'Monk',
-				'PLD' => 'Paladin',
-				'WAR' => 'Warrior',
-				'DRG' => 'Dragoon',
-				'BRD' => 'Bard',
-			),
+		$batch = Batch::insert($batch, 'classjob');
+	}
 
-			'DOM' => array(
-				'CNJ' => 'Conjurer',
-				'THM' => 'Thaumaturge',
-				'ACN' => 'Arcanist',
+}
 
-				'SCH' => 'Scholar',
-				'SMN' => 'Summoner',
-				'BLM' => 'Black Mage',
-				'WHM' => 'White Mage',
-			),
+class ClassJobCategorySeeder extends _LibraSeeder
+{
+	
+	public function run()
+	{
+		// Will handle both classjob_category and classjob_classjob_category
+		$cjc_batch = $cjcjc_batch = array();
 
-			'ALL' => array(
-				'ALL' => 'All',
-			)
+		$data = $this->get_json('ClassJobCategory')['data'];
 
+		foreach ($data as $row)
+		{
+			$cjc_batch[] = array(
+				'id' => $row['id'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+			);
+
+			foreach (explode(',', $row['classjob']) as $cj_id)
+				$cjcjc_batch[] = array(
+					'classjob_id' => $cj_id,
+					'classjob_category_id' => $row['id']
+				);
+		}
+
+		$cjc_batch = Batch::insert($cjc_batch, 'classjob_category');
+		$cjcjc_batch = Batch::insert($cjcjc_batch, 'classjob_classjob_category');
+	}
+
+}
+
+class PlaceNameSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$batch = array();
+
+		$data = $this->get_json('PlaceName')['data'];
+
+		foreach ($data as $row)
+			$batch[] = array(
+				'id' => $row['id'],
+				'region' => $row['region'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+			);
+
+		$batch = Batch::insert($batch, 'place_name');
+	}
+
+}
+
+class ItemUIKindSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('item_ui_kind', $this->get_json('ItemUIKind')['data']);
+	}
+
+}
+
+class ItemUICategorySeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$batch = array();
+
+		$data = $this->get_json('ItemUICategory')['data'];
+
+		foreach ($data as $row)
+			$batch[] = array(
+				'id' => $row['id'],
+				'itemuikind_id' => $row['kind'],
+				'rank' => $row['rank'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+			);
+
+		$batch = Batch::insert($batch, 'item_ui_category');
+	}
+
+}
+
+class ItemCategorySeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('item_category', $this->get_json('ItemCategory')['data']);
+	}
+
+}
+
+class ItemSeriesSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('item_series', $this->get_json('ItemSeries')['data']);
+	}
+
+}
+
+class ItemSpecialBonusSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('item_special_bonus', $this->get_json('ItemSpecialBonus')['data']);
+	}
+
+}
+
+class BaseParamSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('baseparam', $this->get_json('BaseParam')['data']);
+	}
+
+}
+
+class ItemSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$i_batch = $bpi_batch = $cji_batch = array();
+
+		$data = $this->get_json('Item')['data'];
+
+		// Reset icons file
+		$icons_file = storage_path() . '/libra-data/icons.txt';
+		file_put_contents($icons_file, '');
+
+		// Manual transition for stat names
+		$stat_names = array(
+			'damage' => 'Physical Damage',
+			'magic_damage' => 'Magic Damage',
+			'defense' => 'Defense',
+			'magic_defense' => 'Magic Defense',
+			'shield_rate' => 'Block Rate',
+			'shield_block_rate' => 'Block Strength',
+			'attack_interval' => 'Attack Speed',
+			'auto_attack' => 'Attack Power',
 		);
 
-		$batch_jobs = array();
+		// Items is a very long process
+		// Display that progress
+		$i = 0;
 
-		foreach ($jobs as $disciple => $classes)
-			foreach ($classes as $abbr => $job)
-				$batch_jobs[] = array(
-					'abbreviation' => $abbr,
-					'name' => $job,
-					'disciple' => $disciple
-				);
-
-		$this->_batch_insert($batch_jobs, 'jobs');
-		unset($batch_jobs);
-	}
-	
-}
-
-class CareerSeeder extends _CommonSeeder
-{
-
-	public function run()
-	{
-		// Careers
-		echo "\n" . '* Careers *' . "\n";
-		$careers = json_decode(file_get_contents(storage_path() . '/seed-data/careers.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($careers, 'careers');
-		unset($careers);
-
-		// Career Job
-		echo "\n" . '* Career Jobs *' . "\n";
-		$career_job = json_decode(file_get_contents(storage_path() . '/seed-data/career_job.json'), TRUE); // Decode to Array instead of Object
-		foreach ($career_job as &$cj)
+		foreach ($data as $k => $row)
 		{
-			$cj['job_id'] = $this->job_names[$cj['class']];
-			unset($cj['class']);
-		}
-		$this->_batch_insert($career_job, 'career_job');
-		unset($career_job);
-	}
+			// Memory cleanup, we don't need this entry anymore in $data
+			unset($data[$k]);
 
-}
+			if ($i++ % 20 == 0)
+				echo 'i';
+			// We don't need to worry about \n's, because we're inserting every 900
 
-class ItemTablesSeeder extends _CommonSeeder
-{
+			$tmp = array(
+				'id' => $row['id'],
+				'itemcategory_id' => $row['category'],
+				'itemuicategory_id' => $row['ui_category'],
+				'classjobcategory_id' => isset($row['extra']['classjob_category']) ? $row['extra']['classjob_category'] : null,
+				'name_en' => TranslationsMapper::get($row['ui_name']['en']),
+				'name_ja' => TranslationsMapper::get($row['ui_name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['ui_name']['fr']),
+				'name_de' => TranslationsMapper::get($row['ui_name']['de']),
+				'level' => $row['level'],
+				'equip_level' => $row['equip_level'],
+				'rarity' => $row['rarity'],
+				'has_hq' => $row['hq'],
+				'itemseries_id' => $row['series'],
+				'itemspecialbonus_id' => $row['special_bonus'],
+				'slot' => $row['slot'],
+				'min_price' => isset($row['price']) && isset($row['price']['min']) ? $row['price']['min'] : null,
+				'max_price' => isset($row['price']) && isset($row['price']['max']) ? $row['price']['max'] : null,
+				'untradable' => isset($row['extra']['untradable']) ? $row['extra']['untradable'] : null,
+				'unique' => isset($row['extra']['unique']) ? $row['extra']['unique'] : null,
+				'achievable' => isset($row['extra']['achievable']) ? $row['extra']['achievable'] : null,
+				'rewarded' => isset($row['extra']['rewarded']) ? $row['extra']['rewarded'] : null,
+				'color' => isset($row['extra']['color']) ? $row['extra']['color'] : null,
+				'materia' => isset($row['extra']['materia']) ? $row['extra']['materia'] : null,
+				'rank' => $row['rank'],
+			);
 	
-	public function run()
-	{
-		// Import item files
-		echo "\n" . '* Items *' . "\n";
-		$items = json_decode(file_get_contents(storage_path() . '/seed-data/items.json'), TRUE);
-		
-		$item_job = array();
-		foreach ($items as &$item)
-		{
-			//"requires":["GLA","PLD"]
-			foreach ($item['requires'] as $k => $r)
-				if ($r == 'DOW')
-				{
-					array_push($item['requires'], 'GLA','PGL','MRD','LNC','ARC','MNK','PLD','WAR','DRG','BRD');
-					unset($item['requires'][$k]);
-				}
-				elseif ($r == 'DOM')
-				{
-					array_push($item['requires'], 'CNJ','THM','ACN','SCH','SMN','BLM','WHM');
-					unset($item['requires'][$k]);
-				}
-				elseif ($r == 'DOH')
-				{
-					array_push($item['requires'], 'BSM','GSM','ARM','CRP','LTW','WVR','ALC','CUL');
-					unset($item['requires'][$k]);
-				}
-				elseif ($r == 'DOL')
-				{
-					array_push($item['requires'], 'FSH','BTN','MIN');
-					unset($item['requires'][$k]);
-				}
-			
-			foreach ($item['requires'] as $r)
-				if ($r)
-					$item_job[] = array(
-						'item_id' => $item['id'],
-						'job_id' => $this->jobs[$r]
+			// Class Job Items
+			if ($row['classjob'])
+				foreach (explode(',', $row['classjob']) as $cj_id)
+					$cji_batch[] = array(
+						'item_id' => $row['id'],
+						'classjob_id' => $cj_id
 					);
 
-			unset($item['requires']);
+			// Icons
+			if ($row['icon']['nq'])
+				file_put_contents($icons_file, $row['id'] . "\tnq\t" . $row['icon']['nq'] . "\n", FILE_APPEND);
+			if ($row['icon']['hq'])
+				file_put_contents($icons_file, $row['id'] . "\thq\t" . $row['icon']['hq'] . "\n", FILE_APPEND);
+
+			// Stats
+			foreach ($row['stats']['nq'] as $name => $value)
+			{
+				$nq_val = $value;
+				$hq_val = $row['stats']['hq'][$name];
+
+				if ($nq_val == 0 && $hq_val == 0)
+					continue;
+
+				$bpi_batch[] = array(
+					'item_id' => $row['id'],
+					'baseparam_id' => TranslationsMapper::get($stat_names[$name]),
+					'nq_amount' => $nq_val == 0 ? null : $nq_val,
+					'hq_amount' => $hq_val == 0 ? null : $hq_val,
+					'nq_limit' => null,
+					'hq_limit' => null,
+					'bonus' => null
+				);
+			}
+
+			if (isset($row['extra']['stats']))
+				foreach ($row['extra']['stats'] as $baseparam_id => $stat)
+				{
+					$nq_val = isset($stat['nq']) ? $stat['nq'] : 0;
+					$hq_val = isset($stat['hq']) ? $stat['hq'] : 0;
+
+					if ($nq_val == 0 && $hq_val == 0)
+						continue;
+
+					$bpi_batch[] = array(
+						'item_id' => $row['id'],
+						'baseparam_id' => $baseparam_id,
+						'nq_amount' => $nq_val == 0 ? null : $nq_val,
+						'hq_amount' => $hq_val == 0 ? null : $hq_val,
+						'nq_limit' => null,
+						'hq_limit' => null,
+						'bonus' => null
+					);
+				}
+
+			if (isset($row['extra']['bonus_stats']))
+				foreach ($row['extra']['bonus_stats'] as $ignore => $bonus)
+					foreach ($bonus as $baseparam_id => $value)
+						$bpi_batch[] = array(
+							'item_id' => $row['id'],
+							'baseparam_id' => $baseparam_id,
+							'nq_amount' => $value,
+							'hq_amount' => 0,
+							'nq_limit' => null,
+							'hq_limit' => null,
+							'bonus' => 1
+						);
+
+			if (isset($row['extra']['boost']))
+				foreach ($row['extra']['boost'] as $baseparam_id => $boost)
+					if ( ! is_array($boost))
+						$bpi_batch[] = array(
+							'item_id' => $row['id'],
+							'baseparam_id' => $baseparam_id,
+							'nq_amount' => $boost,
+							'hq_amount' => null,
+							'nq_limit' => null,
+							'hq_limit' => null,
+							'bonus' => null
+						);
+					else
+					{
+						if (isset($boost['nq']['rate']))
+							$bpi_batch[] = array(
+								'item_id' => $row['id'],
+								'baseparam_id' => $baseparam_id,
+								'nq_amount' => $boost['nq']['rate'],
+								'hq_amount' => isset($boost['hq']) ? $boost['hq']['rate'] : null,
+								'nq_limit' => $boost['nq']['limit'],
+								'hq_limit' => isset($boost['hq']) ? $boost['hq']['limit'] : null,
+								'bonus' => null
+							);
+						else
+							$bpi_batch[] = array(
+								'item_id' => $row['id'],
+								'baseparam_id' => $baseparam_id,
+								'nq_amount' => $boost['nq'][0],
+								'hq_amount' => isset($boost['hq']) ? $boost['hq'][0] : null,
+								'nq_limit' => null,
+								'hq_limit' => null,
+								'bonus' => null
+							);
+					}
+
+			$i_batch[] = $tmp;
+
+			// Due to memory issues, insert every 1000
+			if (count($i_batch) >= 600)
+				$i_batch = Batch::insert($i_batch, 'items');
+
+			// Again, memory issues, but to a lesser extent
+			if (count($bpi_batch) > 3000)
+				$bpi_batch = Batch::insert($bpi_batch, 'baseparam_items');
+			if (count($cji_batch) > 3000)
+				$cji_batch = Batch::insert($cji_batch, 'classjob_items');
 		}
+
+		// Catch any stragglers
+		$i_batch = Batch::insert($i_batch, 'items');
+		$bpi_batch = Batch::insert($bpi_batch, 'baseparam_items');
+		$cji_batch = Batch::insert($cji_batch, 'classjob_items');
 		
-		$this->_batch_insert($items, 'items');
-		unset($items);
-
-		// Item Jobs
-		echo "\n" . '* Item Job *' . "\n";
-		$this->_batch_insert($item_job, 'item_job');
-		unset($item_job);
-
-		// Vendors
-		echo "\n" . '* Vendors *' . "\n";
-		$vendors = json_decode(file_get_contents(storage_path() . '/seed-data/vendors.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($vendors, 'vendors');
-		unset($vendors);
-
-		// Item Vendor
-		echo "\n" . '* Item Vendor *' . "\n";
-		$item_vendor = json_decode(file_get_contents(storage_path() . '/seed-data/item_vendor.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($item_vendor, 'item_vendor');
-		unset($item_vendor);
-
-		// Stats
-		echo "\n" . '* Stats *' . "\n";
-		$stats = json_decode(file_get_contents(storage_path() . '/seed-data/stats.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($stats, 'stats');
-		unset($stats);
-
-		// Item Stat
-		echo "\n" . '* Item Stat *' . "\n";
-		$item_stat = json_decode(file_get_contents(storage_path() . '/seed-data/item_stat.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($item_stat, 'item_stat');
-		unset($item_stat);
-
-		// Locations
-		echo "\n" . '* Locations *' . "\n";
-		$locations = json_decode(file_get_contents(storage_path() . '/seed-data/locations.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($locations, 'locations');
-		unset($locations);
-
-		// Gathering Nodes
-		echo "\n" . '* Gathering Nodes *' . "\n";
-		$gathering_nodes = json_decode(file_get_contents(storage_path() . '/seed-data/gathering_nodes.json'), TRUE); // Decode to Array instead of Object
-		foreach ($gathering_nodes as &$node)
-		{
-			$node['job_id'] = $this->jobs[$node['class']];
-			unset($node['class']);
-		}
-		$this->_batch_insert($gathering_nodes, 'gathering_nodes');
-		unset($gathering_nodes);
-
-		// Gathering Node Items
-		echo "\n" . '* Gathering Node Item *' . "\n";
-		$gathering_node_item = json_decode(file_get_contents(storage_path() . '/seed-data/gathering_node_item.json'), TRUE); // Decode to Array instead of Object
-		$this->_batch_insert($gathering_node_item, 'gathering_node_item');
-		unset($gathering_node_item);
 	}
 
 }
 
-class RecipeTablesSeeder extends _CommonSeeder
+class RaceSeeder extends _LibraSeeder
 {
+
 	public function run()
 	{
-		// Import recipes
-		$recipes = json_decode(file_get_contents(storage_path() . '/seed-data/recipes.json'), TRUE);
-
-		foreach ($recipes as &$recipe)
-		{
-			// Transalte class
-			$recipe['job_id'] = $this->job_names[$recipe['class']];
-			unset($recipe['class']);
-		}
-
-		$this->_batch_insert($recipes, 'recipes');
-		unset($recipes);
-
-		// Recipe Reagents
-		$item_recipe = json_decode(file_get_contents(storage_path() . '/seed-data/item_recipe.json'), TRUE);
-		$this->_batch_insert($item_recipe, 'item_recipe');
-		unset($item_recipe);
+		$this->common_run('races', $this->get_json('Race')['data']);
 	}
 
 }
 
-class QuestSeeder extends _CommonSeeder
+class BNpcNameSeeder extends _LibraSeeder
 {
 
 	public function run()
 	{
+		$npc_batch = $drop_batch = $loc_batch = array();
+
+		$data = $this->get_json('BNpcName')['data'];
+
+		foreach ($data as $row)
+		{
+			$npc_batch[] = array(
+				'id' => $row['id'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+				'genus' => 'beast'
+			);
+
+			// Drops
+			if (isset($row['extra']['drops']))
+				foreach ($row['extra']['drops'] as $item_id)
+					$drop_batch[] = array(
+						'npcs_id' => $row['id'],
+						'item_id' => $item_id
+					);
+
+			// Locations & Levels
+			if (isset($row['extra']['location']))
+				foreach ($row['extra']['location'] as $region => $areas)
+					foreach ($areas as $area => $levels)
+						foreach ($levels as $level_range)
+							$loc_batch[] = array(
+								'npcs_id' => $row['id'],
+								'placename_id' => rtrim($area, '*'),
+								'x' => null,
+								'y' => null,
+								'levels' => $level_range,
+								'triggered' => preg_match('/\*/', $area) ? 1 : 0
+							);
+		}
+
+		$npc_batch = Batch::insert($npc_batch, 'npcs');
+		$drop_batch = Batch::insert($drop_batch, 'npcs_items');
+		$loc_batch = Batch::insert($loc_batch, 'npcs_place_name');
+
+		// echo "\n" . '** Setting Translations **' . "\n";
+		// TranslationsMapper::set();
+		// exit;
+	}
+
+}
+
+class ENpcResidentSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$npc_batch = $loc_batch = $shop_batch = $si_batch = array();
+
+		$data = $this->get_json('ENpcResident')['data'];
+
+		$i = 0;
+
+		foreach ($data as $row)
+		{
+			// Not interested in non-shop npcs
+			if ( ! isset($row['has_shop']) || $row['has_shop'] != '1')
+				continue;
+
+			$npc_batch[] = array(
+				'id' => $row['id'],
+				'name_en' => TranslationsMapper::get($row['name']['en']),
+				'name_ja' => TranslationsMapper::get($row['name']['ja']),
+				'name_fr' => TranslationsMapper::get($row['name']['fr']),
+				'name_de' => TranslationsMapper::get($row['name']['de']),
+				'genus' => 'shop'
+			);
+
+			// Location
+			$x = $y = null;
+			if (isset($row['extra']['coords']))
+				// Only grabbing first coord entry, I don't think there's more than one
+				list($x, $y) = explode(',', $row['extra']['coords'][0]);
+			
+			$loc_batch[] = array(
+				'npcs_id' => $row['id'],
+				'placename_id' => $row['area'],
+				'x' => $x,
+				'y' => $y,
+				'levels' => null,
+				'triggered' => 0
+			);
+
+			// Shops and Items
+			if (isset($row['extra']['shop']))
+				foreach ($row['extra']['shop'] as $shop_id => $inventory)
+				{
+					// Inserting now to get the resulted ID
+					echo 'n'; if ($i++ % 46 == 0) echo "\n";
+					$npcs_shop_id = DB::table('npcs_shops')->insertGetId(
+						array(
+							'npcs_id' => $row['id'],
+							'shop_id' => $shop_id
+						)
+					);
+
+					// TODO? Idea: store color as R G B in three different tinyint columns
+
+					foreach ($inventory as $item_id => $color)
+						$si_batch[] = array(
+							'item_id' => $item_id,
+							'npcs_shop_id' => $npcs_shop_id,
+							'color' => empty($color) ? null : $color
+						);
+				}
+		}
+
+		$npc_batch = Batch::insert($npc_batch, 'npcs');
+		$loc_batch = Batch::insert($loc_batch, 'npcs_place_name');
+		$si_batch = Batch::insert($si_batch, 'items_npcs_shops');
+	}
+
+}
+
+class ShopSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('shops', $this->get_json('Shop')['data']);
+	}
+
+}
+
+class RecipeElementSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('recipe_elements', $this->get_json('RecipeElement')['data']);
+	}
+
+}
+
+class NotebookDivisionSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('notebook_division', $this->get_json('NotebookDivision')['data']);
+	}
+
+}
+
+class RecipeSeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$r_batch = $rr_batch = array();
+
+		$data = $this->get_json('Recipe')['data'];
+
+		foreach ($data as $row)
+		{
+			$r_batch[] = array(
+				'id' => $row['id'],
+				'item_id' => $row['item_id'],
+				'classjob_id' => $row['classjob'],
+				'element_id' => $row['element'],
+				'can_hq' => $row['can_hq'],
+				'yields' => $row['yields'],
+				'level' => $row['level'],
+				'level_view' => $row['levelView'],
+				'stars' => $row['stars'],
+				'req_craftsmanship' => $row['required']['craftsmanship'],
+				'req_control' => $row['required']['control'],
+				'durability' => $row['extra']['durability'],
+				'max_quality' => $row['extra']['quality_max'],
+				'difficulty' => $row['extra']['difficulty'],
+				'rank' => $row['rank']
+			);
+
+			// Assumption, all extra items exist, not sure why I put them as extra...
+
+			// Reagents
+			foreach ($row['extra']['reagents'] as $item_id => $amount)
+				$rr_batch[] = array(
+					'recipe_id' => $row['id'],
+					'item_id' => $item_id,
+					'amount' => $amount
+				);
+		}
+
+		$r_batch = Batch::insert($r_batch, 'recipes');
+		$rr_batch = Batch::insert($rr_batch, 'recipe_reagents');
+	}
+
+}
+
+class GuardianDeitySeeder extends _LibraSeeder
+{
+
+	public function run()
+	{
+		$this->common_run('guardians', $this->get_json('GuardianDeity')['data']);
+	}
+
+}
+
+// Non-Libra data
+
+class XPSeeder extends Seeder
+{
+
+	public function run() 
+	{
+		Batch::insert(
+			json_decode(file_get_contents(storage_path() . '/seed-data/experience.json'), TRUE), 
+			'experience'
+		);
+	}
+
+}
+
+class CareerSeeder extends Seeder
+{
+
+	public function run()
+	{
+		Batch::insert(
+			json_decode(file_get_contents(storage_path() . '/libra-data/careers.json'), TRUE)['data'], 
+			'careers'
+		);
+		Batch::insert(
+			json_decode(file_get_contents(storage_path() . '/libra-data/career_classjob.json'), TRUE)['data'], 
+			'career_classjob'
+		);
+	}
+
+}
+
+class ClusterSeeder extends Seeder
+{
+
+	public function run()
+	{
+		Batch::insert(
+			file_get_contents(storage_path() . '/libra-data/clusters.tsv'),
+			'clusters',
+			TRUE
+		);
+		Batch::insert(
+			file_get_contents(storage_path() . '/libra-data/cluster_nodes.tsv'),
+			'cluster_nodes',
+			TRUE
+		);
+		Batch::insert(
+			file_get_contents(storage_path() . '/libra-data/cluster_items.tsv'),
+			'cluster_items',
+			TRUE
+		);
+	}
+
+}
+
+class QuestSeeder extends Seeder
+{
+
+	public function run()
+	{
+		// Get all Jobs abbreviations to id
+		// MIN => #
+		$job_to_id = DB::table('classjob')
+			->join('translations', 'translations.id', '=', 'classjob.abbr_en')
+			->select('classjob.id', 'translations.term')
+			->lists('id', 'term');
+
 		// Insert quest items
 		$quest_items = json_decode(file_get_contents(storage_path() . '/seed-data/quest_items.json'), TRUE); // As array
 
 		foreach ($quest_items as &$item)
 		{
-			$item['job_id'] = $this->jobs[$item['job']];
+			$item['classjob_id'] = $job_to_id[$item['job']];
 			unset($item['job']);
 		}
 		
-		$this->_batch_insert($quest_items, 'quest_items');
-		unset($quest_items);
+		$quest_items = Batch::insert($quest_items, 'quest_items');
 	}
+	
 }
 
-class LeveSeeder extends _CommonSeeder
+class LeveSeeder extends Seeder
 {
-	public $locations = array(),
-			$location_id = 0;
-
-	public function get_location_id($location_name = '')
-	{
-		if ( ! isset($this->locations[$location_name]))
-		{
-			DB::table('locations')->insert(array(
-				'id' => ++$this->location_id,
-				'name' => $location_name
-			));
-
-			$this->locations[$location_name] = $this->location_id;
-		}
-
-		return $this->locations[$location_name];
-	}
 
 	public function run() 
 	{
-		// Get all locations
-		foreach (Location::all() as $location)
-			$this->locations[$location->name] = $location->id;
+		// Get all Jobs to id
+		// Mining => #
+		$job_name_to_id = DB::table('classjob')
+			->join('translations', 'translations.id', '=', 'classjob.name_en')
+			->select('classjob.id', 'translations.term')
+			->lists('id', 'term');
 
-		// Set the max id, incase new ones need to be added (which they will be)
-		$this->location_id = max($this->locations);
+		// Get all Jobs abbreviations to id
+		// MIN => #
+		$job_abbr_to_id = DB::table('classjob')
+			->join('translations', 'translations.id', '=', 'classjob.abbr_en')
+			->select('classjob.id', 'translations.term')
+			->lists('id', 'term');
 
+		// Get all Item names to id
+		$item_to_id = DB::table('items')
+			->join('translations', 'translations.id', '=', 'items.name_en')
+			->select('items.id', 'translations.term')
+			->lists('id', 'term');
 
+		$this->leves($job_name_to_id, $item_to_id);
+		$this->leve_rewards($job_abbr_to_id, $item_to_id);
+	}
+
+	public function leves($job_name_to_id, $item_to_id)
+	{
 		// Import leves
 		$leves = json_decode(file_get_contents(storage_path() . '/seed-data/leves.json'), TRUE);
 		
 		foreach ($leves as &$leve)
 		{
 			// "class":"Blacksmith",
-			$leve['job_id'] = $this->job_names[$leve['class']];
+			$leve['classjob_id'] = $job_name_to_id[$leve['class']];
 			unset($leve['class']);
-
-			// "major_location":"Limsa Lominsa",
-			// "minor_location":"",
-			// "location":"",
-			foreach (array('major_', 'minor_', '') as $prefix)
-			{
-				$var = $prefix . 'location';
-				$val = NULL;
-
-				if ($leve[$var])
-					$val = $this->get_location_id($leve[$var]);
-
-				$leve[$var . '_id'] = $val;
-
-				unset($leve[$var]);
-			}
 
 			// "item_name":"Bronze Hatchet",
 				# OR
 			// "item_id":2703
 			if (isset($leve['item_name']))
 			{
-				$leve['item_id'] = null;
-				if ($leve['item_name'])
-				{
-					$query = Item::where('name', $leve['item_name']);
-					if ($query->count())
-						$leve['item_id'] = $query->first()->id;
-				}
+				$leve['item_id'] = $leve['item_name'] && isset($item_to_id[$leve['item_name']])
+					? $item_to_id[$leve['item_name']]
+					: null;
 
 				unset($leve['item_name']);
 			}
 		}
 
-		$this->_batch_insert($leves, 'leves');
-		unset($leves);
+		$leves = Batch::insert($leves, 'leves');
+	}
 
+	public function leve_rewards($job_abbr_to_id, $item_to_id)
+	{
 		// Import leves rewards
 		$leve_rewards = json_decode(file_get_contents(storage_path() . '/seed-data/leve_rewards.json'), TRUE);
 
 		foreach ($leve_rewards as &$lr)
 		{
 			// "class":"BSM",
-			$lr['job_id'] = $this->jobs[$lr['class']];
+			$lr['classjob_id'] = $job_abbr_to_id[$lr['class']];
 			unset($lr['class']);
 
-			$item = Item::where('name', $lr['item_name'])->first();
-
-			$lr['item_id'] = $item ? $item->id : NULL;
+			$lr['item_id'] = isset($item_to_id[$lr['item_name']]) ? $item_to_id[$lr['item_name']] : NULL;
 		}
 
-		$this->_batch_insert($leve_rewards, 'leve_rewards');
-		unset($leve_rewards, $item);
-	}
-
-}
-
-class XPSeeder extends _CommonSeeder
-{
-
-	public function run() 
-	{
-		// Insert experience records
-		$experience = json_decode(file_get_contents(storage_path() . '/seed-data/experience.json'), TRUE);
-		$this->_batch_insert($experience, 'experience');
-		unset($experience);
+		$leve_rewards = Batch::insert($leve_rewards, 'leve_rewards');
 	}
 
 }

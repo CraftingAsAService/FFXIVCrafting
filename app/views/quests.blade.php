@@ -84,14 +84,14 @@
 		<tbody>
 			@foreach($quests as $job => $quest_list)
 			@foreach($quest_list as $q)
-			<tr class='quest{{ $q->job->abbreviation != 'CRP' ? ' hidden' : '' }}'>
+			<tr class='quest{{ $q->classjob->abbr->term != 'CRP' ? ' hidden' : '' }}' data-abbr='{{ $q->classjob->abbr->term }}'>
 				<td width='24' class='valign'>
-					<img src='/img/classes/{{ $q->job->abbreviation }}.png' class='class-icon' rel='tooltip' title='{{ $q->job->name }}' data-abbr='{{ $q->job->abbreviation }}'>
+					<i class='class-icon {{ $q->classjob->abbr->term }}'></i>
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $q->level }}</span>
-					<a href='http://xivdb.com/{{ $q->recipe ? ('?recipe/' . $q->recipe->id) : ('?item/' . $q->item->id) }}' class='item-name' target='_blank'>
-						<img src='/img/items/{{ $q->item->icon ?: '../noitemicon' }}.png' style='margin-right: 10px;'><span class='name'>{{ $q->item->name }}</span>
+					<a href='http://xivdb.com/?{{ $q->recipe ? ('recipe/' . $q->recipe->id) : ('item/' . $q->item->id) }}' class='item-name' target='_blank'>
+						<img src='/img/items/nq/{{ $q->item->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $q->item->name->term }}</span>
 					</a>
 				</td>
 				<td class='text-center amount'>{{ $q->amount }}</td>
@@ -102,7 +102,7 @@
 				</td>
 				<td>{{ $q->notes }}</td>
 				<td class='text-center valign'>
-					<button class='btn btn-default add-to-list' data-item-id='{{ $q->item->id }}' data-item-name='{{{ $q->item->name }}}'>
+					<button class='btn btn-default add-to-list' data-item-id='{{ $q->item->id }}' data-item-name='{{{ $q->item->name->term }}}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>

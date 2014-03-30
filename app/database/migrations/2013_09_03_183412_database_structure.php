@@ -11,6 +11,9 @@ class DatabaseStructure extends Migration {
 	 */
 	public function up()
 	{
+		// DEPRECIATED!
+		return;
+		
 		Schema::create('jobs', function($table)
 		{
 			$table->engine = 'InnoDB';
@@ -365,16 +368,29 @@ class DatabaseStructure extends Migration {
 	 */
 	public function down()
 	{
-		
-		// Just delete every table
-		foreach (DB::select('SHOW TABLES') as $table)
-		{	
-			$table = (array) $table;
-			$table = end($table);
-			// Except for migrations
-			if ($table != 'migrations')
-				Schema::dropIfExists($table);
-		}
+		$tables = array(
+			'jobs',
+			'stats',
+			'items',
+			'item_job',
+			'item_stat',
+			'recipes',
+			'item_recipe',
+			'quest_items',
+			'locations',
+			'leves',
+			'leve_rewards',
+			'experience',
+			'gathering_nodes',
+			'gathering_node_item',
+			'vendors',
+			'item_vendor',
+			'careers',
+			'career_job',
+		);
+
+		foreach ($tables as $table)
+			Schema::dropIfExists($table);
 
 	}
 

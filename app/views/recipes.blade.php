@@ -75,7 +75,7 @@
 							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
 							<li>
 								<a href='#' data-class='{{ $job }}'>
-									<img src='/img/classes/{{ $job }}.png'>
+									<i class='class-icon {{ $job }}'></i>
 									{{ $job_list[$job] }}
 								</a>
 							</li>

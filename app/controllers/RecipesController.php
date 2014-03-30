@@ -5,19 +5,14 @@ class RecipesController extends BaseController
 
 	public function getIndex()
 	{
-		// All Jobs
-		$job_list = array();
-		foreach (Job::all() as $j)
-			$job_list[$j->abbreviation] = $j->name;
-
-		$random_list = Recipe::with('item', 'job')
+		$random_list = Recipes::with('item', 'item.name')
 			->orderBy(DB::raw('RAND()'))
 			->paginate(10);
 
 		return View::make('recipes')
 			->with('active', 'recipes')
 			->with('list', $random_list)
-			->with('job_list', $job_list);
+			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 
 	public function postSearch()

@@ -28,6 +28,10 @@ var home = {
 			$('.ss_yes, .ss_no').toggleClass('hidden');
 		});
 
+		$('#misc_items_switch').change(function() {
+			$('.mi_yes, .mi_no').toggleClass('hidden');
+		});
+
 		$('#multi').change(function() {
 			$('.jobs-list').toggleClass('hidden');
 		});

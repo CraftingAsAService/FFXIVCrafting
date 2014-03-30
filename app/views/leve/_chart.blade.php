@@ -1,5 +1,5 @@
 
-<button class='btn btn-default pull-right add-to-list' data-item-id='{{ $leve->item->id }}' data-item-name='{{{ $leve->item->name }}}' data-item-quantity='{{{ $leve->amount }}}' rel='tooltip' title='Add to Crafting List'>
+<button class='btn btn-default pull-right add-to-list' data-item-id='{{ $leve->item->id }}' data-item-name='{{{ $leve->item->name->term }}}' data-item-quantity='{{{ $leve->amount }}}' rel='tooltip' title='Add to Crafting List'>
 	<i class='glyphicon glyphicon-shopping-cart'></i>
 	<i class='glyphicon glyphicon-plus'></i>
 </button>

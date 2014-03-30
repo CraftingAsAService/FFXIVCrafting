@@ -2,6 +2,8 @@
 
 return array(
 
+	'log' => false,
+
 	'connections' => array(
 
 		'mysql' => array(
