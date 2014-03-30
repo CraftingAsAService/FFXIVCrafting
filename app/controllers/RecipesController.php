@@ -35,8 +35,10 @@ class RecipesController extends BaseController
 		if ($min > $max)
 			list($max, $min) = array($min, $max);
 
+		$job_list = ClassJob::get_name_abbr_list();
+
 		if ($class && $class != 'all')
-			$job = Job::where('abbreviation', $class)->first();
+			$classjob = ClassJob::get_by_abbr($class);
 		
 		$sorting = explode('_', $sorting);
 		$order_by = 'name'; $sort = 'asc';
@@ -51,17 +53,24 @@ class RecipesController extends BaseController
 				$sort = $sorting[1];
 		}
 		
-		$query = Recipe::with('item', 'job')
-			->orderBy($order_by, $sort);
+		$query = Recipes::with('item', 'item.name')
+			->join('items AS i', 'i.id', '=', 'recipes.item_id')
+			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'));
+			
+		$query->orderBy($order_by == 'name' ? 't.term' : 'recipes.' . $order_by, $sort);
 		
 		if ($name)
-			$query->where('name', 'like', '%' . $name . '%');
+			$query->whereHas('item', function($query) use ($name) {
+				$query->whereHas('name', function($query) use ($name) {
+					$query->where('term', 'like', '%' . $name . '%');
+				});
+			});
 
 		if ($min && $max)
-			$query->whereBetween('level', array($min, $max));
+			$query->whereBetween('recipes.level', array($min, $max));
 
 		if (isset($job))
-			$query->where('job_id', $job->id);
+			$query->where('recipes.classjob_id', $classjob->id);
 
 		$recipes = $query->paginate($per_page);
 
