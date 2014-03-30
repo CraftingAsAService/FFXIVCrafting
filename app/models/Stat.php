@@ -147,8 +147,8 @@ class Stat
 		if (empty($stats))
 			return array();
 
-		return BaseParam::with('name_en')
-			->whereHas('name_en', function($q) use ($stats) {
+		return BaseParam::with('en_name')
+			->whereHas('en_name', function($q) use ($stats) {
 				$q->whereIn('term', $stats);
 			})->remember(Config::get('site.cache_length'))->lists('id');
 	}
