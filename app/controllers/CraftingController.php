@@ -172,7 +172,7 @@ class CraftingController extends BaseController
 			->groupBy('recipes.item_id')
 			->orderBy('rank');
 
-		if ($misc_items == 0)
+		if ($misc_items == 0 && $desired_job != 'List')
 			$query
 				->whereHas('item', function($query) {
 					$query->whereNotIn('itemcategory_id', array(14, 15)); // ItemCategory 14 == 'Furnishing', 15 == 'Dye'
