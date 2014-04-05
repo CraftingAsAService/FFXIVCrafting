@@ -19,7 +19,7 @@ class RecipesController extends BaseController
 	{
 		$name = Input::get('name');
 		$min = Input::get('min') ?: 1;
-		$max = Input::get('max') ?: 70;
+		$max = Input::get('max') ?: 50;
 		$class = Input::get('class') ?: 'all';
 		$per_page = Input::get('per_page') ?: 10;
 		$sorting = Input::get('sorting') ?: 'name_asc';
@@ -30,7 +30,7 @@ class RecipesController extends BaseController
 		if ( ! is_numeric($min))
 			$min = 1;
 		if ( ! is_numeric($max))
-			$max = 70;
+			$max = 50;
 
 		if ($min > $max)
 			list($max, $min) = array($min, $max);
@@ -39,7 +39,7 @@ class RecipesController extends BaseController
 
 		if ($class && $class != 'all')
 			$classjob = ClassJob::get_by_abbr($class);
-		
+			
 		$sorting = explode('_', $sorting);
 		$order_by = 'name'; $sort = 'asc';
 		if (count($sorting) == 2)
@@ -56,7 +56,7 @@ class RecipesController extends BaseController
 		$query = Recipes::with('item', 'item.name')
 			->join('items AS i', 'i.id', '=', 'recipes.item_id')
 			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'));
-			
+
 		$query->orderBy($order_by == 'name' ? 't.term' : 'recipes.' . $order_by, $sort);
 		
 		if ($name)
@@ -67,9 +67,9 @@ class RecipesController extends BaseController
 			});
 
 		if ($min && $max)
-			$query->whereBetween('recipes.level', array($min, $max));
+			$query->whereBetween('recipes.level_view', array($min, $max));
 
-		if (isset($job))
+		if (isset($classjob))
 			$query->where('recipes.classjob_id', $classjob->id);
 
 		$recipes = $query->paginate($per_page);

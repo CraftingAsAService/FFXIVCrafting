@@ -121,10 +121,7 @@
 					<div class='col-sm-4'>
 						<h4>Site</h4>
 						<p class='text-muted credit'>
-							Patch 2.1 Ready
-						</p>
-						<p class='text-muted credit'>
-							Patch 2.2 Coming Soon!
+							Patch 2.2 Ready
 						</p>
 					</div>
 					<div class='col-sm-4'>
