@@ -14,7 +14,7 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<script type='text/javascript' src='/js/list.js'></script>
+<script type='text/javascript' src='/js/list.js{{ $asset_cache_string }}'></script>
 @stop
 
 @section('content')

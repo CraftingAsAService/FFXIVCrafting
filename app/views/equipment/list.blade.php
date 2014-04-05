@@ -1,8 +1,8 @@
 @extends('layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-switch.css' rel='stylesheet'>
-	<link href='/css/bootstrap-tour.min.css' rel='stylesheet'>
+	<link href='/css/bootstrap-switch.css{{ $asset_cache_string }}' rel='stylesheet'>
+	<link href='/css/bootstrap-tour.min.css{{ $asset_cache_string }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
@@ -19,15 +19,15 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/bootstrap-switch.js'></script>
-	<script type='text/javascript' src='/js/bootstrap-tour.min.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-switch.js{{ $asset_cache_string }}'></script>
+	<script type='text/javascript' src='/js/bootstrap-tour.min.js{{ $asset_cache_string }}'></script>
 	<script type='text/javascript'>
 		var level = {{ $level }};
 		var job = '{{ $job->abbr->term }}';
 		var craftable_only = Boolean({{ $craftable_only }});
 		var rewardable_too = Boolean({{ $rewardable_too }});
 	</script>
-	<script type='text/javascript' src='/js/equipment.js'></script>
+	<script type='text/javascript' src='/js/equipment.js{{ $asset_cache_string }}'></script>
 @stop
 
 @section('content')
