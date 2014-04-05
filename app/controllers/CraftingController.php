@@ -119,7 +119,7 @@ class CraftingController extends BaseController
 			if ($end - $start > 9) $end = $start + 9;
 
 			// Check for quests
-			$quest_items = QuestItem::with('classjob')
+			$quest_items = QuestItem::with('classjob', 'classjob.abbr')
 				->whereBetween('level', array($start, $end))
 				->whereIn('classjob_id', $job_ids)
 				->orderBy('level')
@@ -186,7 +186,7 @@ class CraftingController extends BaseController
 				->whereHas('classjob', function($query) use ($job_ids) {
 					$query->whereIn('classjob.id', $job_ids);
 				})
-				->whereBetween('level', array($start, $end));
+				->whereBetween('level_view', array($start, $end));
 
 		$recipes = $query
 			->remember(Config::get('site.cache_length'))

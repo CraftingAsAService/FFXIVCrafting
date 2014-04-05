@@ -264,7 +264,7 @@
 					@foreach($quest_items as $quest)
 					<li>
 						@if(count($job) > 2)
-						{{ $quest->job->abbreviation }} 
+						{{ $quest->classjob->abbr->term }} 
 						@endif
 						Level {{ $quest->level }}: 
 						@if ( ! $quest->item)
