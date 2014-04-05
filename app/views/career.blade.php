@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-multiselect.css' rel='stylesheet'>
+	<link href='/css/bootstrap-multiselect.css{{ $asset_cache_string }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
-	<script src='/js/career.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-multiselect.js{{ $asset_cache_string }}'></script>
+	<script src='/js/career.js{{ $asset_cache_string }}'></script>
 @stop
 
 @section('content')

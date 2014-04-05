@@ -5,7 +5,7 @@
 @stop
 
 @section('javascript')
-	<script src='/js/home.js'></script>
+	<script src='/js/home.js{{ $asset_cache_string }}'></script>
 @stop
 
 @section('content')

@@ -11,6 +11,8 @@
 |
 */
 
+View::share('asset_cache_string', '?' . md5(file_get_contents('../version')));
+
 if (Config::get('database.log', false))
 {           
     Event::listen('illuminate.query', function($query, $bindings, $time, $name)

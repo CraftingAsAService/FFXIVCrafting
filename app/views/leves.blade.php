@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-multiselect.css' rel='stylesheet'>
+	<link href='/css/bootstrap-multiselect.css{{ $asset_cache_string }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
@@ -18,8 +18,8 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
-	<script src='/js/leves.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-multiselect.js{{ $asset_cache_string }}'></script>
+	<script src='/js/leves.js{{ $asset_cache_string }}'></script>
 @stop
 
 @section('content')

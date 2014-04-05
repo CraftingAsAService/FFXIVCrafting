@@ -14,7 +14,7 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<script type='text/javascript' src='/js/food.js'></script>
+<script type='text/javascript' src='/js/food.js{{ $asset_cache_string }}'></script>
 @stop
 
 @section('content')
