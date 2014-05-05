@@ -15,7 +15,7 @@
 		{{ $recipe->level }}
 	</td>
 	<td class='text-center valign'>
-		<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->name }}}'>
+		<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->name->term }}}'>
 			<i class='glyphicon glyphicon-shopping-cart'></i>
 			<i class='glyphicon glyphicon-plus'></i>
 		</button>
