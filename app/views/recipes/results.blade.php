@@ -9,7 +9,7 @@
 		</a>
 	</td>
 	<td class='text-center valign'>
-		<i class='class-icon class-id-{{ $recipe->classjob_id }} add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->item->name }}}'></i>
+		<i class='class-icon class-id-{{ $recipe->classjob_id }} add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->item->name->term }}}'></i>
 	</td>
 	<td class='text-center valign'>
 		{{ $recipe->level }}
