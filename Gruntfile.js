@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 
 		uglify: { // Task
-			caas: {
+			all: {
 				files: [{
 					expand: true,
 					cwd: 'app/assets/javascript',
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 		},
 
 		sass: {
-			caas: { // Target
+			all: { // Target
 				options: {
 					style: 'compressed'
 				},
@@ -31,15 +31,15 @@ module.exports = function(grunt) {
 
 		watch: {
 			// Javascript
-			caas_js: {
+			uglify: {
 				files: 'app/assets/javascript/**/*.js',
-				tasks: [ 'uglify:caas', 'beep' ]
+				tasks: [ 'newer:uglify:all', 'beep' ]
 			},
 			
 			// CSS
-			caas_css: {
+			sass: {
 				files: 'app/assets/scss/**/*.scss',
-				tasks: [ 'sass:caas', 'beep' ]
+				tasks: [ 'sass:all', 'beep' ]
 			},
 
 			// Grunt
@@ -55,6 +55,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-newer');
  
 	// define the tasks
  

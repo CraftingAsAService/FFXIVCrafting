@@ -3,5 +3,5 @@
 composer.phar
 composer.lock
 .DS_Store
-node_modules
 .sass-cache
+node_modules

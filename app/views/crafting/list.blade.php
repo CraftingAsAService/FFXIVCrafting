@@ -103,7 +103,7 @@
 				</td>
 				<td class='valign'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' value='0' style='padding: 6px 3px;'>
+						<input type='number' class='form-control obtained text-center' min='0' value='0' step='{{ $yields }}' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>
