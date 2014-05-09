@@ -20,6 +20,9 @@
 			"app/database/seeds",
 			"app/libraries",
 			"app/tests/TestCase.php"
+		],
+		"files": [
+			"app/helpers.php"
 		]
 	},
 	"scripts": {

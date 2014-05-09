@@ -12,8 +12,8 @@
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-		<link href='/css/bootstrap.css{{ $asset_cache_string }}' rel='stylesheet' />
-		<link href='/css/bootstrap-theme.min.css{{ $asset_cache_string }}' rel='stylesheet' />
+		<link href='{{ cdn('/css/bootstrap.css') }}{{ $asset_cache_string }}' rel='stylesheet' />
+		<link href='{{ cdn('/css/bootstrap-theme.min.css') }}{{ $asset_cache_string }}' rel='stylesheet' />
 
 		@section('vendor-css')
 		@show

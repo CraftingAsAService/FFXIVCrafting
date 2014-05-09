@@ -146,4 +146,6 @@ return array(
 		
 	),
 
+	'cdn' => false,
+	
 );

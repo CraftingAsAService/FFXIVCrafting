@@ -52,7 +52,7 @@ class CraftingController extends BaseController
 		$start           = isset($options[1]) ? $options[1] : 1;
 		$end             = isset($options[2]) ? $options[2] : 5;
 		$self_sufficient = isset($options[3]) ? $options[3] : 1;
-		$misc_items	 = isset($options[4]) ? $options[4] : 0;
+		$misc_items	 	 = isset($options[4]) ? $options[4] : 0;
 
 		$item_ids = $item_amounts = array();
 
@@ -186,7 +186,7 @@ class CraftingController extends BaseController
 				->whereHas('classjob', function($query) use ($job_ids) {
 					$query->whereIn('classjob.id', $job_ids);
 				})
-				->whereBetween('level_view', array($start, $end));
+				->whereBetween('level', array($start, $end));
 
 		$recipes = $query
 			->remember(Config::get('site.cache_length'))
