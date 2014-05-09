@@ -279,6 +279,30 @@ class CraftingController extends BaseController
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
 
+		// Sort the pre-requisite crafting by rank
+		// We don't need to sort them by level, just make sure it's in the proper structure
+		// The keys don't matter either
+		$prc =& $sorted_reagent_list['Pre-Requisite Crafting'];
+		
+		$new_prc = array('1' => array());
+		foreach ($prc as $vals)
+			foreach ($vals as $v)
+				$new_prc['1'][] = $v;
+
+		// Sort them by rank first
+		usort($new_prc['1'], function($a, $b) { 
+			return $a['item']->rank - $b['item']->rank; 
+		});
+		// Then by classjob
+		usort($new_prc['1'], function($a, $b) {
+			return $a['item']->recipe[0]->classjob_id - $b['item']->recipe[0]->classjob_id; 
+		});
+		
+		$prc = $new_prc;
+
+		
+
+
 		return View::make('crafting.list')
 			->with(array(
 				'recipes' => $recipes,
