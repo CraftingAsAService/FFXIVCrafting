@@ -49,7 +49,7 @@ class FoodController extends BaseController {
 		
 		#dd($food_groups);
 
-		return View::make('food')
+		return View::make('pages.food')
 			->with('active', 'food')
 			->with('food_groups', $food_groups);
 	}

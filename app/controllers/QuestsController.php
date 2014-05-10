@@ -30,7 +30,7 @@ class QuestsController extends BaseController
 			$quests[$quest->classjob->abbr->term][] = $quest;
 		}
 
-		return View::make('quests')
+		return View::make('pages.quests')
 			->with('active', 'quests')
 			->with('quests', $quests)
 			->with('job_list', ClassJob::get_name_abbr_list());

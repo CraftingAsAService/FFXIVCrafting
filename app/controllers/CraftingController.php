@@ -5,7 +5,7 @@ class CraftingController extends BaseController
 
 	public function getIndex()
 	{
-		return View::make('crafting')
+		return View::make('crafting.index')
 			->with('error', FALSE)
 			->with('active', 'crafting')
 			->with('job_list', ClassJob::get_name_abbr_list())

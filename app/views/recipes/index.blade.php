@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('wrapper.layout')
 
 @section('javascript')
 <script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>

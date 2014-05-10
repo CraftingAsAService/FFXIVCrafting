@@ -5,7 +5,7 @@ class EquipmentController extends BaseController
 
 	public function getIndex()
 	{
-		return View::make('equipment')
+		return View::make('equipment.index')
 			->with('error', FALSE)
 			->with('active', 'equipment')
 			->with('job_list', ClassJob::get_name_abbr_list())

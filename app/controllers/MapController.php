@@ -5,7 +5,7 @@ class MapController extends BaseController
 
 	public function getIndex()
 	{
-		return View::make('map');
+		return View::make('map.index');
 	}
 
 }

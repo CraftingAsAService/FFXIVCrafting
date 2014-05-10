@@ -11,7 +11,7 @@ class RecipesController extends BaseController
 			->orderBy(DB::raw('RAND()'))
 			->paginate(10);
 
-		return View::make('recipes')
+		return View::make('recipes.index')
 			->with('active', 'recipes')
 			->with('list', $random_list)
 			->with('job_list', ClassJob::get_name_abbr_list());

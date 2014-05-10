@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('wrapper.layout')
 
 @section('vendor-css')
 	<link href='/css/bootstrap-switch.css{{ $asset_cache_string }}' rel='stylesheet'>

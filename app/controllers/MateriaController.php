@@ -34,7 +34,7 @@ class MateriaController extends BaseController
 		// Let's move a few up front
 		// First, Crafters, then Gatherers, then the rest (Battling)
 
-		return View::make('materia')
+		return View::make('pages.materia')
 			->with('active', 'materia')
 			->with('materia_list', $materia);
 	}

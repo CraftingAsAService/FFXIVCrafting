@@ -22,7 +22,7 @@ class ListController extends BaseController
 				unset($list[$k]);
 		}
 
-		return View::make('list')
+		return View::make('pages.list')
 			->with('active', 'list')
 			->with('list', $list)
 			->with('job_list', ClassJob::get_name_abbr_list());

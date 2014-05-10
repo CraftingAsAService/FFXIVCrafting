@@ -5,7 +5,7 @@ class LeveController extends BaseController
 
 	public function getIndex()
 	{
-		return View::make('leves')
+		return View::make('leve.index')
 			->with('active', 'leves')
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}

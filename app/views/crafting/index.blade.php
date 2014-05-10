@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('wrapper.layout')
 
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
