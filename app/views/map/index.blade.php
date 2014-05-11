@@ -89,8 +89,8 @@
 @stop
 
 @section('javascript')
-<script type='text/javascript' src='/js/jquery.overscroll.js{{ $asset_cache_string }}'></script>
-<script type='text/javascript' src='/js/map.js{{ $asset_cache_string }}'></script>
+<script type='text/javascript' src='/js/jquery.overscroll.js'></script>
+<script type='text/javascript' src='/js/map.js'></script>
 @stop
 
 @section('content')

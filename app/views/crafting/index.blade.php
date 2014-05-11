@@ -2,12 +2,12 @@
 
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
-	<link href='/css/bootstrap-switch.css{{ $asset_cache_string }}' rel='stylesheet'>
+	<link href='/css/bootstrap-switch.css' rel='stylesheet'>
 @stop
 
 @section('javascript')
-	<script src='/js/home.js{{ $asset_cache_string }}'></script>
-	<script type='text/javascript' src='/js/bootstrap-switch.js{{ $asset_cache_string }}'></script>
+	<script src='/js/home.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-switch.js'></script>
 @stop
 
 @section('content')

@@ -14,9 +14,9 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/bootstrap-multiselect.js{{ $asset_cache_string }}'></script>
-	<script src='/js/home.js{{ $asset_cache_string }}'></script>
-	<script src='/js/quests.js{{ $asset_cache_string }}'></script>
+	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
+	<script src='/js/home.js'></script>
+	<script src='/js/quests.js'></script>
 @stop
 
 @section('content')

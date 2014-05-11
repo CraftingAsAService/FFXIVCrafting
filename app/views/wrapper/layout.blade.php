@@ -12,13 +12,13 @@
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-		<link href='{{ cdn('/css/bootstrap.css') }}{{ $asset_cache_string }}' rel='stylesheet' />
-		<link href='{{ cdn('/css/bootstrap-theme.min.css') }}{{ $asset_cache_string }}' rel='stylesheet' />
+		<link href='{{ cdn('/css/bootstrap.css') }}' rel='stylesheet' />
+		<link href='{{ cdn('/css/bootstrap-theme.min.css') }}' rel='stylesheet' />
 
 		@section('vendor-css')
 		@show
 
-		<link href='/css/global.css{{ $asset_cache_string }}' rel='stylesheet' />
+		<link href='/css/global.css' rel='stylesheet' />
 
 		@section('css')
 		@show
@@ -151,18 +151,18 @@
 		<div id='notifications'></div>
 
 		<!-- jQuery -->
-		<script src='/js/jquery-2.0.3.min.js{{ $asset_cache_string }}'></script>
-		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js{{ $asset_cache_string }}'></script>
+		<script src='/js/jquery-2.0.3.min.js'></script>
+		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 		
-		<script src='/js/bootstrap.min.js{{ $asset_cache_string }}' type='text/javascript'></script>
+		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
 
-		<script src='/js/noty.js{{ $asset_cache_string }}' type='text/javascript'></script>
-		<script src='/js/noty-bottomCenter.js{{ $asset_cache_string }}' type='text/javascript'></script>
-		<script src='/js/noty-theme.js{{ $asset_cache_string }}' type='text/javascript'></script>
+		<script src='/js/noty.js' type='text/javascript'></script>
+		<script src='/js/noty-bottomCenter.js' type='text/javascript'></script>
+		<script src='/js/noty-theme.js' type='text/javascript'></script>
 
-		<script src='/js/viewport.js{{ $asset_cache_string }}' type='text/javascript'></script>
+		<script src='/js/viewport.js' type='text/javascript'></script>
 
-		<script src='/js/global.js{{ $asset_cache_string }}' type='text/javascript'></script>
+		<script src='/js/global.js' type='text/javascript'></script>
 
 		@section('javascript')
 		@show

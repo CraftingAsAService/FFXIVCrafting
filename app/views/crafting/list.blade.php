@@ -1,12 +1,12 @@
 @extends('wrapper.layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-switch.css{{ $asset_cache_string }}' rel='stylesheet'>
-	<link href='/css/bootstrap-tour.min.css{{ $asset_cache_string }}' rel='stylesheet'>
+	<link href='/css/bootstrap-switch.css' rel='stylesheet'>
+	<link href='/css/bootstrap-tour.min.css' rel='stylesheet'>
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js{{ $asset_cache_string }}'></script>
+	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
 	<script type='text/javascript'>
 		var xivdb_tooltips = 
 		{ 
@@ -19,9 +19,9 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/crafting.js{{ $asset_cache_string }}'></script>
-	<script type='text/javascript' src='/js/bootstrap-tour.min.js{{ $asset_cache_string }}'></script>
-	<script type='text/javascript' src='/js/bootstrap-switch.js{{ $asset_cache_string }}'></script>
+	<script type='text/javascript' src='/js/crafting.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-tour.min.js'></script>
+	<script type='text/javascript' src='/js/bootstrap-switch.js'></script>
 @stop
 
 @section('content')
