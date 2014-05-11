@@ -1,0 +1,62 @@
+#gear-main {
+	td.role {
+		&.role-Primary,
+		&.role-Main-Hand {
+			background-image: url(/img/equipment/2x/Primary.png);
+		}
+		&.role-Secondary,
+		&.role-Off-Hand {
+			background-image: url(/img/equipment/2x/Secondary.png);
+		}
+		&.role-Head {
+			background-image: url(/img/equipment/2x/Head.png);
+		}
+		&.role-Body {
+			background-image: url(/img/equipment/2x/Body.png);
+		}
+		&.role-Hands {
+			background-image: url(/img/equipment/2x/Hands.png);
+		}
+		&.role-Waist {
+			background-image: url(/img/equipment/2x/Waist.png);
+		}
+		&.role-Legs {
+			background-image: url(/img/equipment/2x/Legs.png);
+		}
+		&.role-Feet {
+			background-image: url(/img/equipment/2x/Feet.png);
+		}
+		&.role-Neck {
+			background-image: url(/img/equipment/2x/Neck.png);
+		}
+		&.role-Ears {
+			background-image: url(/img/equipment/2x/Ears.png);
+		}
+		&.role-Wrists {
+			background-image: url(/img/equipment/2x/Wrists.png);
+		}
+		&.role-Right-Ring {
+			background-image: url(/img/equipment/2x/Ring.png);
+		}
+		&.role-Right-Ring {
+			background-image: url(/img/equipment/2x/Ring.png);
+		}
+	}
+}
+
+.leve-table {
+	.triple {
+		background-image: url(/img/triple.png);
+	}
+	.location {
+		&.limsalominsa {
+			background-image: url(/img/locations/limsalominsa_bg.png);
+		}
+		&.gridania {
+			background-image: url(/img/locations/gridania_bg.png);
+		}
+		&.uldah {
+			background-image: url(/img/locations/uldah_bg.png);
+		}
+	}
+}

@@ -146,6 +146,6 @@ return array(
 		
 	),
 
-	//'cdn' => false,
+	'cdn' => false,
 	
 );
