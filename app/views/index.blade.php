@@ -5,7 +5,7 @@
 @stop
 
 @section('javascript')
-	<script src='/js/home.js'></script>
+	<script src='{{ cdn('/js/home.js') }}'></script>
 @stop
 
 @section('content')

@@ -18,7 +18,7 @@
 		@section('vendor-css')
 		@show
 
-		<link href='/css/global.css' rel='stylesheet' />
+		<link href='{{ cdn('/css/global.css') }}' rel='stylesheet' />
 
 		@section('css')
 		@show
@@ -151,18 +151,18 @@
 		<div id='notifications'></div>
 
 		<!-- jQuery -->
-		<script src='/js/jquery-2.0.3.min.js'></script>
+		<script src='{{ cdn('/js/jquery-2.0.3.min.js') }}'></script>
 		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 		
-		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
+		<script src='{{ cdn('/js/bootstrap.min.js') }}' type='text/javascript'></script>
 
-		<script src='/js/noty.js' type='text/javascript'></script>
-		<script src='/js/noty-bottomCenter.js' type='text/javascript'></script>
-		<script src='/js/noty-theme.js' type='text/javascript'></script>
+		<script src='{{ cdn('/js/noty.js') }}' type='text/javascript'></script>
+		<script src='{{ cdn('/js/noty-bottomCenter.js') }}' type='text/javascript'></script>
+		<script src='{{ cdn('/js/noty-theme.js') }}' type='text/javascript'></script>
 
-		<script src='/js/viewport.js' type='text/javascript'></script>
+		<script src='{{ cdn('/js/viewport.js') }}' type='text/javascript'></script>
 
-		<script src='/js/global.js' type='text/javascript'></script>
+		<script src='{{ cdn('/js/global.js') }}' type='text/javascript'></script>
 
 		@section('javascript')
 		@show

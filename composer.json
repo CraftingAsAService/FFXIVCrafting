@@ -6,7 +6,8 @@
 		"raveren/kint": "dev-master",
 		"laravel/framework": "4.1.*",
 		"intouch/laravel-newrelic": "*",
-		"wardrobe/core": "dev-master"
+		"wardrobe/core": "dev-master",
+		"rackspace/php-opencloud": "v1.9.2"
 	},
 	"require-dev": {
 		"loic-sharma/profiler": "1.0.*"

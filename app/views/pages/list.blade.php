@@ -14,7 +14,7 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<script type='text/javascript' src='/js/list.js'></script>
+<script type='text/javascript' src='{{ cdn('/js/list.js') }}'></script>
 @stop
 
 @section('content')

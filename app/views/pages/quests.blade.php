@@ -14,9 +14,9 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
-	<script src='/js/home.js'></script>
-	<script src='/js/quests.js'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-multiselect.js') }}'></script>
+	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script src='{{ cdn('/js/quests.js') }}'></script>
 @stop
 
 @section('content')

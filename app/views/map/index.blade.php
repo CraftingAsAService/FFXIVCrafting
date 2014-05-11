@@ -89,8 +89,8 @@
 @stop
 
 @section('javascript')
-<script type='text/javascript' src='/js/jquery.overscroll.js'></script>
-<script type='text/javascript' src='/js/map.js'></script>
+<script type='text/javascript' src='{{ cdn('/js/jquery.overscroll.js') }}'></script>
+<script type='text/javascript' src='{{ cdn('/js/map.js') }}'></script>
 @stop
 
 @section('content')

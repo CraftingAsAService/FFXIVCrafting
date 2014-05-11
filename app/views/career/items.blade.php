@@ -14,7 +14,7 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<script type='text/javascript' src='/js/career.js'></script>
+<script type='text/javascript' src='{{ cdn('/js/career.js') }}'></script>
 @stop
 
 @section('content')

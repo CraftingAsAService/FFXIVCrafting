@@ -14,7 +14,7 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<script type='text/javascript' src='/js/materia.js'></script>
+<script type='text/javascript' src='{{ cdn('/js/materia.js') }}'></script>
 @stop
 
 @section('content')

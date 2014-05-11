@@ -1,30 +1,19 @@
 <?php
+	
+	function cdn($asset)
+	{
+		$cdn = Config::get('app.cdn');
+		// Check if we added cdn's to the config file
+		if( ! $cdn)
+			return asset( $asset );
 
-// http://bigbitecreative.com/using-cdn-laravel-4/
+		// Cache md5 results, no need to touch the file every time
+		$md5_filename = Cache::get('md5:' . $asset, function() use ($asset) {
+			// md5 file contents
+			$md5 = md5_file(public_path() . $asset);
+			// Place md5 string inside filename
+			return preg_replace('/\.([^\.]+)$/', '.' . $md5 . '.$1', $asset);
+		});
 
-function cdn($asset)
-{
-	//Check if we added cdn's to the config file
-	if( !Config::get('app.cdn') )
-		return asset( $asset );
-
-	//Get file name & cdn's
-	$cdns = Config::get('app.cdn');
-	$assetName = basename( $asset );
-	//remove any query string for matching
-	$assetName = explode("?", $assetName);
-	$assetName = $assetName[0];
-
-	//Find the correct cdn to use
-	foreach( $cdns as $cdn => $types )
-		if( preg_match('/^.*\.(' . $types . ')$/i', $assetName) )
-			return cdnPath($cdn, $asset);
-
-	//If we couldnt match a cdn, use the last in the list.
-	end($cdns);
-	return cdnPath( key( $cdns ) , $asset);
-}
-
-function cdnPath($cdn, $asset) {
-	return  "//" . rtrim($cdn, "/") . "/" . ltrim( $asset, "/");
-}
+		return '//' . $cdn . '/' . $md5_filename;
+	}

@@ -1,8 +1,8 @@
 @extends('wrapper.layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-switch.css' rel='stylesheet'>
-	<link href='/css/bootstrap-tour.min.css' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-tour.min.css') }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
@@ -19,9 +19,9 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/crafting.js'></script>
-	<script type='text/javascript' src='/js/bootstrap-tour.min.js'></script>
-	<script type='text/javascript' src='/js/bootstrap-switch.js'></script>
+	<script type='text/javascript' src='{{ cdn('/js/crafting.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 @stop
 
 @section('content')

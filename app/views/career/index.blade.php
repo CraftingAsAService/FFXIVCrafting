@@ -1,12 +1,12 @@
 @extends('wrapper.layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-multiselect.css' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-multiselect.css') }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='/js/bootstrap-multiselect.js'></script>
-	<script src='/js/career.js'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-multiselect.js') }}'></script>
+	<script src='{{ cdn('/js/career.js') }}'></script>
 @stop
 
 @section('content')

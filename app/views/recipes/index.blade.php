@@ -14,7 +14,7 @@
 			"showIcon"      : false,
 		} 
 	</script>
-<script type='text/javascript' src='/js/recipe_book.js'></script>
+<script type='text/javascript' src='{{ cdn('/js/recipe_book.js') }}'></script>
 @stop
 
 @section('content')
