@@ -17,3 +17,15 @@
 
 		return '//' . $cdn . '/' . $md5_filename;
 	}
+
+	function random_guardian_name()
+	{
+		$g = Guardians::with('name')->where('id', rand(1,12))->remember(Config::get('site.cache_length'))->first();
+		return $g->name->term;
+	}
+
+	function random_donation_slogan()
+	{
+		$slogans = Config::get('site.donation_slogans');
+		return $slogans[array_rand($slogans)];
+	}

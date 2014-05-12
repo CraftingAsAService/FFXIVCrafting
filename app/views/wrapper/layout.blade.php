@@ -97,20 +97,16 @@
 		<div id='footer'>
 			<div class='container'>
 				<div class='row top text-center'>
-					<?php
-						$choices = array(
-							"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
-							"Keep the site ad free, <a href='#buymeabeer' id='buymeabeer'>The best AdBlock is Donating!</a>",
-							"Show my wife it's not just a hobby, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
-							"Stable servers aren't free, <a href='#buymeabeer' id='buymeabeer'>Support the site!</a>",
-							"I've spent more time building this than playing, <a href='#buymeabeer' id='buymeabeer'>Help me relax!</a>",
-							"At least you know I'm not a Nigerian Prince, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
-							#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
-						);
-					?>
-					<p class='text-muted credit'>
-						{{ $choices[array_rand($choices)] }}
-					</p>
+					<div class='col-xs-12 col-sm-6'>
+						<p class='text-muted credit'>
+							{{ random_donation_slogan() }}
+						</p>
+					</div>
+					<div class='col-xs-12 col-sm-6'>
+						<p class='text-muted credit'>
+							Praise be unto {{ random_guardian_name() }}
+						</p>
+					</div>
 					<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
 						<input type='hidden' name='cmd' value='_s-xclick'>
 						<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>

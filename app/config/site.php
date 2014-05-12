@@ -1,6 +1,15 @@
 <?php
 
 return array(
+	'donation_slogans' => array(
+		"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
+		"Keep the site ad free, <a href='#buymeabeer' id='buymeabeer'>The best AdBlock is Donating!</a>",
+		"Show my wife it's not just a hobby, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+		#"Stable servers aren't free, <a href='#buymeabeer' id='buymeabeer'>Support the site!</a>",
+		"I've spent more time building this than playing, <a href='#buymeabeer' id='buymeabeer'>Help me relax!</a>",
+		"At least you know I'm not a Nigerian Prince, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
+		#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
+	),
 	'cache_length' => '524160', // Minutes - 60 * 24 * 7 * 52 -- One Year (php artisan cache:clear flushes it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Right Ring','Right Ring'),
 	'defined_slots' => array(
