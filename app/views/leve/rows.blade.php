@@ -1,11 +1,12 @@
 @foreach($leves as $leve)
+<?php $recipe_id = count($leve->item->recipe) ? $leve->item->recipe[0]->id : 0; ?>
 <tr>
 	<td width='24' class='valign'>
 		<i class='class-icon class-id-{{ $leve->classjob_id }}'></i>
 	</td>
 	<td class='item{{ $leve->triple ? ' triple\' rel="tooltip" title="Triple Leve" data-placement="right" data-container=\'body' : '' }}'>
 		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
-		<a href='http://xivdb.com/?recipe/{{ $leve->item->recipe[0]->id }}' class='item-name' target='_blank'>
+		<a href='http://xivdb.com/?recipe/{{ $recipe_id }}' class='item-name' target='_blank'>
 			<img src='/img/items/nq/{{ $leve->item->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
 		</a>
 		@if ($leve->amount > 1)
