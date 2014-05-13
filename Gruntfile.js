@@ -25,6 +25,10 @@ module.exports = function(grunt) {
 
 		uglify: { // Task
 			all: {
+				options: { // Target Options
+					// beautify: true, // DEBUGGING
+					// mangle: false
+				},
 				files: [{
 					expand: true,
 					cwd: 'app/assets/javascript',

@@ -253,15 +253,15 @@ var equipment = {
 		// Go through each cannot equip item, mark other cells as cannot_equip
 		$('#gear tbody td:visible .item.active:not([data-cannot-equip=""])').each(function() {
 			var itemEl = $(this);
-			var cannot_equip = itemEl.data('cannotEquip').split(',');
 			var name = $('.name-box a', itemEl).html();
+			var cannot_equip = ! $.isNumeric(itemEl.data('cannotEquip')) ? itemEl.data('cannotEquip').split(',') : [];
 
 			var td = itemEl.closest('td');
 			var level = td.data('level');
 
 			for(var i = 0; i < cannot_equip.length; i++)
 			{
-				var el = $('.role-' + cannot_equip[i].capitalize() + '[data-level=' + level + ']');
+				var el = $('.role-' + cannot_equip[i].capitalize().replace(/ /, '-') + '[data-level=' + level + ']');
 				el.append('<div class="why-cannot-equip">' + name + '<br>Cannot equip gear to ' + cannot_equip[i].capitalize() + '</div>')
 				el.addClass('cannot-equip');
 			}

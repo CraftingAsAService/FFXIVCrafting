@@ -25,7 +25,7 @@ return array(
 		10	=> 'Neck',
 		11	=> 'Wrists',
 		12	=> 'Right Ring',
-		13	=> 'Main-Hand & Off-Hand',
+		13	=> 'Main Hand & Off Hand',
 		//14 	=> '???',
 		15	=> 'Body & Head',
 		16	=> 'Body, Hands, Legs & Feet',

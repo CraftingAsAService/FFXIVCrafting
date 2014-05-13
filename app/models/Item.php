@@ -159,10 +159,13 @@ class Item extends _LibraBasic
 
 				if ($avoid >= $focus || $focus == 0)
 					continue;
+
+				// if ($item->name->term == 'Linen Cowl')
+				// 	dd($item->name->term, $item->slot, $slot, $slot_cannot_equip, $slot_cannot_equip[$item->slot]);
 				
 				// Cannot equip attribute?
-				if (isset($slot_cannot_equip[$slot]))
-					$item->cannot_equip = $slot_cannot_equip[$slot];
+				if (isset($slot_cannot_equip[$item->slot]))
+					$item->cannot_equip = implode(',', $slot_cannot_equip[$item->slot]);
 
 				$equipment_list[$role][] = $item;
 
@@ -197,7 +200,8 @@ class Item extends _LibraBasic
 					if ($item->equip_level == $max_equip_level)
 					{
 						if (empty($item->cannot_equip) && in_array($item->itemuicategory_id, $two_handed_weapon_ids))
-							$item->cannot_equip = array_flip(Config::get('site.defined_slots'))['Off Hand'];
+							$item->cannot_equip = 'Off Hand';
+							//$item->cannot_equip = array_flip(Config::get('site.defined_slots'))['Off Hand'];
 
 						if ( ! isset($leveled_equipment[$l][$role][$item->level]))
 							$leveled_equipment[$l][$role][$item->level] = array();
