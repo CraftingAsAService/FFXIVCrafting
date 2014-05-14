@@ -99,6 +99,10 @@ class Item extends _LibraBasic
 		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->abbr->term));
 		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
 		$boring_stat_ids = Stat::get_ids(Stat::boring());
+		$advanced_stat_avoidance = Stat::advanced_avoidance($job->abbr->term);
+		foreach ($advanced_stat_avoidance as &$ava)
+			$ava = Stat::get_ids(explode(' w/o ', $ava));
+		unset($ava);
 
 		// Get all items where:
 		// Slot isn't zero
@@ -149,11 +153,21 @@ class Item extends _LibraBasic
 				// Kick it to the curb because of attributes?
 				// Compare the focused vs the avoids
 				$focus = $avoid = 0;
+				$param_count = array_fill(1, 100, 0); // 73 total stats, 100's pretty safe, not to mention we only really focus on the first dozen
 				foreach ($item->baseparam as $param)
+				{
+					$param_count[$param->id]++;
 					if (in_array($param->id, $stat_ids_to_avoid))
 						$avoid++;
 					elseif (in_array($param->id, $stat_ids_to_focus))
 						$focus++;
+				}
+
+				if ($advanced_stat_avoidance)
+					foreach ($advanced_stat_avoidance as $ava)
+						// If the [0] stat exists, but the [1] stat doesn't, drop the piece completely
+						if ($param_count[$ava[0]] > 0 && $param_count[$ava[1]] == 0)
+							$avoid += 10; // Really sell that this should be avoided
 				
 				# echo '<strong>' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . ' (' . $focus . ',' . $avoid . ')<br>';
 
