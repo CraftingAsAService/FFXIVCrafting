@@ -110,7 +110,7 @@ class Item extends _LibraBasic
 		// The class can use it
 		// craftable only?
 		// rewardable?
-
+		
 		foreach ($slots as $slot_identifier => $slot_name)
 		{
 			$query = Item::with('name', 'baseparam', 'baseparam.name', 'vendors', 'recipe', 'recipe.classjob', 'recipe.classjob.name')
@@ -125,7 +125,7 @@ class Item extends _LibraBasic
 				})
 				->orderBy('items.equip_level', 'DESC')
 				->orderBy('items.level', 'DESC')
-				->limit(10);
+				->limit(20);
 
 			if ($craftable_only && $rewardable_too)
 				$query->where(function($query) {
@@ -142,7 +142,7 @@ class Item extends _LibraBasic
 				});
 
 			$items = $query
-						//->remember(Config::get('site.cache_length'))
+						->remember(Config::get('site.cache_length'))
 						->get();
 
 			$slot = isset($slot_alias[$slot_identifier]) ? $slot_alias[$slot_identifier] : $slot_identifier;

@@ -41,6 +41,7 @@
 	<i class='class-icon {{ $job->abbr->term }} large' style='position: relative; top: 5px;'></i>
 	{{ $job->name->term }}
 </h1>
+
 <table class='table' id='gear-main'>
 	<tbody>
 		<tr>
@@ -162,7 +163,7 @@
 				<form action='/equipment' method='post' role='form' class='form-horizontal'>
 					<input type='hidden' name='class' value='{{ $job->abbr->term }}'>
 					<input type='hidden' name='level' value='{{ $original_level }}'>
-					<input type='hidden' name='slim' value='{{ $slim_mode }}'>
+					<input type='hidden' name='slim_mode' value='{{ $slim_mode ? 1 : 0 }}'>
 					<input type='hidden' name='rewardable_too' value='{{ $rewardable_too }}'>
 					<label>
 						Only Craftable
@@ -179,5 +180,11 @@
 <div class='well'>
 	Remember, this tool is geared towards finding craftable equipment!  If you're looking for information on how to gear your level 50, please visit the <a href='http://ffxiv.ariyala.com/' target='_blank'>FFXIV Gear Calculator</a>!
 </div>
+
+@if($fifty_warning)
+<div class='alert alert-warning'>
+	There are too many results for level 50 DOW/DOM classes.  It was excluded on initial load.  Feel free to hit that right arrow though.
+</div>
+@endif
 
 @stop

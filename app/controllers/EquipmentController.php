@@ -76,13 +76,31 @@ class EquipmentController extends BaseController
 		if ($slim_mode)
 			$limit = 47;
 
+		// The limit may need to take one off.
+		// If this is a DOW or DOM class, there's too many items at level 50 to produce good results
+		$fifty_warning = false;
+		if ($limit == 48 || ($slim_mode && $limit == 47))
+		{
+			// Get the "DOW/M" classes
+			$dowm_class_ids = array();
+			$cj = ClassJobCategory::with('classjob')->find(34); // "Disciples of War or Magic"
+			foreach ($cj->classjob as $c)
+				$dowm_class_ids[] = $c->id;
+
+			if (in_array($job->id, $dowm_class_ids))
+			{
+				$fifty_warning = true;
+				$limit--;
+			}
+		}
+
 		if ($level > $limit)
 			$level = $limit;
 
 		View::share('original_level', $level);
-
 		View::share('slim_mode', $slim_mode);
-
+		View::share('fifty_warning', $fifty_warning);
+		
 		#$starting_equipment = array();
 
 		// 3 + ($slim_mode ? 1 : 0)
