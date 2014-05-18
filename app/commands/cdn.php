@@ -77,7 +77,7 @@ class cdn extends Command {
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator('public/' . $ext)) as $filename)
 			{
 				// Ignore '..' or '.' directories.
-				if (in_array(substr($filename, -2), array('..', '\.')))
+				if (in_array(substr($filename, -2), array('..', '\.', '/.'))) // \. for windows, /. for linux
 					continue;
 
 				// Change \'s to /'s, save this for later too

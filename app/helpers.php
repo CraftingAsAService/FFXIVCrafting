@@ -15,7 +15,7 @@
 			return preg_replace('/\.([^\.]+)$/', '.' . $md5 . '.$1', $asset);
 		});
 
-		return '//' . $cdn . '/' . $md5_filename;
+		return '//' . $cdn . $md5_filename;
 	}
 
 	function random_guardian_name()

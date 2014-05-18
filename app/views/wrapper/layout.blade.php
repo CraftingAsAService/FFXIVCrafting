@@ -14,7 +14,7 @@
 
 		<link href='{{ cdn('/css/bootstrap.css') }}' rel='stylesheet' />
 		<link href='{{ cdn('/css/bootstrap-theme.min.css') }}' rel='stylesheet' />
-		{{-- DO NOT HOST ON CDN --}}<link href='/css/images.css' rel='stylesheet' />{{-- /DO NOT HOST ON CDN --}}
+		{{-- DO NOT HOST ON CDN --}}<link href='/css/local.css' rel='stylesheet' />{{-- /DO NOT HOST ON CDN --}}
 
 		@section('vendor-css')
 		@show
