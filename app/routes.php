@@ -11,7 +11,7 @@
 |
 */
 
-View::share('asset_cache_string', '?' . md5(file_get_contents((is_file('../.git/ORIG_HEAD') ? '../' : '') . '.git/ORIG_HEAD')));
+// View::share('asset_cache_string', '?' . md5(file_get_contents((is_file('../.git/ORIG_HEAD') ? '../' : '') . '.git/ORIG_HEAD')));
 
 if (Config::get('database.log', false))
 {           
@@ -44,7 +44,7 @@ Route::get('/', 'HomeController@showWelcome');
 
 Route::get('stats', function()
 {
-	return View::make('stats')
+	return View::make('pages.stats')
 		->with('active', 'stats');
 });
 
@@ -72,13 +72,13 @@ Route::controller('vendors', 'VendorsController');
 Route::get('thanks', function()
 {
 	View::share('active', 'thanks');
-	return View::make('thanks');
+	return View::make('pages.thanks');
 });
 
 Route::get('credits', function()
 {
 	View::share('active', 'credits');
-	return View::make('credits');
+	return View::make('pages.credits');
 });
 
 Route::get('about', function()

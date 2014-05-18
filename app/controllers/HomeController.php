@@ -40,7 +40,7 @@ class HomeController extends BaseController {
 		#return View::make('_blank');
 		############################
 
-		return View::make('hello')
+		return View::make('index')
 			->with('host_warning', preg_match('/thokk/', Request::getHost()));
 	}
 

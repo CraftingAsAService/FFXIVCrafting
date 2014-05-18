@@ -1,12 +1,12 @@
-@extends('layout')
+@extends('wrapper.layout')
 
 @section('vendor-css')
-	<link href='/css/bootstrap-switch.css{{ $asset_cache_string }}' rel='stylesheet'>
-	<link href='/css/bootstrap-tour.min.css{{ $asset_cache_string }}' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-tour.min.css') }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js{{ $asset_cache_string }}'></script>
+	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
 	<script type='text/javascript'>
 		var xivdb_tooltips = 
 		{ 
@@ -19,9 +19,9 @@
 			"showIcon"      : false,
 		} 
 	</script>
-	<script type='text/javascript' src='/js/crafting.js{{ $asset_cache_string }}'></script>
-	<script type='text/javascript' src='/js/bootstrap-tour.min.js{{ $asset_cache_string }}'></script>
-	<script type='text/javascript' src='/js/bootstrap-switch.js{{ $asset_cache_string }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/crafting.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 @stop
 
 @section('content')
@@ -103,7 +103,7 @@
 				</td>
 				<td class='valign'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' value='0' style='padding: 6px 3px;'>
+						<input type='number' class='form-control obtained text-center' min='0' value='0' step='{{ $yields }}' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>

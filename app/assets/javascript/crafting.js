@@ -285,23 +285,26 @@ var crafting = {
 
 			recipe.needed = recipe.needed - recipe.obtained;
 
+			// no more needed?
 			if (recipe.needed < 0)
 			{
 				recipe.obtained += recipe.needed; // Take the amount off of obtained
-				if (recipe.obtained < 0)
-					recipe.obtained = 0;
 
-				recipe.elements.obtained.val(recipe.obtained);
+				var obtained = Math.ceil(recipe.obtained / recipe.yields) * recipe.yields;
+				
+				recipe.elements.obtained.val(obtained < 0 ? 0 : obtained);
 
 				recipe.needed = 0; // Add the (absolute value) amount back to needed
 			}
 
-			recipe.elements.needed.html(recipe.needed);
-			recipe.elements.obtained.attr('max', recipe.total);
+			// We want to make sure the maximum, and the needed, are multiples of the Yield
+			var needed = Math.ceil(recipe.needed / recipe.yields) * recipe.yields,
+				max = Math.ceil(recipe.total / recipe.yields) * recipe.yields;
 
-			if (recipe.total < 0)
-				recipe.total = 0;
-			recipe.elements.total.html(recipe.total);
+			recipe.elements.needed.html(needed);
+			recipe.elements.obtained.attr('max', max);
+
+			recipe.elements.total.html(recipe.total < 0 ? 0 : recipe.total);
 
 			recipe.elements.row[(recipe.needed == 0 ? 'add' : 'remove') + 'Class']('success');
 		}

@@ -6,10 +6,12 @@ class RecipesController extends BaseController
 	public function getIndex()
 	{
 		$random_list = Recipes::with('item', 'item.name')
+			->join('items AS i', 'i.id', '=', 'recipes.item_id')
+			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
 			->orderBy(DB::raw('RAND()'))
 			->paginate(10);
 
-		return View::make('recipes')
+		return View::make('recipes.index')
 			->with('active', 'recipes')
 			->with('list', $random_list)
 			->with('job_list', ClassJob::get_name_abbr_list());

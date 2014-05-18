@@ -8,7 +8,7 @@ class Cluster extends Eloquent
 
 	public function items()
 	{
-		return $this->belongsToMany('Item', 'cluster_items', 'clsuter_id', 'item_id');
+		return $this->belongsToMany('Item', 'cluster_items', 'cluster_id', 'item_id');
 	}
 
 	public function classjob()

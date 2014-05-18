@@ -7,7 +7,7 @@ class ClassJobCategory extends _LibraBasic
 
 	public function classjob()
 	{
-		return $this->hasMany('ClassJob');
+		return $this->belongsToMany('ClassJob', 'classjob_classjob_category', 'classjob_category_id', 'classjob_id');
 	}
 
 }

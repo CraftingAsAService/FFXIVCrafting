@@ -99,6 +99,10 @@ class Item extends _LibraBasic
 		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->abbr->term));
 		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
 		$boring_stat_ids = Stat::get_ids(Stat::boring());
+		$advanced_stat_avoidance = Stat::advanced_avoidance($job->abbr->term);
+		foreach ($advanced_stat_avoidance as &$ava)
+			$ava = Stat::get_ids(explode(' w/o ', $ava));
+		unset($ava);
 
 		// Get all items where:
 		// Slot isn't zero
@@ -106,7 +110,7 @@ class Item extends _LibraBasic
 		// The class can use it
 		// craftable only?
 		// rewardable?
-
+		
 		foreach ($slots as $slot_identifier => $slot_name)
 		{
 			$query = Item::with('name', 'baseparam', 'baseparam.name', 'vendors', 'recipe', 'recipe.classjob', 'recipe.classjob.name')
@@ -121,7 +125,7 @@ class Item extends _LibraBasic
 				})
 				->orderBy('items.equip_level', 'DESC')
 				->orderBy('items.level', 'DESC')
-				->limit(10);
+				->limit(20);
 
 			if ($craftable_only && $rewardable_too)
 				$query->where(function($query) {
@@ -138,7 +142,7 @@ class Item extends _LibraBasic
 				});
 
 			$items = $query
-						//->remember(Config::get('site.cache_length'))
+						->remember(Config::get('site.cache_length'))
 						->get();
 
 			$slot = isset($slot_alias[$slot_identifier]) ? $slot_alias[$slot_identifier] : $slot_identifier;
@@ -149,20 +153,33 @@ class Item extends _LibraBasic
 				// Kick it to the curb because of attributes?
 				// Compare the focused vs the avoids
 				$focus = $avoid = 0;
+				$param_count = array_fill(1, 100, 0); // 73 total stats, 100's pretty safe, not to mention we only really focus on the first dozen
 				foreach ($item->baseparam as $param)
+				{
+					$param_count[$param->id]++;
 					if (in_array($param->id, $stat_ids_to_avoid))
 						$avoid++;
 					elseif (in_array($param->id, $stat_ids_to_focus))
 						$focus++;
+				}
+
+				if ($advanced_stat_avoidance)
+					foreach ($advanced_stat_avoidance as $ava)
+						// If the [0] stat exists, but the [1] stat doesn't, drop the piece completely
+						if ($param_count[$ava[0]] > 0 && $param_count[$ava[1]] == 0)
+							$avoid += 10; // Really sell that this should be avoided
 				
 				# echo '<strong>' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . ' (' . $focus . ',' . $avoid . ')<br>';
 
 				if ($avoid >= $focus || $focus == 0)
 					continue;
+
+				// if ($item->name->term == 'Linen Cowl')
+				// 	dd($item->name->term, $item->slot, $slot, $slot_cannot_equip, $slot_cannot_equip[$item->slot]);
 				
 				// Cannot equip attribute?
-				if (isset($slot_cannot_equip[$slot]))
-					$item->cannot_equip = $slot_cannot_equip[$slot];
+				if (isset($slot_cannot_equip[$item->slot]))
+					$item->cannot_equip = implode(',', $slot_cannot_equip[$item->slot]);
 
 				$equipment_list[$role][] = $item;
 
@@ -197,7 +214,8 @@ class Item extends _LibraBasic
 					if ($item->equip_level == $max_equip_level)
 					{
 						if (empty($item->cannot_equip) && in_array($item->itemuicategory_id, $two_handed_weapon_ids))
-							$item->cannot_equip = array_flip(Config::get('site.defined_slots'))['Off Hand'];
+							$item->cannot_equip = 'Off Hand';
+							//$item->cannot_equip = array_flip(Config::get('site.defined_slots'))['Off Hand'];
 
 						if ( ! isset($leveled_equipment[$l][$role][$item->level]))
 							$leveled_equipment[$l][$role][$item->level] = array();

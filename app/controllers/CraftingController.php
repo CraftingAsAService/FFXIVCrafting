@@ -5,7 +5,7 @@ class CraftingController extends BaseController
 
 	public function getIndex()
 	{
-		return View::make('crafting')
+		return View::make('crafting.index')
 			->with('error', FALSE)
 			->with('active', 'crafting')
 			->with('job_list', ClassJob::get_name_abbr_list())
@@ -52,7 +52,7 @@ class CraftingController extends BaseController
 		$start           = isset($options[1]) ? $options[1] : 1;
 		$end             = isset($options[2]) ? $options[2] : 5;
 		$self_sufficient = isset($options[3]) ? $options[3] : 1;
-		$misc_items	 = isset($options[4]) ? $options[4] : 0;
+		$misc_items	 	 = isset($options[4]) ? $options[4] : 0;
 
 		$item_ids = $item_amounts = array();
 
@@ -186,7 +186,7 @@ class CraftingController extends BaseController
 				->whereHas('classjob', function($query) use ($job_ids) {
 					$query->whereIn('classjob.id', $job_ids);
 				})
-				->whereBetween('level_view', array($start, $end));
+				->whereBetween('level', array($start, $end));
 
 		$recipes = $query
 			->remember(Config::get('site.cache_length'))
@@ -278,6 +278,30 @@ class CraftingController extends BaseController
 
 		foreach ($sorted_reagent_list as $section => $list)
 			ksort($sorted_reagent_list[$section]);
+
+		// Sort the pre-requisite crafting by rank
+		// We don't need to sort them by level, just make sure it's in the proper structure
+		// The keys don't matter either
+		$prc =& $sorted_reagent_list['Pre-Requisite Crafting'];
+		
+		$new_prc = array('1' => array());
+		foreach ($prc as $vals)
+			foreach ($vals as $v)
+				$new_prc['1'][] = $v;
+
+		// Sort them by rank first
+		usort($new_prc['1'], function($a, $b) { 
+			return $a['item']->rank - $b['item']->rank; 
+		});
+		// Then by classjob
+		usort($new_prc['1'], function($a, $b) {
+			return $a['item']->recipe[0]->classjob_id - $b['item']->recipe[0]->classjob_id; 
+		});
+		
+		$prc = $new_prc;
+
+		
+
 
 		return View::make('crafting.list')
 			->with(array(

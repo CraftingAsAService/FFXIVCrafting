@@ -22,14 +22,26 @@ class Stat
 			'DRG' => $melee_set,
 			'MNK' => $melee_set,
 
-			'CNJ' => $magic_set, //array_merge(array('Intelligence'), $magic_set),
-			'SCH' => $magic_set, //array_merge(array('Mind'), $magic_set),
-			'THM' => $magic_set, //array_merge(array('Mind'), $magic_set),
+			'CNJ' => $magic_set, // array_merge(array('Intelligence w/o Mind'), $magic_set),
+			'SCH' => $magic_set, // array_merge(array('Mind'), $magic_set),
+			'THM' => $magic_set, // array_merge(array('Mind w/o Intelligence'), $magic_set),
 
 			'WHM' => $magic_set,
 			'BLM' => $magic_set,
 			'SMN' => $magic_set,
 			'SCH' => $magic_set,
+		);
+
+		return isset($avoid[$job]) ? $avoid[$job] : array();
+	}
+
+	public static function advanced_avoidance($job = 'CRP')
+	{
+		$avoid = array(
+			// Don't suggest pieces that have Intelligence unless they have Mind
+			'CNJ' => array('Intelligence w/o Mind'),
+			// THM: "Avoid Mind pieces without Intelligence"
+			'THM' => array('Mind w/o Intelligence')
 		);
 
 		return isset($avoid[$job]) ? $avoid[$job] : array();
@@ -97,7 +109,7 @@ class Stat
 			'Dexterity' => 'RDPS,Tanks',//,GSM,WVR,CRP,FSH',
 
 			'Spell Speed' => 'MDPS,Heals',
-			'Intelligence' => 'MDPS,Heals',//,ALC,GSM,LTW',
+			'Intelligence' => 'MDPS',//,ALC,GSM,LTW',
 			'Magic Damage' => 'MDPS',
 			'Mind' => 'Heals',//,CUL,BSM,WVR,MIN',
 			'Piety' => 'Heals,RDPS',//,ALC,CUL,FSH',

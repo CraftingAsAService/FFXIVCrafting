@@ -55,10 +55,10 @@
 			@endforeach
 			@endforeach
 		</div>
-		@if(count($items) > 1)
+		@if($i > 1)
 		<div class='td-navigation-buffer cf'></div>
 		<div class='td-navigation text-right'>
-			More options <span class="current">1</span> / <span class="total">{{ count($items) }}</span>
+			More options <span class="current">1</span> / <span class="total">{{ $i }}</span>
 			<a href='#' class="item-next">Next &raquo;</a>
 		</div>
 		@endif
