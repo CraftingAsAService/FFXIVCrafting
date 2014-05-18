@@ -29,6 +29,13 @@
 <p>Visit the <a href='/recipes'>Recipe Book</a> to add items.</p>
 <p>Also, clicking on a DOH class icon (like <img src='/img/classes/CRP.png'>) on other pages will add that item to your crafting list.</p>
 @else
+
+@if(isset($saved))
+<div class='alert alert-info'>
+	Saved list retrieved.  @if(isset($flushed))Previous contents were removed.@endif
+</div>
+@endif
+
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped text-center' id='list'>
 		<thead>
@@ -72,7 +79,26 @@
 	</table>
 </div>
 <a href='/list/flush' class='btn btn-danger pull-right'>Delete All</a>
+<button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Get Link</button>
 <a href='/crafting/list?List:::1' class='btn btn-success'>Craft These Items &raquo;</a>
+
+<div class="modal fade" id='savedList'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Copy this link</h4>
+			</div>
+			<div class="modal-body">
+				<textarea class='form-control'>http://craftingasaservice.com/list/saved/{{ $saved_link }}</textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 @endif
 
 @stop

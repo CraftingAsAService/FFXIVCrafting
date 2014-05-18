@@ -21,10 +21,18 @@ class ListController extends BaseController
 			if (count($l['item']->recipe) == 0)
 				unset($list[$k]);
 		}
+		unset($l);
+
+		$saved = array();
+		if ($list)
+			foreach ($list as $id => $info)
+				$saved[] = $id . ',' . $info['amount'];
+		$saved = implode(':', $saved);
 
 		return View::make('pages.list')
 			->with('active', 'list')
 			->with('list', $list)
+			->with('saved_link', $saved)
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 
@@ -84,6 +92,28 @@ class ListController extends BaseController
 		Session::forget('list');
 
 		return Redirect::to('/list');
+	}
+
+	public function getSaved($string = '')
+	{
+		// Reset the list
+		$list = Session::get('list', array());
+		if ($list)
+			View::share('flushed', true);
+		$list = array();
+
+		foreach (explode(':', $string) as $set)
+		{
+			list($id, $amount) = explode(',', $set);
+			if (is_numeric($amount) && $amount > 0)
+				$list[$id] = $amount;
+		}
+
+		// Save the list
+		Session::put('list', $list);
+		View::share('saved', true);
+
+		return $this->getIndex();
 	}
 
 }
