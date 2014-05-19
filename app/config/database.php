@@ -114,7 +114,7 @@ return array(
 		'cluster' => false,
 
 		'default' => array(
-			'host'     => '198.61.165.31',
+			'host'     => 'moogle', // Relies on /etc/hosts entry
 			'port'     => 6379,
 			'database' => 'REDIS_DB',
 		),
