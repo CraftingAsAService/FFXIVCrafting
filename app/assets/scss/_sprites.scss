@@ -4,7 +4,7 @@ i.class-icon {
 	overflow: hidden;
 	width: 20px;
 	height: 20px;
-	background-image: url(/img/classes/small-sprites.png);
+	// background-image: url(/img/classes/small-sprites.png);
 	background-repeat: no-repeat;
 	background-size: 20px height-px; // Do not override this in the high-dpi class, these dimensions are used by the highdpi browser to determine how to scale the image- the high dpi image will be twice the size, webkit will see this line, and the math computes to a scale of 1.0 instead of 2.0.
 	
@@ -41,12 +41,12 @@ i.class-icon {
 	only screen and (-moz-min-device-pixel-ratio: 1.5),
 	only screen and (-o-min-device-pixel-ratio: 3/2),
 	only screen and (min-device-pixel-ratio: 1.5) {
-		background-image: url("/img/classes/large-sprites.png");
+		// background-image: url("/img/classes/large-sprites.png");
 	}
 
 
 	&.large {
-		background: url(/img/classes/large-sprites.png);
+		// background: url(/img/classes/large-sprites.png);
 		width: 40px;
 		height: 40px;
 
