@@ -4,7 +4,7 @@
 <?php $count++; ?>
 <tr>
 	<td class='text-left valign'>
-		<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
+		<a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'>
 			<img src='/img/items/nq/{{ $recipe->item_id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name->term }}
 		</a>
 	</td>
