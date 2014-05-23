@@ -6,6 +6,7 @@ class RecipesController extends BaseController
 	public function getIndex()
 	{
 		$random_list = Recipes::with('item', 'item.name')
+			->select('*', 'recipes.id AS recipe_id')
 			->join('items AS i', 'i.id', '=', 'recipes.item_id')
 			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
 			->orderBy(DB::raw('RAND()'))
@@ -56,6 +57,7 @@ class RecipesController extends BaseController
 		}
 		
 		$query = Recipes::with('item', 'item.name')
+			->select('*', 'recipes.id AS recipe_id')
 			->join('items AS i', 'i.id', '=', 'recipes.item_id')
 			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'));
 
