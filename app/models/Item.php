@@ -101,7 +101,13 @@ class Item extends _LibraBasic
 		$boring_stat_ids = Stat::get_ids(Stat::boring());
 		$advanced_stat_avoidance = Stat::advanced_avoidance($job->abbr->term);
 		foreach ($advanced_stat_avoidance as &$ava)
-			$ava = Stat::get_ids(explode(' w/o ', $ava));
+		{
+			// These are in a very specific order.
+			// Keep that order in tact.
+			list($a, $b) = explode(' w/o ', $ava);
+			$ava[0] = Stat::get_ids(array($a))[0];
+			$ava[1] = Stat::get_ids(array($b))[0];
+		}
 		unset($ava);
 
 		// Get all items where:
