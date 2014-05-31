@@ -2440,7 +2440,7 @@
     "minor_location":"",
     "location":"",
     "amount":3,
-    "item_name":"Acorn Cookies",
+    "item_name":"Acorn Cookie",
     "triple":"1",
     "notes":""
   },
@@ -2545,7 +2545,7 @@
     "minor_location":"",
     "location":"",
     "amount":1,
-    "item_name":"Jerked Beef ",
+    "item_name":"Jerked Beef",
     "triple":0,
     "notes":""
   },
@@ -2575,7 +2575,7 @@
     "minor_location":"Coerthas",
     "location":"Whitebrim",
     "amount":3,
-    "item_name":"Pastry Fishes",
+    "item_name":"Pastry Fish",
     "triple":"1",
     "notes":""
   },
@@ -2605,7 +2605,7 @@
     "minor_location":"Coerthas",
     "location":"Whitebrim",
     "amount":1,
-    "item_name":"Salt Cod Puff",
+    "item_name":"Salt Cod Puffs",
     "triple":0,
     "notes":""
   },
@@ -2620,7 +2620,7 @@
     "minor_location":"",
     "location":"",
     "amount":3,
-    "item_name":"La Noscean Toasts",
+    "item_name":"La Noscean Toast",
     "triple":"1",
     "notes":""
   },
@@ -2635,7 +2635,7 @@
     "minor_location":"",
     "location":"",
     "amount":1,
-    "item_name":"Deviled Eggs ",
+    "item_name":"Deviled Eggs",
     "triple":0,
     "notes":""
   },
@@ -7922,7 +7922,7 @@
   {
     "class":"Miner",
     "level":1,
-    "name":"Rubble Bubble ",
+    "name":"Rubble Bubble",
     "xp":75,
     "gil":10,
     "type":"Gathering",
@@ -7937,7 +7937,7 @@
   {
     "class":"Miner",
     "level":1,
-    "name":"Who Needs the Paper Work ",
+    "name":"Who Needs the Paper Work",
     "xp":75,
     "gil":9,
     "type":"Gathering",
@@ -7952,7 +7952,7 @@
   {
     "class":"Miner",
     "level":5,
-    "name":"Vanishing Point ",
+    "name":"Vanishing Point",
     "xp":580,
     "gil":46,
     "type":"Gathering",
@@ -7967,7 +7967,7 @@
   {
     "class":"Miner",
     "level":5,
-    "name":"Do They Ore Don't They ",
+    "name":"Do They Ore Don't They",
     "xp":580,
     "gil":49,
     "type":"Gathering",
@@ -7982,7 +7982,7 @@
   {
     "class":"Miner",
     "level":10,
-    "name":"Break It Up ",
+    "name":"Break It Up",
     "xp":2160,
     "gil":99,
     "type":"Gathering",
@@ -7997,7 +7997,7 @@
   {
     "class":"Miner",
     "level":10,
-    "name":"That's Why They Call It Fool's Gold ",
+    "name":"That's Why They Call It Fool's Gold",
     "xp":2160,
     "gil":96,
     "type":"Gathering",
@@ -8042,7 +8042,7 @@
   {
     "class":"Miner",
     "level":15,
-    "name":"A Man's Gotta Dream ",
+    "name":"A Man's Gotta Dream",
     "xp":3925,
     "gil":144,
     "type":"Gathering",
@@ -8057,7 +8057,7 @@
   {
     "class":"Miner",
     "level":15,
-    "name":"Earth Sprites Are Easy ",
+    "name":"Earth Sprites Are Easy",
     "xp":3925,
     "gil":155,
     "type":"Gathering",
@@ -8072,7 +8072,7 @@
   {
     "class":"Miner",
     "level":15,
-    "name":"The Doom That Came to Belah'dia ",
+    "name":"The Doom That Came to Belah'dia",
     "xp":4396,
     "gil":156,
     "type":"Gathering",
@@ -8087,7 +8087,7 @@
   {
     "class":"Miner",
     "level":15,
-    "name":"Eiderdown for Eidolons ",
+    "name":"Eiderdown for Eidolons",
     "xp":3925,
     "gil":153,
     "type":"Gathering",
@@ -8102,7 +8102,7 @@
   {
     "class":"Miner",
     "level":20,
-    "name":"Look How They Shine For You ",
+    "name":"Look How They Shine For You",
     "xp":5610,
     "gil":208,
     "type":"Gathering",
@@ -8117,7 +8117,7 @@
   {
     "class":"Miner",
     "level":20,
-    "name":"Elemental Housekeeping ",
+    "name":"Elemental Housekeeping",
     "xp":5610,
     "gil":208,
     "type":"Gathering",
@@ -8132,7 +8132,7 @@
   {
     "class":"Miner",
     "level":20,
-    "name":"Location, Location, Location ",
+    "name":"Location, Location, Location",
     "xp":4950,
     "gil":210,
     "type":"Gathering",
@@ -8147,7 +8147,7 @@
   {
     "class":"Miner",
     "level":20,
-    "name":"Rock My Wall ",
+    "name":"Rock My Wall",
     "xp":4950,
     "gil":194,
     "type":"Gathering",
@@ -8162,7 +8162,7 @@
   {
     "class":"Miner",
     "level":25,
-    "name":"Fool Me Twice ",
+    "name":"Fool Me Twice",
     "xp":7360,
     "gil":253,
     "type":"Gathering",
@@ -8177,7 +8177,7 @@
   {
     "class":"Miner",
     "level":25,
-    "name":"Can't Start a Fire ",
+    "name":"Can't Start a Fire",
     "xp":8464,
     "gil":273,
     "type":"Gathering",
@@ -8192,7 +8192,7 @@
   {
     "class":"Miner",
     "level":25,
-    "name":"Tag, You're It ",
+    "name":"Tag, You're It",
     "xp":7360,
     "gil":243,
     "type":"Gathering",
@@ -8207,7 +8207,7 @@
   {
     "class":"Miner",
     "level":25,
-    "name":"Baby, Light My Way ",
+    "name":"Baby, Light My Way",
     "xp":7360,
     "gil":228,
     "type":"Gathering",
@@ -8222,7 +8222,7 @@
   {
     "class":"Miner",
     "level":30,
-    "name":"I Kidd You Not ",
+    "name":"I Kidd You Not",
     "xp":11430,
     "gil":327,
     "type":"Gathering",
@@ -8237,7 +8237,7 @@
   {
     "class":"Miner",
     "level":30,
-    "name":"That's What the Money Is For ",
+    "name":"That's What the Money Is For",
     "xp":11430,
     "gil":318,
     "type":"Gathering",
@@ -8312,7 +8312,7 @@
   {
     "class":"Miner",
     "level":35,
-    "name":"Eye for an Eye ",
+    "name":"Eye for an Eye",
     "xp":13850,
     "gil":357,
     "type":"Gathering",
@@ -8342,7 +8342,7 @@
   {
     "class":"Miner",
     "level":40,
-    "name":"Breach and Build ",
+    "name":"Breach and Build",
     "xp":19680,
     "gil":368,
     "type":"Gathering",
@@ -8357,7 +8357,7 @@
   {
     "class":"Miner",
     "level":40,
-    "name":"Not Losing Our Heads This Time ",
+    "name":"Not Losing Our Heads This Time",
     "xp":22632,
     "gil":372,
     "type":"Gathering",
@@ -8372,7 +8372,7 @@
   {
     "class":"Miner",
     "level":40,
-    "name":"Brother in Arms ",
+    "name":"Brother in Arms",
     "xp":19680,
     "gil":372,
     "type":"Gathering",
@@ -8387,7 +8387,7 @@
   {
     "class":"Miner",
     "level":40,
-    "name":"Nature is a Monster ",
+    "name":"Nature is a Monster",
     "xp":19680,
     "gil":368,
     "type":"Gathering",
