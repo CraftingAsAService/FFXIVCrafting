@@ -333,7 +333,7 @@ class Libra extends Migration {
 			$table->integer('placename_id'); // FK placename
 			$table->integer('classjob_id'); // FK classjob
 			$table->smallInteger('level');
-			$table->string('icon', 9);
+			$table->string('icon', 10);
 			$table->decimal('x', 7, 4);
 			$table->decimal('y', 7, 4);
 			

@@ -1,93 +1,5 @@
 @extends('wrapper.layout')
 
-@section('css')
-	<style type='text/css'>
-		.shroud .north 		{ 
-			top: -120px; 
-			left: -90px;
-		}
-		.shroud .gridania 	{ 
-			top: 70px; 
-			left: 220px;
-		}
-		.shroud .east 		{ 
-			top: 150px; 
-			left: 560px;
-		}
-		.shroud .central 	{ 
-			top: 290px; 
-			left: 110px;
-		}
-		.shroud .south 		{ 
-			top: 520px; 
-			left: 310px;
-		}
-
-		.thanalan .western 	{ 
-			top: 470px;
-			left: 20px;
-		}
-		.thanalan .uldah 	{ 
-			top: 530px;
-			left: 290px;
-		}
-		.thanalan .southern { 
-			top: 470px;
-			left: 520px;
-		}
-		.thanalan .northern { 
-			top: -80px;
-			left: 210px;
-		}
-		.thanalan .eastern 	{ 
-			top: 90px;
-			left: 530px;
-		}
-		.thanalan .central 	{ 
-			top: 220px;
-			left: 230px;
-		}
-
-		.noscea .western {
-			top: 110px;
-			left: -80px;
-		}
-		.noscea .upper 	{
-			top: 40px;
-			left: 220px;
-		}
-		.noscea .middle 	{
-			top: 400px;
-			left: 250px;
-		}
-		.noscea .lower 	{
-			top: 400px;
-			left: 400px;
-		}
-		.noscea .limsa 	{
-			top: 550px;
-			left: 20px;
-		}
-		.noscea .eastern {
-			top: 0px;
-			left: 520px;
-		}
-		.noscea .outer {
-			top: 0px;
-			left: 220px;
-		}
-
-		.coerthas .coerthas-central {
-			top: 0px;
-			left: 40px;
-		}
-		.coerthas .mor-dhona {
-			top: 380px;
-			left: 140px;
-		}
-	</style>
-@stop
-
 @section('javascript')
 <script type='text/javascript' src='{{ cdn('/js/jquery.overscroll.js') }}'></script>
 <script type='text/javascript' src='{{ cdn('/js/map.js') }}'></script>
@@ -95,106 +7,128 @@
 
 @section('content')
 
+<?php
+	$map_size = 512;
+	$icon_size = 20;
+	// Map Quotient was difficult to pin down.
+	// I was provided "coordinates" like -65.64 and 5.8
+	// (0,0) is in the bottom left
+	// Also, "X is Y and Y is X", as these were actually Longitute and Latitude-ish, and I stored them in reverse
+	// I had to take Photoshop to get some pixel comparison equivalents
+	// And did the math (a / b = c / X; solve for X)
+	$cluster_quotient = 180;
+	// Thus, while the map size is 512, coordinates reach out to 180% each direction.
+	// Formulas in Action
+	// 94px / -65.64° = 256 / X == -178.76
+	// 42px / -29.79° = 256 / X == -181.57
+	// 180 seemed to be "good enough"
+
+	// Vendors coordinates are things like 14, and 8
+	// (0,0) is in the top left
+	// So the formula will be different
+	// I'm guessing it's a 20x20 "grid", again, going for "good enough".
+	// So, 14 to the right is really (14 / 20) * 512
+
+	// TEST TODO REMOVE ME
+	//var_dump($map_data[53]['vendors']);
+?>
+
+<div class='alert alert-warning pull-right margin-top'>
+	<p><strong><em>Coordinates are not 100% accurate.</em></strong></p>
+</div>
+
 <h1>
 	<i class='glyphicon glyphicon-globe'></i>
 	Map
 </h1>
 
-<h2>The Black Shroud (Gridania)</h2>
+<ul class='nav nav-tabs margin-top'>
+	@foreach ($map as $area_slug => $section)
+	<li class='{{ $section === reset($map) ? 'active' : '' }}'>
+		<a href='#{{ $area_slug }}' data-toggle='tab'>{{ $section['area']['name'] }}</a>
+	</li>
+	@endforeach
+</ul>
 
-<div class='globe shroud'>
-	<div class='area'>
-		<img src='/img/maps/the-black-shroud-the-black-shroud-region-01.png'>
-	</div>
+<div class='tab-content'>
+@foreach ($map as $area_slug => $section)
+	<div class='tab-pane {{ $section === reset($map) ? 'active' : '' }}' id='{{ $area_slug }}'>
+		<div class='row'>
+			<div class='col-sm-9'>
+				<div class='globe {{ $area_slug }}'>
+					<div class='area' data-id='{{ $section['area']['id'] }}'>
+						<img src='{{ $section['area']['img'] }}.png' alt='{{{ $section['area']['name'] }}}'>
 
-	<div class='region north'>
-		<img src='/img/maps/the-black-shroud-north-shroud-f1f4-00.png' title='Map Name'>
+						@foreach ($section['regions'] as $region_slug => $data)
+						<div class='region {{ $region_slug }}' style='top: {{ $data['top'] }}px; left: {{ $data['left'] }}px;' data-id='{{ $data['id'] }}'>
+							<img src='{{ $data['img'] }}.png' alt='{{{ $data['name'] }}}' width='{{ $map_size }}' height='{{ $map_size }}'>
+							<div class='name'>{{ $data['name'] }}</div>
+						</div>
+						@endforeach
+					</div>
+
+					<div class='region-nodes'>
+					@foreach ($section['regions'] as $region_slug => $data)
+						<?php 
+							$ids = array($data['id']);
+							if (isset($data['id_also']))
+								$ids = array_merge($ids, explode(',', $data['id_also']));
+						?>
+						@foreach ($ids as $map_id)
+						@if (isset($map_data[$map_id]))
+
+							@if (isset($map_data[$map_id]['clusters']))
+							<!-- Clusters -->
+							@foreach ($map_data[$map_id]['clusters'] as $cid => $cluster)
+							<?php 
+								$top = $map_size - ($cluster['x'] ? ($map_size / 2) + round($cluster_quotient * ($cluster['x'] / 100)) - ($icon_size / 2) : -$icon_size + 256) + $data['top'];
+								$left = ($cluster['y'] ? ($map_size / 2) + round($cluster_quotient * ($cluster['y'] / 100)) - ($icon_size / 2) : -$icon_size + 256) + $data['left'];
+								$opaque = ! $cluster['x'] || ! $cluster['y'] ? ' opaque' : '';
+							?>
+							<img src='/img/maps/node_icons/{{ $cluster['icon'] ?: '../../reward.png' }}' class='cluster{{ $opaque }}' rel='tooltip' title='{{ $cluster['classjob_abbr'] }} lvl {{ 
+							$cluster['level'] }}' data-id='{{ $cid }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ $top }}px; left: {{ $left }}px;'>
+							@endforeach
+							<!-- /Clusters -->
+							@endif
+
+							@if (isset($map_data[$map_id]['vendors']))
+							<!-- Vendors -->
+							@foreach ($map_data[$map_id]['vendors'] as $vid => $vendor)
+							<?php 
+								$left = ($vendor['x'] ? ($vendor['x'] / 20) * $map_size - ($icon_size / 2) : -$icon_size + 256) + $data['left'];
+								$top = ($vendor['y'] ? ($vendor['y'] / 20) * $map_size - ($icon_size / 2) : -$icon_size + 256) + $data['top'];
+							?>
+							<img src='/img/vendor.png' class='vendor' rel='tooltip' title='{{{ $vendor['name'] }}}' data-id='{{ $vid }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ $top }}px; left: {{ $left }}px;'>
+							@endforeach
+							<!-- /Vendors -->
+							@endif
+
+							@if (isset($map_data[$map_id]['beasts']))
+							<!-- Beasts -->
+							@foreach ($map_data[$map_id]['beasts'] as $bid => $beast)
+
+
+							@endforeach
+							<!-- /Beasts -->
+							@endif
+
+						@endif
+						@endforeach
+					@endforeach
+					</div>
+				</div>
+			</div>
+			<div class='col-sm-3'>
+				<ul>
+					<li>List</li>
+					<li>List</li>
+					<li>List</li>
+					<li>List</li>
+				</ul>
+			</div>
+		</div>
 	</div>
-	<div class='region central'>
-		<img src='/img/maps/the-black-shroud-central-shroud-f1f1-00.png' title='Map Name'>
-	</div>
-	<div class='region gridania'>
-		<img src='/img/maps/the-black-shroud-gridania.png' title='Map Name'>
-	</div>
-	<div class='region south'>
-		<img src='/img/maps/the-black-shroud-south-shroud-f1f3-00.png' title='Map Name'>
-	</div>
-	<div class='region east'>
-		<img src='/img/maps/the-black-shroud-east-shroud-f1f2-00.png' title='Map Name'>
-	</div>
+@endforeach
 </div>
-
-<h2>Thanalan (Ul'dah)</h2>
-
-<div class='globe thanalan'>
-	<div class='area'>
-		<img src='/img/maps/thanalan-thanalan-region-02.png'>
-	</div>
-
-	<div class='region western'>
-		<img src='/img/maps/thanalan-western-thanalan-w1f1-00.png' title='Map Name'>
-	</div>
-	<div class='region uldah'>
-		<img src='/img/maps/thanalan-uldah---steps-of-thal.png' title='Map Name'>
-	</div>
-	<div class='region southern'>
-		<img src='/img/maps/thanalan-southern-thanalan-w1f4-01.png' title='Map Name'>
-	</div>
-	<div class='region northern'>
-		<img src='/img/maps/thanalan-northern-thanalan-w1f5-00.png' title='Map Name'>
-	</div>
-	<div class='region eastern'>
-		<img src='/img/maps/thanalan-eastern-thanalan-w1f3-00.png' title='Map Name'>
-	</div>
-	<div class='region central'>
-		<img src='/img/maps/thanalan-central-thanalan-w1f2-00.png' title='Map Name'>
-	</div>
-</div>
-
-<h2>La Noscea (Limsa Lominsa)</h2>
-
-<div class='globe noscea'>
-	<div class='area'>
-		<img src='/img/maps/la-noscea-la-noscea-region-00.png'>
-	</div>
-
-	<div class='region western'>
-		<img src='/img/maps/la-noscea-western-la-noscea-s1f4-00.png' title='Map Name'>
-	</div>
-	<div class='region upper'>
-		<img src='/img/maps/la-noscea-upper-la-noscea-s1f5-00.png' title='Map Name'>
-	</div>
-	<div class='region middle'>
-		<img src='/img/maps/la-noscea-middle-la-noscea-s1f1-00.png' title='Map Name'>
-	</div>
-	<div class='region lower'>
-		<img src='/img/maps/la-noscea-lower-la-noscea-s1f2-00.png' title='Map Name'>
-	</div>
-	<div class='region limsa'>
-		<img src='/img/maps/la-noscea-limsa-lominsa.png' title='Map Name'>
-	</div>
-	<div class='region eastern'>
-		<img src='/img/maps/la-noscea-eastern-la-noscea-s1f3-00.png' title='Map Name'>
-	</div>
-	<div class='region outer'>
-		<img src='/img/maps/la-noscea-outer-la-noscea-s1f6-00.png' title='Map Name'>
-	</div>	
-</div>
-
-<h2>Coerthas / Mor Dhona</h2>
-
-<div class='globe coerthas'>
-	<div class='area'>
-		<img src='/img/maps/mor-dhona-mor-dhona-region-04.png'>
-	</div>
-	
-	<div class='region coerthas-central'>
-		<img src='/img/maps/coerthas-coerthas-central-highlands-r1f1-00.png' title='Map Name'>
-	</div>
-	<div class='region mor-dhona'>
-		<img src='/img/maps/mor-dhona-mor-dhona-l1f1-01.png' title='Map Name'>
-	</div>
-</div>
-
 
 @stop

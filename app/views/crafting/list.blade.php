@@ -31,6 +31,11 @@
 	Start Tour
 </a>
 
+<a href='#' id='map_it' class='start btn btn-success pull-right' style='margin-top: 12px; margin-right: 10px;'>
+	<i class='glyphicon glyphicon-globe'></i>
+	Map It
+</a>
+
 <h1 style='margin-top: 0;'>
 	@if(isset($job))
 	@if(count(explode(',', $desired_job)) == 1)

@@ -54,4 +54,186 @@ return array(
 
 	'available_languages' => array('en', 'ja', 'de', 'fr'),
 	'default_language' => 'en',
+	'map' => array(
+		'shroud' => array(
+			'area' => array(
+				'id' => 23,
+				'name' => 'The Black Shroud (Gridania)',
+				'img' => '/img/maps/the-black-shroud-the-black-shroud-region-01' // .png
+			),
+			'regions' => array(
+				'north' => array(
+					'id' => 57,
+					'name' => '',
+					'img' => '/img/maps/the-black-shroud-north-shroud-f1f4-00', // .png
+					'top' => '-120', // px
+					'left' => '-90', // px
+				),
+				'gridania' => array(
+					'id' => 51, // Also 52, 53
+					'id_also' => '52,53',
+					'name' => '',
+					'img' => '/img/maps/the-black-shroud-gridania', // .png
+					'top' => '70', // px
+					'left' => '220', // px
+				),
+				'east' => array(
+					'id' => 55,
+					'name' => '',
+					'img' => '/img/maps/the-black-shroud-east-shroud-f1f2-00', // .png
+					'top' => '150', // px
+					'left' => '560', // px
+				),
+				'central' => array(
+					'id' => 54,
+					'name' => '',
+					'img' => '/img/maps/the-black-shroud-central-shroud-f1f1-00', // .png
+					'top' => '290', // px
+					'left' => '110', // px
+				),
+				'south' => array(
+					'id' => 56,
+					'name' => '',
+					'img' => '/img/maps/the-black-shroud-south-shroud-f1f3-00', // .png
+					'top' => '520', // px
+					'left' => '310', // px
+				),
+			),
+		),
+		'thanalan' => array(
+			'area' => array(
+				'id' => 24,
+				'name' => 'Thanalan (Ul\'dah)',
+				'img' => '/img/maps/thanalan-thanalan-region-02' // .png
+			),
+			'regions' => array(
+				'western' => array(
+					'id' => 42,
+					'name' => '',
+					'img' => '/img/maps/thanalan-western-thanalan-w1f1-00', // .png
+					'top' => '470', // px
+					'left' => '20', // px
+				),
+				'uldah' => array(
+					'id' => 39, // Also 40, 41
+					'id_also' => '40,41',
+					'name' => '',
+					'img' => '/img/maps/thanalan-uldah---steps-of-thal', // .png
+					'top' => '530', // px
+					'left' => '290', // px
+				),
+				'southern' => array(
+					'id' => 45,
+					'name' => '',
+					'img' => '/img/maps/thanalan-southern-thanalan-w1f4-01', // .png
+					'top' => '470', // px
+					'left' => '520', // px
+				),
+				'northern' => array(
+					'id' => 46,
+					'name' => '',
+					'img' => '/img/maps/thanalan-northern-thanalan-w1f5-00', // .png
+					'top' => '-80', // px
+					'left' => '210', // px
+				),
+				'eastern' => array(
+					'id' => 44,
+					'name' => '',
+					'img' => '/img/maps/thanalan-eastern-thanalan-w1f3-00', // .png
+					'top' => '90', // px
+					'left' => '530', // px
+				),
+				'central' => array(
+					'id' => 43,
+					'name' => '',
+					'img' => '/img/maps/thanalan-central-thanalan-w1f2-00', // .png
+					'top' => '220', // px
+					'left' => '230', // px
+				),
+			),
+		),
+		'noscea' => array(
+			'area' => array(
+				'id' => 22,
+				'name' => 'La Noscea (Limsa Lominsa)',
+				'img' => '/img/maps/la-noscea-la-noscea-region-00' // .png
+			),
+			'regions' => array(
+				'western' => array(
+					'id' => 33,
+					'name' => '',
+					'img' => '/img/maps/la-noscea-western-la-noscea-s1f4-00', // .png
+					'top' => '110', // px
+					'left' => '-80', // px
+				),
+				'upper' => array(
+					'id' => 34,
+					'name' => '',
+					'img' => '/img/maps/la-noscea-upper-la-noscea-s1f5-00', // .png
+					'top' => '40', // px
+					'left' => '220', // px
+				),
+				'middle' => array(
+					'id' => 30,
+					'name' => '',
+					'img' => '/img/maps/la-noscea-middle-la-noscea-s1f1-00', // .png
+					'top' => '400', // px
+					'left' => '250', // px
+				),
+				'lower' => array(
+					'id' => 31,
+					'name' => '',
+					'img' => '/img/maps/la-noscea-lower-la-noscea-s1f2-00', // .png
+					'top' => '400', // px
+					'left' => '400', // px
+				),
+				'limsa' => array(
+					'id' => 27, // Also 28, 29
+					'id_also' => '28,29',
+					'name' => '',
+					'img' => '/img/maps/la-noscea-limsa-lominsa', // .png
+					'top' => '550', // px
+					'left' => '20', // px
+				),
+				'eastern' => array(
+					'id' => 32,
+					'name' => '',
+					'img' => '/img/maps/la-noscea-eastern-la-noscea-s1f3-00', // .png
+					'top' => '0', // px
+					'left' => '520', // px
+				),
+				'outer' => array(
+					'id' => 350,
+					'name' => '',
+					'img' => '/img/maps/la-noscea-outer-la-noscea-s1f6-00', // .png
+					'top' => '0', // px
+					'left' => '220', // px
+				),
+			),
+		),
+		'coerthas' => array(
+			'area' => array(
+				'id' => 25, // Also 26
+				'id_also' => '26',
+				'name' => 'Coerthas / Mor Dhona',
+				'img' => '/img/maps/mor-dhona-mor-dhona-region-04' // .png
+			),
+			'regions' => array(
+				'coerthas-central' => array(
+					'id' => 63,
+					'name' => '',
+					'img' => '/img/maps/coerthas-coerthas-central-highlands-r1f1-00', // .png
+					'top' => '0', // px
+					'left' => '40', // px
+				),
+				'mor-dhona' => array(
+					'id' => 67,
+					'name' => '',
+					'img' => '/img/maps/mor-dhona-mor-dhona-l1f1-01', // .png
+					'top' => '380', // px
+					'left' => '140', // px
+				),
+			),
+		),
+	)
 );
