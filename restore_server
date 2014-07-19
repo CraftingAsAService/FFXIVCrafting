@@ -1,0 +1,3 @@
+#!/bin/sh
+
+7z e -so app/storage/database.sql.7z | mysql -u root -p ffxivcrafting

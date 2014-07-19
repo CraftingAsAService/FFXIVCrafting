@@ -26,11 +26,12 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function() {
+	
+	if (isset($_SERVER['APP_ENVIRONMENT']))
+		return $_SERVER['APP_ENVIRONMENT'];
 
-	'local' => array('L-NWRIGHT', '*.local.dev', 'Nick-PC','L-CMYERS'),
-
-));
+});
 
 /*
 |--------------------------------------------------------------------------

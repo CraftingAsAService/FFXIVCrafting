@@ -6,7 +6,24 @@ class DatabaseSeeder extends Seeder
 	public function run()
 	{
 		$start = new DateTime('now');
+
+		if (App::environment('production'))
+			$this->server();
+		else
+			$this->local();
 		
+		echo "\n" . 'Time Elapsed: ' . $start->diff(new DateTime('now'))->format('%I:%S') . "\n";
+
+		return;
+	}
+
+	private function server()
+	{
+		echo "\n" . 'Run reload_server instead!' . "\n";
+	}
+
+	private function local()
+	{
 		Eloquent::unguard();
 
 		// Don't bother logging queries
@@ -66,10 +83,6 @@ class DatabaseSeeder extends Seeder
 		$this->call('QuestSeeder');
 		echo "\n" . '** Crafting Leves **' . "\n";
 		$this->call('LeveSeeder');
-
-		echo "\n" . 'Time Elapsed: ' . $start->diff(new DateTime('now'))->format('%I:%S') . "\n";
-
-		return;
 	}
 
 }
