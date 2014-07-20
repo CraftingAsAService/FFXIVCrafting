@@ -1,1 +1,1 @@
-var map={init:function(){$(".globe").overscroll()}};$(map.init);
+var map={init:function(){$("a[data-toggle=tab]").on("shown.bs.tab",function(a){var b=$(a.target).attr("href");$(b).find(".globe:not(.overscroll)").overscroll(),$(b).find(".globe").addClass("overscroll")}),$(".active a[data-toggle=tab]").trigger("shown.bs.tab")}};$(map.init);

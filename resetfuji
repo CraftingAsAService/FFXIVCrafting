@@ -1,0 +1,7 @@
+#!/bin/sh
+
+hhvm artisan migrate:refresh --seed --env=fuji
+hhvm artisan cache:clear -env-fuji
+
+rm app/storage/database.sql.7z
+mysqldump -u root ffxivcrafting | 7z a -si -t7z app/storage/database.sql.7z -mx9

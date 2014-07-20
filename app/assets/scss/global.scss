@@ -775,7 +775,7 @@ $gear_warning_accent: #a46868;
 .globe {
 	position: relative;
 	cursor: move;
-	height: 512px;
+	height: 700px;
 	overflow: hidden;
 	padding: 0;
 	max-width: 1000px;
@@ -785,7 +785,7 @@ $gear_warning_accent: #a46868;
 	.area {
 		position: absolute;
 		width: 1000px;
-		img {
+		&> img {
 			width: 1000px;
 		}
 	}
@@ -800,6 +800,66 @@ $gear_warning_accent: #a46868;
 
 	.region {
 		position: absolute;
+		z-index: 1;
+		.name {
+			position: absolute;
+			z-index: 2;
+			top: 256px; left: 0;
+			right: 0; bottom: 0;
+			text-align: center;
+			font-weight: bold;
+		}
+		// I have to fix a few specific name placements
+		&.mor-dhona, 
+		&.outer {
+			.name {
+				top: 128px;
+			}
+		}
+	}
+
+	&.shroud {
+		.east {
+			max-width: 430px;
+			overflow: hidden;
+		}
+		.south {
+			max-height: 460px;
+			overflow: hidden;
+		}
+	}
+	&.thanalan {
+		.eastern, .southern {
+			overflow: hidden;
+			max-width: 460px;
+		}
+		.uldah {
+			overflow: hidden;
+			max-height: 460px;
+		}
+	}
+	&.noscea {
+		.eastern {
+			overflow: hidden;
+			max-width: 460px;
+		}
+		.limsa {
+			overflow: hidden;
+			max-height: 430px;
+		}
+	}
+
+	.region-nodes {
+		position: absolute;
+		z-index: 4;
+		top: 0; bottom: 0;
+		left: 0;
+		right: 0;
+
+		.cluster, .vendor, .beast {
+			position: absolute;
+			z-index: 8;
+		}
 	}
 }
 
@@ -827,4 +887,11 @@ ul.plain {
 
 .crafted_gathered {
 	padding-top: 16px !important;
+}
+
+.nav-tabs + .tab-content {
+	padding: 10px;
+	border-style: solid;
+	border-color: #ddd;
+	border-width: 0 1px 1px;
 }

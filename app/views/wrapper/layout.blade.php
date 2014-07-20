@@ -118,7 +118,7 @@
 					<div class='col-sm-4'>
 						<h4>Site</h4>
 						<p class='text-muted credit'>
-							Patch 2.2 Ready
+							Patch 2.3 Ready
 						</p>
 					</div>
 					<div class='col-sm-4'>

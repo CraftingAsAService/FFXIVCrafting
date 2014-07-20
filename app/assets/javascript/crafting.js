@@ -175,6 +175,32 @@ var crafting = {
 			return;
 		});
 
+		$('#map_it').click(function(event) {
+			event.preventDefault();
+
+			global.noty({
+				type: 'warning',
+				text: 'Loading Map'
+			});
+
+			var data = [];
+
+			// Go through the form and get the item id's and what's needed
+			$('#Gathered-section, #Bought-section, #Other-section').find('tr.reagent').each(function() {
+				var td = $(this),
+					id = td.data('itemId'),
+					needed = td.find('.needed span').html();
+
+				data[data.length] = id + '|' + needed;
+			});
+
+			data = data.join('||');
+
+			$('<form action="/map" method="POST">' + 
+			    '<input type="hidden" name="items" value="' + data + '">' +
+			    '</form>').submit();
+		});
+
 		return;
 	},
 	reagents:[],
