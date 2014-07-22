@@ -64,6 +64,7 @@
 		</thead>
 		@foreach($reagent_list as $section => $list)
 		<?php if (empty($list)) continue; ?>
+		<?php if (isset($list[1]) && empty($list[1])) continue; ?>
 		<tbody id='{{ preg_replace('/\s|\-/', '', $section) }}-section'>
 			<tr>
 				<th colspan='6'>
