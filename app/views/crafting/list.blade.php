@@ -186,7 +186,12 @@
 					</div>
 				</td>
 				<td class='needed valign'>
-					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yields }}' value='{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}' style='padding: 6px 3px;'>
+					<?php 
+						$needed = (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))); 
+						$needed = ceil($needed / $recipe->yields) * $recipe->yields;
+					?>
+
+					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yields }}' value='{{ $needed }}' style='padding: 6px 3px;'>
 				</td>
 				<td class='valign'>
 					<div class='input-group'>
@@ -196,7 +201,7 @@
 						</div>
 					</div>
 				</td>
-				<td class='valign total'>{{ (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))) }}</td>
+				<td class='valign total'>{{ $needed }}</td>
 				<td>
 					@if(count($recipe->item->vendors))
 					<a href='#' class='btn btn-default vendors{{ $reagent['self_sufficient'] ? ' opaque' : '' }}'>

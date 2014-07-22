@@ -120,6 +120,9 @@
 						<p class='text-muted credit'>
 							Patch 2.3 Ready
 						</p>
+						<p class='text-muted credit'>
+							<a href='http://www.reddit.com/r/ffxivcrafting'>Subreddit</a>
+						</p>
 					</div>
 					<div class='col-sm-4'>
 						<h4>Contact</h4>

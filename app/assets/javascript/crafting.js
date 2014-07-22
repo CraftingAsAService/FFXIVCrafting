@@ -330,7 +330,7 @@ var crafting = {
 			recipe.elements.needed.html(needed);
 			recipe.elements.obtained.attr('max', max);
 
-			recipe.elements.total.html(recipe.total < 0 ? 0 : recipe.total);
+			recipe.elements.total.html(recipe.total < 0 ? 0 : Math.ceil(recipe.total / recipe.yields) * recipe.yields);
 
 			recipe.elements.row[(recipe.needed == 0 ? 'add' : 'remove') + 'Class']('success');
 		}
