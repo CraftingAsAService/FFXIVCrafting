@@ -3,5 +3,14 @@
 hhvm artisan migrate:refresh --seed --env=fuji
 hhvm artisan cache:clear -env-fuji
 
-rm app/storage/database.sql.7z
-mysqldump -u root ffxivcrafting | 7z a -si -t7z app/storage/database.sql.7z -mx9
+# Dump the Data
+rm app/storage/data.sql.7z
+mysqldump -u root --no-create-info ffxivcrafting | 7z a -si -t7z app/storage/data.sql.7z -mx9
+# Dump the Schema
+rm app/storage/schema.sql.7z
+mysqldump -u root --no-data ffxivcrafting | 7z a -si -t7z app/storage/schema.sql.7z -mx9
+
+# Dump the Data
+# mysqldump -u root -C --no-create-info ffxivcrafting | gzip --best -c > app/storage/data.sql.gz
+# Dump the Schema
+# mysqldump -u root -C --no-data ffxivcrafting | gzip --best -c > app/storage/schema.sql.gz
