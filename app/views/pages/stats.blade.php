@@ -5,7 +5,7 @@
 	<h1>Stats Explained</h1>
 
 	<h2>
-		<img src='/img/stats/Craftsmanship.png' class='stat-icon'>
+		<img src='/img/stats/nq/Craftsmanship.png' class='stat-icon'>
 		Craftsmanship
 	</h2>
 
@@ -14,7 +14,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Control.png' class='stat-icon'>
+		<img src='/img/stats/nq/Control.png' class='stat-icon'>
 		Control
 	</h2>
 
@@ -23,7 +23,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/CP.png' class='stat-icon'>
+		<img src='/img/stats/nq/CP.png' class='stat-icon'>
 		CP
 	</h2>
 
@@ -32,7 +32,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Gathering.png' class='stat-icon'>
+		<img src='/img/stats/nq/Gathering.png' class='stat-icon'>
 		Gathering
 	</h2>
 
@@ -41,7 +41,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Perception.png' class='stat-icon'>
+		<img src='/img/stats/nq/Perception.png' class='stat-icon'>
 		Perception
 	</h2>
 
@@ -50,7 +50,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/GP.png' class='stat-icon'>
+		<img src='/img/stats/nq/GP.png' class='stat-icon'>
 		GP
 	</h2>
 
@@ -59,7 +59,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Strength.png' class='stat-icon'>
+		<img src='/img/stats/nq/Strength.png' class='stat-icon'>
 		Strength
 	</h2>
 
@@ -68,7 +68,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Dexterity.png' class='stat-icon'>
+		<img src='/img/stats/nq/Dexterity.png' class='stat-icon'>
 		Dexterity
 	</h2>
 
@@ -77,7 +77,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Vitality.png' class='stat-icon'>
+		<img src='/img/stats/nq/Vitality.png' class='stat-icon'>
 		Vitality
 	</h2>
 
@@ -86,7 +86,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Intelligence.png' class='stat-icon'>
+		<img src='/img/stats/nq/Intelligence.png' class='stat-icon'>
 		Intelligence
 	</h2>
 
@@ -95,7 +95,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Mind.png' class='stat-icon'>
+		<img src='/img/stats/nq/Mind.png' class='stat-icon'>
 		Mind
 	</h2>
 
@@ -104,7 +104,7 @@
 	</p>
 
 	<h2>
-		<img src='/img/stats/Piety.png' class='stat-icon'>
+		<img src='/img/stats/nq/Piety.png' class='stat-icon'>
 		Piety
 	</h2>
 
