@@ -185,4 +185,6 @@ return array(
 
 	'cdn' => 'acd84eeb1b7b98b2dec5-9f5608ae56f41b0c88d873b8b4c5cc36.r22.cf2.rackcdn.com',
 
+	'cipher' => MCRYPT_RIJNDAEL_256,
+
 );
