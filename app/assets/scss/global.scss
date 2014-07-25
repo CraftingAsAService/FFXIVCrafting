@@ -863,6 +863,60 @@ $gear_warning_accent: #a46868;
 	}
 }
 
+.globe_list {
+	::selection {
+		background-color: transparent;
+	}
+	.vision, .find {
+		color: #428bca;
+		cursor: pointer;
+		&.off {
+			opacity: .6;
+		}
+	}
+	ul {
+		list-style-type: none;
+		padding-left: 0;
+		& > li > div:first-child {
+			cursor: pointer;
+		}
+	}
+	.item_level {
+		& > ul {
+			.region_level {
+				& > ul {
+					.cluster_level {
+						& > ul {
+							.node_level {
+
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.list-group-item {
+		padding: 10px 7px;
+	}
+	.item_level, .region_level, .cluster_level, .node_level {
+		// border-radius: 6px;
+		// border: 1px solid #ddd;
+		// padding: 4px;
+		& > ul {
+			margin-top: 10px;
+			display: none;
+			margin-bottom: 0px;
+		}
+		&.open > ul {
+			display: block;
+		}
+	}
+	// .item_level:first-child {
+	// 	margin-top: 0;
+	// }
+}
+
 .color-square {
 	display: inline-block;
 	height: 1em;

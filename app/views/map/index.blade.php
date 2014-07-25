@@ -30,7 +30,7 @@
 	// So, 14 to the right is really (14 / 20) * 512
 
 	// TEST TODO REMOVE ME
-	//var_dump($map_data[53]['vendors']);
+	#var_dump($map_data[53]['vendors']);
 ?>
 
 <div class='alert alert-warning pull-right margin-top'>
@@ -79,14 +79,14 @@
 
 							@if (isset($map_data[$map_id]['clusters']))
 							<!-- Clusters -->
+							<?php $i = -2; ?>
 							@foreach ($map_data[$map_id]['clusters'] as $cid => $cluster)
 							<?php 
-								$top = $map_size - ($cluster['x'] ? ($map_size / 2) + round($cluster_quotient * ($cluster['x'] / 100)) - ($icon_size / 2) : -$icon_size + 256) + $data['top'];
-								$left = ($cluster['y'] ? ($map_size / 2) + round($cluster_quotient * ($cluster['y'] / 100)) - ($icon_size / 2) : -$icon_size + 256) + $data['left'];
-								$opaque = ! $cluster['x'] || ! $cluster['y'] ? ' opaque' : '';
+								$top = $map_size - ($cluster['x'] != 0 ? ($map_size / 2) + round($cluster_quotient * ($cluster['x'] / 100)) - ($icon_size / 2) : 256 - $icon_size) + $data['top'];
+								$left = ($cluster['y'] != 0 ? ($map_size / 2) + round($cluster_quotient * ($cluster['y'] / 100)) - ($icon_size / 2) : 256 + ($icon_size * $i++)) + $data['left'];
+								// $opaque = $cluster['x'] == 0 || $cluster['y'] == 0 ? ' opaque' : '';
 							?>
-							<img src='/img/maps/node_icons/{{ $cluster['icon'] ?: '../../reward.png' }}' class='cluster{{ $opaque }}' rel='tooltip' title='{{ $cluster['classjob_abbr'] }} lvl {{ 
-							$cluster['level'] }}' data-id='{{ $cid }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ $top }}px; left: {{ $left }}px;'>
+							<img src='/img/maps/node_icons/{{ $cluster['icon'] ?: 'unknown.png' }}' class='cluster' rel='tooltip' title='{{ $cluster['classjob_abbr'] }} lvl {{ $cluster['level'] }}' data-id='{{ $cid }}' data-items='{{ count($cluster['items']) }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ $top }}px; left: {{ $left }}px;'>
 							@endforeach
 							<!-- /Clusters -->
 							@endif
@@ -95,19 +95,19 @@
 							<!-- Vendors -->
 							@foreach ($map_data[$map_id]['vendors'] as $vid => $vendor)
 							<?php 
-								$left = ($vendor['x'] ? ($vendor['x'] / 20) * $map_size - ($icon_size / 2) : -$icon_size + 256) + $data['left'];
-								$top = ($vendor['y'] ? ($vendor['y'] / 20) * $map_size - ($icon_size / 2) : -$icon_size + 256) + $data['top'];
+								$left = ($vendor['x'] ? ($vendor['x'] / 20) * $map_size - $icon_size : 256 - $icon_size) + $data['left'];
+								$top = ($vendor['y'] ? ($vendor['y'] / 20) * $map_size - $icon_size : 256 - $icon_size) + $data['top'];
 							?>
-							<img src='/img/vendor.png' class='vendor' rel='tooltip' title='{{{ $vendor['name'] }}}' data-id='{{ $vid }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ $top }}px; left: {{ $left }}px;'>
+							<img src='/img/vendor.png' class='vendor' rel='tooltip' title='{{{ $vendor['name'] }}}' data-id='{{ $vid }}' data-items='{{ count($vendor['items']) }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ $top }}px; left: {{ $left }}px;'>
 							@endforeach
 							<!-- /Vendors -->
 							@endif
 
 							@if (isset($map_data[$map_id]['beasts']))
 							<!-- Beasts -->
+							<?php $i = -2; ?>
 							@foreach ($map_data[$map_id]['beasts'] as $bid => $beast)
-
-
+							<img src='/img/fight.png' class='beast' rel='tooltip' title='{{{ $beast['name'] }}}' data-id='{{ $bid }}' data-items='{{ count($beast['items']) }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ (256 - $icon_size) + $data['top'] }}px; left: {{ (256 + ($icon_size * $i++)) + $data['left'] }}px;'>
 							@endforeach
 							<!-- /Beasts -->
 							@endif
@@ -118,17 +118,182 @@
 					</div>
 				</div>
 			</div>
-			<div class='col-sm-3'>
-				<ul>
-					<li>List</li>
-					<li>List</li>
-					<li>List</li>
-					<li>List</li>
+			<div class='col-sm-3 globe_list'>
+				<ul class='list-group legend'>
+					<li class='list-group-item'>
+						<a href='#legend' data-toggle='modal'>
+							<i class='glyphicon glyphicon-picture margin-right'></i>Legend
+						</a>
+					</li>
 				</ul>
+				<ul class='list-group'>
+				@foreach ($items as $item)
+					<li class='item_level list-group-item'>
+						<div>
+							<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+							<img src='/img/items/nq/{{ $item->id }}.png' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
+						</div>
+						<ul class='list-group'>
+						@foreach ($section['regions'] as $region_slug => $data)
+							<?php 
+								$ids = array($data['id']);
+								if (isset($data['id_also']))
+									$ids = array_merge($ids, explode(',', $data['id_also']));
+							?>
+							<li class='region_level list-group-item'>
+								<div>
+									<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+									<i class='glyphicon glyphicon-globe'></i>
+									{{ $data['name'] }}
+								</div>
+								<ul class='list-group'>
+								@foreach ($ids as $map_id)
+								@if (isset($map_data[$map_id]))
+									@if (isset($map_data[$map_id]['clusters']))
+									<li class='cluster_level list-group-item'>
+										<div>
+											<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+											<i class='glyphicon glyphicon-tree-conifer'></i>
+											Gathering
+										</div>
+										<ul class='list-group'>
+										@foreach ($map_data[$map_id]['clusters'] as $cid => $cluster)
+											@if(in_array($item->id, array_keys($cluster['items'])))
+											<li class='node_level list-group-item'>
+												<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+												<i class='glyphicon glyphicon-screenshot margin-right pull-right find off' data-id='{{ $cid }}' data-type='cluster'></i>
+												<img src='/img/maps/node_icons/{{ $cluster['icon'] ?: 'unknown.png' }}' width='18' height='18'>
+												{{ $cluster['classjob_abbr'] }} level {{ $cluster['level'] }}
+											</li>
+											@endif
+										@endforeach
+										</ul>
+									</li>
+									@endif
+									@if (isset($map_data[$map_id]['vendors']))
+									<li class='cluster_level list-group-item'>
+										<div>
+											<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+											<i class='glyphicon glyphicon-usd'></i>
+											Vendors
+										</div>
+										<ul class='list-group'>
+										@foreach ($map_data[$map_id]['vendors'] as $vid => $vendor)
+											@if(in_array($item->id, array_keys($vendor['items'])))
+											<li class='node_level list-group-item'>
+												<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+												<i class='glyphicon glyphicon-screenshot margin-right pull-right find off' data-id='{{ $vid }}' data-type='vendor'></i>
+												<img src='/img/vendor.png' class='vendor' width='18' height='18'>
+												{{ $vendor['name'] }}
+											</li>
+											@endif
+										@endforeach
+										</ul>
+									</li>
+									@endif
+									@if (isset($map_data[$map_id]['beasts']))
+									<li class='cluster_level list-group-item'>
+										<div>
+											<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+											<i class='glyphicon glyphicon-heart-empty'></i>
+											Beasts
+										</div>
+										<ul class='list-group'>
+										@foreach ($map_data[$map_id]['beasts'] as $bid => $beast)
+											@if(in_array($item->id, array_keys($beast['items'])))
+											<li class='node_level list-group-item'>
+												<i class='glyphicon glyphicon-eye-open pull-right vision'></i>
+												<i class='glyphicon glyphicon-screenshot margin-right pull-right find off' data-id='{{ $bid }}' data-type='beast'></i>
+												<img src='/img/fight.png' class='beast' width='18' height='18'>
+												{{ $beast['name'] }}
+											</li>
+											@endif
+										@endforeach
+										</ul>
+									</li>
+									@endif
+
+								@endif
+								@endforeach
+								</ul>
+							</li>
+						@endforeach
+						</ul>
+					</li>
+				@endforeach
+
+				
 			</div>
 		</div>
 	</div>
 @endforeach
+</div>
+
+<div class="modal fade" id='legend'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Map Legend</h4>
+			</div>
+			<div class="modal-body">
+				
+				<div class='row'>
+					<div class='col-sm-2 text-center'>
+						<div>
+							<img src='/img/maps/node_icons/8750.png' width='20' height='20'>
+							<img src='/img/maps/node_icons/8755.png' width='20' height='20'>
+						</div>
+						<div>
+							<img src='/img/maps/node_icons/060432.png' width='20' height='20'>
+							<img src='/img/maps/node_icons/060437.png' width='20' height='20'>
+						</div>
+					</div>
+					<div class='col-sm-10'>
+						Gathering icons.  Locations on map should be pretty close to their actual area.  Represents the center point to a cluster of nodes, not the individual nodes themselves.
+					</div>
+				</div>
+
+				<hr>
+				
+				<div class='row'>
+					<div class='col-sm-2 text-center'>
+						<img src='/img/maps/node_icons/unknown.png' width='20' height='20'>
+					</div>
+					<div class='col-sm-10'>
+						Gathering icon representing an unknown location.  Will (almost) always display below the name of the region.
+					</div>
+				</div>
+
+				<hr>
+				
+				<div class='row'>
+					<div class='col-sm-2 text-center'>
+						<img src='/img/vendor.png' width='20' height='20'>
+					</div>
+					<div class='col-sm-10'>
+						Vendor locations.  These should be pretty close to their actual spot as well.
+					</div>
+				</div>
+
+				<hr>
+				
+				<div class='row'>
+					<div class='col-sm-2 text-center'>
+						<img src='/img/fight.png' width='20' height='20'>
+					</div>
+					<div class='col-sm-10'>
+						Enemy icons.  Locations of enemys are unknown, so these will (almost) always display above the name of the region.
+					</div>
+				</div>
+				{{--
+				<hr>
+
+				<small><small>While I appreciate any enthusiasm to improve the map, please do not send me updated locations.</small></small>
+				--}}
+			</div>
+		</div>
+	</div>
 </div>
 
 @stop
