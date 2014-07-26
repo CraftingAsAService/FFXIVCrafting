@@ -51,7 +51,9 @@ class MapController extends BaseController
 				'beasts',
 					'beasts.name',
 					'beasts.location'
-			)->whereIn('id', array_keys($item_list))->get();
+			)->whereIn('id', array_keys($item_list))
+			->remember(Config::get('site.cache_length'))
+			->get();
 
 			$map_data = array();
 
@@ -145,6 +147,7 @@ class MapController extends BaseController
 			}
 
 			View::share('map_data', $map_data);
+			View::share('items', $items);
 		}
 
 		return $this->getIndex();
