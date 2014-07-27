@@ -69,10 +69,16 @@ Route::controller('map', 'MapController');
 Route::controller('gathering', 'GatheringController');
 Route::controller('vendors', 'VendorsController');
 
+Route::get('report', function()
+{
+    View::share('active', 'report');
+    return View::make('pages.report');
+});
+
 Route::get('thanks', function()
 {
-	View::share('active', 'thanks');
-	return View::make('pages.thanks');
+    View::share('active', 'thanks');
+    return View::make('pages.thanks');
 });
 
 Route::get('credits', function()

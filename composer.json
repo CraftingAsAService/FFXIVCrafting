@@ -4,7 +4,7 @@
 	"license": "proprietary",
 	"require": {
 		"raveren/kint": "dev-master",
-		"laravel/framework": "4.1.*",
+		"laravel/framework": "4.2.*",
 		"intouch/laravel-newrelic": "*",
 		"wardrobe/core": "dev-master",
 		"rackspace/php-opencloud": "v1.9.2"

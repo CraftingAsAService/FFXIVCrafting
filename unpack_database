@@ -1,0 +1,4 @@
+#!/bin/sh
+
+7z e app/storage/data.sql.7z -o/ffxiv-caas-docker/db-content -y
+7z e app/storage/schema.sql.7z -o/ffxiv-caas-docker/db-content -y

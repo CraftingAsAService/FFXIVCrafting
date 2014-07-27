@@ -120,11 +120,14 @@
 						<p class='text-muted credit'>
 							Patch 2.3 Ready
 						</p>
+						<p class='text-muted credit'>
+							<a href='http://www.reddit.com/r/ffxivcrafting'>Subreddit</a>
+						</p>
 					</div>
 					<div class='col-sm-4'>
 						<h4>Contact</h4>
 						<p class='text-muted credit'>
-							<a href='mailto:tickthokk@gmail.com'>Email Me</a>
+							<a href='mailto:tickthokk@gmail.com'>Email Me</a> - <a href='/report'>Report A Bug</a>
 						</p>
 						<p class='text-muted credit'>
 							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
