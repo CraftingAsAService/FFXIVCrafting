@@ -953,3 +953,36 @@ ul.plain {
 	border-color: #ddd;
 	border-width: 0 1px 1px;
 }
+
+@media print {
+	a[href]:after {
+		content: none !important;
+	}
+	#obtain-these-items {
+		input.obtained {
+			display: none;
+			& + div {
+				display: none;
+			}
+		}
+		input.recipe-amount {
+			border: 0;
+			text-align: right;
+			box-shadow: none;
+		}
+		.vendors {
+			opacity: 1;
+			background-color: #fff;
+			border: 0;
+			box-shadow: none;
+			-webkit-box-shadow: none;
+			text-shadow: none;
+		}
+		.crafted_gathered .class-icon {
+			width: 30px;
+		}
+		.crafted_gathered .class-icon:after {
+			content: attr(title) " ";
+		}
+	}
+}

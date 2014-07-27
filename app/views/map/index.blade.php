@@ -105,7 +105,7 @@
 
 							@if (isset($map_data[$map_id]['beasts']))
 							<!-- Beasts -->
-							<?php $i = -2; ?>
+							<?php $i = -3; ?>
 							@foreach ($map_data[$map_id]['beasts'] as $bid => $beast)
 							<img src='/img/fight.png' class='map-item beast' rel='tooltip' title='{{{ $beast['name'] }}}' data-id='{{ $area_slug }}-{{ $region_slug }}-{{ $bid }}' data-type='beast' data-items='{{ count($beast['items']) }}' width='{{ $icon_size }}' height='{{ $icon_size }}' style='top: {{ (256 - $icon_size) + $data['top'] }}px; left: {{ (256 + ($icon_size * $i++)) + $data['left'] }}px;'>
 							@endforeach
