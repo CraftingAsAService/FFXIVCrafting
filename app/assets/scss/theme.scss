@@ -5,9 +5,43 @@ $theme_color_teal: #25c1c1;
 $theme_color_terra: #e8ddcb;
 $theme_color_black: #000000;
 $theme_color_white: #FFFFFF;
-$theme_color_light_gray: #f2f2f2;
+$theme_color_light_gray: #f7f7f7;
+$theme_color_darker_than_light_gray: #ebeaea;	//lol
 $theme_color_medium_gray: #747475;
 $theme_color_dark_gray: #18191A;
+
+body {
+	background: $theme_color_light_gray;
+}
+
+#account {
+	background: $theme_color_dark_gray;
+}
+
+#header {
+	background: $theme_color_white;
+	padding: {
+		top: 20px;
+		bottom: 20px;
+	}
+}
+
+#banner {
+	background: $theme_color_darker_than_light_gray;
+	padding: {
+		top: 20px;
+		bottom: 20px;
+	}
+	h1 {
+		color: $theme_color_lobster;
+		font-family: 'Roboto Condensed', sans-serif;
+		text-transform: uppercase;
+	}
+	h2 {
+		color: $theme_color_medium_gray;
+		font-family: 'Roboto Condensed', sans-serif;
+	}
+}
 
 #footer {
 	background: $theme_color_dark_gray;
@@ -27,6 +61,7 @@ $theme_color_dark_gray: #18191A;
 
 		&:hover {
 			color: $theme_color_lobster;
+			text-decoration: none;
 		}
 	}
 
@@ -47,7 +82,7 @@ $theme_color_dark_gray: #18191A;
 		}
 		&.view-all {
 			margin: {
-				top: 10px;
+				top: 20px;
 			}
 			a {
 				color: $theme_color_terra;
@@ -59,13 +94,15 @@ $theme_color_dark_gray: #18191A;
 	.post {
 		.title {
 			a {
-				color: $theme_color_white;
 				font-weight: bold;
 			}
 		}
 		.date {
 			color: $theme_color_medium_gray;
 			font-size: 11px;
+		}
+		&:nth-child(4) hr {
+			display: none;
 		}
 	}
 }

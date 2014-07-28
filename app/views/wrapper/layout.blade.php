@@ -29,8 +29,14 @@
 		@show
 	</head>
 	<body>
-		<div id='wrap'>
-			<div class='navbar navbar-inverse'>
+
+		<div id="account">
+			<div class="container">
+				<p>This is the new account section</p>
+			</div>
+		</div>
+		<div id="header">
+			<div class='navbar'>
 				<div class='container'>
 					<div class='navbar-header'>
 						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
@@ -88,7 +94,14 @@
 					</div>
 				</div>
 			</div>
-
+		</div>
+		<div id="banner">
+			<div class="container">
+				<h1>I AM THE NEW BANNER SIZES</h1>
+				<h2>I'm a supporting headline copy that doesn't really support anything.</h2>
+			</div>
+		</div>
+		<div id='wrap'>
 			@yield('precontent')
 
 			<div class='container'>
@@ -105,12 +118,8 @@
 					<div class="col-sm-3">
 						<p class="headline">Recent News</p>
 
-						<?php
-							$wardrobe = new \Wardrobe\Core\Repositories\DbPostRepository();
-							$max_number = 3;
-							$i = 1;
-						?>
-						@foreach($wardrobe->active($max_number) as $post)
+						<?php $wardrobe = new \Wardrobe\Core\Repositories\DbPostRepository(); ?>
+						@foreach($wardrobe->active(3) as $post)
 							<div class="post">
 								<div class="title">
 									<a href="/blog/post/{{{ $post->slug }}}">{{ $post->title }}</a>
@@ -119,13 +128,8 @@
 									{{ date("M d, Y", strtotime($post->publish_date)) }}
 									<?php /*by <span class='who'>{{ $post->user->first_name }} {{ $post->user->last_name }}</span> */ ?>
 								</div>
+								<hr>
 							</div>
-							<?php
-								if ($i != $max_number) {
-									echo '<hr>';
-								}
-								$i++;
-							?>
 						@endforeach
 
 						<p class="view-all"><a href="/blog/">View All Recent News</a></p>
