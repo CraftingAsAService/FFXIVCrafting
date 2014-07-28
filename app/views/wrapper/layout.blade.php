@@ -32,7 +32,26 @@
 
 		<div id="account">
 			<div class="container">
-				<p>This is the new account section</p>
+				<ul>
+					<li>
+						<a href="#">
+							<img src="/img/icons/flags/us.png">
+							<span>English</span>
+						</a>
+					</li>
+					<li>
+						<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
+							<img src="/img/icons/account.png">
+							<span>Account</span>
+						</a>
+					</li>
+					<li>
+						<a href="/list"{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}>
+							<img src="/img/icons/bag.png">
+							<span>Crafting List</span>
+						</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div id="header">
@@ -101,7 +120,8 @@
 				<h2>I'm a supporting headline copy that doesn't really support anything.</h2>
 			</div>
 		</div>
-		<div id='wrap'>
+
+		<div id="content">
 			@yield('precontent')
 
 			<div class='container'>

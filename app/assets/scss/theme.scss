@@ -11,15 +11,63 @@ $theme_color_medium_gray: #747475;
 $theme_color_dark_gray: #18191A;
 
 body {
-	background: $theme_color_light_gray;
+	background: $theme_color_black;
 }
 
 #account {
 	background: $theme_color_dark_gray;
+	font-family: 'Roboto Condensed', sans-serif;
+	padding: {
+		top: 2px;
+		bottom: 2px;
+	}
+	text-transform: uppercase;
+	ul {
+		margin: 0;
+		padding: 0;
+		float: right;
+		list-style-type: none;
+		li {
+			float: left;
+
+			&:last-child a {
+				border-right: 0px;
+			}
+
+			a {
+				border-right: 1px solid #333536;
+				color: #969696;
+				display: block;
+				margin: 0;
+				padding: {
+					left: 20px;
+					right: 20px;
+					top: 5px;
+					bottom: 7px;
+				}
+				text-decoration: none;
+
+
+				&:hover {
+					color: $theme_color_white;
+				}
+				&.active {
+					color: $theme_color_white;
+				}
+
+				span {
+					margin-left: 4px;
+					line-height: 4px;
+					vertical-align: middle;
+				}
+			}
+		}
+	}
 }
 
 #header {
 	background: $theme_color_white;
+	font-family: 'Roboto Condensed', sans-serif;
 	padding: {
 		top: 20px;
 		bottom: 20px;
@@ -43,13 +91,17 @@ body {
 	}
 }
 
+#content {
+	background: $theme_color_light_gray;
+	padding: {
+		bottom: 20px;
+	}
+}
+
 #footer {
 	background: $theme_color_dark_gray;
 	color: $theme_color_light_gray;
 	font-size: 12px;
-	margin: {
-		top: 20px;
-	}
 	padding: {
 		top: 20px;
 		bottom: 20px;
