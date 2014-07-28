@@ -17,16 +17,17 @@
 <script type='text/javascript' src='{{ cdn('/js/food.js') }}'></script>
 @stop
 
+@section('banner')
+	<h1>Food</h1>
+	<p>
+		Food provides a certain percentage of your stat up to the maximum.  The Threshold is what it takes to reach that percentage and maximum.
+		For example, if you had 65 Craftsmanship, it would be a waste to use <em>Mashed Popotoes</em> when <em>Mint Lassi</em> is available (and assumedly cheaper).
+	</p>
+
+	<p>All food lasts 30 minutes and provides a 3% XP Bonus.</p>
+@stop
+
 @section('content')
-
-<h1>Food</h1>
-
-<p>
-	Food provides a certain percentage of your stat up to the maximum.  The Threshold is what it takes to reach that percentage and maximum.
-	For example, if you had 65 Craftsmanship, it would be a waste to use <em>Mashed Popotoes</em> when <em>Mint Lassi</em> is available (and assumedly cheaper).
-</p>
-
-<p>All food lasts 30 minutes and provides a 3% XP Bonus.</p>
 
 <?php
 	$sections = array(

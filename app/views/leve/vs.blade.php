@@ -16,11 +16,13 @@
 	</script>
 @stop
 
+@section('banner')
+	<h1>Leve Vs Leve</h1>
+@stop
+
 @section('content')
 
 <?php $vs = true; ?>
-
-<h1>Leve Vs Leve</h1>
 
 <div class='row'>
 	<div class='col-sm-6'>

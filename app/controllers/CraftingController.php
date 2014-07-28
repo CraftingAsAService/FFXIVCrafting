@@ -3,11 +3,15 @@
 class CraftingController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'crafting');
+	}
+
 	public function getIndex()
 	{
 		return View::make('crafting.index')
 			->with('error', FALSE)
-			->with('active', 'crafting')
 			->with('job_list', ClassJob::get_name_abbr_list())
 			->with('previous', Cookie::get('previous_crafting_load'));
 	}
@@ -33,8 +37,6 @@ class CraftingController extends BaseController
 
 	public function getList()
 	{
-		View::share('active', 'crafting');
-
 		// All Jobs
 		$job_list = ClassJob::get_name_abbr_list();
 		View::share('job_list', $job_list);
@@ -110,8 +112,12 @@ class CraftingController extends BaseController
 			foreach ($job as $j)
 				$job_ids[] = $j->id;
 
+			$full_name_desired_job = false;
 			if (count($job) == 1)
+			{
 				$job = $job[0];
+				$full_name_desired_job = $job->name->term;
+			}
 
 			// Starting maximum of 1
 			if ($start < 0) $start = 1;
@@ -131,7 +137,8 @@ class CraftingController extends BaseController
 				'start' => $start,
 				'end' => $end,
 				'quest_items' => $quest_items,
-				'desired_job' => $desired_job
+				'desired_job' => $desired_job,
+				'full_name_desired_job' => $full_name_desired_job
 			));
 		}
 

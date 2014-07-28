@@ -17,9 +17,11 @@
 <script type='text/javascript' src='{{ cdn('/js/materia.js') }}'></script>
 @stop
 
-@section('content')
+@section('banner')
+	<h1>Materia</h1>
+@stop
 
-<h1>Materia</h1>
+@section('content')
 
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped'>

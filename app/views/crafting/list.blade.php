@@ -24,34 +24,42 @@
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 @stop
 
+@section('banner')
+
+	<a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
+		<i class='glyphicon glyphicon-play'></i>
+		Tour
+	</a>
+
+	<a href='#' id='csv_download' class='btn btn-info pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
+		<i class='glyphicon glyphicon-download-alt'></i>
+		Download
+	</a>
+
+	<a href='#' id='map_it' class='btn btn-success pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
+		<i class='glyphicon glyphicon-globe'></i>
+		Map It
+	</a>
+
+	<h1 class='csv-filename' style='margin-top: 0;'>
+		@if(isset($job))
+		@if(count(explode(',', $desired_job)) == 1)
+		<i class='class-icon {{ $desired_job }} large hidden-print' style='position: relative; top: 5px;'></i>
+		{{ $full_name_desired_job }}
+		@else
+		Crafting for {{ implode(', ', explode(',', $desired_job)) }} 
+		@endif
+		@else
+		Custom Recipe List
+		@endif
+	</h1>
+	@if(isset($job))
+	<h2>recipes between levels {{ $start }} and {{ $end }}</h2>
+	@endif
+@stop
+
 @section('content')
 
-<a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
-	<i class='glyphicon glyphicon-play'></i>
-	Tour
-</a>
-
-<a href='#' id='csv_download' class='btn btn-info pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
-	<i class='glyphicon glyphicon-download-alt'></i>
-	Download
-</a>
-
-<a href='#' id='map_it' class='btn btn-success pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
-	<i class='glyphicon glyphicon-globe'></i>
-	Map It
-</a>
-
-<h1 class='csv-filename' style='margin-top: 0;'>
-	@if(isset($job))
-	@if(count(explode(',', $desired_job)) == 1)
-	<i class='class-icon {{ $desired_job }} large hidden-print' style='position: relative; top: 5px;'></i>
-	@endif
-	{{ implode(' ', explode(',', $desired_job)) }} 
-	recipes between levels {{ $start }} and {{ $end }}
-	@else
-	Custom Recipe List
-	@endif
-</h1>
 
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped text-center' id='obtain-these-items'>

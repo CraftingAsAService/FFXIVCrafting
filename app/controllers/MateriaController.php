@@ -3,6 +3,11 @@
 class MateriaController extends BaseController
 {
 
+	public function __construct()
+	{
+		View::share('active', 'materia');
+	}
+
 	public function getIndex()
 	{
 		// Items that are Materia
@@ -35,7 +40,6 @@ class MateriaController extends BaseController
 		// First, Crafters, then Gatherers, then the rest (Battling)
 
 		return View::make('pages.materia')
-			->with('active', 'materia')
 			->with('materia_list', $materia);
 	}
 

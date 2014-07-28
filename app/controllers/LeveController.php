@@ -3,10 +3,14 @@
 class LeveController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'leves');
+	}
+
 	public function getIndex()
 	{
 		return View::make('leve.index')
-			->with('active', 'leves')
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 

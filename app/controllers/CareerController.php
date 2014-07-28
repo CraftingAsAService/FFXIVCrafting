@@ -3,10 +3,14 @@
 class CareerController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'career');
+	}
+
 	public function getIndex()
 	{	
 		return View::make('career.index')
-			->with('active', 'career')
 			->with('job_list', ClassJob::get_name_abbr_list())
 			->with('previous_ccp', Cookie::get('previous_ccp'))
 			->with('previous_ccr', Cookie::get('previous_ccr'))

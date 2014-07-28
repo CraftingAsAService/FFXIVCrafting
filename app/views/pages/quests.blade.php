@@ -19,13 +19,14 @@
 	<script src='{{ cdn('/js/quests.js') }}'></script>
 @stop
 
+@section('banner')
+	<a href='/quests' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
+
+	<h1>Quest Information</h1>
+@stop
+
 @section('content')
-
-<a href='/quests' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
-<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
-
-<h1>Quest Information</h1>
-
 <div class='panel panel-default'>
 	<div class='panel-heading'>
 		Quest Filter

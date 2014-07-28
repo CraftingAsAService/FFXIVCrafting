@@ -8,6 +8,11 @@
 	<script src='{{ cdn('/js/home.js') }}'></script>
 @stop
 
+@section('banner')
+	<h1>Crafting as a Service</h1>
+	<h2>Crafting information and planning for FFXIV: A Realm Reborn</h2>
+@stop
+
 @section('content')
 
 @if($host_warning)
@@ -21,11 +26,6 @@
 	</div>
 </div>
 @endif
-
-<div class='home jumbotron'>
-	<h1>Crafting as a Service</h1>
-	<p>Crafting information and planning for FFXIV: ARR</p>
-</div>
 
 <div class='row'>
 	<div class='col-sm-6 col-sm-push-6 news'>

@@ -17,12 +17,14 @@
 <script type='text/javascript' src='{{ cdn('/js/list.js') }}'></script>
 @stop
 
-@section('content')
+@section('banner')
+	<h1>
+		<i class='glyphicon glyphicon-shopping-cart'></i>
+		Crafting List
+	</h1>
+@stop
 
-<h1>
-	<i class='glyphicon glyphicon-shopping-cart'></i>
-	Crafting List
-</h1>
+@section('content')
 
 @if(empty($list))
 <p>Your list is empty.</p>

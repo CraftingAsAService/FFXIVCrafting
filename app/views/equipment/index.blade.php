@@ -23,7 +23,7 @@
 	</div>
 	@endif
 
-	<form action='/equipment' method='post' role='form' class='well form-horizontal'>
+	<form action='/equipment' method='post' role='form' class='form-horizontal'>
 		<fieldset>
 			<legend>Select your Class</legend>
 			<div class='form-group'>

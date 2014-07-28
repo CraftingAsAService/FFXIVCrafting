@@ -17,13 +17,14 @@
 <script type='text/javascript' src='{{ cdn('/js/career.js') }}'></script>
 @stop
 
+@section('banner')
+	<h1>{{ $job->name->term }}'s Producing Career</h1>
+
+	<p>List supports the following class{{ count($jobs) > 1 ? 'es' : '' }} between levels {{ $min_level }} and {{ $max_level }}:</p>
+	<p>@foreach($jobs as $j) <span class='label label-default'>{{ $j }}</span> @endforeach</p>
+@stop
+
 @section('content')
-
-<h1>{{ $job->name->term }}'s Producing Career</h1>
-
-<p>List supports the following class{{ count($jobs) > 1 ? 'es' : '' }} between levels {{ $min_level }} and {{ $max_level }}:</p>
-<p>@foreach($jobs as $j) <span class='label label-default'>{{ $j }}</span> @endforeach</p>
-
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped hide_quests' id='career-items-table'>
 		<thead>

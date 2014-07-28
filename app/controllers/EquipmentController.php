@@ -3,11 +3,15 @@
 class EquipmentController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'equipment');
+	}
+
 	public function getIndex()
 	{
 		return View::make('equipment.index')
 			->with('error', FALSE)
-			->with('active', 'equipment')
 			->with('job_list', ClassJob::get_name_abbr_list())
 			->with('previous', Cookie::get('previous_equipment_load'));
 	}

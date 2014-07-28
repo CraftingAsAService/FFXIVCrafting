@@ -71,13 +71,14 @@
 							</div>
 							<div class='collapse navbar-collapse'>
 								<ul class='nav navbar-nav'>
-									<li{{ isset($active) && $active == '' ? ' class="active"' : '' }}><a href='/'>Home</a></li>
-									<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
-									<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
-									<li{{ isset($active) && $active == 'career' ? ' class="active"' : '' }}><a href='/career'>Career</a></li>
-									<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
-									<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
-									<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
+									{{-- See /app/helpers.php for menu_item() function --}}
+									{{ menu_item('/',			'Home',			'home'		) }}
+									{{ menu_item('/equipment',	'Equipment',	'equipment'	) }}
+									{{ menu_item('/crafting',	'Crafting',		'crafting'	) }}
+									{{ menu_item('/career',		'Career',		'career'	) }}
+									{{ menu_item('/recipes',	'Recipe Book',	'recipes'	) }}
+									{{ menu_item('/quests',		'Quests',		'quests'	) }}
+									{{ menu_item('/leve',		'Leves',		'leves'		) }}
 									<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
 										<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 										<ul class='dropdown-menu dropdown-menu-right'>

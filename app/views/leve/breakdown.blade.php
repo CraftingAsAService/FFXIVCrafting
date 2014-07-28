@@ -16,9 +16,11 @@
 	</script>
 @stop
 
-@section('content')
+@section('banner')
+	<h1>Levequest Breakdown</h1>
+@stop
 
-<h1>Leve Breakdown</h1>
+@section('content')
 
 @include('leve._chart')
 
@@ -32,7 +34,7 @@
 
 <p>Use your best judgement when deciding which level to mass produce.</p>
 
-<h3>Compare this Leve against...</h3>
+<h3>Compare this Levequest against...</h3>
 
 <ul>
 	@foreach($others as $other)

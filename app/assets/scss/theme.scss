@@ -130,6 +130,12 @@ h2, .h2 {
 					}
 				}
 			}
+			.dropdown-menu li.active {
+				border-bottom: 0;
+				a {
+					color: $theme_color_lobster;
+				}
+			}
 		}
 	}
 }

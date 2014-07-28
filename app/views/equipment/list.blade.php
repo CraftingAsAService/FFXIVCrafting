@@ -30,17 +30,21 @@
 	<script type='text/javascript' src='{{ cdn('/js/equipment.js') }}'></script>
 @stop
 
+@section('banner')
+
+	<a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
+		<i class='glyphicon glyphicon-play'></i>
+		Start Tour
+	</a>
+
+	<h1>
+		<i class='class-icon {{ $job->abbr->term }} large' style='position: relative; top: 5px;'></i>
+		{{ $job->name->term }}
+	</h1>
+	<h2>Equipment Guide</h2>
+@stop
+
 @section('content')
-
-<a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
-	<i class='glyphicon glyphicon-play'></i>
-	Start Tour
-</a>
-
-<h1 style='margin-top: 0px;'>
-	<i class='class-icon {{ $job->abbr->term }} large' style='position: relative; top: 5px;'></i>
-	{{ $job->name->term }}
-</h1>
 
 <table class='table' id='gear-main'>
 	<tbody>

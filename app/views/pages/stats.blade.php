@@ -1,9 +1,11 @@
 @extends('wrapper.layout')
 
-@section('content')
-	
-	<h1>Stats Explained</h1>
+@section('banner')
+	<h1>Character Stats</h1>
+	<h2>And how they relate to crafting</h2>
+@stop
 
+@section('content')
 	<h2>
 		<img src='/img/stats/nq/Craftsmanship.png' class='stat-icon'>
 		Craftsmanship
