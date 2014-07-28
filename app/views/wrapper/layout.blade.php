@@ -57,59 +57,38 @@
 		<div id="header">
 			<div class='navbar'>
 				<div class='container'>
-					<div class='navbar-header'>
-						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-						</button>
-						<a class='navbar-brand' href='/'>FFXIV CAAS</a>
-					</div>
-					<div class='collapse navbar-collapse'>
-						<ul class='nav navbar-nav navbar-right'>
-							<li{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}><a href='/list'><i class='glyphicon glyphicon-shopping-cart'></i> Crafting List</a></li>
-						</ul>
-						<ul class='nav navbar-nav hidden-sm'>
-							<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
-							<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
-							<li{{ isset($active) && $active == 'career' ? ' class="active"' : '' }}><a href='/career'>Career</a></li>
-							<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
-							<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
-							<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
-						</ul>
-						<ul class='nav navbar-nav visible-sm'>
-							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
-								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Tools <b class='caret'></b></a>
-								<ul class='dropdown-menu'>
+					<div class="row">
+						<div class="col-sm-3">
+							<img src="http://placehold.it/280x80/f7f7f7/e2e2e2" class="img-responsive">
+						</div>
+						<div class="col-sm-9 menu-navbar">
+							<div class='navbar-header'>
+								<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+									<span class='icon-bar'></span>
+									<span class='icon-bar'></span>
+									<span class='icon-bar'></span>
+								</button>
+							</div>
+							<div class='collapse navbar-collapse'>
+								<ul class='nav navbar-nav'>
+									<li{{ isset($active) && $active == '' ? ' class="active"' : '' }}><a href='/'>Home</a></li>
 									<li{{ isset($active) && $active == 'equipment' ? ' class="active"' : '' }}><a href='/equipment'>Equipment</a></li>
 									<li{{ isset($active) && $active == 'crafting' ? ' class="active"' : '' }}><a href='/crafting'>Crafting</a></li>
 									<li{{ isset($active) && $active == 'career' ? ' class="active"' : '' }}><a href='/career'>Career</a></li>
-								</ul>
-							</li>
-							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
-								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Info <b class='caret'></b></a>
-								<ul class='dropdown-menu'>
 									<li{{ isset($active) && $active == 'recipes' ? ' class="active"' : '' }}><a href='/recipes'>Recipe Book</a></li>
 									<li{{ isset($active) && $active == 'quests' ? ' class="active"' : '' }}><a href='/quests'>Quests</a></li>
 									<li{{ isset($active) && $active == 'leves' ? ' class="active"' : '' }}><a href='/leve'>Leves</a></li>
+									<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
+										<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
+										<ul class='dropdown-menu dropdown-menu-right'>
+											<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
+											<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
+											<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
+										</ul>
+									</li>
 								</ul>
-							</li>
-						</ul>
-						<ul class='nav navbar-nav hidden-xs'>
-							<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
-								<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
-								<ul class='dropdown-menu'>
-									<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
-									<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
-									<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
-								</ul>
-							</li>
-						</ul>
-						<ul class='nav navbar-nav visible-xs'>
-							<li class='{{ isset($active) && $active == 'stats' ? ' active' : '' }}'><a href='/stats'>Stats</a></li>
-							<li class='{{ isset($active) && $active == 'materia' ? ' active' : '' }}'><a href='/materia'>Materia</a></li>
-							<li class='{{ isset($active) && $active == 'food' ? ' active' : '' }}'><a href='/food'>Food</a></li>
-						</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
