@@ -125,7 +125,7 @@
 									<a href="/blog/post/{{{ $post->slug }}}">{{ $post->title }}</a>
 								</div>
 								<div class="date">
-									{{ date("M d, Y", strtotime($post->publish_date)) }}
+									<img src="/img/icons/time.png"><span>{{ date("M d, Y", strtotime($post->publish_date)) }}</span>
 									<?php /*by <span class='who'>{{ $post->user->first_name }} {{ $post->user->last_name }}</span> */ ?>
 								</div>
 								<hr>
@@ -169,7 +169,7 @@
 						2014 FFXIV - Crafting as a Service. FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
 					</div>
 					<div class="col-sm-4 text-right">
-						<a href="#">Back To Top</a>
+						<a href="#">Back To Top<span class="glyphicon glyphicon-chevron-up"></span></a>
 					</div>
 				</div>
 			</div>
