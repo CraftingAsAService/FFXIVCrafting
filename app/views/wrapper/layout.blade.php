@@ -93,10 +93,10 @@
 				</div>
 			</div>
 		</div>
+
 		<div id="banner">
 			<div class="container">
-				<h1>I AM THE NEW BANNER SIZES</h1>
-				<h2>I'm a supporting headline copy that doesn't really support anything.</h2>
+				@yield('banner')
 			</div>
 		</div>
 

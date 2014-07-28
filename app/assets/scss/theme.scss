@@ -14,6 +14,15 @@ body {
 	background: $theme_color_black;
 }
 
+h1, .h1, h2, .h2, h3, .h3 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+h2, .h2 {
+	font-size: 22px;
+}
+
 #account {
 	background: $theme_color_dark_gray;
 	font-family: 'Roboto Condensed', sans-serif;
@@ -145,7 +154,8 @@ body {
 #content {
 	background: $theme_color_light_gray;
 	padding: {
-		bottom: 20px;
+		top: 30px;
+		bottom: 30px;
 	}
 }
 
