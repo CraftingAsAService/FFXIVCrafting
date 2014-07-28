@@ -3,11 +3,11 @@
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		
+
 		<title>Crafting as a Service | Final Fantasy XIV ARR Crafting Information</title>
 		<meta name='description' content='Final Fantasy XIV ARR Crafting Information and Planning'>
 		<meta name='keywords' content=''
-		
+
 		<meta charset='utf-8'>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
@@ -20,6 +20,10 @@
 		@show
 
 		<link href='{{ cdn('/css/global.css') }}' rel='stylesheet' />
+
+		<!-- New Theme, woot woot! -->
+		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+		<link href='{{ cdn('/css/theme.css') }}' rel='stylesheet' />
 
 		@section('css')
 		@show
@@ -86,63 +90,82 @@
 			</div>
 
 			@yield('precontent')
-		
+
 			<div class='container'>
 
 				@yield('content')
-					
+
 			</div>
 		</div>
 
 		<div id='footer'>
 			<div class='container'>
-				<div class='row top text-center'>
-					<div class='col-xs-12 col-sm-6'>
-						<p class='text-muted credit'>
-							{{ random_donation_slogan() }}
-						</p>
+
+				<div class="row">
+					<div class="col-sm-3">
+						<p class="headline">Recent News</p>
+
+						<?php
+							$wardrobe = new \Wardrobe\Core\Repositories\DbPostRepository();
+							$max_number = 3;
+							$i = 1;
+						?>
+						@foreach($wardrobe->active($max_number) as $post)
+							<div class="post">
+								<div class="title">
+									<a href="/blog/post/{{{ $post->slug }}}">{{ $post->title }}</a>
+								</div>
+								<div class="date">
+									{{ date("M d, Y", strtotime($post->publish_date)) }}
+									<?php /*by <span class='who'>{{ $post->user->first_name }} {{ $post->user->last_name }}</span> */ ?>
+								</div>
+							</div>
+							<?php
+								if ($i != $max_number) {
+									echo '<hr>';
+								}
+								$i++;
+							?>
+						@endforeach
+
+						<p class="view-all"><a href="/blog/">View All Recent News</a></p>
 					</div>
-					<div class='col-xs-12 col-sm-6'>
-						<p class='text-muted credit'>
-							Praise be unto {{ random_guardian_name() }}
-						</p>
+					<div class="col-sm-3">
+						<p class="headline">Current Patch</p>
+						<img src="/img/current_patch.png" class="img-responsive">
+						<p>This site has been optimzed for Patch 2.3 Defenders of Eorzea</p>
 					</div>
-					<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
-						<input type='hidden' name='cmd' value='_s-xclick'>
-						<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
-						<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
-						<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
-					</form>
+					<div class="col-sm-3">
+						<p class="headline">Donations</p>
+						<p>I've spent more time building this site than actually playing. Help me relax and show my wife this isn't just a hobby!</p>
+						<p class="view-all"><a href="#buymeabeer">Donate Today!</a></p>
+					</div>
+					<div class="col-sm-3">
+						<p class="headline">Other Links</p>
+
+						<p><a href="mailto:tickthokk@gmail.com">Contact Me</a></p>
+						<hr>
+						<p><a href="/report">Report a bug</a></p>
+						<hr>
+						<p><a href="http://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
+						<hr>
+						<p><a href="http://ffxivclock.com/">FFXIV Clock</a></p>
+						<hr>
+						<p><a href="http://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
+						<hr>
+						<p><a href="/credits">Source Credits &amp; Resources</a></p>
+					</div>
 				</div>
-				<div class='row bottom'>
-					<div class='col-sm-4'>
-						<h4>Site</h4>
-						<p class='text-muted credit'>
-							Patch 2.3 Ready
-						</p>
-						<p class='text-muted credit'>
-							<a href='http://www.reddit.com/r/ffxivcrafting'>Subreddit</a>
-						</p>
+			</div>
+		</div>
+		<div id="copyright-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-8">
+						2014 FFXIV - Crafting as a Service. FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
 					</div>
-					<div class='col-sm-4'>
-						<h4>Contact</h4>
-						<p class='text-muted credit'>
-							<a href='mailto:tickthokk@gmail.com'>Email Me</a> - <a href='/report'>Report A Bug</a>
-						</p>
-						<p class='text-muted credit'>
-							<a href='http://na.finalfantasyxiv.com/lodestone/character/2859264/' target='_blank'>My Character</a> 
-						</p>
-					</div>
-					<div class='col-sm-4'>
-						<h4>Other Cool Sites</h4>
-						<p class='text-muted credit'>
-							<a href='http://ffxivclock.com/' target='_blank' rel='tooltip' title='Opens in new window'>
-								FFXIV Clock<span class='glyphicon glyphicon-new-window' style='margin-left: 5px;'></span>
-							</a> 
-						</p>
-						<p class='text-muted credit'>
-							<a href='/credits'>Source Credits &amp; Resources</a> 
-						</p>
+					<div class="col-sm-4 text-right">
+						<a href="#">Back To Top</a>
 					</div>
 				</div>
 			</div>
@@ -153,7 +176,7 @@
 		<!-- jQuery -->
 		<script src='{{ cdn('/js/jquery-2.0.3.min.js') }}'></script>
 		<script src='//code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
-		
+
 		<script src='{{ cdn('/js/bootstrap.min.js') }}' type='text/javascript'></script>
 
 		<script src='{{ cdn('/js/noty.js') }}' type='text/javascript'></script>

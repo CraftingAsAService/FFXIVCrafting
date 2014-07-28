@@ -1,0 +1,87 @@
+/* FFXIV-CAAS Theme */
+
+$theme_color_lobster: #FF4040;
+$theme_color_teal: #25c1c1;
+$theme_color_terra: #e8ddcb;
+$theme_color_black: #000000;
+$theme_color_white: #FFFFFF;
+$theme_color_light_gray: #f2f2f2;
+$theme_color_medium_gray: #747475;
+$theme_color_dark_gray: #18191A;
+
+#footer {
+	background: $theme_color_dark_gray;
+	color: $theme_color_light_gray;
+	font-size: 12px;
+	margin: {
+		top: 20px;
+	}
+	padding: {
+		top: 20px;
+		bottom: 20px;
+	}
+
+	a {
+		color: $theme_color_white;
+		font-weight: bold;
+
+		&:hover {
+			color: $theme_color_lobster;
+		}
+	}
+
+	hr {
+		border-color: #2c2e2f;
+		margin: {
+			top: 10px;
+			bottom: 10px;
+		}
+	}
+
+	p {
+		&.headline {
+			color: $theme_color_lobster;
+			font-family: 'Roboto Condensed', sans-serif;
+			font-size: 18px;
+			text-transform: uppercase;
+		}
+		&.view-all {
+			margin: {
+				top: 10px;
+			}
+			a {
+				color: $theme_color_terra;
+				font-weight: bold;
+			}
+		}
+	}
+
+	.post {
+		.title {
+			a {
+				color: $theme_color_white;
+				font-weight: bold;
+			}
+		}
+		.date {
+			color: $theme_color_medium_gray;
+			font-size: 11px;
+		}
+	}
+}
+
+#copyright-info {
+	background: $theme_color_black;
+	color: #747475;
+	font-size: 10px;
+	padding: {
+		top: 18px;
+		bottom: 18px;
+	}
+
+	a {
+		color: $theme_color_white;
+		font-size: 11px;
+		font-weight: bold;
+	}
+}

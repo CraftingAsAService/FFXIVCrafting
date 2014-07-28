@@ -37,6 +37,7 @@ td.new .stats {
 }
 
 
+/*
 #footer {
 	background-color: #f5f5f5;
 	margin-top: 30px;
@@ -82,6 +83,7 @@ td.new .stats {
 		}
 	}
 }
+*/
 
 .no-value {
 	color: #ccc;
@@ -292,7 +294,7 @@ $gear_warning_accent: #a46868;
 
 		border-collapse: separate !important;
 		border-top-width: 0px !important;
-		
+
 		color: $gear_text;
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	}
@@ -468,7 +470,7 @@ $gear_warning_accent: #a46868;
 		position: relative;
 		top: 5px;
 	}
-		
+
 	.name-box {
 		display: table-cell;
 		height: 50px;
@@ -810,7 +812,7 @@ $gear_warning_accent: #a46868;
 			font-weight: bold;
 		}
 		// I have to fix a few specific name placements
-		&.mor-dhona, 
+		&.mor-dhona,
 		&.outer {
 			.name {
 				top: 128px;
