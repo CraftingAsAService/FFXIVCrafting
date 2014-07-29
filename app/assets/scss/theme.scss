@@ -253,3 +253,37 @@ h2, .h2 {
 		}
 	}
 }
+
+/* Homepage Content */
+.home-callout {
+	background: $theme_color_white;
+	border-bottom: 3px solid $theme_color_lobster;
+	padding: 10px;
+
+	.copy {
+		padding-left: 0px;
+	}
+
+	.title {
+		color: $theme_color_black;
+		font-family: 'Roboto Condensed', sans-serif;
+		font-size: 30px;
+	}
+	.description {
+		color: $theme_color_medium_gray;
+		font-size: 12px;
+		line-height: 18px;
+	}
+
+	img {
+		&.equipment {
+			margin-top: 17px
+		}
+	}
+}
+
+a:hover {
+	.title {
+		color: $theme_color_lobster;
+	}
+}
