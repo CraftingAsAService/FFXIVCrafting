@@ -1,6 +1,8 @@
 <?php
 
 return array(
+	'available_languages' => array('en', 'jp', 'de', 'fr'),
+	'default_language' => 'en',
 	'donation_slogans' => array(
 		"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
 		"Keep the site ad free, <a href='#buymeabeer' id='buymeabeer'>The best AdBlock is Donating!</a>",
@@ -12,6 +14,48 @@ return array(
 	),
 	'cache_length' => '524160', // Minutes - 60 * 24 * 7 * 52 -- One Year (php artisan cache:clear flushes it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Right Ring','Right Ring'),
+	'job_ids' => array(
+		'crafting' => array(
+			8, // CRP
+			9, // BSM
+			10, // ARM
+			11, // GSM
+			12, // LTW
+			13, // WVR
+			14, // ALC
+			15, // CUL
+		),
+		'gathering' => array(
+			16, // MIN
+			17, // BTN
+			18, // FSH
+		),
+		'basic_melee' => array(
+			1, // GLA
+			2, // PGL
+			3, // MRD
+			4, // LNC
+			5, // ARC
+		),
+		'basic_magic' => array(
+			6, // CNJ
+			7, // THM
+			26, // ACN
+		),
+		'advanced_melee' => array(
+			19, // PLD
+			20, // MNK
+			21, // WAR
+			22, // DRG
+			23, // BRD
+		),
+		'advanced_magic' => array(
+			24, // WHM
+			25, // BLM
+			27, // SMN
+			28, // SCH
+		),
+	),
 	'defined_slots' => array(
 		1	=> 'Main Hand',
 		2	=> 'Off Hand',
@@ -51,9 +95,6 @@ return array(
 		19	=> array(3,5,7,8), // 'Body, Head, Hands, Legs & Feet',
 		21	=> array(7,8), // 'Body, Legs & Feet'
 	),
-
-	'available_languages' => array('en', 'ja', 'de', 'fr'),
-	'default_language' => 'en',
 	'map' => array(
 		'shroud' => array(
 			'area' => array(

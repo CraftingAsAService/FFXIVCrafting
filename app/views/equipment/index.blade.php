@@ -29,18 +29,18 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand &amp; Land</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-						<label class='btn btn-primary class-selector{{ $job == 'CRP' ? ' active' : '' }}'>
-							<input type='radio' name='class' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						@foreach($crafting_job_list as $job)
+						<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('MIN','BTN','FSH') as $job)
+						@foreach($gathering_job_list as $job)
 						<label class='btn btn-info class-selector'>
-							<input type='radio' name='class' value='{{ $job }}'> 
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
@@ -51,18 +51,18 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC') as $job)
+						@foreach($basic_melee_job_list as $job)
 						<label class='btn btn-danger class-selector '>
-							<input type='radio' name='class' value='{{ $job }}'> 
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('CNJ', 'THM', 'ACN') as $job)
+						@foreach($basic_magic_job_list as $job)
 						<label class='btn btn-warning class-selector '>
-							<input type='radio' name='class' value='{{ $job }}'> 
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>

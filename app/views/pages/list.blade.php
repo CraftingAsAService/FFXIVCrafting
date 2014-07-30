@@ -5,7 +5,7 @@
 	<script type='text/javascript'>
 		var xivdb_tooltips = 
 		{ 
-			"language"      : "EN",
+			"language"      : "{{ strtoupper(Config::get('language')) }}",
 			"frameShadow"   : true,
 			"compact"       : false,
 			"statsOnly"     : false,

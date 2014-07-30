@@ -9,6 +9,7 @@ class _LibraBasic extends Eloquent
 	// Doing these "backwards" because name_en is an integer, and en_name will be the object
 	public function en_name() { return $this->hasOne('Translations', 'id', 'name_en'); }
 	public function ja_name() { return $this->hasOne('Translations', 'id', 'name_ja'); }
+	public function jp_name() { return $this->hasOne('Translations', 'id', 'name_ja'); }
 	public function fr_name() { return $this->hasOne('Translations', 'id', 'name_fr'); }
 	public function de_name() { return $this->hasOne('Translations', 'id', 'name_de'); }
 

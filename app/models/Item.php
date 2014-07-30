@@ -74,14 +74,14 @@ class Item extends _LibraBasic
 
 	public static function calculate($job_id = 0, $level = 1, $range = 0, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
-		$cache_key = __METHOD__ . '|' . $job_id . ',' . $level . ',' . $range . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');
+		$cache_key = __METHOD__ . '|' . Config::get('language') . '|' . $job_id . ',' . $level . ',' . $range . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');
 		
 		// Does cache exist?  Return that instead
 		if (Cache::has($cache_key))
 			return Cache::get($cache_key);
 
 		// Get the job IDs
-		$job = ClassJob::with('abbr')->find($job_id);
+		$job = ClassJob::with('en_abbr')->find($job_id);
 
 		$equipment_list = array_flip(Config::get('site.equipment_roles'));
 		array_walk($equipment_list, function(&$i) { $i = array(); });
@@ -96,10 +96,10 @@ class Item extends _LibraBasic
 		unset($sce, $ce);
 
 		// Make sure the slot avoids pieces with certain stats
-		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->abbr->term));
-		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
+		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->en_abbr->term));
+		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->en_abbr->term));
 		$boring_stat_ids = Stat::get_ids(Stat::boring());
-		$advanced_stat_avoidance = Stat::advanced_avoidance($job->abbr->term);
+		$advanced_stat_avoidance = Stat::advanced_avoidance($job->en_abbr->term);
 		foreach ($advanced_stat_avoidance as &$ava)
 		{
 			// These are in a very specific order.

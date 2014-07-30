@@ -5,10 +5,14 @@ class CraftingController extends BaseController
 
 	public function getIndex()
 	{
+		$crafting_job_ids = Config::get('site.job_ids.crafting');
+		// ini_set('xdebug.var_display_max_depth', '10'); 
+		// dd(current(ClassJob::with('name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get()));
 		return View::make('crafting.index')
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', ClassJob::get_name_abbr_list())
+			->with('job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get())
+			->with('crafting_job_ids', $crafting_job_ids)
 			->with('previous', Cookie::get('previous_crafting_load'));
 	}
 

@@ -31,18 +31,18 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group jobs-list' data-toggle='buttons'>
-						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-						<label class='btn btn-primary class-selector{{ $job == 'CRP' ? ' active' : '' }}'>
-							<input type='radio' name='class' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						@foreach($job_list as $job)
+						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group hidden jobs-list' data-toggle='buttons'>
-						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-						<label class='btn btn-warning class-selector multi{{ $job == 'CRP' ? ' active' : '' }}'>
-							<input type='checkbox' name='classes[]' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						@foreach($job_list as $job)
+						<label class='btn btn-warning class-selector multi{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}'>
+							<input type='checkbox' name='classes[]' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
