@@ -1,25 +1,14 @@
 @extends('wrapper.layout')
 
 @section('javascript')
-<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "{{ strtoupper(Config::get('language')) }}",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
-<script type='text/javascript' src='{{ cdn('/js/materia.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/materia.js') }}'></script>
+@stop
+
+@section('banner')
+	<h1>Materia</h1>
 @stop
 
 @section('content')
-
-<h1>Materia</h1>
 
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped'>

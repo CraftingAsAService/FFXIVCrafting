@@ -1,29 +1,17 @@
 @extends('wrapper.layout')
 
 @section('javascript')
-<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "{{ strtoupper(Config::get('language')) }}",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
-<script type='text/javascript' src='{{ cdn('/js/career.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/career.js') }}'></script>
+@stop
+
+@section('banner')
+	<h1>{{ $job->name->term }}'s Receiver Career</h1>
+
+	<p>The following class{{ count($jobs) > 1 ? 'es' : '' }} produce items for {{ $job->name->term }} between levels {{ $min_level }} and {{ $max_level }}:</p>
+	<p>@foreach($jobs as $j) <span class='label label-default'>{{ $j }}</span> @endforeach</p>
 @stop
 
 @section('content')
-
-<h1>{{ $job->name->term }}'s Receiver Career</h1>
-
-<p>The following class{{ count($jobs) > 1 ? 'es' : '' }} produce items for {{ $job->name->term }} between levels {{ $min_level }} and {{ $max_level }}:</p>
-<p>@foreach($jobs as $j) <span class='label label-default'>{{ $j }}</span> @endforeach</p>
-
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped hide_quests' id='career-items-table'>
 		<thead>

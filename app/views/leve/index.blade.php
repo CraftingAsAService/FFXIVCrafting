@@ -5,33 +5,21 @@
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "{{ strtoupper(Config::get('language')) }}",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-multiselect.js') }}'></script>
 	<script src='{{ cdn('/js/leves.js') }}'></script>
 @stop
 
+@section('banner')
+	<a href='/leve' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
+
+	<h1>Levequest Information</h1>
+@stop
+
 @section('content')
-
-<a href='/leve' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
-<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
-
-<h1>Leve Information</h1>
-
 <div class='panel panel-default'>
 	<div class='panel-heading'>
-		Leve Filter
+		Levequest Filter
 	</div>
 	<div class='panel-body'>
 		<form class='leve-form form form-inline'>

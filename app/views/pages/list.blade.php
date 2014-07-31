@@ -1,28 +1,17 @@
 @extends('wrapper.layout')
 
 @section('javascript')
-<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "{{ strtoupper(Config::get('language')) }}",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
-<script type='text/javascript' src='{{ cdn('/js/list.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/list.js') }}'></script>
+@stop
+
+@section('banner')
+	<h1>
+		<i class='glyphicon glyphicon-shopping-cart'></i>
+		Crafting List
+	</h1>
 @stop
 
 @section('content')
-
-<h1>
-	<i class='glyphicon glyphicon-shopping-cart'></i>
-	Crafting List
-</h1>
 
 @if(empty($list))
 <p>Your list is empty.</p>

@@ -3,6 +3,11 @@
 class EquipmentController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'equipment');
+	}
+
 	public function getIndex()
 	{
 		$job_ids = Config::get('site.job_ids');

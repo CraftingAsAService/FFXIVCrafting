@@ -10,13 +10,13 @@
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 @stop
 
-@section('content')
-
+@section('banner')
 	<h1>Crafting Calculator</h1>
-
-	<p>Display all the materials needed to craft one of each item between two levels.</p>
-
+	<h2>Display all the materials needed to craft one of each item between two levels.</h2>
 	<p>In general this will not level you to your desired level.  Visit the <a href='/leve'>Leves</a> page when you're done crafting!</p>
+@stop
+
+@section('content')
 
 	@if(isset($error) && $error)
 	<div class='alert alert-danger'>
@@ -24,7 +24,7 @@
 	</div>
 	@endif
 
-	<form action='/crafting' method='post' role='form' class='well form-horizontal' autocomplete='off'>
+	<form action='/crafting' method='post' role='form' class='form-horizontal' autocomplete='off'>
 		<fieldset>
 			<legend>Select your Class</legend>
 			<div class='form-group'>

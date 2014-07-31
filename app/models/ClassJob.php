@@ -7,7 +7,6 @@ class ClassJob extends _LibraBasic
 
 	public function en_abbr() { return $this->hasOne('Translations', 'id', 'abbr_en'); }
 	public function ja_abbr() { return $this->hasOne('Translations', 'id', 'abbr_ja'); }
-	public function jp_abbr() { return $this->hasOne('Translations', 'id', 'abbr_ja'); }
 	public function fr_abbr() { return $this->hasOne('Translations', 'id', 'abbr_fr'); }
 	public function de_abbr() { return $this->hasOne('Translations', 'id', 'abbr_de'); }
 
@@ -44,6 +43,17 @@ class ClassJob extends _LibraBasic
 				return $job;
 		
 		return false;
+	}
+
+	public static function get_abbr_list($ids = array())
+	{
+		$all_jobs = ClassJob::with('abbr')->whereIn('id', $ids)->get();
+
+		$return = array();
+		foreach ($all_jobs as $job)
+			$return[] = $job->abbr->term;
+		
+		return $return;
 	}
 
 }

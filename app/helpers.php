@@ -29,3 +29,10 @@
 		$slogans = Config::get('site.donation_slogans');
 		return $slogans[array_rand($slogans)];
 	}
+
+	function menu_item($href = '', $label = '', $active = '', $class = '')
+	{
+		$class .= View::shared('active') == $active ? ' active' : '';
+		$tag = $class ? '<li class="' . trim($class) . '">' : '<li>';
+		return $tag . '<a href=\'' . $href . '\'>' . $label . '</a></li>'; 
+	}

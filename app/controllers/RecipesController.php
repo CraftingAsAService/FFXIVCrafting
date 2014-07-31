@@ -3,6 +3,11 @@
 class RecipesController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'recipes');
+	}
+
 	public function getIndex()
 	{
 		$random_list = Recipes::with('item', 'item.name')
@@ -13,7 +18,6 @@ class RecipesController extends BaseController
 			->paginate(10);
 
 		return View::make('recipes.index')
-			->with('active', 'recipes')
 			->with('list', $random_list)
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}

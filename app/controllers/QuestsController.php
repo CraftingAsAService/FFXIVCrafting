@@ -3,6 +3,11 @@
 class QuestsController extends BaseController 
 {
 
+	public function __construct()
+	{
+		View::share('active', 'quests');
+	}
+
 	public function getIndex()
 	{
 		// All Quests
@@ -31,7 +36,6 @@ class QuestsController extends BaseController
 		}
 
 		return View::make('pages.quests')
-			->with('active', 'quests')
 			->with('quests', $quests)
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}

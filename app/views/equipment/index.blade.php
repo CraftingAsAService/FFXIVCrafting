@@ -10,11 +10,12 @@
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 @stop
 
-@section('content')
-
+@section('banner')
 	<h1>Equipment Calculator</h1>
+	<h2>Display the gear available for a class at a certain level.</h2>
+@stop
 
-	<p>Display the gear available for a class at a certain level.</p>
+@section('content')
 
 	@if(isset($error) && $error)
 	<div class='alert alert-danger'>
@@ -22,7 +23,7 @@
 	</div>
 	@endif
 
-	<form action='/equipment' method='post' role='form' class='well form-horizontal'>
+	<form action='/equipment' method='post' role='form' class='form-horizontal'>
 		<fieldset>
 			<legend>Select your Class</legend>
 			<div class='form-group'>
@@ -83,8 +84,8 @@
 					<div class='make-switch' data-on='success' data-off='warning'>
 						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
 					</div>
-					Only show craftable items 
-					<input type='checkbox' name='rewardable_too' value='1' checked='checked'> 
+					Only show craftable items
+					<input type='checkbox' name='rewardable_too' value='1' checked='checked'>
 					and <u rel='tooltip' title='Items that are potential rewards from leves, achievements, quests, etc'>rewardable items</u>
 				</div>
 			</div>
@@ -105,7 +106,7 @@
 				</div>
 				@if($previous)
 				<div class='col-sm-1 text-center' style='line-height: 3;'>
-					or 
+					or
 				</div>
 				<div class='col-sm-4 col-md-3'>
 					<a href='{{ $previous }}' class='btn btn-warning btn-block btn-lg'>Load Last Setup</a>

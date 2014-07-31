@@ -1,6 +1,12 @@
 <?php
 
-class FoodController extends BaseController {
+class FoodController extends BaseController
+{
+
+	public function __construct()
+	{
+		View::share('active', 'food');
+	}
 
 	public function getIndex()
 	{
@@ -50,7 +56,6 @@ class FoodController extends BaseController {
 		#dd($food_groups);
 
 		return View::make('pages.food')
-			->with('active', 'food')
 			->with('food_groups', $food_groups);
 	}
 

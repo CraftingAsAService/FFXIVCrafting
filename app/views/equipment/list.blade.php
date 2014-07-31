@@ -6,19 +6,6 @@
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "{{ strtoupper(Config::get('language')) }}",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
 	<script type='text/javascript'>
@@ -30,17 +17,21 @@
 	<script type='text/javascript' src='{{ cdn('/js/equipment.js') }}'></script>
 @stop
 
+@section('banner')
+
+	<a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
+		<i class='glyphicon glyphicon-play'></i>
+		Start Tour
+	</a>
+
+	<h1>
+		<i class='class-icon {{ $job->abbr->term }} large' style='position: relative; top: 5px;'></i>
+		{{ $job->name->term }}
+	</h1>
+	<h2>Equipment Guide</h2>
+@stop
+
 @section('content')
-
-<a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
-	<i class='glyphicon glyphicon-play'></i>
-	Start Tour
-</a>
-
-<h1 style='margin-top: 0px;'>
-	<i class='class-icon {{ $job->abbr->term }} large' style='position: relative; top: 5px;'></i>
-	{{ $job->name->term }}
-</h1>
 
 <table class='table' id='gear-main'>
 	<tbody>

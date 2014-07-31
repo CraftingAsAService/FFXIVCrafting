@@ -1,7 +1,13 @@
 <?php
 
 return array(
-	'available_languages' => array('en', 'jp', 'de', 'fr'),
+	'available_languages' => array('en', 'ja', 'de', 'fr'),
+	'full_languages' => array(
+		'en' => 'English',
+		'fr' => 'Français',
+		'de' => 'Deutsch',
+		'ja' => '日本語',
+	),
 	'default_language' => 'en',
 	'donation_slogans' => array(
 		"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",
@@ -30,6 +36,7 @@ return array(
 			17, // BTN
 			18, // FSH
 		),
+		'fishing' => 18,
 		'basic_melee' => array(
 			1, // GLA
 			2, // PGL
