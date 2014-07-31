@@ -34,8 +34,10 @@
 					<div class='form-group'>
 						<label>Class</label>
 						<select class='multiselect hidden' multiple='multiple' id='class-selector'>
-							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-							<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+							@foreach($crafting_job_list as $job)
+							<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' selected="selected"' : '' }}>
+								{{{ $job->name->term }}}
+							</option>
 							@endforeach
 						</select>
 					</div>

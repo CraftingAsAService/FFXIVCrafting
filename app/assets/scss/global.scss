@@ -988,3 +988,9 @@ ul.plain {
 		}
 	}
 }
+
+.multiselect-container.dropdown-menu {
+	.radio input[type=radio], .checkbox input[type=checkbox] {
+		margin-left: -16px; // vs -20px set by bootstrap
+	}
+}

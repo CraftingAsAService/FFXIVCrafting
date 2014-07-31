@@ -23,13 +23,13 @@ class ClassJob extends _LibraBasic
 		return $list;
 	}
 
-	public static function get_id_abbr_list()
+	public static function get_id_abbr_list($force_english = false)
 	{
 		$list = array();
-		$results = ClassJob::with('abbr')->get();
+		$results = ClassJob::with(($force_english ? 'en_' : '') . 'abbr')->get();
 
 		foreach ($results as $row)
-			$list[$row->abbr->term] = $row->id;
+			$list[$row->{($force_english ? 'en_' : '') . 'abbr'}->term] = $row->id;
 
 		return $list;
 	}

@@ -10,15 +10,18 @@ class LeveController extends BaseController
 
 	public function getIndex()
 	{
+		$job_ids = Config::get('site.job_ids.crafting');
+
 		return View::make('leve.index')
-			->with('job_list', ClassJob::get_name_abbr_list());
+			->with('crafting_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids)->get())
+			->with('crafting_job_ids', $job_ids);
 	}
 
 	public function postIndex()
 	{
 		// Parse the Job IDs
 		$selected_classes = Input::get('classes');
-		foreach (ClassJob::get_id_abbr_list() as $abbr => $id)
+		foreach (ClassJob::get_id_abbr_list(true) as $abbr => $id)
 			if (in_array($abbr, $selected_classes))
 				$job_ids[] = $id;
 

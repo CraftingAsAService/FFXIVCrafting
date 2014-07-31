@@ -9,9 +9,12 @@ class CareerController extends BaseController
 	}
 
 	public function getIndex()
-	{	
+	{
+		$job_ids = Config::get('site.job_ids');
 		return View::make('career.index')
-			->with('job_list', ClassJob::get_name_abbr_list())
+			->with('crafting_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids['crafting'])->get())
+			->with('gathering_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids['gathering'])->get())
+			->with('job_ids', $job_ids)
 			->with('previous_ccp', Cookie::get('previous_ccp'))
 			->with('previous_ccr', Cookie::get('previous_ccr'))
 			->with('previous_gc', Cookie::get('previous_gc'))

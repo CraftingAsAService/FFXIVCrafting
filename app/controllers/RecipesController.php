@@ -19,6 +19,7 @@ class RecipesController extends BaseController
 
 		return View::make('recipes.index')
 			->with('list', $random_list)
+			->with('crafting_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', Config::get('site.job_ids.crafting'))->get())
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 

@@ -38,9 +38,9 @@
 				unset($materia_list[$name]);
 			?>
 			<tr>
-				<td class='text-right valign'>{{ $name }} Materia</td>
+				<td class='text-right valign'>{{ $name }}</td>
 				<td class='valign'>
-					<img src='/img/stats/nq/{{ $materia['stat'] }}.png' class='stat-icon'>
+					<img src='/img/stats/nq/{{ $materia['icon'] }}.png' class='stat-icon'>
 					{{ $materia['stat'] }}
 				</td>
 				@foreach(array('I', 'II', 'III', 'IV') as $power)

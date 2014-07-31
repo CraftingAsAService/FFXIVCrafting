@@ -24,16 +24,20 @@
 				I am a
 
 				<select class='multiselect hidden' id='supporter-producer-class' name='supporter-producer-class'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-					<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+					@foreach($crafting_job_list as $job)
+					<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' selected="selected"' : '' }}>
+						{{{ $job->name->term }}}
+					</option>
 					@endforeach
 				</select>
 
 				, what can I make to support
 
 				<select class='multiselect hidden' multiple='multiple' id='supporter-supported-classes' name='supporter-supported-classes[]'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-					<option value='{{ $job }}' selected='selected'>{{ $job_list[$job] }}</option>
+					@foreach($crafting_job_list as $job)
+					<option value='{{ $job->en_abbr->term }}' selected='selected'>
+						{{{ $job->name->term }}}
+					</option>
 					@endforeach
 				</select>
 
@@ -67,15 +71,19 @@
 				I am a
 
 				<select class='multiselect hidden' id='receiver-recipient-class' name='receiver-recipient-class'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-					<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+					@foreach($crafting_job_list as $job)
+					<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' selected="selected"' : '' }}>
+						{{{ $job->name->term }}}
+					</option>
 					@endforeach
 				</select>
 				, what should
 
 				<select class='multiselect hidden' multiple='multiple' id='receiver-producer-classes' name='receiver-producer-classes[]'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-					<option value='{{ $job }}' selected='selected'>{{ $job_list[$job] }}</option>
+					@foreach($crafting_job_list as $job)
+					<option value='{{ $job->en_abbr->term }}' selected='selected'>
+						{{{ $job->name->term }}}
+					</option>
 					@endforeach
 				</select>
 
@@ -109,16 +117,22 @@
 				I am a
 
 				<select class='multiselect hidden' id='gatherer-class' name='gatherer-class'>
-					@foreach(array('MIN','BTN','FSH') as $job)
-					<option value='{{ $job }}'{{ $job == 'MIN' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+					@foreach($gathering_job_list as $job)
+					<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['gathering']) ? ' selected="selected"' : '' }}>
+						{{{ $job->name->term }}}
+					</option>
 					@endforeach
 				</select>
 				
 				, what should I obtain to support
 
 				<select class='multiselect hidden' multiple='multiple' id='gathering-supported-classes' name='gathering-supported-classes[]'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL', 'MIN', 'BTN', 'FSH') as $job)
-					<option value='{{ $job }}' selected='selected'>{{ $job_list[$job] }}</option>
+					@foreach(array('crafting','gathering') as $type)
+					@foreach(${$type . '_job_list'} as $job)
+					<option value='{{ $job->en_abbr->term }}' selected='selected'>
+						{{{ $job->name->term }}}
+					</option>
+					@endforeach
 					@endforeach
 				</select>
 
@@ -155,8 +169,10 @@
 				What can I maim or pillage to support
 
 				<select class='multiselect hidden' multiple='multiple' id='battling-supported-classes' name='gathering-supported-classes[]'>
-					@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-					<option value='{{ $job }}' selected='selected'>{{ $job_list[$job] }}</option>
+					@foreach($crafting_job_list as $job)
+					<option value='{{ $job->en_abbr->term }}' selected='selected'>
+						{{{ $job->name->term }}}
+					</option>
 					@endforeach
 				</select>
 
