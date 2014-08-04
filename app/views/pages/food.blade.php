@@ -76,6 +76,17 @@
 						</table>
 					</div>
 					<div class='highchart hidden'></div>
+					<ul class='list-group margin-top'>
+						<li class='list-group-item list-group-item-info'>
+							Legend
+						</li>
+						@foreach($section['headers'] as $header)
+						<li class='list-group-item'>
+							<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{{ $translations[$header] }}}'>
+							{{{ $translations[$header] }}}
+						</li>
+						@endforeach
+					</ul>
 				</div>
 				<div class='col-sm-6'>
 					<div class='table-responsive'>

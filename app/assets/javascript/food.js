@@ -176,7 +176,8 @@ var food = {
 									enabled: true,
 									lineColor: 'rgb(100,100,100)'
 								}
-							}
+							},
+							symbol: 'circle'
 						},
 						states: {
 							hover: {
