@@ -6,8 +6,9 @@
 @stop
 
 @section('javascript')
-	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/crafting-index.js') }}'></script>
 @stop
 
 @section('banner')
@@ -78,30 +79,20 @@
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Self Sufficient</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-						<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked'>
+					<div>
+						<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+						<small><em> - "I want to gather things manually instead of buying them"</em></small>
 					</div>
-					<span class='ss_yes'>
-						"I want to gather things manually instead of buying them"
-					</span>
-					<span class='ss_no hidden'>
-						"Just let me know where to buy stuff"
-					</span>
 				</div>
 			</div>
 
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Misc Items</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-						<input type='checkbox' name='misc_items' id='misc_items_switch' value='1'>
+					<div>
+						<input type='checkbox' name='misc_items' id='misc_items_switch' value='1' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+						<small><em> - "Include housing and dye items"</em></small>
 					</div>
-					<span class='mi_yes hidden'>
-						"Include housing and dye items"
-					</span>
-					<span class='mi_no'>
-						"Do not include housing and dye items"
-					</span>
 				</div>
 			</div>
 		</fieldset>

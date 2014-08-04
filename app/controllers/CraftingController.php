@@ -8,17 +8,22 @@ class CraftingController extends BaseController
 		View::share('active', 'crafting');
 	}
 
-	public function getIndex()
+	public function getIndex($advanced = false)
 	{
 		$crafting_job_ids = Config::get('site.job_ids.crafting');
 		// ini_set('xdebug.var_display_max_depth', '10'); 
 		// dd(current(ClassJob::with('name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get()));
-		return View::make('crafting.index')
+		return View::make('crafting.' . ($advanced ? 'advanced' : 'basic'))
 			->with('error', FALSE)
 			->with('active', 'crafting')
 			->with('job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get())
 			->with('crafting_job_ids', $crafting_job_ids)
 			->with('previous', Cookie::get('previous_crafting_load'));
+	}
+
+	public function getAdvanced()
+	{
+		return $this->getIndex(true);
 	}
 
 	public function postIndex()
@@ -49,7 +54,7 @@ class CraftingController extends BaseController
 		$include_quests = TRUE;
 
 		if ( ! Input::all())
-			return Redirect::to('/crafting');
+			return Redirect::back();
 
 		// Get Options
 		$options = explode(':', array_keys(Input::all())[0]);

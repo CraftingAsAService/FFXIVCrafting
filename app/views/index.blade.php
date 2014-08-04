@@ -5,7 +5,7 @@
 @stop
 
 @section('javascript')
-	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 @stop
 
 @section('banner')

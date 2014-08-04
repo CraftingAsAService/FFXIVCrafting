@@ -84,15 +84,11 @@
 		<div class='row'>
 			<div class='col-sm-6'>
 				<label>Slim Mode</label>
-				<div class='make-switch' id='toggle-slim' data-on='success' data-off='warning'>
-					<input type='checkbox'{{ $slim_mode ? ' checked="checked"' : '' }}>
-				</div>
+				<input type='checkbox' id='toggle-slim' {{ $slim_mode ? ' checked="checked"' : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
 			</div>
 			<div class='col-sm-6'>
 				<label>Boring Stats</label>
-				<div class='make-switch' id='toggle-all-stats' data-on='success' data-off='warning'>
-					<input type='checkbox'>
-				</div>
+				<input type='checkbox' id='toggle-all-stats' class='bootswitch' data-on-text='YES' data-off-text='NO'>
 			</div>
 		</div>
 	</div>
@@ -156,12 +152,10 @@
 					<input type='hidden' name='level' value='{{ $original_level }}'>
 					<input type='hidden' name='slim_mode' value='{{ $slim_mode ? 1 : 0 }}'>
 					<input type='hidden' name='rewardable_too' value='{{ $rewardable_too }}'>
-					<label>
-						Only Craftable
-					</label>
-					<div class='make-switch' data-on='success' data-off='warning'>
-						<input type='checkbox' id='craftable_only_switch' name='craftable_only' value='1' {{ $craftable_only ? ' checked="checked"' : '' }}>
-					</div>
+					
+					Only Craftable
+					<input type='checkbox' id='craftable_only_switch' name='craftable_only' value='1' {{ $craftable_only ? ' checked="checked"' : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					
 				</form>
 			</div>
 		</div>

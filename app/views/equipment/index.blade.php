@@ -6,8 +6,13 @@
 @stop
 
 @section('javascript')
-	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
+	<script type='text/javascript'>
+		$(function() {
+			$('.bootswitch').bootstrapSwitch();
+		});
+	</script>
 @stop
 
 @section('banner')
@@ -81,21 +86,18 @@
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Craftable Only</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning'>
-						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
-					</div>
-					Only show craftable items
-					<input type='checkbox' name='rewardable_too' value='1' checked='checked'>
+					<input type='checkbox' name='craftable_only' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Only show craftable items
+					<input type='checkbox' name='rewardable_too' value='1'>
 					and <u rel='tooltip' title='Items that are potential rewards from leves, achievements, quests, etc'>rewardable items</u>
+					</em></small>
 				</div>
 			</div>
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Slim Mode</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning'>
-						<input type='checkbox' name='slim_mode' value='1' checked='checked'>
-					</div>
-					Show a condensed version
+					<input type='checkbox' name='slim_mode' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Show a condensed version</em></small>
 				</div>
 			</div>
 		</fieldset>
