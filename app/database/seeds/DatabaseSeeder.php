@@ -507,7 +507,7 @@ class ItemSeeder extends _LibraSeeder
 							'hq_limit' => null,
 							'bonus' => 1
 						);
-
+					
 			if (isset($row['extra']['boost']))
 				foreach ($row['extra']['boost'] as $baseparam_id => $boost)
 					if ( ! is_array($boost))

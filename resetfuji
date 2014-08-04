@@ -1,7 +1,7 @@
 #!/bin/sh
 
 hhvm artisan migrate:refresh --seed --env=fuji
-hhvm artisan cache:clear -env-fuji
+hhvm artisan cache:clear --env=fuji
 
 # Dump the Data
 rm app/storage/data.sql.7z

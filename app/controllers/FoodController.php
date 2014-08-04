@@ -24,18 +24,21 @@ class FoodController extends BaseController
 				$stats = $names = $key_name = array();
 				foreach ($item->baseparam as $baseparam)
 				{
+					$nq_limit = $baseparam->pivot->nq_limit ?: (int) $baseparam->pivot->nq_amount;
+					$hq_limit = $baseparam->pivot->hq_limit ?: (int) $baseparam->pivot->hq_amount;
+					
 					$translations[$baseparam->en_name->term] = $baseparam->name->term;
 					$stats[$baseparam->en_name->term] = array(
 						'name' => $baseparam->name->term,
 						'nq' => array(
 							'amount' => (int) $baseparam->pivot->nq_amount,
-							'limit' => $baseparam->pivot->nq_limit,
-							'threshold' => round($baseparam->pivot->nq_limit / ($baseparam->pivot->nq_amount / 100))
+							'limit' => $nq_limit,
+							'threshold' => round($nq_limit / ($baseparam->pivot->nq_amount / 100))
 						), 
 						'hq' => array(
 							'amount' => (int) $baseparam->pivot->hq_amount,
-							'limit' => $baseparam->pivot->hq_limit,
-							'threshold' => $baseparam->pivot->hq_amount == 0 ? 0 : round($baseparam->pivot->hq_limit / ($baseparam->pivot->hq_amount / 100))
+							'limit' => $hq_limit,
+							'threshold' => $baseparam->pivot->hq_amount == 0 ? 0 : round($hq_limit / ($baseparam->pivot->hq_amount / 100))
 						)
 					);
 				}
