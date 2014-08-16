@@ -29,7 +29,7 @@
 		@show
 
 		@if(Config::get('app.debug'))
-		<style type='text/css'>#copyright-info { padding-bottom: 48px; } @media(max-width: 779px) { #copyright-info { padding-bottom: 160px; } }</style>
+		<style type='text/css'>@media(min-width: 768px) { #copyright-info { padding-bottom: 48px; } } @media(max-width: 767px) { .anbu { display: none !important; } }</style>
 		@endif
 	</head>
 	<body>
