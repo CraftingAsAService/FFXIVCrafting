@@ -29,14 +29,14 @@
 		@show
 
 		@if(Config::get('app.debug'))
-		<style type='text/css'>#copyright-info { padding-bottom: 48px; }</style>
+		<style type='text/css'>#copyright-info { padding-bottom: 48px; } @media(max-width: 779px) { #copyright-info { padding-bottom: 160px; } }</style>
 		@endif
 	</head>
 	<body>
 
 		<div id="account">
 			<div class="container">
-				<ul>
+				<ul class='hidden-xs'>
 					<li class='language-selector dropdown'>
 						<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 							<img src="/img/icons/flags/{{ Config::get('language') }}.png">
@@ -66,22 +66,26 @@
 						</a>
 					</li>
 				</ul>
+				<ul class='visible-xs'>
+					<li>
+						<a href='#' class='mobile-menu'>
+							<img src="/img/reward.png" width='12' height='12'>
+							<span>Menu</span>
+						</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div id="header">
 			<div class='navbar'>
 				<div class='container'>
 					<div class="row">
-						<div class="col-sm-3">
-							<img src="http://placehold.it/280x80/f7f7f7/e2e2e2" class="img-responsive">
+						<div class="col-xs-12 col-sm-4 col-lg-3 logo">
+							<!-- /f7f7f7/e2e2e2 -->
+							<img src="http://placehold.it/280x80" class="img-responsive" width='280' height='80'>
 						</div>
-						<div class="col-sm-9 menu-navbar">
+						<div class="col-xs-12 col-sm-8 col-lg-9 menu-navbar">
 							<div class='navbar-header'>
-								<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-									<span class='icon-bar'></span>
-									<span class='icon-bar'></span>
-									<span class='icon-bar'></span>
-								</button>
 							</div>
 							<div class='collapse navbar-collapse'>
 								<ul class='nav navbar-nav'>
@@ -179,10 +183,10 @@
 		<div id="copyright-info">
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-8">
+					<div class="col-xs-12 col-sm-8">
 						2014 FFXIV - Crafting as a Service. FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
 					</div>
-					<div class="col-sm-4 text-right">
+					<div class="col-xs-12 col-sm-4 text-right">
 						<a href="#">Back To Top<span class="glyphicon glyphicon-chevron-up"></span></a>
 					</div>
 				</div>
