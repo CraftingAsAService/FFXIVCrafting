@@ -6,19 +6,6 @@
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "EN",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
 	<script type='text/javascript' src='{{ cdn('/js/crafting.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
@@ -247,15 +234,15 @@
 			<label>
 				Self Sufficient
 			</label>
-			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}>
-			</div>
+			
+				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}  class='bootswitch' data-on-text='YES' data-off-text='NO'>
+			
 			<label class='margin-left'>
-				Misc Items
+				Dyes &amp; Furniture
 			</label>
-			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-				<input type='checkbox' id='misc_items_switch' name='misc_items' value='1' {{ $misc_items ? " checked='checked'" : '' }}>
-			</div>
+			
+				<input type='checkbox' id='misc_items_switch' name='misc_items' value='1' {{ $misc_items ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
+			
 		</form>
 		@else
 		<form action='/crafting/list' method='post' role='form' class='form-horizontal' id='self-sufficient-form'>
@@ -263,9 +250,9 @@
 			<label>
 				Self Sufficient
 			</label>
-			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-				<input type='checkbox' id='self_sufficient_switch' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}>
-			</div>
+			
+				<input type='checkbox' id='self_sufficient_switch' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}> class='bootswitch' data-on-text='YES' data-off-text='NO'
+			
 			<small><em>* Refreshes page</em></small>
 		</form>
 		@endif

@@ -27,17 +27,31 @@
 
 		@section('css')
 		@show
+
+		@if(Config::get('app.debug'))
+		<style type='text/css'>#copyright-info { padding-bottom: 48px; }</style>
+		@endif
 	</head>
 	<body>
 
 		<div id="account">
 			<div class="container">
 				<ul>
-					<li>
-						<a href="#">
-							<img src="/img/icons/flags/us.png">
-							<span>English</span>
+					<li class='language-selector dropdown'>
+						<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
+							<img src="/img/icons/flags/{{ Config::get('language') }}.png">
+							<span>{{ Config::get('site.full_languages')[Config::get('language')] }}</span>
 						</a>
+						<ul class='dropdown-menu' role='menu'>
+							@foreach(Config::get('site.full_languages') as $slug => $language)
+							<?php if ($slug == Config::get('language')) continue; ?>
+							<li>
+								<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . Config::get('language_base_url') }}'>
+									<img src="/img/icons/flags/{{ $slug }}.png"> {{ $language }}
+								</a>
+							</li>
+							@endforeach
+						</ul>
 					</li>
 					<li>
 						<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
@@ -193,6 +207,21 @@
 
 		@section('javascript')
 		@show
+
+		<script type='text/javascript'>
+			if (typeof(xivdb_tooltips) === 'undefined')
+				var xivdb_tooltips = 
+				{ 
+					"language"      : "{{ strtoupper(Config::get('language') == 'ja' ? 'jp' : Config::get('language')) }}",
+					"frameShadow"   : true,
+					"compact"       : false,
+					"statsOnly"     : false,
+					"replaceName"   : false,
+					"colorName"     : true,
+					"showIcon"      : false,
+				} 
+		</script>
+		<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

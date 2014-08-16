@@ -6,8 +6,13 @@
 @stop
 
 @section('javascript')
-	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
+	<script type='text/javascript'>
+		$(function() {
+			$('.bootswitch').bootstrapSwitch();
+		});
+	</script>
 @stop
 
 @section('banner')
@@ -30,18 +35,18 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand &amp; Land</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
-						<label class='btn btn-primary class-selector{{ $job == 'CRP' ? ' active' : '' }}'>
-							<input type='radio' name='class' value='{{ $job }}'{{ $job == 'CRP' ? ' checked="checked"' : '' }}>
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+						@foreach($crafting_job_list as $job)
+						<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('MIN','BTN','FSH') as $job)
+						@foreach($gathering_job_list as $job)
 						<label class='btn btn-info class-selector'>
-							<input type='radio' name='class' value='{{ $job }}'>
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
@@ -52,18 +57,18 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC') as $job)
+						@foreach($basic_melee_job_list as $job)
 						<label class='btn btn-danger class-selector '>
-							<input type='radio' name='class' value='{{ $job }}'>
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach(array('CNJ', 'THM', 'ACN') as $job)
+						@foreach($basic_magic_job_list as $job)
 						<label class='btn btn-warning class-selector '>
-							<input type='radio' name='class' value='{{ $job }}'>
-							<img src='/img/classes/{{ $job }}.png' rel='tooltip' title='{{ $job_list[$job] }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>
 						@endforeach
 					</div>
@@ -81,21 +86,18 @@
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Craftable Only</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning'>
-						<input type='checkbox' name='craftable_only' value='1' checked='checked'>
-					</div>
-					Only show craftable items
-					<input type='checkbox' name='rewardable_too' value='1' checked='checked'>
+					<input type='checkbox' name='craftable_only' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Only show craftable items
+					<input type='checkbox' name='rewardable_too' value='1'>
 					and <u rel='tooltip' title='Items that are potential rewards from leves, achievements, quests, etc'>rewardable items</u>
+					</em></small>
 				</div>
 			</div>
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Slim Mode</label>
 				<div class='col-sm-8 col-md-9'>
-					<div class='make-switch' data-on='success' data-off='warning'>
-						<input type='checkbox' name='slim_mode' value='1' checked='checked'>
-					</div>
-					Show a condensed version
+					<input type='checkbox' name='slim_mode' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Show a condensed version</em></small>
 				</div>
 			</div>
 		</fieldset>

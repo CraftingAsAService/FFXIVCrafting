@@ -14,14 +14,14 @@
 App::before(function($request)
 {
 
-	preg_match("/^(..)/", Request::getHost(), $parts);
+	preg_match("/^(..)(.*)$/", Request::getHost(), $parts);
+
+	$is_real = in_array($parts[1], Config::get('site.available_languages'));
 	
-	Config::set('language', 
-		in_array($parts[1], Config::get('site.available_languages')) 
-			? $parts[1] 
-			: Config::get('site.default_language')
-	);
-	
+	Config::set('language', $is_real ? $parts[1] : Config::get('site.default_language'));
+
+	// English isn't "real", which helps us out here
+	Config::set('language_base_url', ($is_real ? substr($parts[2], 1) : $parts[0]) . $_SERVER['REQUEST_URI']);
 });
 
 

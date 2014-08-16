@@ -4,8 +4,10 @@ var crafting = {
 		crafting_tour.init();
 	},
 	events:function() {
-		$('#self_sufficient_switch, #misc_items_switch').change(function() {
-			$(this).closest('form').submit();
+		$('.bootswitch').bootstrapSwitch({
+			onSwitchChange:function() {
+				$(this).closest('form').submit();	
+			}
 		});
 
 		$('#obtain-these-items .collapse').click(function() {

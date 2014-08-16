@@ -1,21 +1,8 @@
 @extends('wrapper.layout')
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "EN",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-multiselect.js') }}'></script>
-	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script src='{{ cdn('/js/quests.js') }}'></script>
 @stop
 
@@ -42,8 +29,10 @@
 					<div class='form-group'>
 						<label>Class</label>
 						<select class='multiselect hidden' multiple='multiple' id='class-selector'>
-							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL', 'MIN','BTN','FSH') as $job)
-							<option value='{{ $job }}'{{ $job == 'CRP' ? ' selected="selected"' : '' }}>{{ $job_list[$job] }}</option>
+							@foreach($job_list as $job)
+							<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids) ? ' selected="selected"' : '' }}>
+								{{{ $job->name->term }}}
+							</option>
 							@endforeach
 						</select>
 					</div>
@@ -85,9 +74,9 @@
 		<tbody>
 			@foreach($quests as $job => $quest_list)
 			@foreach($quest_list as $q)
-			<tr class='quest{{ $q->classjob->abbr->term != 'CRP' ? ' hidden' : '' }}' data-abbr='{{ $q->classjob->abbr->term }}'>
+			<tr class='quest{{ $q->classjob->id != reset($job_ids) ? ' hidden' : '' }}' data-abbr='{{ $q->classjob->en_abbr->term }}'>
 				<td width='24' class='valign'>
-					<i class='class-icon {{ $q->classjob->abbr->term }}'></i>
+					<i class='class-icon {{ $q->classjob->en_abbr->term }}'></i>
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $q->level }}</span>

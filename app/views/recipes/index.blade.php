@@ -1,20 +1,7 @@
 @extends('wrapper.layout')
 
 @section('javascript')
-<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "EN",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
-<script type='text/javascript' src='{{ cdn('/js/recipe_book.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/recipe_book.js') }}'></script>
 @stop
 
 @section('banner')
@@ -73,11 +60,11 @@
 									All Classes
 								</a>
 							</li>
-							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+							@foreach($crafting_job_list as $job)
 							<li>
-								<a href='#' data-class='{{ $job }}'>
-									<img src='/img/classes/{{ $job }}.png'>
-									{{ $job_list[$job] }}
+								<a href='#' data-class='{{ $job->en_abbr->term }}'>
+									<img src='/img/classes/{{ $job->en_abbr->term }}.png'>
+									{{{ $job->name->term }}}
 								</a>
 							</li>
 							@endforeach

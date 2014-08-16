@@ -15,7 +15,7 @@
 	@endif
 </p>
 <p>
-	<strong>Requires:</strong> {{ $leve->amount }} x <a href='http://xivdb.com/?item/{{ $leve->item->id }}' target='_blank'>{{ $leve->item->name }}</a>
+	<strong>Requires:</strong> {{ $leve->amount }} x <a href='http://xivdb.com/?item/{{ $leve->item->id }}' target='_blank'>{{ $leve->item->name->term }}</a>
 </p>
 <p>
 	Calculations assume you're turning in HQ items for a total reward of <em>{{ number_format($leve->xp * 2) }} XP</em> <small>(and {{ number_format($leve->gil * 2) }} Gil)</small> per allotment.
