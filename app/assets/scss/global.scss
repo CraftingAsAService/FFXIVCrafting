@@ -1109,6 +1109,12 @@ ul.plain {
 	-webkit-transition: opacity 0s .25s;
 }
 
+@media (min-width: $tablet_viewport) {
+	#mobile-nav {
+		display: none;
+	}
+}
+
 /* Active slide out navigation */
 #nav-handler:checked ~ #mobile-nav {
 	opacity: 1;

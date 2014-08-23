@@ -48,6 +48,8 @@ Route::get('stats', function()
 		->with('active', 'stats');
 });
 
+Route::controller('account', 'AccountController');
+
 Route::controller('materia', 'MateriaController');
 
 Route::controller('food', 'FoodController');

@@ -80,7 +80,7 @@
 				<div class="col-sm-8">
 					<h2>Recipe Book</h2>
 					<p>
-						Use this took to quickly discover what materials are needed to craft a specific item.
+						Quickly discover what materials are needed to craft a specific item.
 					</p>
 					<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
 				</div>
@@ -100,7 +100,7 @@
 					<p>
 						Those things that you do while playing a game that usually feel like a grind, but are so darn fun.
 					</p>
-					<a href='/gathering' class='btn btn-primary'>Button &raquo;</a>
+					<a href='/gathering' class='btn btn-primary'>Action &raquo;</a>
 				</div>
 			</div>
 		</div>
@@ -114,7 +114,7 @@
 				<div class="col-sm-8">
 					<h2>Leves</h2>
 					<p>
-						Not going to lie, I have no idea what these are.
+						Find the best Tradecraft Leve for your time and gil.
 					</p>
 					<a href='/crafting' class='btn btn-primary'>Find out more &raquo;</a>
 				</div>

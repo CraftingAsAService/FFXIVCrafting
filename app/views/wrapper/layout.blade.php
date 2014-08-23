@@ -64,6 +64,7 @@
 						<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
 							<img src="/img/icons/account.png">
 							<span>Account</span>
+							[Refresh Icon]
 						</a>
 					</li>
 					--}}
@@ -127,6 +128,7 @@
 								<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
 									<img src="/img/icons/account.png">
 									<span>Account</span>
+									[Refresh Icon]
 								</a>
 							</li>
 							--}}
