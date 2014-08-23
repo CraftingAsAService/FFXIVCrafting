@@ -58,13 +58,15 @@
 							<span>Crafting List</span>
 						</a>
 					</li>
-
+					
+					{{--
 					<li>
 						<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
 							<img src="/img/icons/account.png">
 							<span>Account</span>
 						</a>
 					</li>
+					--}}
 					
 					<li>
 						<hr>
@@ -120,12 +122,14 @@
 									@endforeach
 								</ul>
 							</li>
+							{{--
 							<li>
 								<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
 									<img src="/img/icons/account.png">
 									<span>Account</span>
 								</a>
 							</li>
+							--}}
 							<li>
 								<a href="/list"{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}>
 									<img src="/img/icons/bag.png">
