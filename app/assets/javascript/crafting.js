@@ -198,9 +198,13 @@ var crafting = {
 
 			data = data.join('||');
 
-			$('<form action="/map" method="POST">' + 
+			var form = $('<form action="/map" method="POST">' + 
 				'<input type="hidden" name="items" value="' + data + '">' +
-				'</form>').submit();
+				'</form>');
+			
+			$('body').append(form);
+			
+			form.submit();
 		});
 
 		$('#csv_download').click(function(event) {

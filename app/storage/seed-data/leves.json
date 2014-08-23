@@ -460,7 +460,7 @@
     "minor_location":"",
     "location":"",
     "amount":3,
-    "item_name":"Iron Round Knives",
+    "item_name":"Iron Round Knife",
     "triple":"1",
     "notes":""
   },
@@ -490,7 +490,7 @@
     "minor_location":"South Shroud",
     "location":"Quarrymill",
     "amount":1,
-    "item_name":"Steel Baselard",
+    "item_name":"Steel Broadsword",
     "triple":0,
     "notes":""
   },
@@ -670,7 +670,7 @@
     "minor_location":"Coerthas",
     "location":"Observatorium",
     "amount":1,
-    "item_name":"Mythril Knife",
+    "item_name":"Mythril Broadsword",
     "triple":0,
     "notes":""
   },
@@ -4420,7 +4420,7 @@
     "minor_location":"",
     "location":"",
     "amount":3,
-    "item_name":"Voyager's Belts",
+    "item_name":"Voyager's Belt",
     "triple":"1",
     "notes":""
   },
@@ -4450,7 +4450,7 @@
     "minor_location":"South Shroud",
     "location":"Quarrymill",
     "amount":1,
-    "item_name":"Goatskin Writstbands",
+    "item_name":"Goatskin Wristbands",
     "triple":0,
     "notes":""
   },
