@@ -219,7 +219,7 @@
 </div>
 
 <a name='options'></a>
-
+@if( ! isset($item_special))
 <div class='panel panel-info hidden-print'>
 	<div class='panel-heading'>
 		<small class='pull-right'><em>* Refreshes page</em></small>
@@ -235,7 +235,7 @@
 				Self Sufficient
 			</label>
 			
-				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}  class='bootswitch' data-on-text='YES' data-off-text='NO'>
+				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1'{{ $self_sufficient ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
 			
 			<label class='margin-left'>
 				Dyes &amp; Furniture
@@ -251,13 +251,14 @@
 				Self Sufficient
 			</label>
 			
-				<input type='checkbox' id='self_sufficient_switch' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}> class='bootswitch' data-on-text='YES' data-off-text='NO'
+				<input type='checkbox' id='self_sufficient_switch' value='1'{{ $self_sufficient ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'
 			
 			<small><em>* Refreshes page</em></small>
 		</form>
 		@endif
 	</div>
 </div>
+@endif
 
 <div class='row '>
 	@if(isset($job))

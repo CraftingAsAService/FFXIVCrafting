@@ -90,7 +90,7 @@
 						<span>
 							<input type='checkbox' name='misc_items' id='misc_items_switch' value='1' class='bootswitch' data-on-text='YES' data-off-text='NO'>
 						</span>
-						<strong class='margin-left'>Dyes &amp; Furniture</strong>
+						<strong class='margin-left'>Dyes, Furniture &amp; Component Materials</strong>
 					</div>
 				</fieldset>
 				

@@ -66,6 +66,7 @@ class CraftingController extends BaseController
 		$end             = isset($options[2]) ? $options[2] : 5;
 		$self_sufficient = isset($options[3]) ? $options[3] : 1;
 		$misc_items	 	 = isset($options[4]) ? $options[4] : 0;
+		$special	 	 = isset($options[5]) ? $options[5] : 0;
 
 		$item_ids = $item_amounts = array();
 
@@ -86,6 +87,28 @@ class CraftingController extends BaseController
 
 			View::share('item_ids', $item_ids);
 			View::share('item_amounts', $item_amounts);
+
+			$top_level = $item_amounts;
+		}
+
+		if ($desired_job == 'Item')
+		{
+			$item_id = $special;
+
+			$start = $end = null;
+			$include_quests = FALSE;
+
+			// Get the list
+			$item_amounts = array($item_id => 1);
+
+			$item_ids = array_keys($item_amounts);
+
+			if (empty($item_ids))
+				return Redirect::to('/list');
+
+			View::share('item_ids', $item_ids);
+			View::share('item_amounts', $item_amounts);
+			View::share('item_special', true);
 
 			$top_level = $item_amounts;
 		}
@@ -193,7 +216,13 @@ class CraftingController extends BaseController
 		if ($misc_items == 0 && $desired_job != 'List')
 			$query
 				->whereHas('item', function($query) {
-					$query->whereNotIn('itemcategory_id', array(14, 15)); // ItemCategory 14 == 'Furnishing', 15 == 'Dye'
+					$query
+						->whereNotIn('itemcategory_id', array(14, 15)) // ItemCategory 14 == 'Furnishing', 15 == 'Dye'
+						->where(function($query) {
+							$query
+								->where('itemcategory_id', '!=', 16) // Miscellany
+								->where('itemuicategory_id', '!=', 63); // Other
+						});
 				});
 
 		if ($item_ids)

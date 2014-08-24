@@ -126,7 +126,7 @@ class LeveController extends BaseController
 
 	private function _breakdown($leve_id = 0)
 	{
-		$leve = Leve::with('item', 'item.name')->find($leve_id);
+		$leve = Leve::with('item', 'item.name', 'item.recipe', 'item.recipe.reagents', 'item.recipe.reagents.name')->find($leve_id);
 		$experience = Experience::whereBetween('level', array($leve->level, $leve->level + 9))->get();
 		
 		$xp_rewarded = $leve->xp * 2; // 2.1 patch changed it from 200% to 100% bonus

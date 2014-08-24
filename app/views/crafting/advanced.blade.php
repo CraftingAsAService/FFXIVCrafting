@@ -91,7 +91,7 @@
 				<div class='col-sm-8 col-md-9'>
 					<div>
 						<input type='checkbox' name='misc_items' id='misc_items_switch' value='1' class='bootswitch' data-on-text='YES' data-off-text='NO'>
-						<small><em> - "Include housing and dye items"</em></small>
+						<small><em> - "Include things like housing and dye items"</em></small>
 					</div>
 				</div>
 			</div>
