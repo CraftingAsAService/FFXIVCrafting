@@ -25,7 +25,7 @@
 	</div>
 	@endif
 
-	<form action='/crafting' method='post' role='form' class='form-horizontal' autocomplete='off'>
+	<form action='/crafting' method='post' role='form' class='form-horizontal advanced-crafting-form' autocomplete='off'>
 		<fieldset>
 			<legend>Select your Class</legend>
 			<div class='form-group'>

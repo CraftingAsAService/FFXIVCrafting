@@ -5,6 +5,7 @@ class CraftingController extends BaseController
 
 	public function __construct()
 	{
+		parent::__construct();
 		View::share('active', 'crafting');
 	}
 
@@ -16,7 +17,7 @@ class CraftingController extends BaseController
 		return View::make('crafting.' . ($advanced ? 'advanced' : 'basic'))
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get())
+			->with('job_list', ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $crafting_job_ids)->get())
 			->with('crafting_job_ids', $crafting_job_ids)
 			->with('previous', Cookie::get('previous_crafting_load'));
 	}

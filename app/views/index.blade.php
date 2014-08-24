@@ -114,7 +114,7 @@
 				<div class="col-sm-8">
 					<h2>Leves</h2>
 					<p>
-						Find the best Tradecraft Leve for your time and gil.
+						Find the best Tradecraft Leves for your time and gil.
 					</p>
 					<a href='/crafting' class='btn btn-primary'>Find out more &raquo;</a>
 				</div>

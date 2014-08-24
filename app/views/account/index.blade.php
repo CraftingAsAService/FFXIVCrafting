@@ -1,13 +1,36 @@
 @extends('wrapper.layout')
 
 @section('banner')
-	<h1>Load Character</h1>
+	<h1>
+		<img src='{{ $account['avatar'] }}' width='64' height='64' class='border-radius'>
+		{{ $character_name }} <small>of</small> {{ $server }}
+	</h1>
 @stop
 
 @section('content')
 	
-	<img src='{{ $account['avatar'] }}'>
+	@foreach(array('crafting' => 'primary', 'gathering' => 'info', 'melee' => 'danger', 'magic' => 'warning') as $section => $color)
+	<h2>{{ ucfirst($section) }} Levels</h2>
 
-	{{ var_dump($account['classes']) }}
+	<div class='well'>
+		<div class='row'>
+			@foreach(${$section . '_job_list'} as $job)
+			<div class='col-sm-4 col-md-3'>
+				<span class='pull-right label label-{{ $color }}'>Level {{ $account['levels'][strtolower($job->en_name->term)] }}</span>
+				<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
+				{{{ $job->name->term }}}
+				<div class='progress margin-top'>
+					<div class='progress-bar progress-bar-{{ $color }} progress-bar-striped' style='width: {{ (int) (($account['levels'][strtolower($job->en_name->term)] / 50) * 100) }}%;'></div>
+				</div>
+			</div>
+			@endforeach
+		</div>
+	</div>
+	@endforeach
+
+	<div class='text-right'>
+		<a href='/account/refresh' class='btn btn-primary margin-right'>Refresh Data</a>
+		<a href='/account/logout' class='btn btn-danger'>Detach Character</a>
+	</div>
 
 @stop

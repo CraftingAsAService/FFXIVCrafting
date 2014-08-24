@@ -9,6 +9,29 @@
 	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/crafting-index.js') }}'></script>
+	<script type='text/javascript'>
+		$(function() {
+			// On clicking a class icon, fill in the level
+			$('.class-selector').click(function() {
+				var level = parseInt($(this).data('level'));
+
+				$('.recipe-level-select a').each(function() {
+					var el = $(this),
+						start = parseInt(el.data('start')),
+						end = parseInt(el.data('end'));
+						
+					if (level >= start && end >= level)
+						el.trigger('click');
+
+					return;
+				});
+				
+				return;
+			});
+
+			$('.class-selector.active').trigger('click');
+		});
+	</script>
 @stop
 
 @section('banner')
@@ -25,7 +48,7 @@
 	</div>
 	@endif
 
-	<form action='/crafting' method='post' role='form' class='form-horizontal' autocomplete='off'>
+	<form action='/crafting' method='post' role='form' class='form-horizontal crafting-form' autocomplete='off'>
 		<div class='row'>
 			<div class='col-sm-3 col-lg-2'>
 				<fieldset>
@@ -46,7 +69,7 @@
 					<legend>Class</legend>
 					<div class='btn-group jobs-list' data-toggle='buttons'>
 						@foreach($job_list as $job)
-						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}'>
+						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 1 }}'>
 							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
 							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>

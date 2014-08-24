@@ -26,6 +26,14 @@ body {
 	border-radius: 5px;
 }
 
+.border-radius {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
 td.new {
 	-webkit-box-shadow: inset 0 0 10px #ef00ef;
 	-moz-box-shadow: inset 0 0 10px #ef00ef;
@@ -1169,4 +1177,8 @@ ul.plain {
 	// -webkit-overflow-scrolling: touch;
 	// background: #fff;
 	z-index: -1;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
 }

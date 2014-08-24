@@ -5,6 +5,7 @@ class RecipesController extends BaseController
 
 	public function __construct()
 	{
+		parent::__construct();
 		View::share('active', 'recipes');
 	}
 

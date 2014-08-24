@@ -58,16 +58,18 @@
 							<span>Crafting List</span>
 						</a>
 					</li>
-					
-					{{--
+
 					<li>
-						<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
+						<a href="/account"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
+							@if($account)
+							<img src='{{ $account['avatar'] }}' width='16' height='16' class='border-radius'>
+							<span>{{ $character_name }}</span>
+							@else
 							<img src="/img/icons/account.png">
 							<span>Account</span>
-							[Refresh Icon]
+							@endif
 						</a>
 					</li>
-					--}}
 					
 					<li>
 						<hr>
@@ -123,15 +125,17 @@
 									@endforeach
 								</ul>
 							</li>
-							{{--
 							<li>
-								<a href="#"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
+								<a href="/account"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
+									@if($account)
+									<img src='{{ $account['avatar'] }}' width='16' height='16' class='border-radius'>
+									<span>{{ $character_name }}</span>
+									@else
 									<img src="/img/icons/account.png">
 									<span>Account</span>
-									[Refresh Icon]
+									@endif
 								</a>
 							</li>
-							--}}
 							<li>
 								<a href="/list"{{ isset($active) && $active == 'list' ? ' class="active"' : '' }}>
 									<img src="/img/icons/bag.png">
@@ -198,6 +202,8 @@
 					@yield('precontent')
 
 					<div class='container'>
+
+						@include('snippets.messages')
 
 						@yield('content')
 
