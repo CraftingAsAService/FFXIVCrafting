@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'driver' => 'CACHE_DRIVER',
+	'driver' => getenv('CACHE_DRIVER'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -84,6 +84,6 @@ return array(
 	|
 	*/
 
-	'prefix' => 'REDIS_PREFIX',
+	'prefix' => getenv('REDIS_PREFIX'),
 
 );
