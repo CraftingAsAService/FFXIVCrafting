@@ -30,6 +30,8 @@ $env = $app->detectEnvironment(function() {
 	
 	if (isset($_SERVER['APP_ENVIRONMENT']))
 		return $_SERVER['APP_ENVIRONMENT'];
+	elseif(file_exists(__DIR__ . '/environment.php'))
+		return include __DIR__ . '/environment.php';
 
 });
 
