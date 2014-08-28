@@ -60,7 +60,8 @@ return array(
 			'password'  => getenv('DB_PASS'),
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
-			'prefix'    => ''
+			'prefix'    => '',
+			'port'		=> getenv('DB_PORT') ?: 3306,
 		),
 
 		'pgsql' => array(
@@ -114,7 +115,7 @@ return array(
 		'cluster' => false,
 
 		'default' => array(
-			'host'     => 'moogle', // Relies on /etc/hosts entry
+			'host'     => getenv('REDIS_HOST'),
 			'port'     => 6379,
 			'database' => getenv('REDIS_DB'),
 		),
