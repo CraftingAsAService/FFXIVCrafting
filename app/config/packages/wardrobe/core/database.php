@@ -7,7 +7,7 @@ return array(
 
 		'sqlite' => array(
 			'driver'   => 'sqlite',
-			'database' => app_path().'/database/wardrobe.sqlite',
+			'database' => getenv('WARDROBE_LOCATION') ?: app_path().'/database/wardrobe.sqlite',
 			'prefix'   => '',
 		),
 
