@@ -9,7 +9,7 @@
 @stop
 
 @section('banner')
-	<h1>Crafting as a Service</h1>
+	<h1>Welcome to FFXIV Crafting</h1>
 	<h2>Crafting information and planning for FFXIV: A Realm Reborn</h2>
 @stop
 

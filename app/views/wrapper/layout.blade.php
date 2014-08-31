@@ -167,7 +167,10 @@
 							<div class="row">
 								<div class="col-xs-12 col-sm-4 col-lg-3 logo">
 									<!-- /f7f7f7/e2e2e2 -->
-									<a href='/'><img src="/img/logo.png" class="img-responsive" width='263' height='45'></a>
+									<a href='/'>
+										<img src="/img/logo.png" class="img-responsive" width='263' height='45' alt='FFXIV Crafting'>
+										<span class='tagline'>Crafting as a Service</span>
+									</a>
 								</div>
 								<div class="col-xs-12 col-sm-8 col-lg-9 menu-navbar">
 									<div class='navbar-header'>
@@ -246,7 +249,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
 								<img src="/img/current_patch.png" class="img-responsive">
-								<p>This site has been optimzed for Patch 2.3 Defenders of Eorzea</p>
+								<p>This site has been optimized for Patch 2.35 Defenders of Eorzea</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>

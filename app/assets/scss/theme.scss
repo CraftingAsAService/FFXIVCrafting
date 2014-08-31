@@ -291,12 +291,17 @@ h2, .h2 {
 	padding: 10px;
 	cursor: pointer;
 
-	&:hover {
-		-webkit-transform: scale(1.1);
-		-moz-transform: scale(1.1);
-		-o-transform: scale(1.1);
-		-ms-transform: scale(1.1);
-		transform: scale(1.1);
+	margin-bottom: 30px;
+
+	// Hover, except for mobile
+	@media (min-width: $screen-sm-min) {
+		&:hover {
+			-webkit-transform: scale(1.1);
+			-moz-transform: scale(1.1);
+			-o-transform: scale(1.1);
+			-ms-transform: scale(1.1);
+			transform: scale(1.1);
+		}
 	}
 
 	.copy {
@@ -324,6 +329,7 @@ h2, .h2 {
 	}
 }
 
+
 a:hover {
 	.title {
 		color: $theme_color_lobster;
@@ -331,9 +337,18 @@ a:hover {
 }
 
 div.logo {
-	min-height: 55px; // 45px tall logo
+	min-height: 80px;
 	img {
 		margin-top: 5px;
+	}
+	.tagline {
+		text-decoration: none;
+		color: $theme_color_black;
+		margin-left: 55px;
+		letter-spacing: .33em;
+	}
+	a:hover {
+		text-decoration: none;
 	}
 }
 
@@ -344,12 +359,25 @@ div.logo {
 		img {
 			display: inline-block !important;
 		}
+		.tagline {
+			display: block;
+		}
 	}
 	#copyright-info {
 		a {
 			position: relative;
 			top: 10px;
 			padding-bottom: 10px;
+		}
+	}
+}
+
+// Tablet only
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+	div.logo {
+		.tagline {
+			margin-left: 45px;
+			letter-spacing: .22em;
 		}
 	}
 }
