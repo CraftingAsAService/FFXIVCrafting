@@ -12,6 +12,7 @@ class EquipmentController extends BaseController
 	public function getIndex()
 	{
 		$job_ids = Config::get('site.job_ids');
+
 		return View::make('equipment.index')
 			->with('error', FALSE)
 			->with('active', 'equipment')
