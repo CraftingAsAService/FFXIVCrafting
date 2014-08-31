@@ -4,13 +4,34 @@ $tablet_viewport: 768px;
 $desktop_viewport: 992px;
 $large_viewport: 1200px;
 
+// TODO get colors in their own thing
+$theme_color_lobster: #FF4040 !default;
+$theme_color_white: #FFFFFF !default;
+$theme_color_light_gray: #f7f7f7 !default;
+$theme_color_medium_gray: #747475 !default;
+
 html,
 body {
 	height: 100%;
 	/* The html and body elements cannot have any padding or margin. */
 }
+// Required for mobile menu opening
+body {
+	overflow: hidden;
+}
+
+.cursor { cursor: pointer; }
+
 .equipment-icon {
 	border-radius: 5px;
+}
+
+.border-radius {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 td.new {
@@ -37,6 +58,7 @@ td.new .stats {
 }
 
 
+/*
 #footer {
 	background-color: #f5f5f5;
 	margin-top: 30px;
@@ -82,6 +104,7 @@ td.new .stats {
 		}
 	}
 }
+*/
 
 .no-value {
 	color: #ccc;
@@ -292,7 +315,7 @@ $gear_warning_accent: #a46868;
 
 		border-collapse: separate !important;
 		border-top-width: 0px !important;
-		
+
 		color: $gear_text;
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	}
@@ -468,7 +491,7 @@ $gear_warning_accent: #a46868;
 		position: relative;
 		top: 5px;
 	}
-		
+
 	.name-box {
 		display: table-cell;
 		height: 50px;
@@ -598,12 +621,12 @@ $gear_warning_accent: #a46868;
  */
 .cf:before,
 .cf:after {
-    content: " "; /* 1 */
-    display: table; /* 2 */
+	content: " "; /* 1 */
+	display: table; /* 2 */
 }
 
 .cf:after {
-    clear: both;
+	clear: both;
 }
 
 /**
@@ -611,7 +634,7 @@ $gear_warning_accent: #a46868;
  * Include this rule to trigger hasLayout and contain floats.
  */
 .cf {
-    *zoom: 1;
+	*zoom: 1;
 }
 
 .add-to-list { cursor: pointer; }
@@ -810,7 +833,7 @@ $gear_warning_accent: #a46868;
 			font-weight: bold;
 		}
 		// I have to fix a few specific name placements
-		&.mor-dhona, 
+		&.mor-dhona,
 		&.outer {
 			.name {
 				top: 128px;
@@ -985,4 +1008,177 @@ ul.plain {
 			content: attr(title) " ";
 		}
 	}
+}
+
+.multiselect-container.dropdown-menu {
+	.radio input[type=radio], .checkbox input[type=checkbox] {
+		margin-left: -16px; // vs -20px set by bootstrap
+	}
+}
+
+.food-selection {
+
+	.food-grid {
+		tr {
+			th {
+				text-align: center;
+			}
+			td {
+				text-align: center;
+				&:first-child {
+					text-align: right;
+				}
+				&.reveal {
+					cursor: pointer;
+					&:hover {
+						background-color: $theme_color_lobster;
+						color: $theme_color_white;
+					}
+					&.active {
+						background-color: $theme_color_medium_gray;
+						color: $theme_color_white;
+					}
+				}
+			}
+		}
+	}
+
+	.items-table {
+		thead {
+			th {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+		}
+		.stat-icon {
+			margin-left: 2px;
+		}
+	}
+
+	.highchart {
+		width: 100%;
+		height: 400px;
+		border: 1px solid #ddd;
+	}
+}
+
+/* Left Nav Open */
+// http://miguelmota.com/blog/slide-out-navigation-using-css3-translate/
+
+/* Hide nav handler checkbox */
+#nav-handler {
+	display: none;
+}
+
+/* Header */
+#main-header {
+	position: relative;
+	// top: 0;
+	// left: 0;
+	// width: 100%;
+	// height: 75px;
+	z-index: 2;
+	// background: #999;
+}
+
+/* Header menu button */
+// #menu-button {
+// 	display: inline-block;
+// 	float: left;
+// 	line-height: 4.5;
+// 	cursor: pointer;
+// }
+#mobile-menu-button {
+	// color: white;
+	cursor: pointer;
+}
+
+/* Header active menu button */
+// #nav-handler:checked ~ #menu-button {
+// 	color: #08c;
+// }
+
+/* Slide out navigation */
+#mobile-nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 80%;
+	height: 100%;
+	z-index: 1;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	transition: opacity 0s .25s;
+	-moz-transition: opacity 0s .25s;
+	-webkit-transition: opacity 0s .25s;
+}
+
+@media (min-width: $tablet_viewport) {
+	#mobile-nav {
+		display: none;
+	}
+}
+
+/* Active slide out navigation */
+#nav-handler:checked ~ #mobile-nav {
+	opacity: 1;
+	transition: opacity 0s 0s;
+	-moz-transition: opacity 0s 0s;
+	-webkit-transition: opacity 0s 0s;
+}
+
+/* Slide out navigation list items */
+#mobile-nav ul li {
+	display: block;
+	clear: both;
+}
+
+#mobile-nav ul li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+#main-container {
+	display: block;
+	position: relative;
+	height: 100%;
+	transform: translate3D(0,0,0);
+	-moz-transform: translate3D(0,0,0);
+	-webkit-transform: translate3D(0,0,0);
+	transition: -moz-transform .25s ease-in-out;
+	-moz-transition: -moz-transform .25s ease-in-out;
+	-webkit-transition: -webkit-transform .25s ease-in-out;
+	z-index: 5;
+
+	overflow-y: scroll;
+}
+
+/* Translate main container when nav handler is checked */
+#nav-handler:checked ~ #main-container,
+.nav-handler-checked {
+	transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+	-moz-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+	-webkit-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+}
+
+#content-container {
+	// position: absolute;
+	// top: 0;
+	// left: 0;
+	// width: 100%;
+	// height: 100%;
+	// padding: 75px 0 0 0; /* Top padding must be same as header height */
+	// overflow-y: scroll;
+	// -webkit-overflow-scrolling: touch;
+	// background: #fff;
+	z-index: -1;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
 }

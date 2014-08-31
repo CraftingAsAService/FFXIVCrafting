@@ -6,7 +6,11 @@
 	</td>
 	<td class='item{{ $leve->triple ? ' triple\' rel="tooltip" title="Triple Leve" data-placement="right" data-container=\'body' : '' }}'>
 		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
+		@if($recipe_id == 0)
+		<a href='http://xivdb.com/?item/{{ $leve->item->id }}' class='item-name' target='_blank'>
+		@else
 		<a href='http://xivdb.com/?recipe/{{ $recipe_id }}' class='item-name' target='_blank'>
+		@endif
 			<img src='/img/items/nq/{{ $leve->item->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
 		</a>
 		@if ($leve->amount > 1)
@@ -22,7 +26,10 @@
 		{{ $leve->name }}
 	</td>
 	<td class='text-center reward valign'>
-		{{ number_format($leve->xp) }} <a href='/leve/breakdown/{{ $leve->id }}'>XP</a>
+		<a href='/leve/breakdown/{{ $leve->id }}' class='btn btn-default'>
+			<img src='/img/xp.png' width='24' height='24'>
+			{{ number_format($leve->xp) }}
+		</a>
 	</td>
 	<td class='text-center reward valign'>
 		<img src='/img/coin.png' width='24' height='24'>
@@ -37,6 +44,7 @@
 			<i class='glyphicon glyphicon-gift'></i>
 		</button>
 		<div class='hidden' id='rewards_for_{{ $leve->id }}'>
+			@if(isset($leve_rewards[$leve->id]))
 			@foreach($leve_rewards[$leve->id] as $reward)
 			<div class='margin-bottom'>
 				@if($reward->item_id)
@@ -50,6 +58,9 @@
 				<span class='label label-success'>x {{ number_format($reward->amount) }}</span>
 			</div>
 			@endforeach
+			@else
+			None listed
+			@endif
 		</div>
 	</td>
 	<td class='text-center valign'>

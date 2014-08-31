@@ -3,10 +3,16 @@
 class QuestsController extends BaseController 
 {
 
+	public function __construct()
+	{
+		parent::__construct();
+		View::share('active', 'quests');
+	}
+
 	public function getIndex()
 	{
 		// All Quests
-		$quest_records = QuestItem::with('classjob', 'classjob.abbr', 'item', 'item.name', 'item.recipe')
+		$quest_records = QuestItem::with('classjob', 'classjob.en_abbr', 'item', 'item.name', 'item.recipe')
 			->orderBy('classjob_id')
 			->orderBy('level')
 			->orderBy('item_id')
@@ -15,8 +21,8 @@ class QuestsController extends BaseController
 		$quests = array();	
 		foreach($quest_records as $quest)
 		{
-			if ( ! isset($quests[$quest->classjob->abbr->term]))
-				$quests[$quest->classjob->abbr->term] = array();
+			if ( ! isset($quests[$quest->classjob->en_abbr->term]))
+				$quests[$quest->classjob->en_abbr->term] = array();
 
 			if (empty($quest->item->recipe))
 			{
@@ -27,13 +33,15 @@ class QuestsController extends BaseController
 				if ($r->classjob_id == $quest->classjob_id)
 					$quest->recipe = $r;
 
-			$quests[$quest->classjob->abbr->term][] = $quest;
+			$quests[$quest->classjob->en_abbr->term][] = $quest;
 		}
 
+		$job_ids = array_merge(Config::get('site.job_ids.crafting'), Config::get('site.job_ids.gathering'));
+
 		return View::make('pages.quests')
-			->with('active', 'quests')
 			->with('quests', $quests)
-			->with('job_list', ClassJob::get_name_abbr_list());
+			->with('job_ids', $job_ids)
+			->with('job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids)->get());
 	}
 
 }

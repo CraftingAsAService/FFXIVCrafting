@@ -1,7 +1,7 @@
-<ul class="tags">
+<div class="tags">
 	@foreach ($post->tags as $item)
 		@if ($item->tag != "")
-			<li><a href="{{ Wardrobe::route('posts.tags', $item->tag) }}">{{ $item->tag }}</a></li>
+			<a href="{{ Wardrobe::route('posts.tags', $item->tag) }}" class='label label-primary margin-right'>{{ $item->tag }}</a>
 		@endif
 	@endforeach
-</ul>
+</div>

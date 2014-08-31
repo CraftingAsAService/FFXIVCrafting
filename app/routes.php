@@ -15,29 +15,29 @@
 
 if (Config::get('database.log', false))
 {           
-    Event::listen('illuminate.query', function($query, $bindings, $time, $name)
-    {
-        $data = compact('bindings', 'time', 'name');
+	Event::listen('illuminate.query', function($query, $bindings, $time, $name)
+	{
+		$data = compact('bindings', 'time', 'name');
 
-        // Format binding data for sql insertion
-        foreach ($bindings as $i => $binding)
-        {   
-            if ($binding instanceof \DateTime)
-            {   
-                $bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
-            }
-            else if (is_string($binding))
-            {   
-                $bindings[$i] = "'$binding'";
-            }   
-        }       
+		// Format binding data for sql insertion
+		foreach ($bindings as $i => $binding)
+		{   
+			if ($binding instanceof \DateTime)
+			{   
+				$bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
+			}
+			else if (is_string($binding))
+			{   
+				$bindings[$i] = "'$binding'";
+			}   
+		}       
 
-        // Insert bindings into query
-        $query = str_replace(array('%', '?'), array('%%', '%s'), $query);
-        $query = vsprintf($query, $bindings); 
+		// Insert bindings into query
+		$query = str_replace(array('%', '?'), array('%%', '%s'), $query);
+		$query = vsprintf($query, $bindings); 
 
-        Log::info($query, $data);
-    });
+		Log::info($query, $data);
+	});
 }
 
 Route::get('/', 'HomeController@showWelcome');
@@ -47,6 +47,8 @@ Route::get('stats', function()
 	return View::make('pages.stats')
 		->with('active', 'stats');
 });
+
+Route::controller('account', 'AccountController');
 
 Route::controller('materia', 'MateriaController');
 
@@ -71,14 +73,14 @@ Route::controller('vendors', 'VendorsController');
 
 Route::get('report', function()
 {
-    View::share('active', 'report');
-    return View::make('pages.report');
+	View::share('active', 'report');
+	return View::make('pages.report');
 });
 
 Route::get('thanks', function()
 {
-    View::share('active', 'thanks');
-    return View::make('pages.thanks');
+	View::share('active', 'thanks');
+	return View::make('pages.thanks');
 });
 
 Route::get('credits', function()
@@ -90,4 +92,27 @@ Route::get('credits', function()
 Route::get('about', function()
 {
 	return Redirect::to('/blog/about');
+});
+
+App::error(function($exception, $code)
+{
+	// Log::error($exception);
+    
+    if (Config::get('app.debug'))
+    	return;
+
+	switch ($code)
+	{
+		// case 403:
+		// 	return Response::view('errors.403', array(), 403);
+
+		case 404:
+			return Response::view('errors.404', array(), 404);
+
+		case 500:
+			return Response::view('errors.500', array(), 500);
+
+		default:
+			return Response::view('errors.500', array(), $code);
+	}
 });

@@ -1,24 +1,10 @@
 @extends('wrapper.layout')
 
-@section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "EN",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
+@section('banner')
+	<h1>Levequest Breakdown</h1>
 @stop
 
 @section('content')
-
-<h1>Leve Breakdown</h1>
 
 @include('leve._chart')
 
@@ -32,7 +18,7 @@
 
 <p>Use your best judgement when deciding which level to mass produce.</p>
 
-<h3>Compare this Leve against...</h3>
+<h3>Compare this Levequest against...</h3>
 
 <ul>
 	@foreach($others as $other)

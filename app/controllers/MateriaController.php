@@ -3,10 +3,16 @@
 class MateriaController extends BaseController
 {
 
+	public function __construct()
+	{
+		parent::__construct();
+		View::share('active', 'materia');
+	}
+
 	public function getIndex()
 	{
 		// Items that are Materia
-		$results = Item::with('name', 'en_name', 'baseparam', 'baseparam.name')
+		$results = Item::with('name', 'en_name', 'baseparam', 'baseparam.name', 'baseparam.en_name')
 			->where('itemcategory_id', 13)
 			->orderBy('id')
 			->get();
@@ -21,6 +27,7 @@ class MateriaController extends BaseController
 
 			if ( ! isset($materia[$name]))
 				$materia[$name] = array(
+					'icon' => $row->baseparam[0]->en_name->term,
 					'stat' => $row->baseparam[0]->name->term,
 					'power' => array()
 				);
@@ -35,7 +42,6 @@ class MateriaController extends BaseController
 		// First, Crafters, then Gatherers, then the rest (Battling)
 
 		return View::make('pages.materia')
-			->with('active', 'materia')
 			->with('materia_list', $materia);
 	}
 

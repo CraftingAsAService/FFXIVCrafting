@@ -30,6 +30,15 @@ var global = {
 				}
 			});
 		});
+
+		/* Android mobile menu support */
+		if (/Android/i.test(navigator.userAgent)) {
+			$('#nav-handler').on('click', function(e) {
+				e.preventDefault();
+				var mainContainer = $('#main-container');
+				mainContainer[(mainContainer.hasClass('nav-handler-checked') ? 'remove' : 'add') + 'Class']('nav-handler-checked');
+			});
+		}
 	},
 	visible_popover:null,
 	reset_popovers:function(el) {

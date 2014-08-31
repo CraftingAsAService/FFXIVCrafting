@@ -3,6 +3,12 @@
 class RecipesController extends BaseController 
 {
 
+	public function __construct()
+	{
+		parent::__construct();
+		View::share('active', 'recipes');
+	}
+
 	public function getIndex()
 	{
 		$random_list = Recipes::with('item', 'item.name')
@@ -13,8 +19,8 @@ class RecipesController extends BaseController
 			->paginate(10);
 
 		return View::make('recipes.index')
-			->with('active', 'recipes')
 			->with('list', $random_list)
+			->with('crafting_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', Config::get('site.job_ids.crafting'))->get())
 			->with('job_list', ClassJob::get_name_abbr_list());
 	}
 
@@ -57,7 +63,7 @@ class RecipesController extends BaseController
 		}
 		
 		$query = Recipes::with('item', 'item.name')
-			->select('*', 'recipes.id AS recipe_id')
+			->select('*', 'recipes.id AS recipe_id', 'recipes.level AS level')
 			->join('items AS i', 'i.id', '=', 'recipes.item_id')
 			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'));
 

@@ -1,9 +1,22 @@
-@extends(theme_view('layout'))
+@extends('wrapper.layout')
+
+@section('title')
+	About Me
+@stop
+
+@section('css')
+	@include(theme_view('inc.css'))
+@stop
+
+@section('banner')
+	@include(theme_view('inc.links'))
+	
+	<h1 class="title">About Me</h1>
+@stop
 
 @section('content')
 
 	<section class="about">
-		<h1>About Me</h1>
 
 		<img src='/img/about/objection.jpg' style='width: 200px; float: left;'>
 
@@ -25,7 +38,7 @@
 					</ul>
 				</li>
 				<li>
-					I'm married.  Sorry ladies.
+					I'm married.
 				</li>
 				<li>
 					I love video games.  

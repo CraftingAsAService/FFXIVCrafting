@@ -1,12 +1,20 @@
-@extends(theme_view('layout'))
+@extends('wrapper.layout')
 
 @section('title')
 	Post Preview
 @stop
 
+@section('css')
+	@include(theme_view('inc.css'))
+@stop
+
+@section('banner')
+	@include(theme_view('inc.links'))
+	<h1 class="title"></h1>
+@stop
+
 @section('content')
 	<section>
-		<h2 class="title"></h2>
 		<div class="js-content"></div>
 	</section>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

@@ -3,18 +3,27 @@
 class LeveController extends BaseController 
 {
 
+	public function __construct()
+	{
+		parent::__construct();
+		View::share('active', 'leves');
+	}
+
 	public function getIndex()
 	{
+		$job_ids = Config::get('site.job_ids.crafting');
+		$job_ids[] = Config::get('site.job_ids.fishing');
+
 		return View::make('leve.index')
-			->with('active', 'leves')
-			->with('job_list', ClassJob::get_name_abbr_list());
+			->with('crafting_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids)->get())
+			->with('crafting_job_ids', $job_ids);
 	}
 
 	public function postIndex()
 	{
 		// Parse the Job IDs
 		$selected_classes = Input::get('classes');
-		foreach (ClassJob::get_id_abbr_list() as $abbr => $id)
+		foreach (ClassJob::get_id_abbr_list(true) as $abbr => $id)
 			if (in_array($abbr, $selected_classes))
 				$job_ids[] = $id;
 
@@ -118,7 +127,7 @@ class LeveController extends BaseController
 
 	private function _breakdown($leve_id = 0)
 	{
-		$leve = Leve::with('item', 'item.name')->find($leve_id);
+		$leve = Leve::with('item', 'item.name', 'item.recipe', 'item.recipe.reagents', 'item.recipe.reagents.name')->find($leve_id);
 		$experience = Experience::whereBetween('level', array($leve->level, $leve->level + 9))->get();
 		
 		$xp_rewarded = $leve->xp * 2; // 2.1 patch changed it from 200% to 100% bonus

@@ -1,13 +1,17 @@
 @import url(//fonts.googleapis.com/css?family=Crimson+Text:400,600,400italic);
 
 body {
-  font-family: "Crimson Text", "Times New Roman", Georgia, serif;
+  /*
+  font-family: "Crimson Text", "Times New Roman", Georgia, serif;&
   color: #222222;
+  */
 }
 
 h1, h2, h3, h4, h5 {
+  /*
   font-family:'OFL Sorts Mill Goudy TT', Georgia, serif;
   font-weight: 300;
+  */
 }
 
 a {
@@ -65,10 +69,10 @@ h2.title {
   text-align: center;
 }
 
-p {
+#content p {
   text-align: left;
   font-weight: 400;
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1.3em;
   color: #666;
 }
@@ -87,10 +91,10 @@ ul.tags li {
   font-size: 12px;
 }
 
-.container {
+/*.container {
   margin: 0 auto;
   width: 600px;
-}
+}*/
 
 ul.archive {
   margin: 0;
@@ -113,21 +117,21 @@ ul.archive li span {
   color: #ccc;
 }
 
-.post {
+#content .post {
   margin-top: 40px;
 }
-.post p {
+#content .post p {
   text-align: justify;
 }
-.post blockquote {
+#content .post blockquote {
   font-style: italic;
 }
-.post h1 {
+#content .post h1 {
   margin-bottom: 0;
   text-align: center;
   font-size: 32px;
 }
-.post .date {
+#content .post .date {
   font-size: 14px;
   text-align: center;
   padding-left: 10px;
@@ -327,10 +331,10 @@ pre .tex .formula {
   .container{
     width: 100%;
   }
-  .post{
+  #content .post{
     padding: 0px 30px;
   }
-  .post p{
+  #content .post p{
     text-align: left;
   }
   nav{
@@ -342,10 +346,10 @@ pre .tex .formula {
   .container{
     width: 100%;
   }
-  .post{
+  #content .post{
     padding: 0 20px;
   }
-  .post p{
+  #content .post p{
     text-align: justify;
   }
   nav{
@@ -357,10 +361,10 @@ pre .tex .formula {
   .container{
     width: 100%;
   }
-  .post{
+  #content .post{
     padding: 0 20px;
   }
-  .post p{
+  #content .post p{
     text-align: justify;
   }
   nav{

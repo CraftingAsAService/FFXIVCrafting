@@ -24,16 +24,13 @@ var home = {
 			$('fieldset.quests[data-job="' + job + '"]').removeClass('hidden');
 		});
 
-		$('#self_sufficient_switch').change(function() {
-			$('.ss_yes, .ss_no').toggleClass('hidden');
-		});
-
-		$('#misc_items_switch').change(function() {
-			$('.mi_yes, .mi_no').toggleClass('hidden');
-		});
-
 		$('#multi').change(function() {
 			$('.jobs-list').toggleClass('hidden');
+		});
+
+		$('.home-callout').click(function() {
+			window.location = $(this).data('href');
+			return;
 		});
 	}
 }

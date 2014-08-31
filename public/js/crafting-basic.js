@@ -1,0 +1,1 @@
+var basic={init:function(){$("input[type=checkbox]").bootstrapSwitch(),$(".recipe-level-select a").click(function(a){a.preventDefault();var b=$(this);$(".recipe-level-select a.active").removeClass("active"),b.addClass("active"),$("#recipe-level-start").val(b.data("start")),$("#recipe-level-end").val(b.data("end"))})}};$(basic.init);

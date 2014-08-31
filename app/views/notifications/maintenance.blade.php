@@ -1,17 +1,17 @@
-@extends('wrapper.simplified')
+@extends('wrapper.layout')
 
-@section('content')
-
+@section('banner')
 <h1>
 	Maintenance Mode
 </h1>
+@stop
+
+@section('content')
 
 <p>
-	I'm currently updating the codebase.  We'll be right back.
+	I'm currently updating the codebase.  We'll be right back.  Thanks for your patience.
 </p>
 
-<p>
-	It could be upwards of 15 minutes, so if you'd like immediate access, try my <a href='http://qa.craftingasaservice.com/'>QA Server</a> <sup><small>Not guaranteed to be up to date or in working order</small></sup>
-</p>
+<img src='/img/tour_moogle.png' style='position: relative; top: 30px;'>
 
 @stop
