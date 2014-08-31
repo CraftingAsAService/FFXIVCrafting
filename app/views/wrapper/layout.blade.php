@@ -159,7 +159,7 @@
 							<div class="row">
 								<div class="col-xs-12 col-sm-4 col-lg-3 logo">
 									<!-- /f7f7f7/e2e2e2 -->
-									<img src="http://placehold.it/280x80" class="img-responsive" width='280' height='80'>
+									<a href='/'><img src="/img/logo.png" class="img-responsive" width='263' height='45'></a>
 								</div>
 								<div class="col-xs-12 col-sm-8 col-lg-9 menu-navbar">
 									<div class='navbar-header'>
@@ -242,8 +242,14 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>
-								<p>I've spent more time building this site than actually playing. Help me relax and show my wife this isn't just a hobby!</p>
-								<p class="view-all"><a href="#buymeabeer">Donate Today!</a></p>
+								<p>I've spent more time building this site than actually playing.  Buy me a beer!</p>
+								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Donate Today!</a></p>
+								<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
+									<input type='hidden' name='cmd' value='_s-xclick'>
+									<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
+									<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
+									<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
+								</form>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Other Links</p>

@@ -27,6 +27,11 @@ var home = {
 		$('#multi').change(function() {
 			$('.jobs-list').toggleClass('hidden');
 		});
+
+		$('.home-callout').click(function() {
+			window.location = $(this).data('href');
+			return;
+		});
 	}
 }
 

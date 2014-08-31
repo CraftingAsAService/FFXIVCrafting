@@ -289,6 +289,15 @@ h2, .h2 {
 	background: $theme_color_white;
 	border-bottom: 3px solid $theme_color_lobster;
 	padding: 10px;
+	cursor: pointer;
+
+	&:hover {
+		-webkit-transform: scale(1.1);
+		-moz-transform: scale(1.1);
+		-o-transform: scale(1.1);
+		-ms-transform: scale(1.1);
+		transform: scale(1.1);
+	}
 
 	.copy {
 		padding-left: 0px;
@@ -301,13 +310,16 @@ h2, .h2 {
 	}
 	.description {
 		color: $theme_color_medium_gray;
-		font-size: 12px;
+		font-size: 14px;
 		line-height: 18px;
 	}
 
-	img {
-		&.equipment {
-			margin-top: 17px
+	.step {
+		text-align: right;
+		color: $theme_color_lobster;
+		font-weight: bold;
+		img {
+			margin-left: 5px;
 		}
 	}
 }
@@ -319,7 +331,10 @@ a:hover {
 }
 
 div.logo {
-	min-height: 80px;
+	min-height: 55px; // 45px tall logo
+	img {
+		margin-top: 5px;
+	}
 }
 
 // Mobile Only
@@ -356,6 +371,13 @@ div.logo {
 		// }
 		li:nth-child(5) {
 			clear: both;
+		}
+	}
+
+	div.logo {
+		min-height: 80px;
+		img {
+			margin-top: 17px;
 		}
 	}
 }
