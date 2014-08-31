@@ -1,4 +1,10 @@
-<!DOCTYPE html>
+<?php
+	// Config options not always present (maintenance page)
+	$lang = Config::get('language');
+	if ( ! is_string($lang)) $lang = 'en';
+	$lbu = Config::get('language_base_url'); 
+	if ( ! is_string($lbu)) $lbu = $_SERVER['REQUEST_URI'];
+?><!DOCTYPE html>
 <html lang='en-us'>
 	<head>
 		<meta http-equiv='X-UA-Compatible' content='IE=Edge'>
@@ -90,11 +96,11 @@
 					<li>
 						<hr>
 					</li>
-
+					
 					@foreach(Config::get('site.full_languages') as $slug => $language)
-					<?php if ($slug == Config::get('language')) continue; ?>
+					<?php if ($slug == $lang) continue; ?>
 					<li>
-						<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . Config::get('language_base_url') }}'>
+						<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
 							<img src="/img/icons/flags/{{ $slug }}.png"> {{ $language }}
 						</a>
 					</li>
@@ -111,15 +117,17 @@
 						<ul class='hidden-xs'>
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
-									<img src="/img/icons/flags/{{ Config::get('language') }}.png">
-									<span>{{ Config::get('site.full_languages')[Config::get('language')] }}</span>
+									<img src="/img/icons/flags/{{ $lang }}.png">
+									<span>{{ Config::get('site.full_languages')[$lang] }}</span>
 								</a>
 								<ul class='dropdown-menu' role='menu'>
 									@foreach(Config::get('site.full_languages') as $slug => $language)
-									<?php if ($slug == Config::get('language')) continue; ?>
+									<?php if ($slug == $lang) continue; ?>
 									<li>
-										<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . Config::get('language_base_url') }}'>
+										<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'> {{-- $lbu set above --}}
 											<img src="/img/icons/flags/{{ $slug }}.png"> {{ $language }}
+										}
+										}
 										</a>
 									</li>
 									@endforeach
@@ -307,7 +315,7 @@
 			if (typeof(xivdb_tooltips) === 'undefined')
 				var xivdb_tooltips = 
 				{ 
-					"language"      : "{{ strtoupper(Config::get('language') == 'ja' ? 'jp' : Config::get('language')) }}",
+					"language"      : "{{ strtoupper($lang == 'ja' ? 'jp' : $lang) }}",
 					"frameShadow"   : true,
 					"compact"       : false,
 					"statsOnly"     : false,
