@@ -61,7 +61,7 @@
 
 					<li>
 						<a href="/account"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
-							@if($account)
+							@if(isset($account) && $account)
 							<img src='{{ $account['avatar'] }}' width='16' height='16' class='border-radius'>
 							<span>{{ $character_name }}</span>
 							@else
@@ -127,7 +127,7 @@
 							</li>
 							<li>
 								<a href="/account"{{ isset($active) && $active == 'account' ? ' class="active"' : '' }}>
-									@if($account)
+									@if(isset($account) && $account)
 									<img src='{{ $account['avatar'] }}' width='16' height='16' class='border-radius'>
 									<span>{{ $character_name }}</span>
 									@else
@@ -174,12 +174,14 @@
 											{{ menu_item('/recipes',	'Recipe Book',	'recipes'	) }}
 											{{ menu_item('/quests',		'Quests',		'quests'	) }}
 											{{ menu_item('/leve',		'Leves',		'leves'		) }}
-											<li class='dropdown{{ isset($active) && in_array($active, array('stats', 'materia', 'food')) ? ' active' : '' }}'>
+											<li class='dropdown{{ (isset($active) && in_array($active, array('stats', 'materia', 'food'))) || Request::segment(1) == 'blog' ? ' active' : '' }}'>
 												<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 												<ul class='dropdown-menu dropdown-menu-right'>
 													<li{{ isset($active) && $active == 'stats' ? ' class="active"' : '' }}><a href='/stats'>Stats</a></li>
 													<li{{ isset($active) && $active == 'materia' ? ' class="active"' : '' }}><a href='/materia'>Materia</a></li>
 													<li{{ isset($active) && $active == 'food' ? ' class="active"' : '' }}><a href='/food'>Food</a></li>
+													<li class='divider'></li>
+													<li{{ Request::segment(1) == 'blog' ? ' class="active"' : '' }}><a href='/blog'>Blog</a></li>
 												</ul>
 											</li>
 										</ul>

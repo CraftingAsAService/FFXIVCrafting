@@ -11,7 +11,7 @@
 </p>
 
 <p>
-	It could be upwards of 15 minutes, so if you'd like immediate access, try my <a href='http://qa.craftingasaservice.com/'>QA Server</a> <sup><small>Not guaranteed to be up to date or in working order</small></sup>
+	It could be upwards of 15 minutes, so if you'd like immediate access, try my <a href='http://qa.ffxivcrafting.com/'>QA Server</a> <sup><small>Not guaranteed to be up to date or in working order</small></sup>
 </p>
 
 @stop

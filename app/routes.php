@@ -15,29 +15,29 @@
 
 if (Config::get('database.log', false))
 {           
-    Event::listen('illuminate.query', function($query, $bindings, $time, $name)
-    {
-        $data = compact('bindings', 'time', 'name');
+	Event::listen('illuminate.query', function($query, $bindings, $time, $name)
+	{
+		$data = compact('bindings', 'time', 'name');
 
-        // Format binding data for sql insertion
-        foreach ($bindings as $i => $binding)
-        {   
-            if ($binding instanceof \DateTime)
-            {   
-                $bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
-            }
-            else if (is_string($binding))
-            {   
-                $bindings[$i] = "'$binding'";
-            }   
-        }       
+		// Format binding data for sql insertion
+		foreach ($bindings as $i => $binding)
+		{   
+			if ($binding instanceof \DateTime)
+			{   
+				$bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
+			}
+			else if (is_string($binding))
+			{   
+				$bindings[$i] = "'$binding'";
+			}   
+		}       
 
-        // Insert bindings into query
-        $query = str_replace(array('%', '?'), array('%%', '%s'), $query);
-        $query = vsprintf($query, $bindings); 
+		// Insert bindings into query
+		$query = str_replace(array('%', '?'), array('%%', '%s'), $query);
+		$query = vsprintf($query, $bindings); 
 
-        Log::info($query, $data);
-    });
+		Log::info($query, $data);
+	});
 }
 
 Route::get('/', 'HomeController@showWelcome');
@@ -73,14 +73,14 @@ Route::controller('vendors', 'VendorsController');
 
 Route::get('report', function()
 {
-    View::share('active', 'report');
-    return View::make('pages.report');
+	View::share('active', 'report');
+	return View::make('pages.report');
 });
 
 Route::get('thanks', function()
 {
-    View::share('active', 'thanks');
-    return View::make('pages.thanks');
+	View::share('active', 'thanks');
+	return View::make('pages.thanks');
 });
 
 Route::get('credits', function()
@@ -92,4 +92,11 @@ Route::get('credits', function()
 Route::get('about', function()
 {
 	return Redirect::to('/blog/about');
+});
+
+// 404 
+
+App::missing(function($exception)
+{
+	return Response::view('errors.404', array(), 404);
 });

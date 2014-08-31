@@ -1,12 +1,21 @@
-@extends(theme_view('layout'))
+@extends('wrapper.layout')
 
 @section('title')
 	{{ $post->title }}
 @stop
 
+@section('css')
+	@include(theme_view('inc.css'))
+@stop
+
+@section('banner')
+	@include(theme_view('inc.links'))
+	<h1 class="title">{{ $post->title }}</h1>
+	<h2>{{ date('l F jS, h:i:s A', strtotime($post->created_at)) }}</h2>
+@stop
+
 @section('content')
 	<section>
-		<h2 class="title">{{ $post->title }}</h2>
 
 		{{ $post->parsed_content }}
 

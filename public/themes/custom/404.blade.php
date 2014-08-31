@@ -4,6 +4,10 @@
   404
 @stop
 
+@section('css')
+	@include(theme_view('inc.css'))
+@stop
+
 @section('content')
 	<section>
 		<h2 class="title">404 Error</h2>
