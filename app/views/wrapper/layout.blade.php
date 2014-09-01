@@ -126,8 +126,6 @@
 									<li>
 										<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'> {{-- $lbu set above --}}
 											<img src="/img/icons/flags/{{ $slug }}.png"> {{ $language }}
-										}
-										}
 										</a>
 									</li>
 									@endforeach
