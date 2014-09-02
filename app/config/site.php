@@ -107,6 +107,7 @@ return array(
 			'area' => array(
 				'id' => 23,
 				'name' => 'The Black Shroud (Gridania)',
+				'short_name' => 'Black Shroud',
 				'img' => '/img/maps/the-black-shroud-the-black-shroud-region-01' // .png
 			),
 			'regions' => array(
@@ -152,6 +153,7 @@ return array(
 			'area' => array(
 				'id' => 24,
 				'name' => 'Thanalan (Ul\'dah)',
+				'short_name' => 'Thanalan',
 				'img' => '/img/maps/thanalan-thanalan-region-02' // .png
 			),
 			'regions' => array(
@@ -204,6 +206,7 @@ return array(
 			'area' => array(
 				'id' => 22,
 				'name' => 'La Noscea (Limsa Lominsa)',
+				'short_name' => 'La Noscea',
 				'img' => '/img/maps/la-noscea-la-noscea-region-00' // .png
 			),
 			'regions' => array(
@@ -264,6 +267,7 @@ return array(
 				'id' => 25, // Also 26
 				'id_also' => '26',
 				'name' => 'Coerthas / Mor Dhona',
+				'short_name' => 'Mor Dhona',
 				'img' => '/img/maps/mor-dhona-mor-dhona-region-04' // .png
 			),
 			'regions' => array(

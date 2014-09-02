@@ -6,7 +6,6 @@
 
 @section('banner')
 	<h1>
-		<i class='glyphicon glyphicon-shopping-cart'></i>
 		Crafting List
 	</h1>
 @stop

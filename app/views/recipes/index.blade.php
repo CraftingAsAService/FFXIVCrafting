@@ -9,7 +9,6 @@
 	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
 
 	<h1>
-		<i class='glyphicon glyphicon-book'></i>
 		Recipe Book
 	</h1>
 @stop

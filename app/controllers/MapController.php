@@ -24,6 +24,9 @@ class MapController extends BaseController
 
 	public function postIndex()
 	{
+		$title = preg_replace('/\s+/m', ' ', preg_replace("/\n/", '', trim(Input::get('title'))));
+		View::share('map_title', $title);
+
 		$posted_list = explode('||', Input::get('items'));
 		$item_list = array();
 		foreach ($posted_list as $row)

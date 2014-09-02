@@ -346,6 +346,7 @@ div.logo {
 		color: $theme_color_black;
 		margin-left: 55px;
 		letter-spacing: .33em;
+		white-space: nowrap;
 	}
 	a:hover {
 		text-decoration: none;
@@ -469,4 +470,15 @@ div.logo {
 	background: transparent !important;
 	font-weight: normal !important;
 	color: $theme_color_lobster !important;
+}
+
+// Nexus 10, Portrait, Tagline is new-lining
+body.Android {
+	@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+		div.logo {
+			.tagline {
+				letter-spacing: .21em;
+			}
+		}
+	}
 }

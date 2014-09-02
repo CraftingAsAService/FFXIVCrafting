@@ -1124,7 +1124,8 @@ ul.plain {
 }
 
 /* Active slide out navigation */
-#nav-handler:checked ~ #mobile-nav {
+// #nav-handler:checked ~ #mobile-nav,
+body.mobile-nav-enabled #mobile-nav {
 	opacity: 1;
 	transition: opacity 0s 0s;
 	-moz-transition: opacity 0s 0s;
@@ -1159,8 +1160,8 @@ ul.plain {
 }
 
 /* Translate main container when nav handler is checked */
-#nav-handler:checked ~ #main-container,
-.nav-handler-checked {
+// #nav-handler:checked ~ #main-container,
+body.mobile-nav-enabled #main-container {
 	transform: translate3D(80%,0,0); /* X value must be same as Nav width */
 	-moz-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
 	-webkit-transform: translate3D(80%,0,0); /* X value must be same as Nav width */

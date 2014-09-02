@@ -15,6 +15,9 @@
 			$('.class-selector').click(function() {
 				var level = parseInt($(this).data('level'));
 
+				if (level == 0)
+					return;
+
 				$('.recipe-level-select a').each(function() {
 					var el = $(this),
 						start = parseInt(el.data('start')),
@@ -69,7 +72,7 @@
 					<legend>Class</legend>
 					<div class='btn-group jobs-list' data-toggle='buttons'>
 						@foreach($job_list as $job)
-						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 1 }}'>
+						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 0 }}'>
 							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
 							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{{ $job->name->term }}}'>
 						</label>

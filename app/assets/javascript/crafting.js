@@ -198,8 +198,13 @@ var crafting = {
 
 			data = data.join('||');
 
+			var title = $('#banner h1').text();
+			if ($('#banner h2').length > 0)
+				title += ' ' + $('#banner h2').text();
+
 			var form = $('<form action="/map" method="POST">' + 
 				'<input type="hidden" name="items" value="' + data + '">' +
+				'<input type="hidden" name="title" value="' + title + '">' +
 				'</form>');
 			
 			$('body').append(form);

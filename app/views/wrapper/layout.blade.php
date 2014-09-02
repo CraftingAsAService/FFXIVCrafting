@@ -40,15 +40,13 @@
 	</head>
 	<body>
 
-		<input type='checkbox' id='nav-handler'>
-
 		{{-- MOBILE MENU ONLY --}}
 		<nav id='mobile-nav'>
 			<div class='header-bar'>
 				<div class="container">
 					<ul>
 						<li>
-							<label id='mobile-menu-button' for='nav-handler'>
+							<label id='mobile-menu-button' class='toggle-mobile-nav'>
 								Close Menu
 							</label>
 						</li>
@@ -151,7 +149,7 @@
 						</ul>
 						<ul class='visible-xs'>
 							<li>
-								<label id='mobile-menu-button' for='nav-handler'>
+								<label id='mobile-menu-button' class='toggle-mobile-nav'>
 									<img src="/img/reward.png" width='12' height='12'>
 									<span>Menu</span>
 								</label>
@@ -281,10 +279,10 @@
 				<div id="copyright-info">
 					<div class="container">
 						<div class="row">
-							<div class="col-xs-12 col-sm-8">
+							<div class="col-xs-12 col-sm-9">
 								2014 FFXIV - Crafting as a Service. FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
 							</div>
-							<div class="col-xs-12 col-sm-4 text-right">
+							<div class="col-xs-12 col-sm-3 text-right">
 								<a href="#">Back To Top<span class="glyphicon glyphicon-chevron-up"></span></a>
 							</div>
 						</div>
@@ -292,6 +290,8 @@
 				</div>
 			</section>
 		</main>
+
+		@yield('modals')
 
 		<div id='notifications'></div>
 
