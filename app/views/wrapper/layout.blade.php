@@ -112,7 +112,7 @@
 			<header id='main-header'>
 				<div id="account">
 					<div class="container">
-						<ul class='hidden-xs'>
+						<ul class='hidden-xs hidden-sm'>
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 									<img src="/img/icons/flags/{{ $lang }}.png">
@@ -147,7 +147,7 @@
 								</a>
 							</li>
 						</ul>
-						<ul class='visible-xs'>
+						<ul class='visible-xs visible-sm'>
 							<li>
 								<label id='mobile-menu-button' class='toggle-mobile-nav'>
 									<img src="/img/reward.png" width='12' height='12'>
@@ -161,20 +161,20 @@
 					<div class='navbar'>
 						<div class='container'>
 							<div class="row">
-								<div class="col-xs-12 col-sm-4 col-lg-3 logo">
+								<div class="col-xs-12 col-md-3 logo">
 									<!-- /f7f7f7/e2e2e2 -->
 									<a href='/'>
 										<img src="/img/logo.png" class="img-responsive" width='263' height='45' alt='FFXIV Crafting'>
 										<span class='tagline'>Crafting as a Service</span>
 									</a>
 								</div>
-								<div class="col-xs-12 col-sm-8 col-lg-9 menu-navbar">
+								<div class="hidden-xs hidden-sm col-md-9 menu-navbar">
 									<div class='navbar-header'>
 									</div>
 									<div class='collapse navbar-collapse'>
 										<ul class='nav navbar-nav'>
 											{{-- See /app/helpers.php for menu_item() function --}}
-											{{ menu_item('/',			'Home',			'home'		) }}
+											{{-- menu_item('/',			'Home',			'home'		) --}}
 											{{ menu_item('/equipment',	'Equipment',	'equipment'	) }}
 											{{ menu_item('/crafting',	'Crafting',		'crafting'	) }}
 											{{ menu_item('/career',		'Career',		'career'	) }}

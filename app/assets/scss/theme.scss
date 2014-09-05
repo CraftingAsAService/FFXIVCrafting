@@ -355,15 +355,6 @@ div.logo {
 
 // Mobile Only
 @media (max-width: $screen-xs-max) {
-	div.logo {
-		text-align: center;
-		img {
-			display: inline-block !important;
-		}
-		.tagline {
-			display: block;
-		}
-	}
 	#copyright-info {
 		a {
 			position: relative;
@@ -373,40 +364,44 @@ div.logo {
 	}
 }
 
+// Mobile and Tablet
+@media (max-width: $screen-sm-max) {
+	div.logo {
+		text-align: center;
+		img {
+			display: inline-block !important;
+		}
+		.tagline {
+			display: block;
+		}
+	}
+}
+
 // Tablet only
 @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
 	div.logo {
 		.tagline {
-			margin-left: 45px;
-			letter-spacing: .22em;
+			letter-spacing: .33em;
 		}
 	}
 }
 
 // Tablet to Small Desktop range
 @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
-	.nav.navbar-nav {
-		// li {
-		// 	position: relative;
-		// 	top: 2px;
-		// }
-		// li:nth-child(1), li:nth-child(2), li:nth-child(3), li:nth-child(4) {
-		// 	border-top: 2px solid $theme_color_white;
-		// 	top: 4px;
-		// 	&.active {
-		// 		border-bottom: 0 !important;
-		// 		border-top: 2px solid $theme_color_lobster;
-		// 	}
-		// }
-		li:nth-child(5) {
-			clear: both;
-		}
-	}
-
 	div.logo {
 		min-height: 80px;
 		img {
 			margin-top: 17px;
+		}
+	}
+}
+
+// Small Desktop
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+	div.logo {
+		.tagline {
+			margin-left: 45px;
+			letter-spacing: .21em;
 		}
 	}
 }
@@ -428,6 +423,18 @@ div.logo {
 		box-shadow: none;
 		margin: {
 			bottom: 0;
+		}
+		.navbar-nav {
+			margin: 7.5px -15px !important; // bootstrap override
+			float: none !important; // bootstrap override
+			> li {
+				float: none !important; // bootstrap override
+				> a {
+					padding-top: 10px !important; // bootstrap override
+					padding-bottom: 10px !important; // bootstrap override
+					line-height: 20px !important; // bootstrap override
+				}
+			}
 		}
 		.nav.navbar-nav {
 			text-transform: uppercase;
@@ -457,6 +464,10 @@ div.logo {
 		border-top-color: $theme_color_lobster;
 		margin-top: 10px;
 		margin-bottom: 10px;
+	}
+
+	.container {
+		width: auto !important; // bootstrap override
 	}
 }
 

@@ -57,55 +57,6 @@ td.new .stats {
 	cursor: pointer;
 }
 
-
-/*
-#footer {
-	background-color: #f5f5f5;
-	margin-top: 30px;
-
-	.top {
-		.credit {
-			margin-top: 15px;
-		}
-	}
-	.bottom {
-		.credit {
-			margin-bottom: 15px;
-		}
-	}
-
-	@media (max-width: $tablet_viewport - 1) {
-		text-align: center;
-	}
-}
-
-
-
-@media (min-width: $tablet_viewport) {
-
-	$footer-size: 154px;
-
-	#wrap {
-		min-height: 100%;
-		height: auto !important;
-		height: 100%;
-		margin: 0 auto;
-		margin-bottom: -$footer-size;
-		padding: 0 0 $footer-size;
-	}
-
-	#footer {
-		height: $footer-size;
-		overflow: hidden;
-
-		&>.container {
-			padding-left: 15px;
-			padding-right: 15px;
-		}
-	}
-}
-*/
-
 .no-value {
 	color: #ccc;
 }
@@ -1117,7 +1068,7 @@ ul.plain {
 	-webkit-transition: opacity 0s .25s;
 }
 
-@media (min-width: $tablet_viewport) {
+@media (min-width: $desktop_viewport) {
 	#mobile-nav {
 		display: none;
 	}
@@ -1161,10 +1112,13 @@ body.mobile-nav-enabled #mobile-nav {
 
 /* Translate main container when nav handler is checked */
 // #nav-handler:checked ~ #main-container,
-body.mobile-nav-enabled #main-container {
-	transform: translate3D(80%,0,0); /* X value must be same as Nav width */
-	-moz-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
-	-webkit-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+
+@media (max-width: $desktop_viewport - 1) {
+	body.mobile-nav-enabled #main-container {
+		transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+		-moz-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+		-webkit-transform: translate3D(80%,0,0); /* X value must be same as Nav width */
+	}
 }
 
 #content-container {
