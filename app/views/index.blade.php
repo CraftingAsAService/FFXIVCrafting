@@ -63,7 +63,7 @@
 	</div>
 </div>
 
-{{--
+<?php /*
 <div class="row">
 	<div class="col-sm-6">
 		<a href="/equipment">
@@ -170,5 +170,5 @@
 		</div>
 	</div>
 </div>
---}}
+*/ ?>
 @stop
