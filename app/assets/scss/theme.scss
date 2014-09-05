@@ -171,7 +171,7 @@ h2, .h2 {
 }
 
 #banner {
-	background: $theme_color_darker_than_light_gray;
+	background: $theme_color_light_gray;
 	padding: {
 		top: 20px;
 		bottom: 20px;
@@ -188,7 +188,7 @@ h2, .h2 {
 }
 
 #content {
-	background: $theme_color_light_gray;
+	background: $theme_color_white;
 	padding: {
 		top: 30px;
 		bottom: 30px;
@@ -460,11 +460,11 @@ div.logo {
 	}
 }
 
-.ui-state-hover, 
-.ui-widget-content .ui-state-hover, 
-.ui-widget-header .ui-state-hover, 
-.ui-state-focus, 
-.ui-widget-content .ui-state-focus, 
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	border: 0 !important;
 	background: transparent !important;
