@@ -48,7 +48,7 @@
 				<td class='valign text-center materia-value'>
 					<a href='http://xivdb.com/?item/{{ $materia['power'][$power]['id'] }}' target='_blank'>
 						{{ number_format($materia['power'][$power]['amount']) }}
-						<img src='/img/items/nq/{{ $materia['power'][$power]['id'] }}.png'>
+						<img src='{{ assetcdn('items/nq/' . $materia['power'][$power]['id'] . '.png') }}'>
 					</a>
 				</td>
 				@endforeach

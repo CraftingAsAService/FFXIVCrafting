@@ -116,7 +116,7 @@
 											@endif
 
 											<a href='http://xivdb.com/?item/{{ $item['id'] }}' target='_blank'>
-												<img src='/img/items/{{ $quality }}/{{ $item['id'] }}.png' width='36' height='36'>
+												<img src='{{ assetcdn('items/' . $quality . '/' . $item['id'] . '.png') }}' width='36' height='36'>
 												{{ $item['name'] }}
 											</a>
 										</td>
