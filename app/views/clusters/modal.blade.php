@@ -21,7 +21,7 @@
 							@foreach ($icons as $icon => $descriptions)
 								@foreach ($descriptions as $desc => $count)
 								<li>
-									<img src='/img/maps/node_icons/{{ $icon }}.png'> {{ $desc }} <span class='label label-default'>{{ $count }} nodes</span>
+									<img src='/img/maps/node_icons/{{ $icon }}'> {{ $desc }} <span class='label label-default'>{{ $count }} nodes</span>
 								</li>
 								@endforeach
 							@endforeach

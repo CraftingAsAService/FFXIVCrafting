@@ -184,7 +184,7 @@ return array(
 	),
 
 	'cdn' => 'acd84eeb1b7b98b2dec5-9f5608ae56f41b0c88d873b8b4c5cc36.r22.cf2.rackcdn.com',
-	'asset_cdn' => '1f8542391fb6f69feac6-8da73fe2eda52501a203c4314e300532.r78.cf2.rackcdn.com',
+	'asset_cdn' => 'c3dcd810e2e5862353ca-bc79add51f9bad46177fcbc8055b750c.r72.cf2.rackcdn.com',
 
 	'cipher' => MCRYPT_RIJNDAEL_256,
 
