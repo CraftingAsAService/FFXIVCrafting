@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new cdn);
+Artisan::add(new imgcdn);

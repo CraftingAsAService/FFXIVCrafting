@@ -133,7 +133,7 @@
 					<li class='item_level list-group-item'>
 						<div>
 							{{-- <span class='pull-right'>{{ Form::checkbox('', '', true) }}</span> --}}
-							<img src='/img/items/nq/{{ $item->id }}.png' class='item-icon' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
+							<img src='{{ assetcdn('items/nq/' . $item->id . '.png') }}' class='item-icon' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
 						</div>
 						<ul class='list-group'>
 						@foreach ($section['regions'] as $region_slug => $data)

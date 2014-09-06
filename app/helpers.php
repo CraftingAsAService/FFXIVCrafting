@@ -17,6 +17,12 @@
 
 		return '//' . $cdn . $md5_filename;
 	}
+	
+	function assetcdn($asset)
+	{
+		$cdn = Config::get('app.asset_cdn');
+		return '//' . $cdn . '/' . $asset;
+	}
 
 	function random_guardian_name()
 	{

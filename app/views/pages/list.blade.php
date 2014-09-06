@@ -48,7 +48,7 @@
 			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name->term }}}'>
 				<td class='text-left'>
 					<a href='http://xivdb.com/?recipe/{{ $list_item['item']->recipe[0]->id }}' target='_blank'>
-						<img src='/img/items/nq/{{ $list_item['item']->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name->term }}
+						<img src='{{ assetcdn('items/nq/' . $list_item['item']->id . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name->term }}
 					</a>
 				</td>
 				<td class='text-center valign'>

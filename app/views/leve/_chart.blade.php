@@ -26,7 +26,7 @@
 	@foreach($leve->item->recipe[0]->reagents as $reagent)
 	<li class='list-group-item'>
 		<a href='http://xivdb.com/?item/{{ $reagent->id }}' target='_blank'>
-			<img src='/img/items/nq/{{ $reagent->id }}.png' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name->term }}</span>
+			<img src='{{ assetcdn('items/nq/' . $reagent->id . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name->term }}</span>
 		</a>
 		x {{ $reagent->pivot->amount * $leve->amount }}
 		@if($leve->amount > 1)
