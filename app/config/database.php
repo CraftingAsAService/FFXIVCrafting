@@ -54,14 +54,14 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => getenv('DB_HOST'),
-			'database'  => getenv('DB_NAME'),
-			'username'  => getenv('DB_USER'),
-			'password'  => getenv('DB_PASS'),
+			'host'      => getenv('db.host'),
+			'database'  => getenv('db.schema'),
+			'username'  => getenv('db.username'),
+			'password'  => getenv('db.password'),
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-			'port'		=> getenv('DB_PORT') ?: 3306,
+			'port'		=> getenv('db.port') ?: 3306,
 		),
 
 		'pgsql' => array(
@@ -115,9 +115,9 @@ return array(
 		'cluster' => false,
 
 		'default' => array(
-			'host'     => getenv('REDIS_HOST'),
+			'host'     => getenv('redis.host'),
 			'port'     => 6379,
-			'database' => getenv('REDIS_DB'),
+			'database' => getenv('redis.database'),
 		),
 
 	),

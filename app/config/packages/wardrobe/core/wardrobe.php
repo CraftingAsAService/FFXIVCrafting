@@ -53,7 +53,7 @@ return array(
 	| Set this to your sites title
 	|
 	*/
-	'title' => 'Crafting as a Service',
+	'title' => 'FFXIV Crafting, Crafting as a Service',
 
 	/*
 	|--------------------------------------------------------------------------
