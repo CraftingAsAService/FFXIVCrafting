@@ -5,78 +5,170 @@
 @stop
 
 @section('javascript')
-	<script src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
+@stop
+
+@section('banner')
+	<h1>Welcome to FFXIV Crafting</h1>
+	<h2>Crafting information and planning for FFXIV: A Realm Reborn</h2>
 @stop
 
 @section('content')
 
-@if($host_warning)
-
-<div class="panel panel-danger" style='margin-bottom: 60px;'>
-	<div class="panel-heading">
-		<h3 class="panel-title">Domain Notificiation</h3>
-	</div>
-	<div class="panel-body">
-		You're currently using caas.thokk.com.  Please use <a href='http://craftingasaservice.com/'>http://craftingasaservice.com/</a> instead.  Thanks!
-	</div>
-</div>
-@endif
-
-<div class='home jumbotron'>
-	<h1>Crafting as a Service</h1>
-	<p>Crafting information and planning for FFXIV: ARR</p>
-</div>
-
 <div class='row'>
-	<div class='col-sm-6 col-sm-push-6 news'>
+	<div class='col-sm-4 homepage-step'>
+		<div class='home-callout' data-href='/equipment'>
+			<img src='/img/homepage/icon-lg-equipment.png' class='img-responsive' width='40' height='40'>
+			<p class='title'>
+				Equipment<span class='hidden-sm'>&nbsp;Calculator</span>
+			</p>
+			<p class='description'>
+				Your goal is to create HQ items every time, and the only way to do that is with the proper gear.  Start with your gear!
+			</p>
+			<p class='step'>
+				<img src='/img/homepage/icon-lg-number-1.png' class='img-responsive pull-right' width='20' height='20'>
+				Begin Step
+			</p>
+		</div>
+	</div>
+	<div class='col-sm-4 homepage-step'>
+		<div class='home-callout' data-href='/crafting'>
+			<img src='/img/homepage/icon-lg-anvil.png' class='img-responsive' width='40' height='40'>
+			<p class='title'>
+				Crafting<span class='hidden-sm'>&nbsp;Calculator</span>
+			</p>
+			<p class='description'>
+				Make your life easier, gather everything you'll need before you start crafting.  Be sure to pick up some extras!
+			</p>
+			<p class='step'>
+				<img src='/img/homepage/icon-lg-number-2.png' class='img-responsive pull-right' width='20' height='20'>
+				Begin Step
+			</p>
+		</div>
+	</div>
+	<div class='col-sm-4 homepage-step'>
+		<div class='home-callout' data-href='/leve'>
+			<img src='/img/homepage/icon-lg-levequest.png' class='img-responsive' width='40' height='40'>
+			<p class='title'>
+				Levequests
+			</p>
+			<p class='description'>
+				Bonus XP from crafting your list won't completely level you.  Find the best Levequest to help you level up to the next crafting tier!
+			</p>
+			<p class='step'>
+				<img src='/img/homepage/icon-lg-number-3.png' class='img-responsive pull-right' width='20' height='20'>
+				Begin Step
+			</p>
+		</div>
+	</div>
+</div>
 
-		<h2>News<a href='/blog' target='_blank'><span class='glyphicon glyphicon-new-window'></span></a></h2>
+<?php /*
+<div class="row">
+	<div class="col-sm-6">
+		<a href="/equipment">
+			<div class="home-callout">
+				<div class="row">
+					<div class="col-sm-4">
+						<img src="/img/homepage/callout-equipment.png" class="img-responsive center-block equipment">
+					</div>
+					<div class="col-sm-8 copy">
+						<p class="title">Equipment Calculator</p>
+						<p class="description">
+							Want to know what equipment you can craft at a certain level for your class?
+							Use this tool to select your disciple and level range.
+						</p>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
 
-		<?php $wardrobe = new \Wardrobe\Core\Repositories\DbPostRepository(); ?>
-		@foreach($wardrobe->active(5) as $post)
-		<div class='post'>
-			<div class='name'>
-				<a href='/blog/post/{{{ $post->slug }}}' target='_blank'><span class='glyphicon glyphicon-bookmark'></span>{{ $post->title }}<span class='glyphicon glyphicon-new-window'></span></a>
-			</div>
-			<div class='when_who'>
-				Posted on <span class='when'>{{ date("M d, Y", strtotime($post->publish_date)) }}</span> 
-				by <span class='who'>{{ $post->user->first_name }} {{ $post->user->last_name }}</span>
-			</div>
-			<div class='tags'>
-				@foreach(json_decode($post->tags) as $tag)
-				@if($tag->tag)
-				<span class='tag'>
-					<span class='glyphicon glyphicon-tag'></span> {{ $tag->tag }}
-				</span>
-				@endif
-				@endforeach
+	<div class="col-sm-6">
+		<div class="home-callout">
+			<div class="row">
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-8">
+					<h2>Crafting Calculator</h2>
+					<p>
+						Want to get everything you need before trying to level Weaver from levels 5 to 10?
+						Use this tool to select your craft and level range.
+					</p>
+					<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
+				</div>
 			</div>
 		</div>
-		@endforeach
-	</div>
-	<div class='col-sm-6 col-sm-pull-6'>
-
-		<h2>Equipment Calculator</h2>
-		<p>
-			Want to know what equipment you can craft at a certain level for your class?  
-			Use this tool to select your disciple and level range.
-		</p>
-		<a href='/equipment' class='btn btn-primary'>Gear me out &raquo;</a>
-
-		<h2>Crafting Calculator</h2>
-		<p>
-			Want to get everything you need before trying to level Weaver from levels 5 to 10?  
-			Use this tool to select your craft and level range.
-		</p>
-		<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
-
-		<h2>Career Calculator</h2>
-		<p>
-			Ever ask yourself when mining "What should I be digging up?", or when crafting "Just how many total Bronze Ingots do I really need to make?"
-			Find the most efficient use of your pickaxe or needle with this tool!
-		</p>
-		<a href='/gathering' class='btn btn-primary'>See the totals &raquo;</a>
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-sm-6">
+		<div class="home-callout">
+			<div class="row">
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-8">
+					<h2>Career Calculator</h2>
+					<p>
+						Ever ask yourself when mining "What should I be digging up?", or when crafting "Just how many total Bronze Ingots do I really need to make?"
+						Find the most efficient use of your pickaxe or needle with this tool!
+					</p>
+					<a href='/gathering' class='btn btn-primary'>See the totals &raquo;</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="home-callout">
+			<div class="row">
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-8">
+					<h2>Recipe Book</h2>
+					<p>
+						Quickly discover what materials are needed to craft a specific item.
+					</p>
+					<a href='/crafting' class='btn btn-primary'>Vocationalize &raquo;</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="home-callout">
+			<div class="row">
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-8">
+					<h2>Quests</h2>
+					<p>
+						Those things that you do while playing a game that usually feel like a grind, but are so darn fun.
+					</p>
+					<a href='/gathering' class='btn btn-primary'>Action &raquo;</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="home-callout">
+			<div class="row">
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-8">
+					<h2>Leves</h2>
+					<p>
+						Find the best Tradecraft Leves for your time and gil.
+					</p>
+					<a href='/crafting' class='btn btn-primary'>Find out more &raquo;</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+*/ ?>
 @stop

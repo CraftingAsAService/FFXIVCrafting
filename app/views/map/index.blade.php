@@ -1,5 +1,12 @@
 @extends('wrapper.layout')
 
+@section('banner')
+	<h1>Gathering Map</h1>
+	@if($map_title)
+	<h2>{{ $map_title }}</h2>
+	@endif
+@stop
+
 @section('javascript')
 <script type='text/javascript' src='{{ cdn('/js/jquery.overscroll.js') }}'></script>
 <script type='text/javascript' src='{{ cdn('/js/map.js') }}'></script>
@@ -33,19 +40,13 @@
 	#var_dump($map_data[53]['vendors']);
 ?>
 
-<div class='alert alert-warning pull-right margin-top'>
-	<p><strong><em>Coordinates are not 100% accurate.</em></strong></p>
-</div>
-
-<h1>
-	<i class='glyphicon glyphicon-globe'></i>
-	Map
-</h1>
-
-<ul class='nav nav-tabs margin-top'>
+<ul class='nav nav-tabs margin-top' style='clear: right;'>
 	@foreach ($map as $area_slug => $section)
 	<li class='{{ $section === reset($map) ? 'active' : '' }}'>
-		<a href='#{{ $area_slug }}' data-toggle='tab'>{{ $section['area']['name'] }}</a>
+		<a href='#{{ $area_slug }}' data-toggle='tab'>
+			<span class='visible-xs visible-sm'>{{ $section['area']['short_name'] }}</span>
+			<span class='hidden-xs hidden-sm'>{{ $section['area']['name'] }}</span>
+		</a>
 	</li>
 	@endforeach
 </ul>
@@ -226,6 +227,9 @@
 	</div>
 @endforeach
 </div>
+@stop
+
+@section('modals')
 
 <div class="modal fade" id='legend'>
 	<div class="modal-dialog">
@@ -284,11 +288,16 @@
 						Enemy icons.  Locations of enemys are unknown, so these will (almost) always display above the name of the region.
 					</div>
 				</div>
-				{{--
+
 				<hr>
 
-				<small><small>While I appreciate any enthusiasm to improve the map, please do not send me updated locations.</small></small>
-				--}}
+				<div class='row'>
+					<div class='col-sm-10 col-sm-offset-2'>
+						<p class='text-warning'>
+							Coordinates are not 100% accurate.
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

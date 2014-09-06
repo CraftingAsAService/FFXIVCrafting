@@ -53,7 +53,7 @@ return array(
 	*/
 
 	'providers' => array(
-		
+
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
@@ -82,7 +82,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
 		// Profiler
-		'Profiler\ProfilerServiceProvider',
+		// 'Profiler\ProfilerServiceProvider',
 
 		'Wardrobe\Core\WardrobeServiceProvider',
 
@@ -143,9 +143,9 @@ return array(
 		'Profiler' => 'Profiler\Facades\Profiler',
 
 		'Wardrobe' => 'Wardrobe\Core\Facades\WardrobeFacade',
-		
+
 	),
 
 	'cdn' => false,
-	
+
 );

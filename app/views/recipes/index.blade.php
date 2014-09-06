@@ -1,32 +1,19 @@
 @extends('wrapper.layout')
 
 @section('javascript')
-<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "EN",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
-<script type='text/javascript' src='{{ cdn('/js/recipe_book.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/recipe_book.js') }}'></script>
+@stop
+
+@section('banner')
+	<a href='/recipes' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
+
+	<h1>
+		Recipe Book
+	</h1>
 @stop
 
 @section('content')
-
-<a href='/recipes' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
-<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
-
-<h1>
-	<i class='glyphicon glyphicon-book'></i>
-	Recipe Book
-</h1>
-
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped table-responsive text-center' id='recipe-book'>
 		<thead>
@@ -72,11 +59,11 @@
 									All Classes
 								</a>
 							</li>
-							@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $job)
+							@foreach($crafting_job_list as $job)
 							<li>
-								<a href='#' data-class='{{ $job }}'>
-									<img src='/img/classes/{{ $job }}.png'>
-									{{ $job_list[$job] }}
+								<a href='#' data-class='{{ $job->en_abbr->term }}'>
+									<img src='/img/classes/{{ $job->en_abbr->term }}.png'>
+									{{{ $job->name->term }}}
 								</a>
 							</li>
 							@endforeach

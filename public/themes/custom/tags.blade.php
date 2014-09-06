@@ -1,12 +1,20 @@
-@extends(theme_view('layout'))
+@extends('wrapper.layout')
 
 @section('title')
-	Archives
+	Tags
+@stop
+
+@section('css')
+	@include(theme_view('inc.css'))
+@stop
+
+@section('banner')
+	@include(theme_view('inc.links'))
+	<h1 class="title">Tags</h1>
 @stop
 
 @section('content')
 	<section>
-		<h2 class="title">Tags</h2>
 
 		@foreach (Wardrobe::tags() as $item)
 			@if ($item['tag'] != "")

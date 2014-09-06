@@ -3,13 +3,28 @@
 class CraftingController extends BaseController 
 {
 
-	public function getIndex()
+	public function __construct()
 	{
-		return View::make('crafting.index')
+		parent::__construct();
+		View::share('active', 'crafting');
+	}
+
+	public function getIndex($advanced = false)
+	{
+		$crafting_job_ids = Config::get('site.job_ids.crafting');
+		// ini_set('xdebug.var_display_max_depth', '10'); 
+		// dd(current(ClassJob::with('name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get()));
+		return View::make('crafting.' . ($advanced ? 'advanced' : 'basic'))
 			->with('error', FALSE)
 			->with('active', 'crafting')
-			->with('job_list', ClassJob::get_name_abbr_list())
+			->with('job_list', ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $crafting_job_ids)->get())
+			->with('crafting_job_ids', $crafting_job_ids)
 			->with('previous', Cookie::get('previous_crafting_load'));
+	}
+
+	public function getAdvanced()
+	{
+		return $this->getIndex(true);
 	}
 
 	public function postIndex()
@@ -33,8 +48,6 @@ class CraftingController extends BaseController
 
 	public function getList()
 	{
-		View::share('active', 'crafting');
-
 		// All Jobs
 		$job_list = ClassJob::get_name_abbr_list();
 		View::share('job_list', $job_list);
@@ -42,7 +55,7 @@ class CraftingController extends BaseController
 		$include_quests = TRUE;
 
 		if ( ! Input::all())
-			return Redirect::to('/crafting');
+			return Redirect::back();
 
 		// Get Options
 		$options = explode(':', array_keys(Input::all())[0]);
@@ -53,6 +66,7 @@ class CraftingController extends BaseController
 		$end             = isset($options[2]) ? $options[2] : 5;
 		$self_sufficient = isset($options[3]) ? $options[3] : 1;
 		$misc_items	 	 = isset($options[4]) ? $options[4] : 0;
+		$special	 	 = isset($options[5]) ? $options[5] : 0;
 
 		$item_ids = $item_amounts = array();
 
@@ -73,6 +87,28 @@ class CraftingController extends BaseController
 
 			View::share('item_ids', $item_ids);
 			View::share('item_amounts', $item_amounts);
+
+			$top_level = $item_amounts;
+		}
+
+		if ($desired_job == 'Item')
+		{
+			$item_id = $special;
+
+			$start = $end = null;
+			$include_quests = FALSE;
+
+			// Get the list
+			$item_amounts = array($item_id => 1);
+
+			$item_ids = array_keys($item_amounts);
+
+			if (empty($item_ids))
+				return Redirect::to('/list');
+
+			View::share('item_ids', $item_ids);
+			View::share('item_amounts', $item_amounts);
+			View::share('item_special', true);
 
 			$top_level = $item_amounts;
 		}
@@ -110,8 +146,12 @@ class CraftingController extends BaseController
 			foreach ($job as $j)
 				$job_ids[] = $j->id;
 
+			$full_name_desired_job = false;
 			if (count($job) == 1)
+			{
 				$job = $job[0];
+				$full_name_desired_job = $job->name->term;
+			}
 
 			// Starting maximum of 1
 			if ($start < 0) $start = 1;
@@ -131,7 +171,8 @@ class CraftingController extends BaseController
 				'start' => $start,
 				'end' => $end,
 				'quest_items' => $quest_items,
-				'desired_job' => $desired_job
+				'desired_job' => $desired_job,
+				'full_name_desired_job' => $full_name_desired_job
 			));
 		}
 
@@ -175,7 +216,13 @@ class CraftingController extends BaseController
 		if ($misc_items == 0 && $desired_job != 'List')
 			$query
 				->whereHas('item', function($query) {
-					$query->whereNotIn('itemcategory_id', array(14, 15)); // ItemCategory 14 == 'Furnishing', 15 == 'Dye'
+					$query
+						->whereNotIn('itemcategory_id', array(14, 15)) // ItemCategory 14 == 'Furnishing', 15 == 'Dye'
+						->where(function($query) {
+							$query
+								->where('itemcategory_id', '!=', 16) // Miscellany
+								->where('itemuicategory_id', '!=', 63); // Other
+						});
 				});
 
 		if ($item_ids)
@@ -247,13 +294,15 @@ class CraftingController extends BaseController
 			'Crafting List' => array(),
 		);
 
+		$gathering_class_abbreviations = ClassJob::get_abbr_list(Config::get('site.job_ids.gathering'));
+
 		foreach ($reagent_list as $reagent)
 		{
 			$section = 'Other';
 			$level = 0;
-
+			
 			// Section
-			if (in_array($reagent['self_sufficient'], array('MIN', 'BTN', 'FSH')))
+			if (in_array($reagent['self_sufficient'], $gathering_class_abbreviations))
 			{
 				$section = 'Gathered';
 				$level = $reagent['item']->level;
@@ -261,6 +310,10 @@ class CraftingController extends BaseController
 			elseif ($reagent['self_sufficient'])
 			{
 				$section = 'Pre-Requisite Crafting';
+				if ( ! isset($reagent['item']->recipe[0]))
+				{
+					dd($reagent['item']);
+				}
 				$level = $reagent['item']->recipe[0]->level;
 			}
 			elseif (count($reagent['item']->vendors))

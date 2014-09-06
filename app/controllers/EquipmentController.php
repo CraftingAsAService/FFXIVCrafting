@@ -3,12 +3,24 @@
 class EquipmentController extends BaseController 
 {
 
+	public function __construct()
+	{
+		parent::__construct();
+		View::share('active', 'equipment');
+	}
+
 	public function getIndex()
 	{
+		$job_ids = Config::get('site.job_ids');
+
 		return View::make('equipment.index')
 			->with('error', FALSE)
 			->with('active', 'equipment')
-			->with('job_list', ClassJob::get_name_abbr_list())
+			->with('crafting_job_list', ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['crafting'])->get())
+			->with('gathering_job_list', ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['gathering'])->get())
+			->with('basic_melee_job_list', ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['basic_melee'])->get())
+			->with('basic_magic_job_list', ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['basic_magic'])->get())
+			->with('job_ids', $job_ids)
 			->with('previous', Cookie::get('previous_equipment_load'));
 	}
 

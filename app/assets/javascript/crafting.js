@@ -4,8 +4,10 @@ var crafting = {
 		crafting_tour.init();
 	},
 	events:function() {
-		$('#self_sufficient_switch, #misc_items_switch').change(function() {
-			$(this).closest('form').submit();
+		$('.bootswitch').bootstrapSwitch({
+			onSwitchChange:function() {
+				$(this).closest('form').submit();	
+			}
 		});
 
 		$('#obtain-these-items .collapse').click(function() {
@@ -196,9 +198,18 @@ var crafting = {
 
 			data = data.join('||');
 
-			$('<form action="/map" method="POST">' + 
+			var title = $('#banner h1').text();
+			if ($('#banner h2').length > 0)
+				title += ' ' + $('#banner h2').text();
+
+			var form = $('<form action="/map" method="POST">' + 
 				'<input type="hidden" name="items" value="' + data + '">' +
-				'</form>').submit();
+				'<input type="hidden" name="title" value="' + title + '">' +
+				'</form>');
+			
+			$('body').append(form);
+			
+			form.submit();
 		});
 
 		$('#csv_download').click(function(event) {

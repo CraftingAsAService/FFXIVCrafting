@@ -1,7 +1,17 @@
-@extends(theme_view('layout'))
+@extends('wrapper.layout')
 
 @section('title')
 	{{ site_title() }}
+@stop
+
+@section('css')
+	@include(theme_view('inc.css'))
+@stop
+
+@section('banner')
+	@include(theme_view('inc.links'))
+	<h1>{{ site_title() }}</h1>
+	<h4>A Development Log &amp; Crafting Diary</h4>
 @stop
 
 @section('content')

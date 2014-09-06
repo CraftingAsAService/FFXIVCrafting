@@ -6,52 +6,47 @@
 @stop
 
 @section('javascript')
-	<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
-	<script type='text/javascript'>
-		var xivdb_tooltips = 
-		{ 
-			"language"      : "EN",
-			"frameShadow"   : true,
-			"compact"       : false,
-			"statsOnly"     : false,
-			"replaceName"   : false,
-			"colorName"     : true,
-			"showIcon"      : false,
-		} 
-	</script>
 	<script type='text/javascript' src='{{ cdn('/js/crafting.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 @stop
 
+@section('banner')
+
+	<a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
+		<i class='glyphicon glyphicon-play'></i>
+		Tour
+	</a>
+
+	<a href='#' id='csv_download' class='btn btn-info pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
+		<i class='glyphicon glyphicon-download-alt'></i>
+		Download
+	</a>
+
+	<a href='#' id='map_it' class='btn btn-success pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
+		<i class='glyphicon glyphicon-globe'></i>
+		Map It
+	</a>
+
+	<h1 class='csv-filename' style='margin-top: 0;'>
+		@if(isset($job))
+		@if(count(explode(',', $desired_job)) == 1)
+		<i class='class-icon {{ $desired_job }} large hidden-print' style='position: relative; top: 5px;'></i>
+		{{ $full_name_desired_job }}
+		@else
+		Crafting for {{ implode(', ', explode(',', $desired_job)) }} 
+		@endif
+		@else
+		Custom Recipe List
+		@endif
+	</h1>
+	@if(isset($job))
+	<h2>recipes between levels {{ $start }} and {{ $end }}</h2>
+	@endif
+@stop
+
 @section('content')
 
-<a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
-	<i class='glyphicon glyphicon-play'></i>
-	Tour
-</a>
-
-<a href='#' id='csv_download' class='btn btn-info pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
-	<i class='glyphicon glyphicon-download-alt'></i>
-	Download
-</a>
-
-<a href='#' id='map_it' class='btn btn-success pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
-	<i class='glyphicon glyphicon-globe'></i>
-	Map It
-</a>
-
-<h1 class='csv-filename' style='margin-top: 0;'>
-	@if(isset($job))
-	@if(count(explode(',', $desired_job)) == 1)
-	<i class='class-icon {{ $desired_job }} large hidden-print' style='position: relative; top: 5px;'></i>
-	@endif
-	{{ implode(' ', explode(',', $desired_job)) }} 
-	recipes between levels {{ $start }} and {{ $end }}
-	@else
-	Custom Recipe List
-	@endif
-</h1>
 
 <div class='table-responsive'>
 	<table class='table table-bordered table-striped text-center' id='obtain-these-items'>
@@ -224,7 +219,7 @@
 </div>
 
 <a name='options'></a>
-
+@if( ! isset($item_special))
 <div class='panel panel-info hidden-print'>
 	<div class='panel-heading'>
 		<small class='pull-right'><em>* Refreshes page</em></small>
@@ -239,15 +234,15 @@
 			<label>
 				Self Sufficient
 			</label>
-			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}>
-			</div>
+			
+				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1'{{ $self_sufficient ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
+			
 			<label class='margin-left'>
-				Misc Items
+				Dyes &amp; Furniture
 			</label>
-			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-				<input type='checkbox' id='misc_items_switch' name='misc_items' value='1' {{ $misc_items ? " checked='checked'" : '' }}>
-			</div>
+			
+				<input type='checkbox' id='misc_items_switch' name='misc_items' value='1' {{ $misc_items ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
+			
 		</form>
 		@else
 		<form action='/crafting/list' method='post' role='form' class='form-horizontal' id='self-sufficient-form'>
@@ -255,14 +250,15 @@
 			<label>
 				Self Sufficient
 			</label>
-			<div class='make-switch' data-on='success' data-off='warning' data-on-label='Yes' data-off-label='No'>
-				<input type='checkbox' id='self_sufficient_switch' value='1' {{ $self_sufficient ? " checked='checked'" : '' }}>
-			</div>
+			
+				<input type='checkbox' id='self_sufficient_switch' value='1'{{ $self_sufficient ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'
+			
 			<small><em>* Refreshes page</em></small>
 		</form>
 		@endif
 	</div>
 </div>
+@endif
 
 <div class='row '>
 	@if(isset($job))

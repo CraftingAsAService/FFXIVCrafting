@@ -9,6 +9,12 @@ var equipment = {
 		boring_stats: false
 	},
 	init:function() {
+		$('.bootswitch').bootstrapSwitch({
+			onSwitchChange:function() {
+				$(this).closest('form').submit();	
+			}
+		});
+		
 		$.fn.inlineStyle = function (prop) {
 			return this.prop("style")[$.camelCase(prop)];
 		};
@@ -24,7 +30,7 @@ var equipment = {
 	},
 	viewport_changed:function() {
 		// Reaffirm slim mode
-		equipment.slim($('#toggle-slim').bootstrapSwitch('status'));
+		equipment.slim($('#toggle-slim').bootstrapSwitch('state'));
 	},
 	cell_events:function() {
 		equipment.mark_upgrades();
@@ -456,23 +462,23 @@ var equipment = {
 		equipment.same_cell_heights();
 	},
 	page_events:function() {
-		$('#toggle-slim').on('switch-change', function(e, data) {
-			equipment.slim(data.value);
+		$('#toggle-slim').on('switchChange.bootstrapSwitch', function(e, state) {
+			equipment.slim(state);
 			$('html, body').animate({ scrollTop: $('#table-options').offset().top }, 'slow');
 		});
 
-		if ($('#toggle-slim').bootstrapSwitch('status'))
+		if ($('#toggle-slim').bootstrapSwitch('state'))
 			equipment.options.level_range = 4;
 
-		$('#toggle-all-stats').on('switch-change', function(e, data) {
-			equipment.options.boring_stats = data.value;
+		$('#toggle-all-stats').on('switchChange.bootstrapSwitch', function(e, state) {
+			equipment.options.boring_stats = state;
 			equipment.all_stats();
 			$('html, body').animate({ scrollTop: $('#table-options').offset().top }, 'slow');
 		});
 
-		$('#craftable_only_switch').change(function() {
-			$(this).closest('form').submit();
-		});
+		// $('#craftable_only_switch').change(function() {
+		// 	$(this).closest('form').submit();
+		// });
 	}
 }
 
@@ -495,8 +501,8 @@ var equipment_tour = {
 		startEl.click(function(e) {
 			e.preventDefault();
 
-			if ($('#toggle-slim').bootstrapSwitch('status'))
-				$('#toggle-slim').bootstrapSwitch('setState', false);
+			if ($('#toggle-slim').bootstrapSwitch('state'))
+				$('#toggle-slim').bootstrapSwitch('toggleState');
 
 			if (equipment_tour.first_run == true)
 				equipment_tour.build();

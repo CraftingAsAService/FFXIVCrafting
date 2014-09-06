@@ -1,5 +1,7 @@
 var global = {
 	init:function() {
+		global.detect_systems();
+
 		$('[rel=tooltip]').tooltip({
 			container: 'body'
 		});
@@ -30,6 +32,19 @@ var global = {
 				}
 			});
 		});
+
+		$('.toggle-mobile-nav').click(function() {
+			$('body').toggleClass('mobile-nav-enabled');
+		});
+
+		// /* Android mobile menu support */
+		// if (/Android/i.test(navigator.userAgent)) {
+		// 	$('#nav-handler').on('click', function(e) {
+		// 		e.preventDefault();
+		// 		var mainContainer = $('#main-container');
+		// 		mainContainer[(mainContainer.hasClass('nav-handler-checked') ? 'remove' : 'add') + 'Class']('nav-handler-checked');
+		// 	});
+		// }
 	},
 	visible_popover:null,
 	reset_popovers:function(el) {
@@ -161,6 +176,41 @@ var global = {
 				document.body.removeChild(link);
 			}
 		}
+	},
+	detect_systems:function() {
+		// Browser & OS Detection
+		var N= navigator.appName, ua= navigator.userAgent, tem;
+		var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+		if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+		M= M? [M[1], M[2]]: [N, navigator.appVersion,'-?'];
+		$('body').addClass(M[0]);
+
+		// Test for IE8
+		if (M[0] == 'MSIE')
+			$('body').addClass('msie' + parseFloat(M[1]));
+
+		// Test for Windows, Mac, Linux, Android
+		if (navigator.platform.toUpperCase().indexOf('WIN') >= 0)
+			$('body').addClass('Windows');
+		if (navigator.platform.toUpperCase().indexOf('MAC') >= 0)
+			$('body').addClass('Mac');
+		if (navigator.platform.toUpperCase().indexOf('LINUX') >= 0)
+			$('body').addClass('Linux');
+
+		// Test for IOS, Android
+		if (navigator.platform.match(/(iPhone|iPod|iPad|Pike)/i))
+			$('body').addClass('IOS');
+		if (navigator.platform.match(/Android/i))
+			$('body').addClass('Android');
+
+		global.is_handheld_device = navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i);
+		$('body').addClass(global.is_handheld_device ? 'is_handheld' : 'not_handheld');
+
+		// Special MSIE11 check
+		if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./))
+			$('body').addClass('msie11');
+
+		return;
 	}
 }
 
