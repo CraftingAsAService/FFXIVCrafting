@@ -43,7 +43,7 @@
 		}
 	}
 }
-
+.levequests-table .level-section, 
 .leve-table {
 	.triple {
 		background-image: url(/img/triple.png);
@@ -58,6 +58,18 @@
 		&.uldah {
 			background-image: url(/img/locations/uldah_bg.png);
 		}
+	}
+}
+
+.levequests-table td.location {
+	&.limsalominsa:before {
+		background-image: url(/img/locations/limsalominsa_banner.png);
+	}
+	&.gridania:before {
+		background-image: url(/img/locations/gridania_banner.png);
+	}
+	&.uldah:before {
+		background-image: url(/img/locations/uldah_banner.png);
 	}
 }
 

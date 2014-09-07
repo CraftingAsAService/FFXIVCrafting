@@ -59,7 +59,7 @@
 				<a href='http://www.bluegartr.com/' target='_blank'>Order of the Blue Gartr</a>
 			</h4>
 			<p>
-				Lots of great FFXIV info.  I couldn't have done my Leve page without it!
+				Lots of great FFXIV info.  My levequest information was originall gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>user Seravi Edalborez</a>.  Thanks Seravi!
 			</p>
 		</div>
 	</div>

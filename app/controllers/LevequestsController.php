@@ -1,12 +1,12 @@
 <?php
 
-class LeveController extends BaseController 
+class LevequestsController extends BaseController 
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		View::share('active', 'leves');
+		View::share('active', 'levequests');
 	}
 
 	public function getIndex()
@@ -14,9 +14,46 @@ class LeveController extends BaseController
 		$job_ids = Config::get('site.job_ids.crafting');
 		$job_ids[] = Config::get('site.job_ids.fishing');
 
-		return View::make('leve.index')
-			->with('crafting_job_list', ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids)->get())
-			->with('crafting_job_ids', $job_ids);
+		$type_to_icon = array(
+			'Field' => 'leaf',
+			'Courier' => 'envelope',
+			'Reverse Courier' => 'plane',
+			'Town' => 'home',
+		);
+
+		// All Leves
+		$all_leves = Leve::with(array(
+				'classjob', 'classjob.en_abbr', 'item', 'item.name', 'item.recipe', 'item.vendors',
+			))
+			->where('item_id', '>', 0) // Avoids mining/botany "bug"
+			->orderBy('classjob_id')
+			->orderBy('level')
+			->orderBy('triple', 'desc')
+			->orderBy('xp', 'desc')
+			->orderBy('gil', 'desc')
+			->get();
+
+		$leves = array();
+		foreach ($all_leves as $leve)
+			$leves[$leve->classjob->en_abbr->term][$leve->level][] = $leve;
+
+		return View::make('levequests.index')
+			->with('crafting_job_list', ClassJob::with('name', 'en_name', 'en_abbr')->whereIn('id', $job_ids)->get())
+			->with('crafting_job_ids', $job_ids)
+			->with('leves', $leves)
+			->with('type_to_icon', $type_to_icon)
+			->with('opening_level', 1)
+			->with('opening_class', 'CRP');
+	}
+
+	public function getRewards($job_id, $level)
+	{
+		$rewards = LeveReward::with('item')
+			->where('level', $level)
+			->where('classjob_id', $job_id)
+			->get();
+
+		dd($rewards);
 	}
 
 	public function postIndex()
@@ -68,10 +105,7 @@ class LeveController extends BaseController
 		$location_search = strtolower(Input::get('leve_location'));
 		$item_search = strtolower(Input::get('leve_item'));
 
-		$rewards = LeveReward::with('item')
-			->whereBetween('level', array($min, $max))
-			->whereIn('classjob_id', $job_ids)
-			->get();
+		
 
 		$leve_rewards = array();
 
