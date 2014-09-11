@@ -70,6 +70,11 @@
 <button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Get Link</button>
 <a href='/crafting/list?List:::1' class='btn btn-success'>Craft These Items &raquo;</a>
 
+@endif
+
+@stop
+
+@section('modals')
 <div class="modal fade" id='savedList'>
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -86,7 +91,4 @@
 		</div>
 	</div>
 </div>
-
-@endif
-
 @stop
