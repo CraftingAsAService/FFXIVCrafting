@@ -882,12 +882,12 @@ class LeveSeeder extends Seeder
 			->select('classjob.id', 'translations.term')
 			->lists('id', 'term');
 
-		// Get all Jobs abbreviations to id
-		// MIN => #
-		$job_abbr_to_id = DB::table('classjob')
-			->join('translations', 'translations.id', '=', 'classjob.abbr_en')
-			->select('classjob.id', 'translations.term')
-			->lists('id', 'term');
+		// // Get all Jobs abbreviations to id
+		// // MIN => #
+		// $job_abbr_to_id = DB::table('classjob')
+		// 	->join('translations', 'translations.id', '=', 'classjob.abbr_en')
+		// 	->select('classjob.id', 'translations.term')
+		// 	->lists('id', 'term');
 
 		// Get all Item names to id
 		$item_to_id = DB::table('items')
@@ -896,13 +896,13 @@ class LeveSeeder extends Seeder
 			->lists('id', 'term');
 
 		$this->leves($job_name_to_id, $item_to_id);
-		$this->leve_rewards($job_abbr_to_id, $item_to_id);
+		$this->leve_rewards($job_name_to_id, $item_to_id);
 	}
 
 	public function leves($job_name_to_id, $item_to_id)
 	{
 		// Import leves
-		$leves = json_decode(file_get_contents(storage_path() . '/seed-data/leves.json'), TRUE);
+		$leves = json_decode(file_get_contents(storage_path() . '/seed-data/improved-leves.json'), TRUE);
 		
 		foreach ($leves as &$leve)
 		{
@@ -921,26 +921,42 @@ class LeveSeeder extends Seeder
 
 				unset($leve['item_name']);
 			}
+
+			// Improved added min_xp and max_xp, as well as gil versions of that
+			// Convert it to xp (a median) and xp_spread (+/-)
+			$leve['xp'] = (int) (($leve['xp_max'] + $leve['xp_min']) / 2);
+			$leve['xp_spread'] = (int) (($leve['xp_max'] - $leve['xp_min']) / 2);
+			unset($leve['xp_max'], $leve['xp_min']);
+			$leve['gil'] = (int) (($leve['gil_max'] + $leve['gil_min']) / 2);
+			$leve['gil_spread'] = (int) (($leve['gil_max'] - $leve['gil_min']) / 2);
+			unset($leve['gil_max'], $leve['gil_min']);
 		}
 
 		$leves = Batch::insert($leves, 'leves');
 	}
 
-	public function leve_rewards($job_abbr_to_id, $item_to_id)
+	public function leve_rewards($job_name_to_id, $item_to_id)
 	{
 		// Import leves rewards
-		$leve_rewards = json_decode(file_get_contents(storage_path() . '/seed-data/leve_rewards.json'), TRUE);
+		$leve_rewards = json_decode(file_get_contents(storage_path() . '/seed-data/improved-leve-rewards.json'), TRUE);
 
-		foreach ($leve_rewards as &$lr)
-		{
-			// "class":"BSM",
-			$lr['classjob_id'] = $job_abbr_to_id[$lr['class']];
-			unset($lr['class']);
+		$rewards = array();
+		foreach ($leve_rewards as $class => $levels)
+			foreach ($levels as $level => $items)
+				foreach ($items as $item_name => $amounts)
+					foreach ($amounts as $amount)
+					{
+						$iid = isset($item_to_id[$item_name]) ? $item_to_id[$item_name] : NULL;
+						$rewards[] = array(
+							'item_id' => $iid,
+							'item_name' => $iid ? NULL : $item_name,
+							'classjob_id' => $job_name_to_id[$class],
+							'level' => $level,
+							'amount' => $amount
+						);
+					}
 
-			$lr['item_id'] = isset($item_to_id[$lr['item_name']]) ? $item_to_id[$lr['item_name']] : NULL;
-		}
-
-		$leve_rewards = Batch::insert($leve_rewards, 'leve_rewards');
+		$rewards = Batch::insert($rewards, 'leve_rewards');
 	}
 
 }

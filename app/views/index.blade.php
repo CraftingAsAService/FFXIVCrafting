@@ -18,7 +18,7 @@
 <div class='row'>
 	<div class='col-sm-4 homepage-step'>
 		<div class='home-callout' data-href='/equipment'>
-			<img src='/img/homepage/icon-lg-equipment.png' class='img-responsive' width='40' height='40'>
+			<img src='/img/homepage/icon-equipment.png' width='40' height='40'>
 			<p class='title'>
 				Equipment<span class='hidden-sm'>&nbsp;Calculator</span>
 			</p>
@@ -26,14 +26,14 @@
 				Your goal is to create HQ items every time, and the only way to do that is with the proper gear.  Start with your gear!
 			</p>
 			<p class='step'>
-				<img src='/img/homepage/icon-lg-number-1.png' class='img-responsive pull-right' width='20' height='20'>
+				<img src='/img/homepage/icon-number-1.png' class='pull-right' width='20' height='20'>
 				Begin Step
 			</p>
 		</div>
 	</div>
 	<div class='col-sm-4 homepage-step'>
 		<div class='home-callout' data-href='/crafting'>
-			<img src='/img/homepage/icon-lg-anvil.png' class='img-responsive' width='40' height='40'>
+			<img src='/img/homepage/icon-anvil.png' width='40' height='40'>
 			<p class='title'>
 				Crafting<span class='hidden-sm'>&nbsp;Calculator</span>
 			</p>
@@ -41,14 +41,14 @@
 				Make your life easier, gather everything you'll need before you start crafting.  Be sure to pick up some extras!
 			</p>
 			<p class='step'>
-				<img src='/img/homepage/icon-lg-number-2.png' class='img-responsive pull-right' width='20' height='20'>
+				<img src='/img/homepage/icon-number-2.png' class='pull-right' width='20' height='20'>
 				Begin Step
 			</p>
 		</div>
 	</div>
 	<div class='col-sm-4 homepage-step'>
 		<div class='home-callout' data-href='/leve'>
-			<img src='/img/homepage/icon-lg-levequest.png' class='img-responsive' width='40' height='40'>
+			<img src='/img/homepage/icon-levequest.png' width='40' height='40'>
 			<p class='title'>
 				Levequests
 			</p>
@@ -56,7 +56,7 @@
 				Bonus XP from crafting your list won't completely level you.  Find the best Levequest to help you level up to the next crafting tier!
 			</p>
 			<p class='step'>
-				<img src='/img/homepage/icon-lg-number-3.png' class='img-responsive pull-right' width='20' height='20'>
+				<img src='/img/homepage/icon-number-3.png' class='pull-right' width='20' height='20'>
 				Begin Step
 			</p>
 		</div>

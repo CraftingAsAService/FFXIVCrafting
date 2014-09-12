@@ -32,7 +32,7 @@ class LeveController extends BaseController
 
 		// All Leves
 		$query = Leve::with(array(
-				'classjob', 'item', 'item.name', 'item.recipe',
+				'classjob', 'item', 'item.name', 'item.recipe', 'item.vendors',
 			))
 			->where('item_id', '>', 0) // Avoids mining/botany "bug"
 			->orderBy('classjob_id')

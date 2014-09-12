@@ -10,9 +10,9 @@
 
 				<div class='icons pull-left text-center'>
 					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
-						<img src='/img/items/nq/{{ $item->id }}.png' width='40' height='40' class='main-icon nq'>
+						<img src='{{ assetcdn('items/nq/' . $item->id . '.png') }}' width='40' height='40' class='main-icon nq'>
 						@if ($item->can_hq)
-						<img src='/img/items/hq/{{ $item->id }}.png' width='40' height='40' class='main-icon hq hidden'>
+						<img src='{{ assetcdn('items/hq/' . $item->id . '.png') }}' width='40' height='40' class='main-icon hq hidden'>
 						@endif
 					</a>
 					<div>

@@ -42,7 +42,7 @@
 					<span class='close' rel='tooltip' title='Job Level'>{{ $recipe->level }}</span>
 					@endif
 					<a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'>
-						<img src='/img/items/nq/{{ $recipe->item_id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->term }}
+						<img src='{{ assetcdn('items/nq/' . $recipe->item_id . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->term }}
 					</a>
 				</td>
 				<td class='valign text-center'>

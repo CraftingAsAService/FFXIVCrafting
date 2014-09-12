@@ -4,7 +4,7 @@
   "author": "Nick Wright",
   "repository": {
     "type": "git",
-    "url": "http://github.com/tickthokk/ffxiv-caas/"
+    "url": "http://github.com/tickthokk/ffxivcrafting/"
   },
   "dependencies": {
     "grunt": "0.x.x",

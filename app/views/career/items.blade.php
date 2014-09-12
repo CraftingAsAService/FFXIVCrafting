@@ -44,7 +44,7 @@
 					<span class='close' rel='tooltip' title='Item Level'>{{ $item->level }}</span>
 					@endif
 					<a href='http://xivdb.com/?item/{{ $item->item_id }}' target='_blank'>
-						<img src='/img/items/nq/{{ $item->item_id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $item->name }}
+						<img src='{{ assetcdn('items/nq/' . $item->item_id . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $item->name }}
 					</a>
 				</td>
 				<td class='valign text-center'>

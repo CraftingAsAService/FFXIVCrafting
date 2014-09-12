@@ -11,7 +11,7 @@
 		@else
 		<a href='http://xivdb.com/?recipe/{{ $recipe_id }}' class='item-name' target='_blank'>
 		@endif
-			<img src='/img/items/nq/{{ $leve->item->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
+			<img src='{{ assetcdn('items/nq/' . $leve->item->id . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
 		</a>
 		@if ($leve->amount > 1)
 		<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
@@ -26,7 +26,7 @@
 		{{ $leve->name }}
 	</td>
 	<td class='text-center reward valign'>
-		<a href='/leve/breakdown/{{ $leve->id }}' class='btn btn-default'>
+		<a href='/levequests/breakdown/{{ $leve->id }}' class='btn btn-default'>
 			<img src='/img/xp.png' width='24' height='24'>
 			{{ number_format($leve->xp) }}
 		</a>
@@ -48,7 +48,7 @@
 			@foreach($leve_rewards[$leve->id] as $reward)
 			<div class='margin-bottom'>
 				@if($reward->item_id)
-				<img src='/img/items/nq/{{ $reward->item->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 10px;'>
+				<img src='{{ assetcdn('items/nq/' . $reward->item->id . '.png') }}' width='36' height='36' style='margin-right: 10px;'>
 				{{ $reward->item->name->term }}
 				@else
 				<img src='/img/noitemicon.png' style='margin-right: 10px;'>

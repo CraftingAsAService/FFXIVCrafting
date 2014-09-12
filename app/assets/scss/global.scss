@@ -20,6 +20,14 @@ body {
 	overflow: hidden;
 }
 
+.inline {
+	display: inline-block;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
 .cursor { cursor: pointer; }
 
 .equipment-icon {
@@ -1136,4 +1144,94 @@ body.mobile-nav-enabled #mobile-nav {
 
 .ui-helper-hidden-accessible {
 	display: none;
+}
+
+// .levequests-table {
+// 	.level-header {
+// 		th {
+// 			cursor: pointer;
+// 			-webkit-touch-callout: none;
+// 			-webkit-user-select: none;
+// 			-khtml-user-select: none;
+// 			-moz-user-select: none;
+// 			-ms-user-select: none;
+// 			user-select: none;
+// 			a {
+// 				display: block;
+// 			}
+// 		}
+// 	}
+// 	.level-section {
+// 		.leve-type {
+// 			margin-right: 8px;
+// 		}
+// 		.location {
+// 			background-position: right bottom;
+// 			min-height: 60px;
+// 			width: 180px;
+// 			max-width: 200px;
+// 			max-height: 200px;
+// 			&>div {
+// 				padding-right: 25px;
+// 				font-size: .9em;
+// 			}
+// 		}
+// 	}
+// }
+
+.leve-section {
+	// p.item, p.location {
+	// 	padding: 8px 0;
+	// }
+	// .leve {
+	// 	margin-bottom: 20px;
+
+	// 	.well {
+	// 		margin: 0 1em;
+	// 	}
+	// 	td.location
+	// 	.primary-location {
+	// 		position: relative
+	// 	}
+	// 	.triple-turnin {
+	// 		font-size: 24px;
+	// 		margin-top: 7px;
+	// 	}
+	// 	.leve-type {
+	// 		font-size: .9em;
+	// 	}
+	// }
+	// .item, .location, .rewards, .breakdown {
+	// 	margin-top: 13px;
+	// }
+	td.location {
+		&:before {
+			content : "";
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			// background-image: url(/wp-content/uploads/2010/11/tandem.jpg); 
+			background-repeat: no-repeat;
+			background-position: center center;
+			width: 100%;
+			height: 100%;
+			opacity : 0.25;
+			z-index: 0;
+		}
+		> span, > div {
+			position: relative;
+			z-index: 1;
+		}
+	}
+}
+
+.xp-reward, .gil-reward {
+	> span {
+		opacity: .7;
+		span {
+			margin-left: 3px;
+			font-size: .75em;
+		}
+	}
 }

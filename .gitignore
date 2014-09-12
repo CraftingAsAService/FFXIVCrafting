@@ -1,8 +1,12 @@
 /bootstrap/compiled.php
-/bootstrap/environment.php
 /vendor
 composer.phar
 composer.lock
 .DS_Store
 .sass-cache
 node_modules
+/bootstrap/environment.php
+.env.php
+.env.local.php
+.env.fuji.php
+.env.qa.php

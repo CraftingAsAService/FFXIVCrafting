@@ -27,8 +27,20 @@ h1, .h1, h2, .h2, h3, .h3 {
 	margin-bottom: 10px;
 }
 
-h2, .h2 {
-	font-size: 22px;
+#banner {
+	h2, .h2 {
+		font-size: 22px;
+	}
+}
+
+#content {
+	h1, h2, h3 {
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+	h1:first-child {
+		margin-top: 0;
+	}
 }
 
 #account, .header-bar {

@@ -22,8 +22,7 @@
 		<link href='{{ cdn('/css/bootstrap-theme.min.css') }}' rel='stylesheet' />
 		{{-- DO NOT HOST ON CDN --}}<link href='/css/local.css' rel='stylesheet' />{{-- /DO NOT HOST ON CDN --}}
 
-		@section('vendor-css')
-		@show
+		@yield('vendor-css')
 
 		<link href='{{ cdn('/css/global.css') }}' rel='stylesheet' />
 
@@ -31,8 +30,7 @@
 		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 		<link href='{{ cdn('/css/theme.css') }}' rel='stylesheet' />
 
-		@section('css')
-		@show
+		@yield('css')
 
 		@if(Config::get('app.debug'))
 		<style type='text/css'>@media(min-width: 768px) { #copyright-info { padding-bottom: 48px; } } @media(max-width: 767px) { .anbu { display: none !important; } }</style>
@@ -86,7 +84,7 @@
 					{{ menu_item('/career',		'Career',		'career'	) }}
 					{{ menu_item('/recipes',	'Recipe Book',	'recipes'	) }}
 					{{ menu_item('/quests',		'Quests',		'quests'	) }}
-					{{ menu_item('/leve',		'Leves',		'leves'		) }}
+					{{ menu_item('/levequests',	'Leves',		'leves'		) }}
 					{{ menu_item('/stats',		'Stats',		'stats'		) }}
 					{{ menu_item('/materia',	'Materia',		'materia'	) }}
 					{{ menu_item('/food',		'Food',			'food'		) }}
@@ -180,7 +178,7 @@
 											{{ menu_item('/career',		'Career',		'career'	) }}
 											{{ menu_item('/recipes',	'Recipe Book',	'recipes'	) }}
 											{{ menu_item('/quests',		'Quests',		'quests'	) }}
-											{{ menu_item('/leve',		'Leves',		'leves'		) }}
+											{{ menu_item('/levequests',	'Leves',		'leves'		) }}
 											<li class='dropdown{{ (isset($active) && in_array($active, array('stats', 'materia', 'food'))) || Request::segment(1) == 'blog' ? ' active' : '' }}'>
 												<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 												<ul class='dropdown-menu dropdown-menu-right'>
@@ -309,8 +307,7 @@
 
 		<script src='{{ cdn('/js/global.js') }}' type='text/javascript'></script>
 
-		@section('javascript')
-		@show
+		@yield('javascript')
 
 		<script type='text/javascript'>
 			if (typeof(xivdb_tooltips) === 'undefined')

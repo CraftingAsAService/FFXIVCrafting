@@ -80,6 +80,7 @@
 				$link = 'item/' . $item->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
+					$item_level = $item->recipe[0]->level;
 					$yields = $item->recipe[0]->yields;
 					foreach ($item->recipe[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
@@ -94,7 +95,7 @@
 					</a>
 					@endif
 					<a href='http://xivdb.com/?{{ $link }}' target='_blank'>
-						<img src='/img/items/nq/{{ $item->id ?: '../noitemicon' }}.png' width='36' height='36' class='margin-right'><span class='name'>{{ $item->name->term }}</span>
+						<img src='{{ assetcdn('items/nq/' . $item->id . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $item->name->term }}</span>
 					</a>
 					@if ($yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
@@ -160,7 +161,7 @@
 						{{ $recipe->level }}
 					</a>
 					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-						<img src='/img/items/nq/{{ $recipe->item->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->name->term }}</span>
+						<img src='{{ assetcdn('items/nq/' . $recipe->item->id . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->name->term }}</span>
 					</a>
 					@if ($recipe->yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>

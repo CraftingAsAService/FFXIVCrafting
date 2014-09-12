@@ -48,7 +48,7 @@
 			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name->term }}}'>
 				<td class='text-left'>
 					<a href='http://xivdb.com/?recipe/{{ $list_item['item']->recipe[0]->id }}' target='_blank'>
-						<img src='/img/items/nq/{{ $list_item['item']->id ?: '../noitemicon' }}.png' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name->term }}
+						<img src='{{ assetcdn('items/nq/' . $list_item['item']->id . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name->term }}
 					</a>
 				</td>
 				<td class='text-center valign'>
@@ -70,6 +70,11 @@
 <button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Get Link</button>
 <a href='/crafting/list?List:::1' class='btn btn-success'>Craft These Items &raquo;</a>
 
+@endif
+
+@stop
+
+@section('modals')
 <div class="modal fade" id='savedList'>
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -86,7 +91,4 @@
 		</div>
 	</div>
 </div>
-
-@endif
-
 @stop

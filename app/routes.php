@@ -59,6 +59,7 @@ Route::controller('equipment', 'EquipmentController');
 Route::controller('crafting', 'CraftingController');
 Route::controller('quests', 'QuestsController');
 Route::controller('leve', 'LeveController');
+Route::controller('levequests', 'LevequestsController');
 
 Route::controller('list', 'ListController');
 Route::controller('recipes', 'RecipesController');
