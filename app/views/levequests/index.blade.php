@@ -90,18 +90,12 @@
 									<div class='text-left inline'>
 										<p class='xp-reward'>
 											<img src='/img/xp.png' width='24' height='24'>
-											{{ number_format($leve->xp) }}
-											@if ($leve->xp_spread > 0)
-											<span>&plusmn;<span>{{ number_format($leve->xp_spread) }}</span></span>
-											@endif
+											<span class='opaque'>{{ $leve->xp_spread > 0 ? '~' : '' }}</span>{{ number_format($leve->xp) }}
 										</p>
 
 										<p class='gil-reward'>
 											<img src='/img/coin.png' width='24' height='24'>
-											{{ number_format($leve->gil) }}
-											@if ($leve->gil_spread > 0)
-											<span>&plusmn;<span>{{ number_format($leve->gil_spread) }}</span></span>
-											@endif
+											<span class='opaque'>{{ $leve->gil_spread > 0 ? '~' : '' }}</span>{{ number_format($leve->gil) }}
 										</p>
 									</div>
 								</td>

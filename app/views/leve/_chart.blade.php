@@ -45,22 +45,36 @@
 @if($leve->item->recipe)
 <h3>Recipe</h3>
 
-<ul class='list-group'>
-	@foreach($leve->item->recipe[0]->reagents as $reagent)
-	<li class='list-group-item'>
-		<a href='http://xivdb.com/?item/{{ $reagent->id }}' target='_blank'>
-			<img src='{{ assetcdn('items/nq/' . $reagent->id . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name->term }}</span>
-		</a>
-		x {{ $reagent->pivot->amount * $leve->amount }}
-		@if($leve->amount > 1)
-		total
-		@endif
-	</li>
-	@endforeach
-	<li class='list-group-item'>
-		<a href='/crafting/list?Item:::::{{ $leve->item->id }}'>View in crafting tool</a>
-	</li>
-</ul>
+<div class='panel-group' id='accordion{{ $leve->id }}' style='margin-bottom: 0;'>
+	<div class='panel panel-default'>
+		<div class='panel-heading'>
+			<h4 class='panel-title'>
+				<a data-toggle='collapse' data-parent='#accordion{{ $leve->id }}' href='#collapse{{ $leve->id }}'>
+					Show Recipe
+				</a>
+			</h4>
+		</div>
+	</div>
+</div>
+<div id='collapse{{ $leve->id }}' class='collapse'>
+	<ul class='list-group'>
+		@foreach($leve->item->recipe[0]->reagents as $reagent)
+		<li class='list-group-item'>
+			<a href='http://xivdb.com/?item/{{ $reagent->id }}' target='_blank'>
+				<img src='{{ assetcdn('items/nq/' . $reagent->id . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name->term }}</span>
+			</a>
+			x {{ $reagent->pivot->amount * $leve->amount }}
+			@if($leve->amount > 1)
+			total
+			@endif
+		</li>
+		@endforeach
+		<li class='list-group-item'>
+			<a href='/crafting/list?Item:::::{{ $leve->item->id }}'>View in crafting tool</a>
+		</li>
+	</ul>
+</div>
+				
 @endif
 
 <h3>Leveling Up</h3>
@@ -103,7 +117,7 @@
 	</thead>
 	<tbody>
 		@foreach($chart as $row)
-		<tr>
+		<tr class='{{ $row['level'] - 1 == $account['levels'][strtolower($leve->classjob->en_name->term)] ? 'success' : '' }}'>
 			<td class='text-center nowrap'>{{ $row['level'] - 1 }} to {{ $row['level'] }}</td>
 			<td class='text-center'>{{ number_format($row['requires']) }}</td>
 			<td class='text-center'>{{ $row['turnins'] }}</td>

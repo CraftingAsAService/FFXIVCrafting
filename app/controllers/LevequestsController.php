@@ -83,7 +83,7 @@ class LevequestsController extends BaseController
 
 	private function _breakdown($leve_id = 0)
 	{
-		$leve = Leve::with('item', 'item.name', 'item.recipe', 'item.recipe.reagents', 'item.recipe.reagents.name')->find($leve_id);
+		$leve = Leve::with('classjob', 'classjob.en_name', 'item', 'item.name', 'item.recipe', 'item.recipe.reagents', 'item.recipe.reagents.name')->find($leve_id);
 		$experience = Experience::whereBetween('level', array($leve->level + 1, $leve->level + 10))->get();
 		
 		$chart = array();
