@@ -26,7 +26,7 @@
 		{{ $leve->name }}
 	</td>
 	<td class='text-center reward valign'>
-		<a href='/leve/breakdown/{{ $leve->id }}' class='btn btn-default'>
+		<a href='/levequests/breakdown/{{ $leve->id }}' class='btn btn-default'>
 			<img src='/img/xp.png' width='24' height='24'>
 			{{ number_format($leve->xp) }}
 		</a>

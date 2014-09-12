@@ -392,7 +392,9 @@ class Libra extends Migration {
 			$table->smallInteger('level');
 			$table->smallInteger('amount');
 			$table->integer('xp');
+			$table->smallInteger('xp_spread');
 			$table->smallInteger('gil');
+			$table->smallInteger('gil_spread');
 			$table->smallInteger('triple');
 			$table->enum('type', array('Town', 'Courier', 'Reverse Courier', 'Field', 'Gathering'));
 			$table->string('major_location', 50);

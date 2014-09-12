@@ -26,8 +26,12 @@ var levequests = {
 		// On clicking a class icon, fill in the level
 		$('.class-selector').click(function() {
 			var el = $(this),
-				level = parseInt(Math.floor(el.data('level') / 5) * 5),
-				level_el = $('.leve-level-select a[data-level=' + level + ']');
+				level = parseInt(Math.floor(el.data('level') / 5) * 5);
+
+			if (level == 0)
+				level = 1;
+
+			var level_el = $('.leve-level-select a[data-level=' + level + ']');
 
 			$('.class-selector.active').removeClass('active');
 			el.addClass('active');
@@ -55,49 +59,47 @@ var levequests = {
 
 		$('.class-selector.active').trigger('click');
 
-		// Hide images until later to avoid unnecessary loading
-		// $('.level-section img.reveal-later').each(function() {
-		// 	$(this).data('src', this.src);
-		// 	this.src = '';
-		// 	return;
-		// });
+		$('.vendors').on('click', function(event) {
+			event.preventDefault();
+			
+			var el = $(this),
+				id = el.data('itemId');
 
-		// $('.level-header th').click(function() {
-		// 	var el = $(this);
+			if (el.hasClass('loading'))
+				return;
 
-		// 	if ($(el.data('section')).hasClass('hidden'))
-		// 	{
-		// 		$('.level-section', el.closest('table')).addClass('hidden');
-		// 		$('.level-header i', el.closest('table')).addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
-		// 		$(el.data('section')).removeClass('hidden');
-		// 		$('i', el).removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+			var modal = $('#vendors_for_' + id);
 
-		// 		// Reveal the images
-		// 		$('img[src=""]', el.closest('tbody').next('tbody')).each(function() {
-		// 			$(this).removeClass('reveal-later');
-		// 			this.src = $(this).data('src');
-		// 			return;
-		// 		});
+			if (modal.length == 0)
+			{
+				$.ajax({
+					url: '/vendors/view/' + id,
+					dataType: 'json',
+					beforeSend:function() {
 
-		// 		// Modify the Hash
+						el.addClass('loading');
 
-		// 		var section = el.data('section') + '-section';
+						global.noty({
+							type: 'warning',
+							text: 'Loading Vendors'
+						});
+					},
+					success:function(json) {
+						$('body').append(json.html);
 
-		// 		var tmp = $(section);
-		// 		tmp.prop('id', '');
-		// 		document.location.hash = section.slice(1);
-		// 		tmp.prop('id', section.slice(1));
-		// 	}
-		// 	else
-		// 	{
-		// 		document.location.hash = '';
+						$('#vendors_for_' + id).modal();
 
-		// 		$(el.data('section')).addClass('hidden');
-		// 		$('i', el).addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
-		// 	}
+						el.removeClass('loading');
+					}
+				});
+			}
+			else
+			{
+				$('#vendors_for_' + id).modal('show');
+			}
 
-		// 	return;
-		// });
+			return;
+		});
 	},
 	load_leves:function() {
 		var job = $('.jobs-list label.active').data('class'),

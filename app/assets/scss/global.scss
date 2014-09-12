@@ -20,6 +20,14 @@ body {
 	overflow: hidden;
 }
 
+.inline {
+	display: inline-block;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
 .cursor { cursor: pointer; }
 
 .equipment-icon {
@@ -1214,6 +1222,16 @@ body.mobile-nav-enabled #mobile-nav {
 		> span, > div {
 			position: relative;
 			z-index: 1;
+		}
+	}
+}
+
+.xp-reward, .gil-reward {
+	> span {
+		opacity: .7;
+		span {
+			margin-left: 3px;
+			font-size: .75em;
 		}
 	}
 }

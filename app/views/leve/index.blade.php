@@ -17,6 +17,12 @@
 @stop
 
 @section('content')
+
+<div class='alert alert-warning'>
+	This page is going away and will be redirected to the <a href='/levequests'>New Levequests Page</a>.  
+	If you strongly feel this version is better, please <a href='mailto:tickthokk@gmail.com?Subject=I like the old Leve page'>let me know</a>.  
+</div>
+
 <div class='panel panel-default'>
 	<div class='panel-heading'>
 		Levequest Filter
