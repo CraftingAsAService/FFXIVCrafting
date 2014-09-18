@@ -7,7 +7,7 @@ class GatheringController extends BaseController
 	{
 		$item = Item::with('name', 'clusters', 'clusters.classjob', 'clusters.classjob.name', 'clusters.location', 'clusters.location.name', 'clusters.nodes')
 			->where('id', $id)
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->first();
 
 		$clusters = array();
@@ -28,7 +28,7 @@ class GatheringController extends BaseController
 	{
 		$item = Item::with('name', 'beasts', 'beasts.name', 'beasts.location', 'beasts.location.name')
 			->where('id', $id)
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->first();
 
 		$beasts = array();

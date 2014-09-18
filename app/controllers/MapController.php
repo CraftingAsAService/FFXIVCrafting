@@ -55,7 +55,7 @@ class MapController extends BaseController
 					'beasts.name',
 					'beasts.location'
 			)->whereIn('id', array_keys($item_list))
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->get();
 
 			$map_data = array();

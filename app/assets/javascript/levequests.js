@@ -28,16 +28,14 @@ var levequests = {
 			var el = $(this),
 				level = parseInt(Math.floor(el.data('level') / 5) * 5);
 
-			if (level == 0)
-				level = 1;
-
-			var level_el = $('.leve-level-select a[data-level=' + level + ']');
-
 			$('.class-selector.active').removeClass('active');
 			el.addClass('active');
 
-			$('.leve-level-select a.active').removeClass('active');
-			level_el.addClass('active');
+			if (level > 0) {
+				var level_el = $('.leve-level-select a[data-level=' + level + ']');
+				$('.leve-level-select a.active').removeClass('active');
+				level_el.addClass('active');
+			}
 
 			levequests.load_leves();
 			
