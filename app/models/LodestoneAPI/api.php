@@ -1954,7 +1954,8 @@
                     if (stripos($Line, 'bt_db_item_detail') !== false) 
                     {
                         $Data = trim(str_ireplace(array('>', '"'), NULL, html_entity_decode(preg_match("/\/lodestone\/playguide\/db\/item\/([a-z0-9]{11})\//", $Line, $matches)))); 
-                        $Temp['id_lodestone'] = $matches[1];
+                        if (isset($matches[1]))
+                            $Temp['id_lodestone'] = $matches[1];
                     }
 
                     // Cannot equip
