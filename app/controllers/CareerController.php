@@ -98,7 +98,7 @@ class CareerController extends BaseController
 			->orderBy('c.level')
 			->orderBy('i.level')
 			->having('amount', '>', '1')
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->get();
 
 		return View::make('career.production')
@@ -180,7 +180,7 @@ class CareerController extends BaseController
 			->groupBy('r.id')
 			->orderBy('r.level')
 			->having('amount', '>', '1')
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->get();
 
 		return View::make('career.receiver')

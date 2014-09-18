@@ -18,8 +18,40 @@ return array(
 	// 	"At least you know I'm not a Nigerian Prince, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
 	// 	#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
 	// ),
-	'cache_length' => '524160', // Minutes - 60 * 24 * 7 * 52 -- One Year (php artisan cache:clear flushes it sooner)
+	'cache_length' => '10080', // Minutes - 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Right Ring','Right Ring'),
+	'gear_focus' => array(
+		'LNC,PGL,DRG,MNK,BRD,ARC' => array(
+			'Dexterity',
+			'Critical Hit Rate',
+			'Skill Speed',
+		),
+		'GLA,MRD,PLD,WAR' => array(
+			'Strength',
+			'Skill Speed',
+			'Parry',
+		),
+		'THM,BLM,ACN,SMN' => array(
+			'Intelligence',
+			'Spell Speed',
+			'Piety',
+		),
+		'CNJ,SCH,WHM' => array(
+			'Mind',
+			'Spell Speed',
+			'Piety',
+		),
+		'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL' => array(
+			'Control',
+			'CP',
+			'Craftsmanship',
+		),
+		'MIN,BTN,FSH' => array(
+			'Gathering',
+			'GP',
+			'Perception',
+		),
+	),
 	'job_ids' => array(
 		'crafting' => array(
 			8, // CRP

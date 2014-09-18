@@ -162,7 +162,9 @@ class Stat
 		return BaseParam::with('en_name')
 			->whereHas('en_name', function($q) use ($stats) {
 				$q->whereIn('term', $stats);
-			})->remember(Config::get('site.cache_length'))->lists('id');
+			})
+			// ->remember(Config::get('site.cache_length'))
+			->lists('id');
 	}
 
 }

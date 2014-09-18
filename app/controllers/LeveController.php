@@ -63,7 +63,9 @@ class LeveController extends BaseController
 		if (Input::get('leve_name'))
 			$query->where('name', 'like', '%' . Input::get('leve_name') . '%');
 
-		$leve_records = $query->remember(Config::get('site.cache_length'))->get();
+		$leve_records = $query
+			// ->remember(Config::get('site.cache_length'))
+			->get();
 
 		$location_search = strtolower(Input::get('leve_location'));
 		$item_search = strtolower(Input::get('leve_item'));

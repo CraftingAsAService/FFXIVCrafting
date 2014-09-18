@@ -7,7 +7,7 @@ class VendorsController extends BaseController
 	{
 		$item = Item::with('name', 'vendors', 'vendors.npc', 'vendors.npc.name', 'vendors.npc.location', 'vendors.npc.location.name')
 			->where('id', $id)
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->first();
 
 		$vendors = array();

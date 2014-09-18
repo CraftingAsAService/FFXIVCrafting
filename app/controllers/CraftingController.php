@@ -236,7 +236,7 @@ class CraftingController extends BaseController
 				->whereBetween('level', array($start, $end));
 
 		$recipes = $query
-			->remember(Config::get('site.cache_length'))
+			// ->remember(Config::get('site.cache_length'))
 			->get();
 
 		// Fix the amount of the top level to be evenly divisible by the amount the recipe yields
