@@ -1670,7 +1670,7 @@
             $this->Guardian     = str_ireplace("&#39;", "'", trim(strip_tags(html_entity_decode($String[15]))));
                 
             $i = 0;
-            foreach($String as $Line)
+            foreach((array) $String as $Line)
             {
                 if (stripos($Line, 'Grand Company') !== false)  { $Company = trim(strip_tags(html_entity_decode($String[($i + 1)]))); }
                 if (stripos($Line, 'Free Company') !== false)   { $FreeCompany = trim($String[($i + 1)]); }
