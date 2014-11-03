@@ -86,7 +86,7 @@ class AccountController extends BaseController
 		));
 
 		$levels = array();
-		foreach ((array) $Character->getClassJobsOrdered('desc', 'level', 'named') as $key => $values)
+		foreach ((array) $Character->getClassJobs('named') as $key => $values)
 			$levels[$key] = $values['level'];
 
 		return array(

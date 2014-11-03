@@ -147,6 +147,7 @@
             'character' => 
             [   
                 'profile'       => 'http://eu.finalfantasyxiv.com/lodestone/character/',
+                'achiSummary'   => '/achievement/',
                 'achievement'   => '/achievement/kind/',
             ],
 
@@ -233,16 +234,16 @@
         {
             // Set classes
             $this->ClassList = array(
-                "Gladiator", "Pugilist", "Marauder", "Lancer", "Archer", "Conjurer", "Thaumaturge", "Arcanist", "Carpenter", "Blacksmith", 
+                "Gladiator", "Pugilist", "Marauder", "Lancer", "Archer", "Rogue", "Conjurer", "Thaumaturge", "Arcanist", "Carpenter", "Blacksmith", 
                 "Armorer", "Goldsmith", "Leatherworker", "Weaver", "Alchemist", "Culinarian", "Miner", "Botanist", "Fisher"
             );
             
             // Set class by disicpline                          
             $this->ClassDisicpline = array(
-                "dow" => array_slice($this->ClassList, 0, 5),
-                "dom" => array_slice($this->ClassList, 5, 3),
-                "doh" => array_slice($this->ClassList, 8, 8),
-                "dol" => array_slice($this->ClassList, 16, 3),
+                "dow" => array_slice($this->ClassList, 0, 6),
+                "dom" => array_slice($this->ClassList, 6, 3),
+                "doh" => array_slice($this->ClassList, 9, 8),
+                "dol" => array_slice($this->ClassList, 17, 3),
             );
         }
     }
@@ -672,11 +673,11 @@
         // Checks if an error page exists
         public function errorPage($ID)
         {
-            // Check character tag
-            $PageNotFound = $this->find('/lodestone/character/');
-            
-            // if not found, error.
-            if (!$PageNotFound) { return true; }
+            // Check error message
+            $PageNotFound = $this->find('base_visual_error');
+
+            // if error message is found.
+            if ($PageNotFound) { return true; }
 
             return false;
         }
@@ -728,8 +729,9 @@
                     $Character->setAvatar($this->findRange('player_name_thumb', 10, NULL, false));
                     $Character->setPortrait($this->findRange('bg_chara_264', 2, NULL, false));
                     $Character->setRaceClan($this->find('chara_profile_title'));
-                    $Character->setLegacy($this->find('bt_legacy_history'));
-                    $Character->setBirthGuardianCompany($this->findRange('chara_profile_list', 60, NULL, false));
+                    //$Character->setLegacy($this->find('bt_legacy_history'));
+                    $Character->setNamedayCityCompanyFC($this->findRange('chara_profile_left', null, "chara_class_box", false));
+
                     $Character->setCity($this->findRange('City-state', 5));
                     $Character->setBiography($this->findRange('txt_selfintroduction', 5));
                     $Character->setHPMPTP($this->findRange('param_power_area', 10));
@@ -746,12 +748,12 @@
                     $this->log(__LINE__, 'function: parseProfile() - parsing chunk 3');
 
                     // Set Minions
-                    $Minions = $this->findRange('area_header_w358_inner', NULL, '//Minion', false);
+                    $Minions = $this->findRange('-- Minion --', NULL, '//Minion', false);
                     $Character->setMinions($Minions);
                     
                     // Set Mounts
                     $this->log(__LINE__, 'function: parseProfile() - parsing chunk 4');
-                    $Mounts = $this->findRange('area_header_w358_inner', NULL, '//Mount', false, 2);
+                    $Mounts = $this->findRange('-- Mount --', NULL, '//Mount', false);
                     $Character->setMounts($Mounts);
                     
                     #$this->segment('class_fighter');
@@ -842,6 +844,43 @@
         }
 
         // Parse achievement by category
+        public function parseAchievementsSummary($ID = null)
+        {
+            if (!$ID)
+            {
+                $ID = $this->getID();
+            }
+
+            if (!$ID)
+            {
+                echo "error: No ID Set.";   
+            }
+            else
+            {
+                // Get the source
+                $this->getSource($this->URL['character']['profile'] . $ID . $this->URL['character']['achiSummary']);
+                
+                // Create a new character object
+                $Achievements = new Achievements();
+                
+                // Get Achievements
+                $Public = $Achievements->checkIfPublic($this->findAll('area_inner_tc', 20));
+
+                if ($Public)
+                {
+                    $Achievements->setSummary($this->findAll('achievement_area_footer', NULL, '/li', false));
+                    
+                    // Append character to array
+                    return $Achievements;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        // Parse achievement by category
         public function parseAchievementsByCategory($cID, $ID = null)
         {
             if (!$ID)
@@ -864,13 +903,28 @@
                 
                 // Create a new character object
                 $Achievements = new Achievements();
-                
+
                 // Get Achievements
-                $Achievements->addCategory($cID);
-                $Achievements->set($this->findAll('achievement_area_body', NULL, 'bt_more', false));
+                $Public = $Achievements->checkIfPublic($this->findAll('area_inner_tc', 20));
+
+                if ($Public)
+                {
+                    // Get Achievements
+                    $Achievements->addCategory($cID);
+                    $Achievements->set($this->findAll('achievement_area_body', NULL, 'bt_more', false));
+                    
+                    // Append character to array
+                    return $Achievements;
+                }
+                else
+                {
+                    return false;
+                }
                 
                 // Append character to array
                 $this->Achievements[$cID] = $Achievements;
+
+                return $Achievements;
             }
         }
 
@@ -1549,7 +1603,7 @@
     /*  Character
      *  ---------
      */
-    class Character
+    class Character extends Parser
     {
         use Funky;
         use Config;
@@ -1591,6 +1645,7 @@
         }
         public function getID() { return $this->ID; }
         public function getLodestone() { return $this->Lodestone; }
+        public function getLodestoneID() { return $this->LodestoneID; }
         
         // NAME + SERVER
         public function setNameServer($String)
@@ -1662,38 +1717,48 @@
         // LEGACY
         public function setLegacy($String) { $this->Legacy = $String; }
         public function getLegacy() { return $this->Legacy; }
-        
-        // BIRTHDATE + GUARDIAN + COMPANY + FREE COMPANY
-        public function setBirthGuardianCompany($String)
+
+        public function setNamedayCityCompanyFC($String)
         {
-            $this->Nameday      = trim(strip_tags(html_entity_decode($String[11])));
-            $this->Guardian     = str_ireplace("&#39;", "'", trim(strip_tags(html_entity_decode($String[15]))));
-                
-            $i = 0;
-            foreach($String as $Line)
+            foreach($String as $i => $line)
             {
-                if (stripos($Line, 'Grand Company') !== false)  { $Company = trim(strip_tags(html_entity_decode($String[($i + 1)]))); }
-                if (stripos($Line, 'Free Company') !== false)   { $FreeCompany = trim($String[($i + 1)]); }
-                $i++;;
-            }
-            
-            // If grand company
-            if (isset($Company))
-            {
-                $this->Company      = array("name" => explode("/", $Company)[0], "rank" => explode("/", $Company )[1]);
-            }
-            
-            // If free company
-            if (isset($FreeCompany))
-            {
-                $FreeCompanyID      = trim(filter_var(explode('&quot;', $FreeCompany)[1], FILTER_SANITIZE_NUMBER_INT));
-                $FreeCompany        = trim(strip_tags(html_entity_decode($FreeCompany)));
+                if (stripos($line, 'Nameday') !== false)
+                {
+                    $offset = ($i + 1);
+                    $this->Nameday = $this->strip_html($String[$offset]);
+                }
 
-                $FreeCompany        = str_ireplace(["&#39;", "&amp;"], ["'", "&"], $FreeCompany);
+                if (stripos($line, 'Guardian') !== false)
+                {
+                    $offset = ($i + 1);
+                    $this->Guardian = $this->strip_html($String[$offset]);
+                }
 
-                $this->FreeCompany  = array("name" => $FreeCompany, "id" => $FreeCompanyID);
+                if (stripos($line, 'City-state') !== false)
+                {
+                    $offset = ($i + 1);
+                    $this->City = $this->strip_html($String[$offset]);
+                }
+
+                if (stripos($line, 'Grand Company') !== false)
+                {
+                    $offset = ($i + 1);
+                    $data = explode('/', $this->strip_html($String[$offset]));
+                    $this->Company['name'] = $data[0];
+                    $this->Company['rank'] = $data[1];
+                }
+
+                if (stripos($line, 'Free Company') !== false)
+                {
+                    $offset = ($i + 1);
+                    $this->FreeCompany = explode("/", $String[$offset]);
+                    $this->FreeCompany = trim($this->FreeCompany[3]);
+                    
+                    break;
+                }
             }
         }
+
         public function getNameday()        { return $this->Nameday; }
         public function getGuardian()       { return $this->Guardian; }
         public function getCompanyName()    { return $this->Company['name']; }
@@ -1780,9 +1845,9 @@
             $this->Stats['resists']['bind']                 = trim(filter_var($String[6][5], FILTER_SANITIZE_NUMBER_INT));
             $this->Stats['resists']['heavy']                = trim(filter_var($String[6][5], FILTER_SANITIZE_NUMBER_INT));
 
-            $this->Stats['resists']['slashing']             = trim(filter_var($String[$last][3], FILTER_SANITIZE_NUMBER_INT));
-            $this->Stats['resists']['piercing']             = trim(filter_var($String[$last][4], FILTER_SANITIZE_NUMBER_INT));
-            $this->Stats['resists']['blunt']                = trim(filter_var($String[$last][5], FILTER_SANITIZE_NUMBER_INT));
+            $this->Stats['resists']['slashing']             = trim(filter_var($String[7][3], FILTER_SANITIZE_NUMBER_INT));
+            $this->Stats['resists']['piercing']             = trim(filter_var($String[7][4], FILTER_SANITIZE_NUMBER_INT));
+            $this->Stats['resists']['blunt']                = trim(filter_var($String[7][5], FILTER_SANITIZE_NUMBER_INT));
         }
         
         // GET STAT FUNC
@@ -1953,9 +2018,15 @@
                     // ID Lodestone
                     if (stripos($Line, 'bt_db_item_detail') !== false) 
                     {
-                        $Data = trim(str_ireplace(array('>', '"'), NULL, html_entity_decode(preg_match("/\/lodestone\/playguide\/db\/item\/([a-z0-9]{11})\//", $Line, $matches)))); 
+                        $index = ($i + 1);
+                        $Data = trim(str_ireplace(array('>', '"'), NULL, html_entity_decode(preg_match("/\/lodestone\/playguide\/db\/item\/([a-z0-9]{11})\//", $A[$index], $matches)))); 
+                        
+                        // TODO : Fix properly, matches is returining false, likely index incorrect.
+                        $Temp['id_lodestone'] = null;
                         if (isset($matches[1]))
+                        {
                             $Temp['id_lodestone'] = $matches[1];
+                        }
                     }
 
                     // Cannot equip
@@ -2141,6 +2212,7 @@
                     $Class  = strtolower(trim(strip_tags(html_entity_decode($Array[$i]))));
                     $Level  = trim(strip_tags(html_entity_decode($Array[$i + 1])));
                     $EXP    = trim(strip_tags(html_entity_decode($Array[$i + 2])));
+
                     if ($Class)
                     {
                         $arr = array(
@@ -2154,9 +2226,15 @@
                             'exp-current' => explode(" / ", $EXP)[0],
                             'exp-max' => explode(" / ", $EXP)[1],
                         );
+
+                        if ($arr['level'] == '-') { $arr['level'] = 0; }
+                        if ($arr['exp']['current'] == '-') { $arr['exp']['current'] = 0; }
+                        if ($arr['exp']['max'] == '-') { $arr['exp']['max'] = 0; }
+                        if ($arr['exp-current'] == '-') { $arr['exp-current'] = 0; }
+                        if ($arr['exp-max'] == '-') { $arr['exp-max'] = 0; }
                             
-                        $Temp[] = $arr;
-                        $Temp[$Class] = $arr;
+                        $Temp['numbered'][] = $arr;
+                        $Temp['named'][$Class] = $arr;
                     }
                 }
                 
@@ -2166,44 +2244,38 @@
             
             $this->ClassJob = $Temp;
         }
-        public function getClassJob($Class) { return $this->ClassJob[strtolower($Class)]; }
+        public function getClassJob($class) 
+        { 
+            $type = 'named';
+            if (is_numeric($class)) 
+            {
+                $type = 'numbered';
+            }
+            
+            return $this->ClassJob[$type][$class];
+        }
+        
         public function getClassJobs($Specific = null) 
         {
-            $arr = array();
-            if ($Specific)
-            {
-                foreach($this->getClassJobs() as $Key => $Data)
-                {
-                    if ($Specific == 'numbered')
-                    {
-                        if (is_numeric($Key)) 
-                        {
-                            $arr[] = $Data;
-                        }
-                    }
-                    else if ($Specific == 'named')
-                    {
-                        if (!is_numeric($Key)) 
-                        {
-                            $arr[$Key] = $Data;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                $arr = $this->ClassJob;
+            $data = $this->ClassJob;
+
+            if ($Specific) {
+               $data = $this->ClassJob[$Specific];
             }
 
-            return $arr;
+            return $data;
         }
-        public function getClassJobsOrdered($Order = false, $OrderBy = null, $ArrayType = null)
+        public function getClassJobsOrdered($Specific = null, $Order = false, $OrderBy = null, $ArrayType = null)
         {
             // OPrder
             if (strtolower($Order) == 'asc') { $Ascending = true; } else { $Ascending = false; }
 
+            if (!$Specific) {
+                $Specific = 'named';
+            }
+
             // Get the jobs
-            $ClassJobs = $this->getClassJobs($ArrayType);
+            $ClassJobs = $this->getClassJobs($ArrayType)[$Specific];
 
             // Set order by
             if (!$OrderBy) { $OrderBy = 'level'; }
@@ -2239,7 +2311,7 @@
             if (!is_numeric($this->Stats['core']['mp'])) { $this->Validated = false; $this->Errors[] = 'mp is false or non numeric'; }
             if (!is_numeric($this->Stats['core']['tp'])) { $this->Validated = false; $this->Errors[] = 'tp is false or non numeric'; }
             
-            foreach($this->ClassJob as $CJ)
+            foreach($this->ClassJob['numbered'] as $CJ)
             {
                 if (!is_numeric($CJ['level']) && $CJ['level'] != '-') { $this->Validated = false; $this->Errors[] = $CJ['class'] .' level was non numeric and not "-"'; }
                 if (!is_numeric($CJ['exp']['current']) && $CJ['exp']['current'] != '-') { $this->Validated = false; $this->Errors[] = $CJ['class'] .' level was non numeric and not "-"'; }
@@ -2258,7 +2330,7 @@
             [
                 // Basic profile data
                 'id'            => $this->getID(),
-                'lsid'          => $this->getLodestone(),
+                'lsurl'         => $this->getLodestone(),
                 'name'          => $this->getName(),
                 'server'        => $this->getServer(),
                 'title'         => $this->getTitle(),
@@ -2319,6 +2391,21 @@
 
             return $character_data;
         }
+        
+        public function probableJobs()
+        {
+            $jobarray=$this->getClassJobs("named");
+            $req=array('PLD'=>array('main'=>"gladiator", 'sub'=>"conjurer"), 'MNK'=>array('main'=>"pugilist", 'sub'=>"lancer"), 'WAR'=>array('main'=>"marauder", 'sub'=>"gladiator"), 'DRG'=>array('main'=>"lancer", 'sub'=>"marauder"), 'BRD'=>array('main'=>"archer", 'sub'=>"pugilist"), 'WHM'=>array('main'=>"conjurer", 'sub'=>"arcanist"), 'BLM'=>array('main'=>"thaumaturge", 'sub'=>"archer"), 'SMN'=>array('main'=>"arcanist", 'sub'=>"thaumaturge"), 'SCH'=>array('main'=>"arcanist", 'sub'=>"conjurer"), 'NIN'=>array('main'=>"rogue", 'sub'=>"pugilist"));
+            $jobs=array("PLD", "MNK", "WAR", "DRG", "BRD", "WHM", "BLM", "SMN", "SCH", "NIN");
+            foreach ($jobs as $job_name)
+            {
+                if ($jobarray[$req[$job_name]['main']]['level']!="-"&&$jobarray[$req[$job_name]['sub']]['level']!="-"&&$jobarray[$req[$job_name]['main']]['level']>=30&&$jobarray[$req[$job_name]['sub']]['level']>=15)
+                {
+                    $returnarray[$job_name]=$jobarray[$req[$job_name]['main']]['level'];
+                }
+            }
+            return $returnarray;
+        }
     }
 
     /*  Free Company
@@ -2362,6 +2449,7 @@
         }
         public function getID() { return $this->ID; }
         public function getLodestone() { return $this->Lodestone; }
+
 
         // NAME + SERVER
         public function setBasicData($String)
@@ -2796,7 +2884,7 @@
     /*  Achievement
      *  -----------
      */
-    class Achievements
+    class Achievements extends Parser
     {
         use Funky;
         use Config;
@@ -2885,7 +2973,7 @@
                     $this->TotalAchievements++;
                     
                     // Append temp data
-                    $NewList[] = $Temp;
+                    $NewList[$Temp['id']] = $Temp;
                 }
             }
 
@@ -2902,6 +2990,64 @@
         public function get() { return $this->List; }
         public function addAchievements($List) { $this->List = array_merge($this->List, $List); }
         public function genPointsPercentage() { $this->PointsPercentage = (round($this->CurrentPoints / $this->TotalPoints, 3) * 100); }
+
+        public function checkIfPublic($Array)
+        {
+            /*
+                This is so dirty... but it'll do
+            */
+            if (isset($Array[0]))
+            {
+                if (stripos($Array[0][0], 'do not have permission') !== false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public function setSummary($Array)
+        {
+            // placeholder
+            $achievements = [];
+
+            // loop
+            foreach($Array as $arr)
+            {
+                $temp = [];
+
+                foreach($arr as $i => $line)
+                {
+                    if (stripos($line, 'ic_achievement') !== false)
+                    {
+                        $offset = $i + 1;
+                        $temp['id'] = explode("/", $arr[$offset])[6];
+                    }
+
+                    if (stripos($line, 'lds/pc/global') !== false)
+                    {
+                        $temp['icon'] = $this->getAttribute('src', $line);
+                    }
+
+                    if (stripos($line, 'ldst_strftime') !== false)
+                    {
+                        $temp['time'] = explode('(', $line)[2];
+                        $temp['time'] = explode(',', $temp['time'])[0];
+                    }
+
+                    if (stripos($line, '/script') !== false)
+                    {
+                        $offset = $i + 2;
+                        $temp['title'] = $this->strip_html($arr[$offset]);
+                    }
+                }
+
+                $achievements[$temp['id']] = $temp;
+            }
+
+            $this->List = $achievements;
+        }
     }
     
     /*  Parser
