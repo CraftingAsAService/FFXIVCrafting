@@ -13,15 +13,11 @@
 	<a href='/leve' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
 	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
 
-	<h1>Levequest Information</h1>
+	<h1>Levequest</h1>
+	<h2>Advanced Version</h2>
 @stop
 
 @section('content')
-
-<div class='alert alert-warning'>
-	This page is going away and will be redirected to the <a href='/levequests'>New Levequests Page</a>.  
-	If you strongly feel this version is better, please <a href='mailto:tickthokk@gmail.com?Subject=I like the old Leve page'>let me know</a>.  
-</div>
 
 <div class='panel panel-default'>
 	<div class='panel-heading'>

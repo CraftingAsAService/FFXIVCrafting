@@ -116,7 +116,7 @@ return array(
 
 		'default' => array(
 			'host'     => getenv('redis.host'),
-			'port'     => 6379,
+			'port'     => getenv('redis.port') ?: 6379,
 			'database' => getenv('redis.database'),
 		),
 

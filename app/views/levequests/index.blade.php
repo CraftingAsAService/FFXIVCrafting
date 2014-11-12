@@ -22,6 +22,7 @@
 				</a>
 				@endforeach
 			</div>
+			<a href='/leve'>Advanced Version</a>
 		</fieldset>
 	</div>
 	<div class='col-sm-9 col-lg-10'>
