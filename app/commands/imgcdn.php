@@ -75,7 +75,7 @@ class imgcdn extends Command {
 
 		$tally = 0;
 		foreach (array('items/nq', 'items/hq') as $ext)
-			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator('/var/www/ffxivcrafting-assets/assets/' . $ext)) as $filename)
+			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator('/home/vagrant/Projects/ffxivcrafting-assets/assets/' . $ext)) as $filename)
 			{
 				// Ignore '..' or '.' directories.
 				if (in_array(substr($filename, -2), array('..', '\.', '/.'))) // \. for windows, /. for linux
