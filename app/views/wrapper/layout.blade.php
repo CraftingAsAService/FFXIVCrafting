@@ -243,7 +243,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
 								<img src="/img/current_patch.png" class="img-responsive">
-								<p>This site has been optimized for Patch 2.35 Defenders of Eorzea</p>
+								<p>This site has been optimized for Patch 2.4 Dreams of Ice</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>

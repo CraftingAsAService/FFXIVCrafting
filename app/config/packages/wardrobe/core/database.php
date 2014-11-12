@@ -1,26 +1,26 @@
 <?php
 
 return array(
-	'default' => 'sqlite',
+	'default' => 'mysql',
 
 	'connections' => array(
 
-		'sqlite' => array(
-			'driver'   => 'sqlite',
-			'database' => getenv('wardrobe.location') ?: app_path().'/database/wardrobe.sqlite',
-			'prefix'   => '',
-		),
-
-		// 'mysql' => array(
-		// 	'driver'    => 'mysql',
-		// 	'host'      => 'localhost',
-		// 	'database'  => 'wardrobe',
-		// 	'username'  => 'root',
-		// 	'password'  => 'root',
-		// 	'charset'   => 'utf8',
-		// 	'collation' => 'utf8_unicode_ci',
-		// 	'prefix'    => '',
+		// 'sqlite' => array(
+		// 	'driver'   => 'sqlite',
+		// 	'database' => getenv('wardrobe.location') ?: app_path().'/database/wardrobe.sqlite',
+		// 	'prefix'   => '',
 		// ),
+		
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => getenv('db.host'),
+			'database'  => getenv('db.schema'),
+			'username'  => getenv('db.username'),
+			'password'  => getenv('db.password'),
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => 'wardrobe_',
+		),
 
 		// 'pgsql' => array(
 		// 	'driver'   => 'pgsql',
