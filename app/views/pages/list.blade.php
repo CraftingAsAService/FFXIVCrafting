@@ -83,7 +83,7 @@
 				<h4 class="modal-title">Copy this link</h4>
 			</div>
 			<div class="modal-body">
-				<textarea class='form-control'>http://craftingasaservice.com/list/saved/{{ $saved_link }}</textarea>
+				<textarea class='form-control'>http://ffxivcrafting.com/list/saved/{{ $saved_link }}</textarea>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
