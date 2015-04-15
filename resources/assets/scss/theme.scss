@@ -1,0 +1,507 @@
+/* FFXIV-CAAS Theme */
+
+$theme_color_lobster: #FF4040;
+$theme_color_teal: #25c1c1;
+$theme_color_terra: #e8ddcb;
+$theme_color_black: #000000;
+$theme_color_white: #FFFFFF;
+$theme_color_light_gray: #f7f7f7;
+$theme_color_darker_than_light_gray: #ebeaea;	//lol
+$theme_color_medium_gray: #747475;
+$theme_color_dark_gray: #18191A;
+
+$screen-xs-min:              480px !default;
+$screen-sm-min:              768px !default;
+$screen-md-min:              992px !default;
+$screen-lg-min:              1200px !default;
+$screen-xs-max:              ($screen-sm-min - 1) !default;
+$screen-sm-max:              ($screen-md-min - 1) !default;
+$screen-md-max:              ($screen-lg-min - 1) !default;
+
+body {
+	background: $theme_color_black;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#banner {
+	h2, .h2 {
+		font-size: 22px;
+	}
+}
+
+#content {
+	h1, h2, h3 {
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+	h1:first-child {
+		margin-top: 0;
+	}
+}
+
+#account, .header-bar {
+	background: $theme_color_dark_gray;
+	font-family: 'Roboto Condensed', sans-serif;
+	padding: {
+		top: 2px;
+		bottom: 2px;
+	}
+	text-transform: uppercase;
+	ul {
+		margin: 0;
+		padding: 0;
+		float: right;
+		list-style-type: none;
+		li {
+			float: left;
+
+			&:last-child a, &:last-child label {
+				border-right: 0px;
+			}
+
+			a, label {
+				border-right: 1px solid #333536;
+				color: #969696;
+				display: block;
+				margin: 0;
+				padding: {
+					left: 20px;
+					right: 20px;
+					top: 5px;
+					bottom: 7px;
+				}
+				text-decoration: none;
+
+
+				&:hover {
+					color: $theme_color_white;
+				}
+				&.active {
+					color: $theme_color_white;
+				}
+
+				span {
+					margin-left: 4px;
+					line-height: 4px;
+					vertical-align: middle;
+				}
+			}
+
+			&.language-selector {
+				a {
+					padding-left: 10px;
+				}
+			}
+		}
+	}
+	ul.dropdown-menu {
+		min-width: 100px;
+		background: $theme_color_dark_gray;
+		border-top: 0px;
+		border-radius: 0 0 4px 4px;
+		li {
+			float: none;
+			a {
+				border-right-width: 0;
+				padding: {
+					left: 10px;
+					right: 10px;
+				}
+			}
+		}
+	}
+}
+
+#header {
+	background: $theme_color_white;
+	font-family: 'Roboto Condensed', sans-serif;
+	padding: {
+		top: 10px;
+		bottom: 10px;
+	}
+
+	.container .row {
+		position: relative;
+	}
+	.menu-navbar {
+		position: absolute;
+		bottom: -10px;
+		right: 0;
+	}
+
+	.dropdown-menu {
+		text-align: right;
+		min-width: 115px;
+		border: 0;
+		padding: 5px 7px;
+	}
+
+	.navbar {
+		background: none;
+		border: 0;
+		border-radius: 0;;
+		filter: none !important;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		margin: {
+			bottom: 0;
+		}
+
+		.nav.navbar-nav {
+			float: right;
+			text-transform: uppercase;
+
+			li {
+				&.active {
+					background: none;
+					border-bottom: 2px solid $theme_color_lobster;
+					a {
+						color: $theme_color_black;
+					}
+				}
+
+				a {
+					background: none;
+					color: #969696;
+					&:hover {
+						color: $theme_color_dark_gray;
+					}
+				}
+			}
+			.dropdown-menu li.active {
+				border-bottom: 0;
+				a, label {
+					color: $theme_color_lobster;
+				}
+			}
+		}
+	}
+}
+
+#banner {
+	background: $theme_color_light_gray;
+	padding: {
+		top: 20px;
+		bottom: 20px;
+	}
+	h1 {
+		color: $theme_color_lobster;
+		font-family: 'Roboto Condensed', sans-serif;
+		text-transform: uppercase;
+	}
+	h2 {
+		color: $theme_color_medium_gray;
+		font-family: 'Roboto Condensed', sans-serif;
+	}
+}
+
+#content {
+	background: $theme_color_white;
+	padding: {
+		top: 30px;
+		bottom: 30px;
+	}
+}
+
+#footer {
+	background: $theme_color_dark_gray;
+	color: $theme_color_light_gray;
+	font-size: 12px;
+	padding: {
+		top: 20px;
+		bottom: 20px;
+	}
+
+	a {
+		color: $theme_color_white;
+		font-weight: bold;
+
+		&:hover {
+			color: $theme_color_lobster;
+			text-decoration: none;
+		}
+	}
+
+	hr {
+		border-color: #2c2e2f;
+		margin: {
+			top: 10px;
+			bottom: 10px;
+		}
+	}
+
+	p {
+		&.headline {
+			color: $theme_color_lobster;
+			font-family: 'Roboto Condensed', sans-serif;
+			font-size: 18px;
+			text-transform: uppercase;
+		}
+		&.view-all {
+			margin: {
+				top: 20px;
+			}
+			a {
+				color: $theme_color_terra;
+				font-weight: bold;
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	.post {
+		.title {
+			a {
+				font-weight: bold;
+			}
+		}
+		.date {
+			color: $theme_color_medium_gray;
+			font-size: 11px;
+			span {
+				display: inline-block;
+				margin-left: 4px;
+				vertical-align: middle;
+			}
+		}
+		&:nth-child(4) hr {
+			display: none;
+		}
+	}
+}
+
+#copyright-info {
+	background: $theme_color_black;
+	color: #747475;
+	font-size: 10px;
+	padding: {
+		top: 18px;
+		bottom: 18px;
+	}
+
+	a {
+		color: $theme_color_white;
+		font-size: 11px;
+		font-weight: bold;
+		span {
+			margin-left: 4px;
+			padding-top: 2px;
+		}
+	}
+}
+
+/* Homepage Content */
+.home-callout {
+	background: $theme_color_white;
+	border-bottom: 3px solid $theme_color_lobster;
+	padding: 10px;
+	cursor: pointer;
+
+	margin-bottom: 30px;
+
+	// Hover, except for mobile
+	@media (min-width: $screen-sm-min) {
+		&:hover {
+			-webkit-transform: scale(1.1);
+			-moz-transform: scale(1.1);
+			-o-transform: scale(1.1);
+			-ms-transform: scale(1.1);
+			transform: scale(1.1);
+		}
+	}
+
+	.copy {
+		padding-left: 0px;
+	}
+
+	.title {
+		color: $theme_color_black;
+		font-family: 'Roboto Condensed', sans-serif;
+		font-size: 30px;
+	}
+	.description {
+		color: $theme_color_medium_gray;
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.step {
+		text-align: right;
+		color: $theme_color_lobster;
+		font-weight: bold;
+		img {
+			margin-left: 5px;
+		}
+	}
+}
+
+
+a:hover {
+	.title {
+		color: $theme_color_lobster;
+	}
+}
+
+div.logo {
+	min-height: 80px;
+	img {
+		margin-top: 5px;
+	}
+	.tagline {
+		text-decoration: none;
+		color: $theme_color_black;
+		margin-left: 55px;
+		letter-spacing: .33em;
+		white-space: nowrap;
+	}
+	a:hover {
+		text-decoration: none;
+	}
+}
+
+// Mobile Only
+@media (max-width: $screen-xs-max) {
+	#copyright-info {
+		a {
+			position: relative;
+			top: 10px;
+			padding-bottom: 10px;
+		}
+	}
+}
+
+// Mobile and Tablet
+@media (max-width: $screen-sm-max) {
+	div.logo {
+		text-align: center;
+		img {
+			display: inline-block !important;
+		}
+		.tagline {
+			display: block;
+		}
+	}
+}
+
+// Tablet only
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+	div.logo {
+		.tagline {
+			letter-spacing: .33em;
+		}
+	}
+}
+
+// Tablet to Small Desktop range
+@media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+	div.logo {
+		min-height: 80px;
+		img {
+			margin-top: 17px;
+		}
+	}
+}
+
+// Small Desktop
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+	div.logo {
+		.tagline {
+			margin-left: 45px;
+			letter-spacing: .21em;
+		}
+	}
+}
+
+.header-bar .container {
+	padding-right: 0;
+}
+
+#mobile-nav {
+	background-color: $theme_color_dark_gray;
+	// border-right: 2px solid $theme_color_dark_gray;
+
+	.navbox {
+		background: none;
+		border: 0;
+		border-radius: 0;;
+		filter: none !important;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		margin: {
+			bottom: 0;
+		}
+		.navbar-nav {
+			margin: 7.5px -15px !important; // bootstrap override
+			float: none !important; // bootstrap override
+			> li {
+				float: none !important; // bootstrap override
+				> a {
+					padding-top: 10px !important; // bootstrap override
+					padding-bottom: 10px !important; // bootstrap override
+					line-height: 20px !important; // bootstrap override
+				}
+			}
+		}
+		.nav.navbar-nav {
+			text-transform: uppercase;
+
+			li {
+				&.active {
+					background: none;
+					// border-bottom: 2px solid $theme_color_lobster;
+					a {
+						color: $theme_color_lobster;
+					}
+				}
+
+				a {
+					background: none;
+					// color: #969696;
+					color: $theme_color_white;
+					&:hover {
+						color: $theme_color_lobster;
+					}
+				}
+			}
+		}
+	}
+
+	hr {
+		border-top-color: $theme_color_lobster;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+	.container {
+		width: auto !important; // bootstrap override
+	}
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	border: 0 !important;
+	background: transparent !important;
+	font-weight: normal !important;
+	color: $theme_color_lobster !important;
+}
+
+// Nexus 10, Portrait, Tagline is new-lining
+body.Android {
+	@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+		div.logo {
+			.tagline {
+				letter-spacing: .21em;
+			}
+		}
+	}
+}

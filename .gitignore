@@ -1,0 +1,9 @@
+/vendor
+/node_modules
+.env
+.env.qa
+.env.production
+composer.phar
+composer.lock
+.DS_Store
+.sass-cache
