@@ -1,0 +1,3 @@
+[submodule "resources/assets/images"]
+	path = resources/assets/images
+	url = https://github.com/Tickthokk/ffxivcrafting-assets.git

@@ -1,32 +1,43 @@
-# Crafting As A Service
+# FFXIV Crafting
+## Crafting As A Service
+### An online tool to help crafters in Final Fantasy XIV: A Realm Reborn.
 
-An online tool to help crafters in Final Fantasy XIV: A Realm Reborn.
+## Development
 
-### Contributions
-* Are welcome!
-* View the CONTRIBUTING.md file for more information
+Setup:
+Laravel 5 Homestead - http://laravel.com/docs/5.0/homestead
 
-### Apache Config Environment Variables
+List of necessary downloads to Windows Machine:
+- Vagrant
+- VirtualBox
+- NodeJS
+- Ruby (Installation Note: Click "Add Ruby to PATH" option)
+- GitHub
 
-Include these inside your virtualhost definition.
+Install Ruby, and `gem install sass`.
+I was met with an error here (Windows 8.1).  This thread had a workaround: http://stackoverflow.com/questions/27278966/error-sass-installation-for-windows, but to summarize, run `gem source -a http://rubygems.org/` then try to install sass again.
 
-```
-SetEnv APP_ENVIRONMENT local|qa # Do not include for Production
+Install NodeJS and run `grunt install` in the project directory, followed by `grunt`.
 
-SetEnv DB_HOST 127.0.0.1
-SetEnv DB_NAME ffxivcrafting
-SetEnv DB_PORT 9999 # Unnecessary if port is 3306
-SetEnv DB_USER root
-SetEnv DB_PASS password # Don't include if it's blank
+ImageMagick needs installed inside Homestead/Vagrant.
 
-SetEnv DEBUG_ENABLED 1
-SetEnv ENCRYPTION_KEY 32-character-string-space-filler
 
-SetEnv CACHE_DRIVER redis|file
+The `ffxivcrafting` schema should be manually created.
 
-# If cache driver is redis:
-SetEnv REDIS_DB 0|1 # 0 is Production
-SetEnv REDIS_PREFIX caas_ # I throw a qa_ before it for that environment
 
-#SetEnv WARDROBE_LOCATION /wardrobe/qa.sqlite 
-```
+If necessary, the `ffxivcrafting-assets` folder is a submodule.  To initialize it, `cd resources/assets/images && git submodule init`.  `git submodule update` may come in handy as well.
+
+---
+
+Custom artisan commands:
+
+- php artisan db:unpack
+ - Requires 7Zip
+  - `sudo apt-get install p7zip-full`
+- php artisan db:build
+
+---
+
+## Routine Updates
+
+Image for Footer: http://na.finalfantasyxiv.com/lodestone/special/patchnote_log/

@@ -31,7 +31,7 @@ module.exports = function(grunt) {
 				},
 				files: [{
 					expand: true,
-					cwd: 'app/assets/javascript',
+					cwd: 'resources/assets/javascript',
 					src: [ '**/*.js' ],
 					dest: 'public/js'
 				}]
@@ -41,12 +41,13 @@ module.exports = function(grunt) {
 		sass: {
 			all: { // Target
 				options: {
-					style: 'compressed'
+					style: 'compressed',
+					sourcemap: 'none'
 				},
 				files: [{
 					expand: true,
-					cwd: 'app/assets/scss',
-					src: [ '**/*.scss', '!**/_*.scss' ],
+					cwd: 'resources/assets/scss',
+					src: [ '**/*.scss' ],
 					dest: 'public/css',
 					ext: '.css'
 				}]
@@ -56,23 +57,45 @@ module.exports = function(grunt) {
 		watch: {
 			// Javascript
 			uglify: {
-				files: 'app/assets/javascript/**/*.js',
-				tasks: [ 'newer:uglify:all', 'beep' ],
-				options: { interval: 5007 }
+				files: 'resources/assets/javascript/**/*.js',
+				tasks: [ 'newer:uglify:all', 'notify:uglify' ]//, 'beep' ]
 			},
 			
 			// CSS
 			sass: {
-				files: 'app/assets/scss/**/*.scss',
-				tasks: [ 'sass:all', 'beep' ],
-				options: { interval: 5007 }
+				files: 'resources/assets/scss/**/*.scss',
+				tasks: [ 'sass:all', 'notify:sass' ]//, 'beep' ]
 			},
 
 			// Grunt
-			grunt: {
-				files: ['Gruntfile.js'],
-				tasks: [ 'beep' ],
-				options: { interval: 5007 }
+			// grunt: {
+			// 	files: ['Gruntfile.js'],
+			// 	tasks: [ 'beep' ]
+			// }
+		},
+
+		notify: {
+			uglify: {
+				options: {
+					title: 'JS Uglified',
+					message: 'Task Complete'
+				}
+			},
+			sass: {
+				options: {
+					title: 'SASS Compiled',
+					message: 'Task Complete'
+				}
+			}
+		},
+
+		notify_hooks: {
+			options: {
+				enabled: true,
+				max_jshint_notifications: 5,
+				title: 'FFXIV Crafting Grunt',
+				success: true,
+				duration: 3
 			}
 		}
 
@@ -83,15 +106,15 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-imagemin');
-	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-newer');
+	grunt.loadNpmTasks('grunt-notify');
  
 	// define the tasks
  
 	grunt.registerTask('default', [ 'watch' ]);
-	grunt.registerTask('images', [ 'newer:imagemin:all', 'beep' ]);
+	grunt.registerTask('images', [ 'newer:imagemin:all' ]);//, 'beep' ]);
 	// grunt.registerTask('cdn', [ 'newer:cloudfiles:production', 'beep' ]);
 
-	grunt.registerTask('beep', function() { console.log('\x07'); });
+	// grunt.registerTask('beep', function() { console.log('\x07'); });
 
 };

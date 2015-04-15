@@ -5,9 +5,6 @@
 
     RewriteEngine On
 
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^(.*)images/20ffxiv/(.+)\.png$ http://xivdb.com/images/20ffxiv/$2.png [L,R=301]
-
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 

@@ -22,6 +22,8 @@
   "devDependencies": {
     "grunt-notify": "~0.3.0",
     "grunt": "~0.4.5",
-    "grunt-contrib-watch": "~0.6.1"
+    "grunt-contrib-watch": "~0.6.1",
+    "gulp": "^3.8.8",
+    "laravel-elixir": "*"
   }
 }

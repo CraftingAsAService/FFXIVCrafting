@@ -1,0 +1,212 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 147.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"docblockr",
+				"DocBlockr: Reparse comment block"
+			],
+			[
+				"doc",
+				"DocBlockr: Decorate line comment"
+			]
+		],
+		"width": 413.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/nwright/Projects/Personal/FFXIV/FFXIVCrafting/app/controllers/QuestsController.php",
+		"/Users/nwright/Projects/Personal/FFXIV/FFXIVCrafting/app/views/recipes/results_footer.blade.php",
+		"/Users/nwright/Projects/Personal/FFXIV/FFXIVCrafting/app/controllers/GatheringController.php",
+		"/Users/nwright/Projects/Personal/FFXIV/FFXIVCrafting/app/controllers/ListController.php",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/resources/views/levequests/advanced.blade.php",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/app/Http/routes.php",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/Gruntfile.js",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/storage/logs/laravel-2015-03-28.log",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/app/config/database.php",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/bootstrap/environment.php",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/app/config/local/app.php",
+		"/Users/nwright/Projects/Personal/ffxivcrafting/.env.local.php",
+		"/Users/nwright/Projects/Tickthokk/ffxivcrafting/package.json",
+		"/Users/nwright/Projects/Tickthokk/ffxivcrafting/Gruntfile.js",
+		"/Users/nwright/.homestead/Homestead.yaml",
+		"/Users/nwright/Projects/Legrand/Sales-Tools/.gitignore",
+		"/Users/nwright/Projects/Legrand/Sales-Tools/package.json",
+		"/Users/nwright/Projects/Legrand/Sales-Tools/Gruntfile.js",
+		"/Users/nwright/Projects/Legrand/Sales-Tools/assets/scss/global.scss",
+		"/Users/nwright/Projects/Legrand/Sales-Tools/application/config/database.php",
+		"/Users/nwright/Documents/Installation Instruction Items/package.json",
+		"/Users/nwright/Documents/Installation Instruction Items/Gruntfile.js",
+		"/Users/nwright/Projects/Legrand/ConnectXpress/.env.local.php",
+		"/Users/nwright/Projects/Legrand/ConnectXpress/Gruntfile.js",
+		"/Users/nwright/Projects/Legrand/ConnectXpress/app/assets/javascript/bootstrap.js",
+		"/Users/nwright/Projects/Legrand/ConnectXpress/app/assets/scss/_common.scss"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Input::",
+			"leve_records",
+			"{{{",
+			"Request::input(",
+			"Input",
+			"beep",
+			", 'beep' ]",
+			"_token",
+			"''",
+			",\n				options: { interval: 5007 }"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "OldFFXIVStuff.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 252.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
