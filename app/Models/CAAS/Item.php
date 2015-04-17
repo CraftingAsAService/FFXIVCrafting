@@ -102,7 +102,7 @@ class Item extends _LibraBasic
 		// Make sure the slot avoids pieces with certain stats
 		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->en_abbr->term));
 		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->en_abbr->term));
-		$primary_stat = Stat::get_ids([Stat::primary($job->en_abbr->term)])[0];
+		// $primary_stat = Stat::get_ids([Stat::primary($job->en_abbr->term)]);
 		$boring_stat_ids = Stat::get_ids(Stat::boring());
 		$advanced_stat_avoidance = Stat::advanced_avoidance($job->en_abbr->term);
 		foreach ($advanced_stat_avoidance as &$ava)

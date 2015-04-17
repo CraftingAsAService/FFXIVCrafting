@@ -65,6 +65,8 @@ class Stat
 		foreach ($primaries as $stat => $jobs)
 			if (in_array($job, $jobs))
 				return $stat;
+
+		return 'Materia';
 	}
 
 	public static function focus($job = 'CRP')
