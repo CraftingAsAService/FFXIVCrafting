@@ -72,10 +72,10 @@
 				</th>
 				<th class='valign'>
 					<div>
-						<input type='number' class='form-control input-sm' value='1' min='1' max='90' id='min-level' rel='tooltip' title='Min Level'>
+						<input type='number' class='form-control input-sm' value='1' min='1' max='999' id='min-level' rel='tooltip' title='Min Level'>
 					</div>
 					<div>
-						<input type='number' class='form-control input-sm' value='90' min='1' max='90' id='max-level' rel='tooltip' title='Max Level'>
+						<input type='number' class='form-control input-sm' value='999' min='1' max='999' id='max-level' rel='tooltip' title='Max Level'>
 					</div>
 				</th>
 				<th>&nbsp;</th>
