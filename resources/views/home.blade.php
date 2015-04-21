@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<div class='col-sm-4 homepage-step'>
-		<div class='home-callout' data-href='/leve'>
+		<div class='home-callout' data-href='/levequests'>
 			<img src='/img/homepage/icon-levequest.png' width='40' height='40'>
 			<p class='title'>
 				Levequests

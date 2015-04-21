@@ -29,6 +29,10 @@ Route::controller('crafting', 'CraftingController');
 Route::controller('map', 'MapController');
 Route::controller('equipment', 'EquipmentController');
 
+// Old/Redirect Controllers
+
+Route::controller('leve', 'LevequestsController');
+
 // Simpler Pages
 foreach (['stats', 'report', 'thanks', 'credits'] as $page)
 	Route::get($page, function() use ($page)

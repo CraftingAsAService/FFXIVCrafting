@@ -61,7 +61,7 @@ return [
 		'mysql' => [
 			'driver'    => 'mysql',
 			'host'      => env('DB_HOST', 'localhost'),
-			'host'      => env('DB_PORT', '3306'),
+			// 'port'      => env('DB_PORT', '3306'),
 			'database'  => env('DB_DATABASE', 'ffxivcraft'),
 			'username'  => env('DB_USERNAME', 'homestead'),
 			'password'  => env('DB_PASSWORD', 'secret'),
