@@ -83,7 +83,7 @@ class AccountController extends Controller
 
 	private function api_register($character, $server)
 	{
-		include app_path() . '/models/LodestoneAPI/api.php';
+		include app_path() . '/Models/LodestoneAPI/api.php';
 		$API = new \LodestoneAPI();
 
 		$API->searchCharacter($character, $server, true);
