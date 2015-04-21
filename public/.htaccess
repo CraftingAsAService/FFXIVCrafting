@@ -5,6 +5,11 @@
 
     RewriteEngine On
 
+    # Just say No, to Google Docs
+    # Mozilla/5.0 (compatible; GoogleDocs; apps-spreadsheets; +http://docs.google.com)
+    RewriteCond %{HTTP_USER_AGENT} ^.*(GoogleDocs|apps-spreadsheets).* [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
