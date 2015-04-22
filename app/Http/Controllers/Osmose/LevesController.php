@@ -25,7 +25,7 @@ class LevesController extends \App\Http\Controllers\Controller
 			'/wiki/Category:Fieldcraft_Levequest'
 		);
 
-		$html_base = storage_path() . '/app/osmose/cache/_leves/';
+		$html_base = storage_path() . '/app/osmose/cache/leves/';
 
 		$categories = [];
 		foreach($starting_pages as $url)
@@ -160,7 +160,7 @@ class LevesController extends \App\Http\Controllers\Controller
 
 	public function getCompile()
 	{
-		$extra_leve_data = json_decode(file_get_contents(storage_path() . '/app/osmose/cache/_leves/leves.json'));
+		$extra_leve_data = json_decode(file_get_contents(storage_path() . '/app/osmose/cache/leves/leves.json'));
 
 		$original_leves = json_decode(file_get_contents(storage_path() . '/app/manual/leves.json'));
 

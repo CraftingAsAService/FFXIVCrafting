@@ -67,7 +67,7 @@ class MapsController extends \App\Http\Controllers\Controller
 
 		foreach (array('FIX', 'MPOINT', 'BPOINT') as $get)
 		{
-			$cached_folder = storage_path() . '/app/osmose/cache/' . $json->MAPID;
+			$cached_folder = storage_path() . '/app/osmose/cache/maps/' . $json->MAPID;
 			$cached_file = $cached_folder . '/' . $get . '.json';
 
 			if ( ! is_file($cached_file))
