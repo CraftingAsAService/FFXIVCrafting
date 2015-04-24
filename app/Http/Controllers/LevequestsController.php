@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Cache;
 use Config;
 
 use App\Models\CAAS\Leve;
@@ -33,34 +34,40 @@ class LevequestsController extends Controller
 		];
 
 		// All Leves
-		$all_leves = Leve::with(['classjob', 'classjob.en_abbr', 'item', 'item.name', 'item.recipe', 'item.vendors'])
-			->where('item_id', '>', 0) // Avoids mining/botany "bug"
-			->orderBy('classjob_id')
-			->orderBy('level')
-			->orderBy('triple', 'desc')
-			->orderBy('xp', 'desc')
-			->orderBy('gil', 'desc')
-			->get();
+		$all_leves = Cache::remember('leves_' . Config::get('language'), 60, function() {
+			return Leve::with(['classjob', 'classjob.en_abbr', 'item', 'item.name', 'item.recipe', 'item.vendors'])
+				->where('item_id', '>', 0) // Avoids mining/botany "bug"
+				->orderBy('classjob_id')
+				->orderBy('level')
+				->orderBy('triple', 'desc')
+				->orderBy('xp', 'desc')
+				->orderBy('gil', 'desc')
+				->get();
+		});
 
 		$leves = [];
 		foreach ($all_leves as $leve)
 			$leves[$leve->classjob->en_abbr->term][$leve->level][] = $leve;
 
-		$leve_rewards = LeveReward::with('item')
-			->orderBy('classjob_id')
-			->orderBy('level')
-			->orderBy('item_id')
-			->orderBy('amount')
-			->get();
+		$rewards = Cache::remember('rewards_' . Config::get('language'), 60, function() {
+			$leve_rewards = LeveReward::with('item')
+				->orderBy('classjob_id')
+				->orderBy('level')
+				->orderBy('item_id')
+				->orderBy('amount')
+				->get();
 
-		$rewards = [];
-		foreach($leve_rewards as $reward)
-			if ($reward->item_id)
-			{
-				$rewards[$reward->classjob_id][$reward->level][$reward->item_id]['item'] = $reward->item;
-				$rewards[$reward->classjob_id][$reward->level][$reward->item_id]['amounts'][] = $reward->amount;
-			}
+			$rewards = [];
+			foreach($leve_rewards as $reward)
+				if ($reward->item_id)
+				{
+					$rewards[$reward->classjob_id][$reward->level][$reward->item_id]['item'] = $reward->item;
+					$rewards[$reward->classjob_id][$reward->level][$reward->item_id]['amounts'][] = $reward->amount;
+				}
 
+			return $rewards;
+		});
+		
 		$crafting_job_list = ClassJob::with('name', 'en_name', 'en_abbr')->whereIn('id', $crafting_job_ids)->get();
 		$opening_level = 1;
 		$opening_class = 'CRP';
@@ -204,7 +211,7 @@ class LevequestsController extends Controller
 			->whereIn('classjob_id', $job_ids)
 			->get();
 
-		$leve_rewards = array();
+		$leve_rewards = [];
 
 		foreach ($leves as $k => $row)
 		{
