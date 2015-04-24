@@ -12,6 +12,12 @@
 
 @section('content')
 
+@if(isset($incomplete_saved))
+<div class='alert alert-warning'>
+	Your saved list was malformed!  Please check the URL again.
+</div>
+@endif
+
 @if(empty($list))
 <p>Your list is empty.</p>
 <p>Visit the <a href='/recipes'>Recipe Book</a> to add items.</p>

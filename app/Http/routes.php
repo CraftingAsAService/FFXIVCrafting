@@ -32,7 +32,9 @@ Route::controller('gear', 'GearController');
 
 // Old/Redirect Controllers
 
-Route::controller('leve', 'LevequestsController');
+Route::any('leve', function() {
+	return redirect('/levequests');
+});
 
 // Simpler Pages
 foreach (['stats', 'report', 'thanks', 'credits'] as $page)

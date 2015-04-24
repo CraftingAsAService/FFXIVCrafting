@@ -116,16 +116,22 @@ class ListController extends Controller
 			view()->share('flushed', true);
 		$list = [];
 
-		foreach (explode(':', $string) as $set)
+		// String needs to contain at least digits comma digits (1234,5), but can be expaned as (1234,5:6789,10)
+		if (preg_match('/\d+\,\d+/', $string))
 		{
-			list($id, $amount) = explode(',', $set);
-			if (is_numeric($amount) && $amount > 0)
-				$list[$id] = $amount;
-		}
+			foreach (explode(':', $string) as $set)
+			{
+				list($id, $amount) = explode(',', $set);
+				if (is_numeric($amount) && $amount > 0)
+					$list[$id] = $amount;
+			}
 
-		// Save the list
-		Session::put('list', $list);
-		view()->share('saved', true);
+			// Save the list
+			Session::put('list', $list);
+			view()->share('saved', true);
+		}
+		else
+			view()->share('incomplete_saved', true);
 
 		return $this->getIndex();
 	}
