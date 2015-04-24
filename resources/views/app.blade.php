@@ -12,6 +12,9 @@
 		<link href="/img/favicon@2x.png" rel="icon" type="image/png">
 		<meta name='csrf-token' content='{{ Session::token() }}'>
 
+		<!-- IE11 is stupid -->
+		<meta name="msapplication-config" content="none"/>
+
 		<title>Crafting as a Service | Final Fantasy XIV ARR Crafting Information</title>
 		<meta name='description' content='Final Fantasy XIV ARR Crafting Information and Planning'>
 		<meta name='keywords' content=''>
