@@ -43,7 +43,7 @@ foreach (['stats', 'report', 'thanks', 'credits'] as $page)
 	});
 
 // Blog used to exist, but now it's just a subreddit
-Route::get('blog', function()
+Route::any('blog/{sluga?}/{slugb?}/{slugc?}/{slugd?}', function()
 {
 	return redirect('http://www.reddit.com/r/ffxivcrafting');
 });
