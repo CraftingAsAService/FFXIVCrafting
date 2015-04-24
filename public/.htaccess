@@ -1,3 +1,7 @@
+# Get the X-Forwarded-For header into the access log
+LogFormat "%h (%{X-Forwarded-For}i) %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined_with_forwarded_for
+CustomLog /var/www/project/log/access.log combined_with_forwarded_for
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
