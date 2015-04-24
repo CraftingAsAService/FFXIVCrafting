@@ -1,4 +1,4 @@
-@if ($errors->all())
+@if (isset($errors) && $errors->all())
 	<div class="alert alert-danger">
 		<h4>The Following Errors were found:</h4>
 		@foreach($errors->all() as $error)
