@@ -70,7 +70,7 @@ class CraftingController extends Controller
 			return redirect()->back();
 
 		// Get Options
-		$options = explode(':', array_keys(\Request::all())[0]);
+		$options = explode(':', array_keys(\Request::except('_token'))[0]);
 
 		// Parse Options              						// Defaults
 		$desired_job     = isset($options[0]) ? $options[0] : 'CRP';
@@ -131,7 +131,7 @@ class CraftingController extends Controller
 			$desired_job = strtoupper($desired_job);
 
 			// Make sure it's a real job, jobs might be multiple
-			$job = array();
+			$job = [];
 			foreach (explode(',', $desired_job) as $ds)
 				$job[] = ClassJob::get_by_abbr($ds);
 
@@ -154,7 +154,7 @@ class CraftingController extends Controller
 				return view('crafting', compact('error', 'quests'));
 			}
 
-			$job_ids = array();
+			$job_ids = [];
 			foreach ($job as $j)
 				$job_ids[] = $j->id;
 
