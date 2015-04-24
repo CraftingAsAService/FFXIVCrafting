@@ -2,7 +2,7 @@
 
 @section('banner')
 	<h1>Gathering Map</h1>
-	@if($map_title)
+	@if(isset($map_title))
 	<h2>{{ $map_title }}</h2>
 	@endif
 @stop

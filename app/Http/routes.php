@@ -28,6 +28,7 @@ Route::controller('account', 'AccountController');
 Route::controller('crafting', 'CraftingController');
 Route::controller('map', 'MapController');
 Route::controller('equipment', 'EquipmentController');
+Route::controller('gear', 'GearController');
 
 // Old/Redirect Controllers
 
