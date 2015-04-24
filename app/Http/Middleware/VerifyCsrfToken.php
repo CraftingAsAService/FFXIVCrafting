@@ -14,7 +14,17 @@ class VerifyCsrfToken extends BaseVerifier {
 	 */
 	public function handle($request, Closure $next)
 	{
-		return parent::handle($request, $next);
+		// Only enable CSRF on these routes:
+		$enable_for = [
+			// Frankly I'm just disabling it completely for now
+			// 'path/to/route'
+		];
+
+		foreach ($enable_for as $route)
+			if ($request->is($route))
+				return parent::handle($request, $next);
+
+		return parent::addCookieToResponse($request, $next($request));
 	}
 
 }
