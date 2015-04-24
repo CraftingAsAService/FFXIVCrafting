@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('meta')
+	<meta name="robots" content="nofollow">
+@stop
+
 @section('banner')
 	<h1>Load Character</h1>
 	<h2>Your levels will help the system make smarter choices!</h2>

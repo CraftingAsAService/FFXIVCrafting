@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('meta')
+	<meta name="robots" content="noindex,nofollow">
+@stop
+
 @section('vendor-css')
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-tour.min.css') }}' rel='stylesheet'>

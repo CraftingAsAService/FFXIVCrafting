@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('meta')
+	<meta name="robots" content="nofollow">
+@stop
+
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>

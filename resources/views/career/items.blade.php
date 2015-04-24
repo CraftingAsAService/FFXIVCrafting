@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('meta')
+	<meta name="robots" content="noindex,nofollow">
+@stop
+
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/career.js') }}'></script>
 @stop

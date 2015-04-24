@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('meta')
+	<meta name="robots" content="nofollow">
+@stop
+
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-multiselect.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>

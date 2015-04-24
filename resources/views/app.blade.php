@@ -14,11 +14,13 @@
 
 		<title>Crafting as a Service | Final Fantasy XIV ARR Crafting Information</title>
 		<meta name='description' content='Final Fantasy XIV ARR Crafting Information and Planning'>
-		<meta name='keywords' content=''
+		<meta name='keywords' content=''>
 
 		<meta charset='utf-8'>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+		@yield('meta')
 
 		<link href='{!! cdn('/css/bootstrap.css') !!}' rel='stylesheet' />
 		<link href='{!! cdn('/css/bootstrap-theme.css') !!}' rel='stylesheet' />
