@@ -8,7 +8,7 @@
     # Images not found?
     RewriteCond %{REQUEST_FILENAME} !-f 
     RewriteCond %{REQUEST_URI} \.(gif|jpg|jpeg|png)$
-    RewriteRule .* /image/noitemicon.png [L]
+    RewriteRule .* /img/noitemicon.png [L]
 
     # Just say No, to Google Docs
     # Mozilla/5.0 (compatible; GoogleDocs; apps-spreadsheets; +http://docs.google.com)
