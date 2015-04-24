@@ -12,6 +12,9 @@
 		<link href="/img/favicon@2x.png" rel="icon" type="image/png">
 		<meta name='csrf-token' content='{{ Session::token() }}'>
 
+		<!-- Google Webmaster Tools Verification -->
+		<meta name="google-site-verification" content="31bB29x-UyxdPFc_t--x2BnBY1mGDooQCfGo2XcmlAI">
+
 		<!-- IE11 is stupid -->
 		<meta name="msapplication-config" content="none"/>
 
