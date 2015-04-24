@@ -14,7 +14,7 @@
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
 	<script type='text/javascript'>
 		var level = {{ $level }};
-		var job = '{{ $job->abbr->term }}';
+		var job = '{{ $job->en_abbr->term }}';
 		var craftable_only = Boolean({{ $craftable_only }});
 		var rewardable_too = Boolean({{ $rewardable_too }});
 	</script>
@@ -29,7 +29,7 @@
 	</a>
 
 	<h1>
-		<i class='class-icon {{ $job->abbr->term }} large' style='position: relative; top: 5px;'></i>
+		<i class='class-icon {{ $job->en_abbr->term }} large' style='position: relative; top: 5px;'></i>
 		{{ $job->name->term }}
 	</h1>
 	<h2>Equipment Guide</h2>
@@ -139,11 +139,11 @@
 					Change Level <span class='caret'></span>
 					</button>
 					<ul class='dropdown-menu level-dropdown-menu' role='menu'>
-						<li><a href='/equipment/list?{{ $job->abbr->term }}:1:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-success'>
+						<li><a href='/equipment/list?{{ $job->en_abbr->term }}:1:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-success'>
 							1
 						</a></li>
 						@foreach(range(5,50,5) as $switch_level)
-						<li><a href='/equipment/list?{{ $job->abbr->term }}:{{ $switch_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-success'>
+						<li><a href='/equipment/list?{{ $job->en_abbr->term }}:{{ $switch_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-success'>
 							{{ $switch_level }}
 						</a></li>
 						@endforeach
@@ -152,7 +152,7 @@
 			</div>
 			<div class='col-sm-4'>
 				{!! Form::open(['url' => '/equipment', 'class' => 'form-horizontal']) !!}
-					<input type='hidden' name='class' value='{{ $job->abbr->term }}'>
+					<input type='hidden' name='class' value='{{ $job->en_abbr->term }}'>
 					<input type='hidden' name='level' value='{{ $original_level }}'>
 					<input type='hidden' name='slim_mode' value='{{ $slim_mode ? 1 : 0 }}'>
 					<input type='hidden' name='rewardable_too' value='{{ $rewardable_too }}'>
