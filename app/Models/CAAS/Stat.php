@@ -151,6 +151,75 @@ class Stat
 		return $focus;
 	}
 
+	/**
+	 * Gear Focus, just stick to 6 stats, tops
+	 * @param  string $job  [description]
+	 * @return array $focus [description]
+	 */
+	public static function gear_focus($job = 'CRP')
+	{
+		// TODO move into a config file
+		$shortcuts = [
+			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
+			'DOL' => 'MIN,BTN,FSH',
+			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM',
+			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN', // Melee DPS
+			'RDPS' => 'BRD,ARC', // Ranged DPS
+			'STR-DPS' => 'LNC,PGL,DRG,MNK',
+			'DEX-DPS' => 'BRD,ARC,ROG,NIN',
+			'MDPS' => 'THM,BLM,ACN,SMN', // Magical DPS
+			'Heals' => 'CNJ,SCH,WHM',
+			'Tanks' => 'GLA,MRD,PLD,WAR',
+		];
+
+		$look_for = [$job];
+		foreach ($shortcuts as $role => $classes)
+			if (in_array($job, explode(',', $classes)))
+				$look_for[] = $role;
+
+		// TODO, move into a config file
+		// The order these are defined in are important
+		$benefactors = [
+			// Disciples of the Hand
+			'Craftsmanship' => ['DOH'],
+			'Control' => ['DOH'],
+			'CP' => ['DOH'],
+
+			// Disciples of the Land
+			'Gathering' => ['DOL'],
+			'Perception' => ['DOL'],
+			'GP' => ['DOL'],
+
+			// Battle Classes
+
+			'Strength' => ['Tanks','STR-DPS'],
+			'Dexterity' => ['DEX-DPS'],
+			'Intelligence' => ['MDPS'],
+			'Mind' => ['Heals'],
+
+			'Accuracy' => ['DOW','DOM'],
+			'Critical Hit Rate' => ['DOW','DOM'],
+			'Determination' => ['DOW','DOM'],
+			'Skill Speed' => ['DOW'],
+			'Spell Speed' => ['DOM'],
+
+			'Vitality' => ['DOW','DOM'],
+
+			'Parry' => ['Tanks'],
+			'Piety' => ['DOM'],
+		];
+
+		$focus = [];
+
+		foreach ($benefactors as $stat => $roles)
+			foreach ($look_for as $job)
+				if (in_array($job, $roles))
+					$focus[] = $stat;
+
+		return $focus;
+	}
+
 	public static function boring()
 	{
 		// A list of the "boring" stats
@@ -176,17 +245,31 @@ class Stat
 		);
 	}
 
-	public static function get_ids($stats)
+	public static function get_ids($stats, $preserve_order = false)
 	{
 		if (empty($stats))
 			return [];
 
-		return BaseParam::with('en_name')
+		if ( ! $preserve_order)
+			return BaseParam::with('en_name')
 			->whereHas('en_name', function($q) use ($stats) {
 				$q->whereIn('term', $stats);
 			})
-			// ->remember(Config::get('site.cache_length'))
 			->lists('id');
+
+		$results = [];
+
+		foreach ($stats as $stat)
+		{
+			$r = BaseParam::with('en_name')
+				->whereHas('en_name', function($q) use ($stat) {
+					$q->where('term', $stat);
+				})
+				->first();
+			$results[] = isset($r->id) ? $r->id : 0;
+		}
+		
+		return $results;
 	}
 
 }

@@ -142,6 +142,7 @@ class BaseStructure extends Migration
 			$table->boolean('unique');
 			$table->boolean('achievable');
 			$table->boolean('rewarded');
+			$table->string('dungeon_drop', 12)->nullable()->default(null);
 			$table->string('color', 11)->nullable()->default(null);
 			$table->integer('rank');
 

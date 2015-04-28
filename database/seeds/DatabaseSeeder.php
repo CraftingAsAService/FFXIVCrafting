@@ -439,6 +439,7 @@ class ItemSeeder extends _LibraSeeder
 				'unique' => isset($row['extra']['unique']) ? $row['extra']['unique'] : null,
 				'achievable' => isset($row['extra']['achievable']) ? $row['extra']['achievable'] : null,
 				'rewarded' => isset($row['extra']['rewarded']) ? $row['extra']['rewarded'] : null,
+				'dungeon_drop' => isset($row['extra']['dungeon_drop']) ? $row['extra']['dungeon_drop'] : null,
 				'color' => isset($row['extra']['color']) ? $row['extra']['color'] : null,
 				'materia' => isset($row['extra']['materia']) ? $row['extra']['materia'] : null,
 				'rank' => $row['rank'],

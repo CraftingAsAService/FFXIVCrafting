@@ -269,7 +269,8 @@ class LibraController extends \App\Http\Controllers\Controller
 					$extra['achievable'] = true;
 				if (isset($data->quest))
 					$extra['rewarded'] = true;
-				
+				if (isset($data->instance_content) && ! empty($data->instance_content))
+					$extra['dungeon_drop'] = implode(',', $data->instance_content);
 
 				// On second though, we don't need Repair info
 
@@ -288,9 +289,7 @@ class LibraController extends \App\Http\Controllers\Controller
 				unset($data->sell_price, $data->repair_price, $data->RepairItem, $data->Repair, $data->CondClassJob, $data->recipe, $data->bonus, $data->bonus_hq);
 				unset($data->DisablePassedOthers, $data->OnlyOne, $data->Series, $data->series_bonus, $data->Crest, $data->Stain, $data->achievement, $data->RecastTime);
 				unset($data->action, $data->action_hq, $data->effect, $data->color);
-				// 1.1.3 introduced this
 				unset($data->instance_content);
-				// 1.4
 
 
 				if (count(get_object_vars($data)) != 0)

@@ -1236,3 +1236,102 @@ body.mobile-nav-enabled #mobile-nav {
 		}
 	}
 }
+
+table.gear {
+	&.table-bordered {
+		border: 1px solid #868686;
+	}
+	thead {
+		tr {
+			th {
+				background-color: #868686;
+				border-color: #868686;
+				color: black;
+			}
+		}
+	}
+	tfoot {
+		tr {
+			th {
+				background-color: #868686;
+				border-color: #868686;
+				height: 3px;
+			}
+		}
+	}
+	.ilvl {
+		float: right;
+		color: #868686;
+		font-size: .8em;
+		&:before {
+			content: "ilvl ";
+		}
+	}
+	.slot-icon img {
+		width: 20px;
+		height: 20px;
+		border-radius: 3px;
+	}
+	.item-icon {
+		margin-right: 5px;
+	}
+	.stat, .cart, .obtained {
+		text-align: center;
+	}
+	td {
+		&.level {
+			text-align: center;
+			vertical-align: middle;
+			font-weight: bold;
+		}
+		&.stat, &.item {
+			line-height: 28px;
+		}
+		&.obtained {
+			padding-top: 7px;
+		}
+		&.cart {
+			.class-icon {
+				position: relative;
+				top: 6px;
+			}
+		}
+	}
+}
+
+table.table-curved {
+	border-collapse: separate;
+	border: 1px solid #868686;
+	border-right-color: #ddd;
+	border-bottom-color: #ddd;
+	border-radius: 6px 6px 0 0;
+	border-left: 0px;
+	border-top: 0px;
+	> thead:first-child > tr:first-child > th {
+		border-bottom: 0px;
+		border-top: 1px solid #868686;
+	}
+	// Would have used :first-child, but <colgroup> was in the way
+	> :nth-child(2) > :first-child {
+		> :first-child {
+			border-top-left-radius: 6px;
+		}
+		> :last-child {
+			border-top-right-radius: 6px;
+		}
+	}
+	td {
+		border-left: 1px solid #ddd;
+		border-top: 1px solid #ddd;
+	}
+	thead th {
+		border-bottom: 0;
+
+		background-image: -webkit-gradient(linear, left 0, left 100%, from(#f5f5f5), to(#e8e8e8));
+		background-image: -webkit-linear-gradient(top, #f5f5f5, 0%, #e8e8e8, 100%);
+		background-image: -moz-linear-gradient(top, #f5f5f5 0, #e8e8e8 100%);
+		background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5',endColorstr='#ffe8e8e8',GradientType=0);
+	}
+}
