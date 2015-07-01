@@ -31,10 +31,10 @@ class Gear
 		$stat_ids_to_focus = Stat::get_ids(Stat::gear_focus($job_abbr));
 
 		// Get all items
-		$items = Gear::items($job->id, $starting_level - 10, $starting_level + $level_range, array_keys($slots), $stat_ids_to_focus, $options);
+		$items = self::items($job->id, $starting_level - 10, $starting_level + $level_range, array_keys($slots), $stat_ids_to_focus, $options);
 
 		// Sort those items into the appropriate buckets
-		$equipment_list = Gear::organize($items, $job_abbr, $starting_level, $stat_ids_to_focus, $options);
+		$equipment_list = self::organize($items, $job_abbr, $starting_level, $stat_ids_to_focus, $options);
 
 		return $equipment_list;
 	}
@@ -45,7 +45,7 @@ class Gear
 	 * @param  [type] $job_abbr [description]
 	 * @return [type]           [description]
 	 */
-	private function organize($items, $job_abbr, $starting_level, $stat_ids_to_focus, $options)
+	static private function organize($items, $job_abbr, $starting_level, $stat_ids_to_focus, $options)
 	{
 		// Prepare the result slots
 		$equipment_list = array_flip(Config::get('site.equipment_roles'));
@@ -205,7 +205,7 @@ class Gear
 	 * @param  [type] $options           [description]
 	 * @return [type]                    [description]
 	 */
-	private function items($job_id, $level_start, $level_end, $slot_ids, $stat_ids_to_focus, $options)
+	static private function items($job_id, $level_start, $level_end, $slot_ids, $stat_ids_to_focus, $options)
 	{
 		// Get all items where:
 		// Slot isn't zero
