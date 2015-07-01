@@ -71,7 +71,7 @@ class EquipmentController extends Controller
 
 		// Make sure level is valid
 		if ($level < 1 || ! is_numeric($level)) $level = 1;
-		elseif ($level > 50) $level = 50;
+		elseif ($level > config('site.max_level')) $level = config('site.max_level');
 
 		// All Jobs
 		$job_list = ClassJob::get_name_abbr_list();
@@ -104,7 +104,7 @@ class EquipmentController extends Controller
 		// The limit may need to take one off.
 		// If this is a DOW or DOM class, there's too many items at level 50 to produce good results
 		$fifty_warning = false;
-		if ($limit == 48 || ($slim_mode && $limit == 47))
+		if ($limit == config('site.max_level') - 2 || ($slim_mode && $limit == config('site.max_level') - 3))
 		{
 			// Get the "DOW/M" classes
 			$dowm_class_ids = [];

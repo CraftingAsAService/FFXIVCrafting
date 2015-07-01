@@ -53,7 +53,7 @@
 	</h1>
 	@if(isset($job))
 	<h2>
-	@if($start <= 50)
+	@if($start <= config('site.max_level'))
 	recipes between levels {{ $start }} and {{ $end }}
 	@else
 		@if ($start == 55)

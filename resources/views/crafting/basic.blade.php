@@ -62,7 +62,7 @@
 				<fieldset>
 					<legend>Recipe Level</legend>
 					<div class='list-group recipe-level-select'>
-						@foreach(range(1,46,5) as $level)
+						@foreach(range(1,config('site.max_level') - 4,5) as $level)
 						<a href='#' class='list-group-item{{ $level == 1 ? ' active' : '' }}' data-start='{{ $level }}' data-end='{{ $level + 4 }}'>
 							{{ $level }} - {{ $level + 4 }}
 						</a>

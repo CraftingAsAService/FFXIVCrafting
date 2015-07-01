@@ -43,12 +43,12 @@
 
 					<div class='form-group margin-left'>
 						<label>Min Level</label>
-						<input type='number' min='0' max='50' step='5' value='1' class='form-control text-center' id='min-level'>
+						<input type='number' min='0' max='{{ config('site.max_level') }}' step='5' value='1' class='form-control text-center' id='min-level'>
 					</div>
 
 					<div class='form-group margin-left'>
 						<label>Max Level</label>
-						<input type='number' min='0' max='50' step='5' value='50' class='form-control text-center' id='max-level'>
+						<input type='number' min='0' max='{{ config('site.max_level') }}' step='5' value='{{ config('site.max_level') }}' class='form-control text-center' id='max-level'>
 					</div>
 
 					<div class='form-group margin-left'>

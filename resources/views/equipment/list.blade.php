@@ -142,7 +142,7 @@
 						<li><a href='/equipment/list?{{ $job->en_abbr->term }}:1:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-success'>
 							1
 						</a></li>
-						@foreach(range(5,50,5) as $switch_level)
+						@foreach(range(5,config('site.max_level'),5) as $switch_level)
 						<li><a href='/equipment/list?{{ $job->en_abbr->term }}:{{ $switch_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-success'>
 							{{ $switch_level }}
 						</a></li>

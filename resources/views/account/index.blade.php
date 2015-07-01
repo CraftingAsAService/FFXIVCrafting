@@ -20,7 +20,7 @@
 				<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
 				{{ $job->name->term }}
 				<div class='progress margin-top'>
-					<div class='progress-bar progress-bar-{{ $color }} progress-bar-striped' style='width: {{ (int) (($account['levels'][strtolower($job->en_name->term)] / 50) * 100) }}%;'></div>
+					<div class='progress-bar progress-bar-{{ $color }} progress-bar-striped' style='width: {{ (int) (($account['levels'][strtolower($job->en_name->term)] / config('site.max_level')) * 100) }}%;'></div>
 				</div>
 			</div>
 			@endforeach

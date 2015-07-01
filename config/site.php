@@ -2,6 +2,8 @@
 
 return array(
 
+	'max_level' => 60,
+
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
 
