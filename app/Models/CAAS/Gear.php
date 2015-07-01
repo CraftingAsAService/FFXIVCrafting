@@ -15,7 +15,7 @@ class Gear
 	 * @param  array  $options         [description]
 	 * @return array  $equipment_list  an array of equipment slots
 	 */
-	public function profile($job = '', $starting_level = 1, $level_range = 1, $options = [])
+	static public function profile($job = '', $starting_level = 1, $level_range = 1, $options = [])
 	{
 		// Get the job, depending on string or id
 		$job = is_numeric($job)
