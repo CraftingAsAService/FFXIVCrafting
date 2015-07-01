@@ -126,7 +126,8 @@ class Gear
 						$bis[$item->{$quality . '_worth'}][$quality][] = $item->id;
 
 				// Highest Common Denominator
-				$bis_hcd = end(array_keys($bis));
+				$keys = array_keys($bis);
+				$bis_hcd = end($keys);
 
 				// $bis[$bis_hcd]
 
