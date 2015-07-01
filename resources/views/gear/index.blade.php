@@ -1,121 +1,186 @@
 @extends('app')
 
+@section('meta')
+	<meta name="robots" content="nofollow">
+@stop
+
+@section('vendor-css')
+	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
+@stop
+
+@section('javascript')
+	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
+	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
+	<script type='text/javascript'>
+		$(function() {
+			$('.bootswitch').bootstrapSwitch({
+				onSwitchChange:function() {
+					return $('#gear-form').trigger('build_url');
+				}
+			});
+
+			// On clicking a class icon, fill in the level
+			$('.class-selector').click(function() {
+				var el = $(this),
+					img = el.find('img');
+
+				$('input[name=level]').val(el.data('level'));
+				
+				var active_img = $('.class-selector img.active');
+				if (active_img.length) {
+					active_img.removeClass('active')
+					active_img.attr('src', active_img.data('originalSrc'));
+				}
+
+				img.addClass('active');
+				img.data('originalSrc', img.attr('src'));
+				img.attr('src', img.data('activeSrc'));
+
+				$('#gear-form').trigger('build_url');
+
+				return;
+			});
+
+			$('#gear-form').on('build_url', function() {
+				var el = $(this),
+					url = el.data('sourceUrl'),
+					// cannot rely on .class-selector.active, it's delayed.
+					job = $('.class-selector img.active').closest('label').data('job'),
+					level = $('#level').val()
+					options = '';
+
+				$('#gear-form input:checkbox:checked').each(function() {
+					console.log($(this));
+					options += $(this).attr('name') + ',';
+					return;
+				});
+
+				// Take the last comma off
+				if (options.length > 0)
+					options = options.substring(0, options.length - 1);
+
+				el.attr('action', url.replace(/JOB/, job).replace(/LEVEL/, level) + options);
+
+				return;
+			});
+
+			$('#gear-form').submit(function(event) {
+				event.preventDefault();
+				window.location = $(this).attr('action');
+				return false;
+			});
+
+			if ($('.class-selector.select-me').length == 1)
+				$('.class-selector.select-me').first().trigger('click');
+			else
+				$('.class-selector').first().trigger('click');
+
+			return;
+		});
+	</script>
+@stop
+
 @section('banner')
-	<h1>CLASSNAME Gear</h1>
-	<h2>Focus on Level 18</h2>
+	<h1>Gear Calculator</h1>
+	<h2>Display the gear available for a class at a certain level.</h2>
 @stop
 
 @section('content')
 
-	@foreach ($gear as $slot => $levels)
-	<table class='gear table table-striped table-hover table-condensed table-curved'>
-		<colgroup>
-			<col width='20px'>
-			<col>
-			@foreach ($stat_focus as $stat)
-			<col width='50px'>
-			@endforeach
-			<col width='60px'>
-			<col width='80px'>
-		</colgroup>
-		<thead>
-			<tr>
-				<th class='slot-icon' colspan='2'>
-					<img src='/img/equipment/{{ $slot }}.png'>
-					{{ $slot }}
-				</th>
-				@foreach ($stat_focus as $stat)
-				<th class='stat' rel='tooltip' title='{{ $stat }}'>
-					<img src="/img/stats/nq/{{ $stat }}.png" class="stat-icon">
-				</th>
-				@endforeach
-				<th class='obtained' rel='tooltip' title='Obtained From'><i class='glyphicon glyphicon-gift'></i></th>
-				<th class='cart' rel='tooltip' title='Add to Crafting List'><i class='glyphicon glyphicon-shopping-cart'></i></th>
-			</tr>
-		</thead>
-		@foreach ($levels as $level => $bucket)
-		<tbody>
-			<?php $i = 0; ?>
-			@foreach (['nq', 'hq'] as $quality)
-			<?php if ( ! isset($bucket[$quality])) continue; ?>
-			@foreach ($bucket[$quality] as $item)
-			{{-- Less than the LCD, opaque --}}
-			{{-- Is LCD, and LCD != real starting level, warning color --}}
-			{{-- Is LCD, and LCD == real starting level, success color --}}
-			<tr class='{{ 
-				$level < $bucket['lcd'] 
-					? 'opaque' 
-					: (
-						$item->{$quality . '_worth'} == $bucket['bis_worth'] 
-						? (
-							$level == $start_level 
-							? 'success' 
-							: ($level == $bucket['lcd'] ? 'info' : '')
-						)
-						: ''
-					) 
-			}}'>
-				@if($i++ == 0)
-				<td class='level{{ 
-					$level == $start_level
-					? ' success' 
-					: ($level == $bucket['lcd'] ? ' info' : '')
-				}}' rowspan='{{ count($bucket['nq']) + (isset($bucket['hq']) ? count($bucket['hq']) : 0) }}'>
-					{{ $level }}
-				</td>
-				@endif
-				<td class='item'>
-					<span class='ilvl'>{{ $item->level }}</span>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
-						<img src='{{ assetcdn('items/' . $quality . '/' . $item->id . '.png') }}' width='20' height='20' class='item-icon {{ $quality }}'>{{ $item->name->term }}
-					</a>
-					{{--
-					@if ($item->{$quality . '_worth'} == $bucket['bis_worth'])
-					<i class='glyphicon glyphicon-fire' rel='tooltip' title='Best in Slot for Level'></i>
-					@endif
-					--}}
-				</td>
-				@foreach ($stat_focus_ids as $stat_id)
-				<td class='stat'>
-					@foreach ($item->baseparam as $baseparam)
-					@if ($baseparam->id == $stat_id)
-					{{ (int) $baseparam->pivot->{$quality . '_amount'} }}
-					@endif
-					@endforeach
-				</td>
-				@endforeach
-				<td class='obtained'>
-					@if($item->rewarded || $item->achievable)
-					<span class='rewarded'>
-						<img src='/img/reward.png' class='rewarded' width='20' height='20' rel='tooltip' title='Reward from {{ $item->achievable ? 'an Achievement' : 'a Quest' }}'>
-					</span>
-					@endif
-					@if(count($item->vendors))
-					<span class='gil'>
-						<img src='/img/coin.png' class='vendors' width='24' height='24' rel='tooltip' title='Available for {{ $item->min_price }} gil, Click to load Vendors'>
-					</span>
-					@endif
-					@if(count($item->dungeon_drop))
-					<span class='dungeon'>
-						<img src='/img/dungeon.png' class='dungeon_drop' width='24' height='24' rel='tooltip' title='Dungeon Reward'>
-					</span>
-					@endif
-				</td>
-				<td class='cart'>
-					@if(count($item->recipe))
-					<i class='class-icon class-id-{{ $item->recipe[0]->classjob_id }} stat-crafted_by' rel='tooltip' title='Crafted By {{ $item->recipe[0]->classjob->name->term }}'></i>
-					<button class='btn btn-default btn-xs add-to-list success-after-add' data-item-id='{{ $item->id }}' data-item-name='{{ $item->name->term }}'>
-						<i class='glyphicon glyphicon-shopping-cart'></i>
-						<i class='glyphicon glyphicon-plus'></i>
-					</button>
-					@endif
-				</td>
-			</tr>
-			@endforeach
-			@endforeach
-		</tbody>
-		@endforeach
-	</table>
-	@endforeach
+	{!! Form::open(['url' => '#', 'method' => 'get', 'id' => 'gear-form', 'class' => 'form-horizontal', 'data-source-url' => '/gear/profile/JOB/LEVEL?options=']) !!}
+		<fieldset>
+			<legend>Select your Class</legend>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand &amp; Land</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach($crafting_job_list as $job)
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
+						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						</label>
+						@endforeach
+					</div>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach($gathering_job_list as $job)
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
+						<label class='btn btn-info class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						</label>
+						@endforeach
+					</div>
+				</div>
+			</div>
+
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
+				<div class='col-sm-8 col-md-9'>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach($basic_melee_job_list as $job)
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
+						<label class='btn btn-danger class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						</label>
+						@endforeach
+					</div>
+					<div class='btn-group' data-toggle='buttons'>
+						@foreach($basic_magic_job_list as $job)
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
+						<label class='btn btn-warning class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						</label>
+						@endforeach
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Options</legend>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Level</label>
+				<div class='col-sm-4 col-md-3'>
+					<input type='number' id='level' name='level' value='{{ isset($defaults['level']) ? $defaults['level'] : 5 }}' placeholder='Level (e.g. 5)' class='form-control'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Include High Quality</label>
+				<div class='col-sm-8 col-md-9'>
+					<input type='checkbox' name='hq' value='1' @if((isset($defaults['options']) && in_array('hq', $defaults['options'])) || ! isset($defaults['options']))checked='checked'@endif class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Include High Quality craftables</em></small>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Craftable Only</label>
+				<div class='col-sm-8 col-md-9'>
+					<input type='checkbox' name='craftable' value='1' @if((isset($defaults['options']) && in_array('craftable', $defaults['options'])) || ! isset($defaults['options']))checked='checked'@endif class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Only show craftable items</em></small>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-sm-4 col-md-3 control-label'>Include Rewards</label>
+				<div class='col-sm-8 col-md-9'>
+					<input type='checkbox' name='rewardable' value='1' @if((isset($defaults['options']) && in_array('rewardable', $defaults['options'])) || ! isset($defaults['options']))checked='checked'@endif class='bootswitch' data-on-text='YES' data-off-text='NO'>
+					<small><em> - Also include rewardable items</em></small>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<div class='form-group'>
+				<div class='col-sm-3 col-sm-offset-4 col-md-offset-3'>
+					<button type='submit' class='btn btn-success btn-block btn-lg'>View Gear Profile</button>
+				</div>
+			</div>
+		</fieldset>
+	{!! Form::close() !!}
+		
+	<hr>
+	<div class='alert alert-info'>
+		You can still use the old <a href='/equipment'>Equipment Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>
+	</div>
 
 @stop

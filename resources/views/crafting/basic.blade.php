@@ -15,6 +15,7 @@
 	<script type='text/javascript' src='{{ cdn('/js/crafting-index.js') }}'></script>
 	<script type='text/javascript'>
 		$(function() {
+
 			// On clicking a class icon, fill in the level
 			$('.class-selector').click(function() {
 				var level = parseInt($(this).data('level'));
@@ -35,8 +36,8 @@
 				
 				return;
 			});
-
-			$('.class-selector.active').trigger('click');
+			
+			return;
 		});
 	</script>
 @stop
@@ -66,24 +67,13 @@
 							{{ $level }} - {{ $level + 4 }}
 						</a>
 						@endforeach
-						<a href='#' class='list-group-item' data-start='55' data-end='55'>
+						@foreach ([55, 70, 90, 110] as $key => $value)
+						<a href='#' class='list-group-item' data-start='{{ $value }}' data-end='{{ $value }}'>
+							@foreach (range(0, $key) as $ignore)
 							<i class='glyphicon glyphicon-star'></i>
+							@endforeach
 						</a>
-						<a href='#' class='list-group-item' data-start='70' data-end='70'>
-							<i class='glyphicon glyphicon-star'></i>
-							<i class='glyphicon glyphicon-star'></i>
-						</a>
-						<a href='#' class='list-group-item' data-start='90' data-end='90'>
-							<i class='glyphicon glyphicon-star'></i>
-							<i class='glyphicon glyphicon-star'></i>
-							<i class='glyphicon glyphicon-star'></i>
-						</a>
-						<a href='#' class='list-group-item' data-start='110' data-end='110'>
-							<i class='glyphicon glyphicon-star'></i>
-							<i class='glyphicon glyphicon-star'></i>
-							<i class='glyphicon glyphicon-star'></i>
-							<i class='glyphicon glyphicon-star'></i>
-						</a>
+						@endforeach
 					</div>
 					<input type='hidden' name='start' id='recipe-level-start' value='1'>
 					<input type='hidden' name='end' id='recipe-level-end' value='5'>
@@ -94,9 +84,11 @@
 					<legend>Class</legend>
 					<div class='btn-group jobs-list' data-toggle='buttons'>
 						@foreach($job_list as $job)
-						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 0 }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = $job->id == reset($crafting_job_ids); ?>
+						<?php $this_level = $account ? $account['levels'][strtolower($job->en_name->term)] : 0; ?>
+						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-level='{{ $this_level }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
 						</label>
 						@endforeach
 					</div>

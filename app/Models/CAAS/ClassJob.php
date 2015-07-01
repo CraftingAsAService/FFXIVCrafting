@@ -60,4 +60,13 @@ class ClassJob extends _LibraBasic
 		return $return;
 	}
 
+	public static function get_by_type($type = '')
+	{
+		$job_ids = Config::get('site.job_ids')[$type];
+
+		return ClassJob::with('name', 'en_abbr', 'en_name')
+			->whereIn('id', $job_ids)
+			->get();
+	}
+
 }

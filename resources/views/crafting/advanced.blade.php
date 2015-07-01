@@ -37,17 +37,19 @@
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group jobs-list' data-toggle='buttons'>
 						@foreach($job_list as $job)
-						<label class='btn btn-primary class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = $job->id == reset($crafting_job_ids); ?>
+						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}'>
+							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group hidden jobs-list' data-toggle='buttons'>
 						@foreach($job_list as $job)
-						<label class='btn btn-warning class-selector multi{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}'>
-							<input type='checkbox' name='classes[]' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = 0; ?>
+						<label class='btn btn-warning class-selector multi{{ $this_job ? ' select-me' : '' }}'>
+							<input type='checkbox' name='classes[]' value='{{ $job->en_abbr->term }}'> 
+							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
 						</label>
 						@endforeach
 					</div>
@@ -90,7 +92,7 @@
 				</div>
 			</div>
 
-			<div class='form-group'>F
+			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Misc Items</label>
 				<div class='col-sm-8 col-md-9'>
 					<div>

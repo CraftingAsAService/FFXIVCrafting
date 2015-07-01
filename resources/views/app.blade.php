@@ -85,7 +85,7 @@
 
 					{{-- See /app/Helpers/ViewHelper.php for menu_item() function --}}
 					{!! menu_item('/',			'Home',			'home'		) !!}
-					{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
+					{!! menu_item('/gear',		'Gear',			'gear'	) !!}
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 					{!! menu_item('/career',	'Career',		'career'	) !!}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
@@ -185,7 +185,7 @@
 										<ul class='nav navbar-nav'>
 											{{-- See /app/helpers.php for menu_item() function --}}
 											{{-- menu_item('/',			'Home',			'home'		) --}}
-											{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
+											{!! menu_item('/gear',		'Gear',			'gear'	) !!}
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 											{!! menu_item('/career',	'Career',		'career'	) !!}
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}

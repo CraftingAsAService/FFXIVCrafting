@@ -15,20 +15,22 @@ Route::get('/', 'HomeController@index');
 
 // Controllers
 
-Route::controller('materia', 'MateriaController');
-Route::controller('food', 'FoodController');
-Route::controller('levequests', 'LevequestsController');
-Route::controller('quests', 'QuestsController');
-Route::controller('recipes', 'RecipesController');
-Route::controller('career', 'CareerController');
-Route::controller('gathering', 'GatheringController');
-Route::controller('vendors', 'VendorsController');
-Route::controller('list', 'ListController');
-Route::controller('account', 'AccountController');
-Route::controller('crafting', 'CraftingController');
-Route::controller('map', 'MapController');
-Route::controller('equipment', 'EquipmentController');
-Route::controller('gear', 'GearController');
+Route::controllers([
+	'materia'		=> 'MateriaController',
+	'food'			=> 'FoodController',
+	'levequests'	=> 'LevequestsController',
+	'quests'		=> 'QuestsController',
+	'recipes'		=> 'RecipesController',
+	'career'		=> 'CareerController',
+	'gathering'		=> 'GatheringController',
+	'vendors'		=> 'VendorsController',
+	'list'			=> 'ListController',
+	'account'		=> 'AccountController',
+	'crafting'		=> 'CraftingController',
+	'map'			=> 'MapController',
+	'equipment'		=> 'EquipmentController',
+	'gear'			=> 'GearController',
+]);
 
 // Old/Redirect Controllers
 
@@ -55,9 +57,11 @@ if (app()->environment('local'))
 	{
 
 		Route::get('/', 'Osmose\HomeController@index');
-		Route::controller('libra', 'Osmose\LibraController');
-		Route::controller('maps', 'Osmose\MapsController');
-		Route::controller('icons', 'Osmose\IconsController');
-		Route::controller('leves', 'Osmose\LevesController');
+		Route::controllers([
+			'libra' => 'Osmose\LibraController',
+			'maps' => 'Osmose\MapsController',
+			'icons' => 'Osmose\IconsController',
+			'leves' => 'Osmose\LevesController',
+		]);
 
 	});

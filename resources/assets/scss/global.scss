@@ -1272,11 +1272,18 @@ table.gear {
 		height: 20px;
 		border-radius: 3px;
 	}
+	td .materia .stat-icon {
+		height: 22px;
+	}
 	.item-icon {
 		margin-right: 5px;
 	}
 	.stat, .cart, .obtained {
 		text-align: center;
+	}
+	.stat.aetherial span:before {
+		content: "+";
+		opacity: .5;
 	}
 	td {
 		&.level {
@@ -1333,5 +1340,12 @@ table.table-curved {
 		background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
 		background-repeat: repeat-x;
 		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5',endColorstr='#ffe8e8e8',GradientType=0);
+	}
+}
+
+.gear-form {
+	.class-selector {
+		text-align: left;
+		min-width: 145px;
 	}
 }

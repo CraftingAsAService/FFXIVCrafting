@@ -129,5 +129,10 @@
 			</div>
 		</fieldset>
 	{!! Form::close() !!}
+		
+	<hr>
+	<div class='alert alert-info'>
+		This page is being replaced by the <a href='/equipment'>Gear Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the one question survey!</a>
+	</div>
 
 @stop

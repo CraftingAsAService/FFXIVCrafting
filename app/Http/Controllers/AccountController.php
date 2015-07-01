@@ -11,6 +11,8 @@ use Session;
 
 use App\Models\CAAS\ClassJob;
 
+use Viion\Lodestone\LodestoneAPI;
+
 class AccountController extends Controller
 {
 
@@ -83,27 +85,17 @@ class AccountController extends Controller
 
 	private function api_register($character, $server)
 	{
-		include app_path() . '/Models/LodestoneAPI/api.php';
-		$API = new \LodestoneAPI();
+		require app_path() . '/Models/LodestoneAPI/api-autoloader.php';
+		$api = new LodestoneAPI();
 
-		$API->searchCharacter($character, $server, true);
-		
-		$search = $API->getSearch();
-
-		if ($search['total'] == 0)
-			return FALSE;
-
-		$Character = $API->get([
-			"name" => $character,
-			"server" => $server
-		]);
+		$character = $api->Search->Character($character, $server);
 
 		$levels = [];
-		foreach ((array) $Character->getClassJobs('named') as $key => $values)
-			$levels[$key] = $values['level'];
+		foreach ((array) $character->classjobs as $classjob)
+			$levels[strtolower($classjob['name'])] = $classjob['level'];
 
 		return [
-			'avatar' => (string) $Character->getAvatar(64),
+			'avatar' => (string) $character->avatar,
 			'levels' => $levels,
 			'created' => time()
 		];

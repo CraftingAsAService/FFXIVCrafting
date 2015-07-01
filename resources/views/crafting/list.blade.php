@@ -360,7 +360,7 @@
 			<div class='panel-body text-center'>
 				<p>Get extras in case of a failed synthesis.</p>
 
-				<p>Improve your chances for HQ items by using the <a href='/equipment'>equipment calculator</a>.</p>
+				<p>Improve your chances for HQ items by using the <a href='/gear'>gear profiler</a>.</p>
 
 				<p>Don't forget the <a href='/food'>food</a> or <a href='/materia'>materia</a>!</p>
 			</div>
