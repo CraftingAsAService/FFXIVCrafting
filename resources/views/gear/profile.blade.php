@@ -5,6 +5,10 @@
 	<h2>A look at level {{ $start_level }}</h2>
 @stop
 
+@section('javascript')
+	<script type='text/javascript' src='{{ cdn('/js/gear-profile.js') }}'></script>
+@stop
+
 @section('content')
 
 	@foreach ($gear as $slot => $levels)
@@ -58,7 +62,7 @@
 						)
 						: ''
 					) 
-			}}'>
+			}}' data-item-id='{{ $item->id }}'>
 				@if($i++ == 0)
 				<td class='level{{ 
 					$level == $start_level
