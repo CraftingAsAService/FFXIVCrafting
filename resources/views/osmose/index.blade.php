@@ -82,6 +82,13 @@
 
 	<div class='row'>
 		<div class='col-sm-4'>
+			<h4>Garland Import (<a href='http://garlandtools.org' target='_blank'>Garland Tools</a>)</h4>
+
+			<p>
+				<a href='/osmose/garland'>Impot Garland Data</a><br>
+			</p>
+		</div>
+		<div class='col-sm-4'>
 			<h4>Map Crawler (<a href='http://xivdb.com' target='_blank'>XIVDB</a>)</h4>
 
 			<p>
@@ -126,6 +133,9 @@
 
 			<p>
 				<code>hhvm artisan migrate:refresh --seed</code>
+			</p>
+			<p>
+				<code>hhvm artisan db:seed --class=GarlandSeeder</code>
 			</p>
 			<p>
 				<code>hhvm artisan osmose:db:export</code>

@@ -9,6 +9,8 @@ class Item extends _LibraBasic
 
 	protected $table = 'items';
 
+	protected $guarded = ['id'];
+
 	public function classjob()
 	{
 		return $this->belongsToMany('App\Models\CAAS\ClassJob', 'classjob_items', 'item_id', 'classjob_id');

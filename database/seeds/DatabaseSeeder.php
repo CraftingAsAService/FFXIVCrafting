@@ -8,6 +8,10 @@ class DatabaseSeeder extends Seeder
 
 	public function run()
 	{
+		echo 'RIP Libra App' . PHP_EOL;
+		return;
+
+		
 		$start = new DateTime('now');
 
 		if (app()->environment('local'))

@@ -62,6 +62,7 @@ if (app()->environment('local'))
 			'maps' => 'Osmose\MapsController',
 			'icons' => 'Osmose\IconsController',
 			'leves' => 'Osmose\LevesController',
+			'garland' => 'Osmose\GarlandController',
 		]);
 
 	});
