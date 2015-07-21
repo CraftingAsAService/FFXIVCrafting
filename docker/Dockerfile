@@ -34,6 +34,8 @@ RUN a2ensite 000-default
 
 # Configure CAAS domain in Apache
 ADD ./caas-web.tar.gz /var/www/
+# Fix permissions issue on DocRoot
+RUN chown -R www-data.www-data /var/www/
 
 # Services script
 ENTRYPOINT [ "/usr/sbin/apache2ctl", "-D", "FOREGROUND" ]
