@@ -48,17 +48,17 @@
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($crafting_job_list as $job)
-						<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}> 
+							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($gathering_job_list as $job)
-						<label class='btn btn-info class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<label class='btn btn-info class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
@@ -70,17 +70,17 @@
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($basic_melee_job_list as $job)
-						<label class='btn btn-danger class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<label class='btn btn-danger class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($basic_magic_job_list as $job)
-						<label class='btn btn-warning class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->en_name->term)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
-							<img src='/img/classes/{{ $job->en_abbr->term }}.png' rel='tooltip' title='{{ $job->name->term }}'>
+						<label class='btn btn-warning class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>

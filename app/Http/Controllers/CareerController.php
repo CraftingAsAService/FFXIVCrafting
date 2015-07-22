@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Cookie;
 use Config;
 
-use App\Models\CAAS\ClassJob;
+use App\Models\Garland\Job;
+use App\Models\Garland\Recipe;
+use App\Models\Garland\Career;
 
 class CareerController extends Controller
 {
@@ -21,8 +23,8 @@ class CareerController extends Controller
 	public function getIndex()
 	{
 		$job_ids = Config::get('site.job_ids');
-		$crafting_job_list = ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids['crafting'])->get();
-		$gathering_job_list = ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids['gathering'])->get();
+		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
+		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
 			
 		$previous_ccp = Cookie::get('previous_ccp');
 		$previous_ccr = Cookie::get('previous_ccr');
@@ -59,7 +61,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = ClassJob::get_id_abbr_list();
+		$all_classes = Job::lists('id', 'abbr');
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -69,51 +71,34 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class recognized...'); // TODO
 
-		$jobs = ClassJob::with('name')->whereIn('id', $supported_classes)->get();
+		$jobs = Job::whereIn('id', $supported_classes)->get();
 		foreach ($jobs as $k => $v)
-			$jobs[$k] = $v->name->term;
+			$jobs[$k] = $v->name;
 	
-		$job = ClassJob::get_by_abbr($my_class);
+		$job = Job::where('abbr', $my_class)->first();
 
 		if (empty($job))
 			exit('No primary class recognized...'); // TODO
 
-		\DB::statement('SET SESSION group_concat_max_len=16384');
-
-		$recipies = \DB::table('recipes AS r')
-			->select('*', 'r.id AS recipe_id', \DB::raw('SUM(cj.amount) AS amount'), 
-				\DB::raw('
-					(
-						SELECT COUNT(*)
-						FROM  `items_npcs_shops` AS `ins`
-						WHERE `ins`.`item_id` = `i`.`id`
-					) AS vendors
-				')
-				// , 
-				// \DB::raw('
-				// 	(
-				// 		SELECT COUNT(*)
-				// 		FROM `npcs_items` AS `ni`
-				// 		WHERE `ni`.`item_id` = `i`.`id`
-				// 	) AS beasts
-				// ')
-			)
-			->join('items AS i', 'i.id', '=', 'r.item_id')
-			->join('careers AS c', 'c.identifier', '=', 'r.id')
-			->join('career_classjob AS cj', 'cj.career_id', '=', 'c.id')
-			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
-			->whereBetween('c.level', [$min_level, $max_level])
-			->where('r.classjob_id', $job->id)
-			->where('c.type', 'recipe')
-			->whereIn('cj.classjob_id', $supported_classes)
-			->groupBy('r.id')
-			->orderBy('c.level')
-			->orderBy('i.level')
-			->having('amount', '>', '1')
-			// ->remember(Config::get('site.cache_length'))
+		$produced = Career::with('job', 'recipe', 'recipe.item', 'recipe.item.shops')
+			->where('type', 'recipe')
+			->whereBetween('level', [$min_level, $max_level])
+			->whereHas('job', function($query) use ($supported_classes) {
+				$query->whereIn('job_id', $supported_classes);
+			})
+			->whereHas('recipe', function($query) use ($job) {
+				$query->where('job_id', $job->id);
+			})
 			->get();
 
-		return view('career.production', compact('recipies', 'show_quests', 'jobs', 'job', 'min_level', 'max_level'));
+		$recipes = $amounts = [];
+		foreach ($produced as $career)
+		{
+			$recipes[$career->recipe->id] = $career->recipe;
+			@$amounts[$career->recipe->id] += $career->job->sum('pivot.amount');
+		}
+
+		return view('career.production', compact('recipes', 'amounts', 'show_quests', 'jobs', 'job', 'min_level', 'max_level'));
 	}
 
 	public function postReceiver(Request $request)
@@ -143,7 +128,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = ClassJob::get_id_abbr_list();
+		$all_classes = Job::lists('id', 'abbr');
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -153,43 +138,34 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class recognized...'); // TODO
 
-		$jobs = ClassJob::with('name')->whereIn('id', $supported_classes)->get();
+		$jobs = Job::whereIn('id', $supported_classes)->get();
 		foreach ($jobs as $k => $v)
-			$jobs[$k] = $v->name->term;
+			$jobs[$k] = $v->name;
 	
-		$job = ClassJob::get_by_abbr($my_class);
+		$job = Job::where('abbr', $my_class)->first();
 
 		if (empty($job))
 			exit('No primary class recognized...'); // TODO
 
-		\DB::statement('SET SESSION group_concat_max_len=16384');
-
-		$recipies = \DB::table('career_classjob as cj')
-			->select('*', 'r.id AS recipe_id', \DB::raw('SUM(cj.amount) AS amount'), 
-				\DB::raw('
-					(
-						SELECT COUNT(*)
-						FROM  `items_npcs_shops` AS `ins`
-						WHERE `ins`.`item_id` = `i`.`id`
-					) AS vendors
-				')
-			)
-			->join('careers AS c', 'cj.career_id', '=', 'c.id')
-			->join('recipes AS r', 'r.id', '=', 'c.identifier')
-			->join('classjob AS j', 'j.id', '=', 'r.classjob_id')
-			->join('items AS i', 'i.id', '=', 'r.item_id')
-			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
-			->whereBetween('c.level', array($min_level, $max_level))
-			->where('cj.classjob_id', $job->id)
-			->where('c.type', 'recipe')
-			->whereIn('r.classjob_id', $supported_classes)
-			->groupBy('r.id')
-			->orderBy('r.level')
-			->having('amount', '>', '1')
-			// ->remember(Config::get('site.cache_length'))
+		$received = Career::with('job', 'recipe', 'recipe.item', 'recipe.item.shops')
+			->where('type', 'recipe')
+			->whereBetween('level', [$min_level, $max_level])
+			->whereHas('job', function($query) use ($job) {
+				$query->where('job_id', $job->id);
+			})
+			->whereHas('recipe', function($query) use ($supported_classes) {
+				$query->whereIn('job_id', $supported_classes);
+			})
 			->get();
 
-		return view('career.receiver', compact('recipies', 'show_quests', 'jobs', 'job', 'min_level', 'max_level'));
+		$recipes = $amounts = [];
+		foreach ($received as $career)
+		{
+			$recipes[$career->recipe->id] = $career->recipe;
+			@$amounts[$career->recipe->id] += $career->job->sum('pivot.amount');
+		}
+
+		return view('career.receiver', compact('recipes', 'amounts', 'show_quests', 'jobs', 'job', 'min_level', 'max_level'));
 	}
 
 	public function postGathering(Request $request)
@@ -216,12 +192,12 @@ class CareerController extends Controller
 	{
 		$supported_classes = explode(',', $supported_classes);
 
-		$show_quests = in_array($my_class, $supported_classes);
+		$show_quests = false; //in_array($my_class, $supported_classes);
 
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = ClassJob::get_id_abbr_list();
+		$all_classes = Job::lists('id', 'abbr');
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -231,168 +207,66 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class recognized...'); // TODO
 
-		$jobs = ClassJob::with('name')->whereIn('id', $supported_classes)->get();
+		$jobs = Job::whereIn('id', $supported_classes)->get();
 		foreach ($jobs as $k => $v)
-			$jobs[$k] = $v->name->term;
+			$jobs[$k] = $v->name;
 		
 		if ($my_class != 'BTL')
-			$job = ClassJob::get_by_abbr($my_class);
+			$job = Job::where('abbr', $my_class)->first();
 		else
 			$job = $my_class;
 
 		if (empty($job))
 			exit('No primary class recognized...'); // TODO
 
-		$top_query = $inner_query = $join = $where = $union = $having = '';
-		$parameters = [];
-
-		\DB::statement('SET SESSION group_concat_max_len=16384');
+		// I am a  Miner  , what should I obtain to support  these 11 Classes  between ilevels   and   ?
+		$query = Career::with('job', 'item', 'item.category', 'item.nodes', 'item.shops', 'item.fishing', 'item.mobs')
+			->where('type', 'item')
+			->whereBetween('level', [$min_level, $max_level])
+			->whereHas('job', function($query) use ($supported_classes) {
+				$query->whereIn('job_id', $supported_classes);
+			});
 
 		if (in_array($my_class, array('MIN', 'BTN')))
 		{
-			// Add Nodes
-			$top_query .= "
-					(
-						SELECT
-							COUNT(*)
-						FROM `cluster_items` AS `ci`
-						JOIN `clusters` AS `c` ON `c`.`id` = `ci`.`cluster_id`
-						WHERE `c`.`classjob_id` = ? AND `ci`.`item_id` = `x`.`item_id`
-					) AS nodes,
-			";
-
-			$parameters[] = $job->id;
-
-			$having = "HAVING nodes > 0";
-		} else {
-			// Battling or Fishing
-			$join = "LEFT JOIN `cluster_items` AS `ci` ON `ci`.`item_id` = `i`.`id` " . 
-				'LEFT JOIN `item_ui_category` AS `iuc` ON `iuc`.`id` = `i`.`itemuicategory_id` ' . 
-				'LEFT JOIN `translations` AS `iuct` ON `iuct`.`id` = `iuc`.`name_en`';
-
-			// FSH where the item is "seafood"
-			// BTL where the item is not "seafood"
-			$where = "AND `iuct`.`term` " . ($my_class == 'BTL' ? '!' : '') . "= 'Seafood'";
-			$where .= " AND `ci`.`id` IS NULL";
+			// Has nodes
+			//  of the $my_class variety
+			// 0 == MIN == Mineral Deposit
+			// 1 == MIN == Rocky Outcropping
+			// 2 == BTN == Mature Tree
+			// 3 == BTN == Lush Vegetation
+			$types = $my_class == 'MIN' ? [0, 1] : [2, 3];
+			$query->whereHas('item', function($query) use ($types) {
+				$query->whereHas('nodes', function($query) use ($types) {
+					$query->whereIn('type', $types);
+				});
+			});
 		}
-
-		$parameters[] = $min_level;
-		$parameters[] = $max_level;
-		$parameters = array_merge($parameters, $supported_classes);
-
-		if ($my_class != 'BTL')
+		elseif ($my_class == 'FSH')
 		{
-			$union = "
-					UNION
-
-					SELECT
-						`i`.`id`, t.term AS name, `i`.level, `i`.`min_price`, qi.amount AS amount, 
-						qi.level AS quest_level, qi.quality AS quest_quality
-					FROM quest_items AS qi
-					JOIN items AS i ON i.id = qi.item_id
-					JOIN classjob AS j ON j.id = qi.classjob_id
-					JOIN translations AS t ON t.id = i.name_" . Config::get('language') . "
-					WHERE j.id = ?
-						AND qi.level BETWEEN ? AND ?
-			";
-			
-			$parameters[] = $job->id;
-			$parameters[] = $min_level;
-			$parameters[] = $max_level;
+			// Has Fishing
+			$query->whereHas('item', function($query) {
+				$query->has('fishing');
+			});
 		}
-
-		// TODO Caching
-
-		$items = \DB::select("
-			SELECT x.*,
-				" . $top_query . "
-				(
-					SELECT COUNT(*)
-					FROM `items_npcs_shops` AS `ins`
-					WHERE `ins`.`item_id` = `x`.`item_id`
-				) AS vendors, 
-				(
-					SELECT COUNT(*)
-					FROM `npcs_items` AS `ni`
-					WHERE `ni`.`item_id` = `x`.`item_id`
-				) AS beasts
-			FROM (
-				SELECT 
-					`i`.`id` AS `item_id`, t.term AS name, `i`.level, `i`.`min_price`, SUM(cj.amount) AS amount,
-					NULL AS quest_level, NULL AS quest_quality
-				FROM `careers` AS `c`
-				JOIN `items` AS `i` ON `i`.`id` = `c`.`identifier`
-				JOIN `career_classjob` AS `cj` ON `cj`.`career_id` = `c`.`id`
-				JOIN translations AS t ON t.id = i.name_" . Config::get('language') . "
-				" . $join . "
-				WHERE
-					`c`.`type` = 'item'
-					AND `c`.`level` BETWEEN ? AND ?
-					AND `cj`.`classjob_id` in (" . str_pad('', count($supported_classes) * 2 - 1, '?,') . ")
-					" . $where . "
-				GROUP BY `c`.`identifier`
-
-				" . $union . "
-				
-				ORDER BY `item_id` ASC
-			) AS x
-			" . $having, 
-			$parameters
-		);
-		
-		if ($my_class != 'BTL')
+		else // Presumably BTL
 		{
-			$quest_items = [];
-			// Rip out Quest Entries
-			foreach ($items as $k => $result)
-				if ($result->quest_level != NULL)
-				{
-					$quest_items[] = $result;
-					unset($items[$k]);
-				}
-
-			// Put them back in, either merge or insert
-			if ($show_quests)
-				foreach ($quest_items as $quest_item)
-				{
-					foreach($items as $k => $result)
-					{
-						if ($quest_item->item_id == $result->item_id)
-						{
-							// Merge
-							$original_amount = $result->amount;
-							$quest_amount = $quest_item->amount;
-							$items[$k] = $quest_item;
-							$items[$k]->amount = $original_amount;
-							$items[$k]->quest_amount = $quest_amount;
-
-							continue 2;
-						}
-					}
-
-					// If a match was found it would have continued
-					// This means at this point we add it in straight up
-					$quest_item->quest_amount = $quest_item->amount;
-					$items[] = $quest_item;
-				}
-
-			// Fishing doesn't have an ilvl...
-			if ($my_class != 'FSH')
-			{
-				$sortable_items = [];
-				foreach ($items as $row)
-					$sortable_items[$row->level][] = $row;
-				ksort($sortable_items);
-
-				$items = [];
-				foreach($sortable_items as $rows)
-					foreach ($rows as $row)
-						$items[] = $row;
-				unset($sortable_results);
-			}
+			// Has Mobs
+			$query->whereHas('item', function($query) {
+				$query->has('mobs');
+			});
 		}
 
-		return view('career.items', compact('items', 'show_quests', 'jobs', 'job', 'min_level', 'max_level'));
+		$gathering = $query->get();
+
+		$items = $amounts = [];
+		foreach ($gathering as $career)
+		{
+			$items[$career->item->id] = $career->item;
+			@$amounts[$career->item->id] += $career->job->sum('pivot.amount');
+		}
+
+		return view('career.items', compact('items', 'amounts', 'show_quests', 'jobs', 'job', 'min_level', 'max_level'));
 	}
 
 }

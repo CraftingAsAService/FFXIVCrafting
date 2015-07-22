@@ -62,18 +62,27 @@
 				<fieldset>
 					<legend>Recipe Level</legend>
 					<div class='list-group recipe-level-select'>
-						@foreach(range(1,config('site.max_level') - 4,5) as $level)
+						{{-- Show 1 to 50 --}}
+						@foreach(range(1,50 - 4,5) as $level)
 						<a href='#' class='list-group-item{{ $level == 1 ? ' active' : '' }}' data-start='{{ $level }}' data-end='{{ $level + 4 }}'>
 							{{ $level }} - {{ $level + 4 }}
 						</a>
 						@endforeach
+						{{-- Then show 50 1* to 4*, which are really differing ilvls --}}
 						@foreach ([55, 70, 90, 110] as $key => $value)
 						<a href='#' class='list-group-item' data-start='{{ $value }}' data-end='{{ $value }}'>
+							50 
 							@foreach (range(0, $key) as $ignore)
 							<i class='glyphicon glyphicon-star'></i>
 							@endforeach
 						</a>
 						@endforeach
+						{{-- And pick back up from 51 to max level, though the ilvls are a little more custom --}}
+						<a href='#' class='list-group-item' data-start='115' data-end='136'>
+							51 - 55
+						</a><a href='#' class='list-group-item' data-start='139' data-end='160'>
+							56 - 60
+						</a>
 					</div>
 					<input type='hidden' name='start' id='recipe-level-start' value='1'>
 					<input type='hidden' name='end' id='recipe-level-end' value='5'>
@@ -85,10 +94,10 @@
 					<div class='btn-group jobs-list' data-toggle='buttons'>
 						@foreach($job_list as $job)
 						<?php $this_job = $job->id == reset($crafting_job_ids); ?>
-						<?php $this_level = $account ? $account['levels'][strtolower($job->en_name->term)] : 0; ?>
+						<?php $this_level = $account ? $account['levels'][strtolower($job->name)] : 0; ?>
 						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-level='{{ $this_level }}'>
-							<input type='radio' name='class' value='{{ $job->en_abbr->term }}'> 
-							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
 						@endforeach
 					</div>
@@ -107,15 +116,17 @@
 						<span>
 							<input type='checkbox' name='misc_items' id='misc_items_switch' value='1' class='bootswitch' data-on-text='YES' data-off-text='NO'>
 						</span>
-						<strong class='margin-left'>Dyes &amp; Furniture</strong>
+						<strong class='margin-left'>Dyes, Components &amp; Furniture</strong>
 					</div>
 
+					{{--
 					<div class='margin-top'>
 						<span>
-							<input type='checkbox' name='component_items' id='component_items_switch' value='1' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+							<input type='checkbox' name='component_items' id='component_items_switch' value='1' class='bootswitch' data-on-text='YES' data-off-text='NO' disabled='disabled'>
 						</span>
 						<strong class='margin-left'>Component Materials</strong> <small><em>- Requires Dyes &amp; Furniture</em></small>
 					</div>
+					--}}
 				</fieldset>
 				
 				<div style='margin-top: 30px;'>

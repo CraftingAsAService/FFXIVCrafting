@@ -1,6 +1,9 @@
-<?php namespace App\Models\CAAS;
+<?php
 
-use App\Models\CAAS\ClassJob;
+namespace App\Models\CAAS;
+
+use App\Models\Garland\Job;
+use App\Models\Garland\Item;
 
 use Config;
 
@@ -19,22 +22,20 @@ class Gear
 	{
 		// Get the job, depending on string or id
 		$job = is_numeric($job)
-			? ClassJob::with('en_abbr')->find($job_id)
-			: ClassJob::get_by_abbr($job);
-
-		$job_abbr = $job->en_abbr->term;
+			? Job::find($job)
+			: Job::get_by_abbr($job);
 
 		// Slot data
-		$slots = Config::get('site.defined_slots');
+		$slots = config('site.defined_slots');
 
 		// Stat data
-		$stat_ids_to_focus = Stat::get_ids(Stat::gear_focus($job_abbr));
+		$stat_ids_to_focus = Stat::get_ids(Stat::gear_focus($job->abbr));
 
 		// Get all items
 		$items = self::items($job->id, $starting_level - 10, $starting_level + $level_range, array_keys($slots), $stat_ids_to_focus, $options);
 
 		// Sort those items into the appropriate buckets
-		$equipment_list = self::organize($items, $job_abbr, $starting_level, $stat_ids_to_focus, $options);
+		$equipment_list = self::organize($items, $job->abbr, $starting_level, $stat_ids_to_focus, $options);
 
 		return $equipment_list;
 	}
@@ -48,17 +49,18 @@ class Gear
 	static private function organize($items, $job_abbr, $starting_level, $stat_ids_to_focus, $options)
 	{
 		// Prepare the result slots
-		$equipment_list = array_flip(Config::get('site.equipment_roles'));
+		$equipment_list = array_flip(config('site.equipment_roles'));
 		array_walk($equipment_list, function(&$i) { $i = []; });
 
 		// Slot data
-		$slots = Config::get('site.defined_slots');
-		$slot_alias = Config::get('site.slot_alias');
-		// $slot_cannot_equip = Config::get('site.slot_cannot_equip');
+		$slots = config('site.defined_slots');
+		$slot_alias = config('site.slot_alias');
+		// $slot_cannot_equip = config('site.slot_cannot_equip');
 		// foreach ($slot_cannot_equip as &$sce)
 		// 	foreach ($sce as &$ce)
 		// 		$ce = $slots[$ce];
 		// unset($sce, $ce);
+		// 
 
 		foreach ($items as $item)
 		{
@@ -69,7 +71,7 @@ class Gear
 
 			// Add this item to the slot
 			$equipment_list[$slot_name][] = $item;
-		}		
+		}
 
 		// Clean up the list, split out HQ as it's own item
 		/**
@@ -91,22 +93,33 @@ class Gear
 				// Every stat has an equal weight
 				// TODO this is unfair to alias body pieces (Body & Head, etc)
 				$nq_worth = $hq_worth = 0;
-				foreach ($item->baseparam as $stat)
+				$item->has_hq = false;
+				foreach ($item->attributes as $attribute)
 				{
-					if ( ! in_array($stat->id, $stat_ids_to_focus))
+					// Test for HQ off the bat
+					if ($attribute->quality == 'hq')
+						$item->has_hq = true;
+
+					if ( ! in_array($attribute->attribute, $stat_ids_to_focus))
 						continue;
 
-					$nq_worth += $stat->pivot->nq_amount;
-					$hq_worth += $stat->pivot->hq_amount;
+					if ( ! in_array($attribute->quality, ['nq', 'hq']))
+						continue;
+
+					${$attribute->quality . '_worth'} += $attribute->amount;
 				}
 
 				$item->nq_worth = $nq_worth;
 				$item->hq_worth = $hq_worth;
 
-				$sorted[$item->equip_level]['nq'][] = $item;
+				// If the item has no worth, don't include it
+				if ($item->nq_worth == 0)
+					continue;
+
+				$sorted[$item->elvl]['nq'][] = $item;
 
 				if ($item->has_hq && in_array('hq', $options))
-					$sorted[$item->equip_level]['hq'][] = $item;
+					$sorted[$item->elvl]['hq'][] = $item;
 			}
 
 			ksort($sorted);
@@ -208,20 +221,19 @@ class Gear
 	 */
 	static private function items($job_id, $level_start, $level_end, $slot_ids, $stat_ids_to_focus, $options)
 	{
+		$job_category_ids = Job::with('categories')->find($job_id)->categories->lists('id');
 		// Get all items where:
 		// Slot isn't zero
 		// The class can use it
-		$query = Item::with('name', 'baseparam', 'baseparam.name', 'vendors', 'recipe', 'recipe.classjob', 'recipe.classjob.name')
+		$query = Item::with('job_category', 'job_category.jobs', 'instances', 'achievements', 'attributes', 'mobs', 'shops', 'recipes', 'recipes.job', 'quest_rewards', 'leves', 'ventures')
 			->whereIn('slot', $slot_ids)
-			->whereBetween('equip_level', [$level_start, $level_end])
-			->whereHas('classjob', function($query) use ($job_id) {
-				$query->where('classjob.id', $job_id);
+			->whereBetween('elvl', [$level_start, $level_end])
+			->whereIn('job_category_id', $job_category_ids)
+			->whereHas('attributes', function($query) use ($stat_ids_to_focus) {
+				$query->whereIn('attribute', $stat_ids_to_focus);
 			})
-			->whereHas('baseparam', function($query) use ($stat_ids_to_focus) {
-				$query->whereIn('baseparam.id', $stat_ids_to_focus);
-			})
-			->orderBy('items.equip_level', 'DESC')
-			->orderBy('items.level', 'DESC');
+			->orderBy('item.elvl', 'DESC')
+			->orderBy('item.ilvl', 'DESC');
 
 		if (in_array('craftable', $options))
 		{
@@ -229,21 +241,36 @@ class Gear
 			{
 				$query->where(function($query) {
 					$query
-						->whereHas('recipe', function($query) {
-							$query->where('recipes.item_id', \DB::raw('items.id'));
+						->whereHas('recipes', function($query) {
+							$query->where('item_id', \DB::raw('item.id'));
 						})
-						->orWhere('items.achievable', '1')
-						->orWhere('items.rewarded', '1');
+						->orHas('quest_rewards')
+						->orHas('leves')
+						->orHas('ventures')
+						->orHas('achievements');
 				});
 			}
 			else
-				$query->whereHas('recipe', function($query) {
-					$query->where('recipes.item_id', \DB::raw('items.id'));
+				$query->whereHas('recipes', function($query) {
+					$query->where('item_id', \DB::raw('item.id'));
 				});
-
 		}
 		
 		return $query->get();
 	}
+
+	// static private function logger() {
+	// 	// \DB::connection()->enableQueryLog();
+	//     $queries = \DB::getQueryLog();
+	//     $formattedQueries = [];
+	//     foreach( $queries as $query ) :
+	//         $prep = $query['query'];
+	//         foreach( $query['bindings'] as $binding ) :
+	//             $prep = preg_replace("#\?#", $binding, $prep, 1);
+	//         endforeach;
+	//         $formattedQueries[] = $prep;
+	//     endforeach;
+	//     return $formattedQueries;
+	// }
 
 }

@@ -2,7 +2,7 @@
 
 	function cdn($asset)
 	{
-		$cdn = Config::get('site.cdn');
+		$cdn = config('site.cdn');
 		
 		// Check if we added cdn's to the config file
 		if( ! $cdn)
@@ -21,19 +21,24 @@
 
 	function assetcdn($asset)
 	{
-		$cdn = Config::get('site.asset_cdn');
+		$cdn = config('site.asset_cdn');
+		
+		// Check if we added cdn's to the config file
+		if( ! $cdn)
+			return asset( $asset );
+		
 		return '//' . $cdn . '/' . $asset;
 	}
 
 	function random_guardian_name()
 	{
-		$g = Guardians::with('name')->where('id', rand(1,12))->remember(Config::get('site.cache_length'))->first();
+		$g = Guardians::with('name')->where('id', rand(1,12))->remember(config('site.cache_length'))->first();
 		return $g->name->term;
 	}
 
 	function random_donation_slogan()
 	{
-		$slogans = Config::get('site.donation_slogans');
+		$slogans = config('site.donation_slogans');
 		return $slogans[array_rand($slogans)];
 	}
 
@@ -77,4 +82,9 @@
 
 			return $posts;
 		});
+	}
+
+	function stat_name($attribute)
+	{
+		return \App\Models\CAAS\Stat::name($attribute);
 	}

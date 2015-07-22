@@ -27,6 +27,7 @@
 		Download
 	</a>
 
+	{{--
 	<span class="dropdown pull-right hidden-print" style='margin-top: 12px; margin-right: 10px;'>
 		<button class='btn btn-success' id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class='glyphicon glyphicon-globe'></i>
@@ -38,6 +39,7 @@
 			<li><a href='#' id='map_remaining'>Remaining</a></li>
 		</ul>
 	</span>
+	--}}
 
 	<h1 class='csv-filename' style='margin-top: 0;'>
 		@if(isset($job))
@@ -54,7 +56,7 @@
 	@if(isset($job))
 	<h2>
 	@if($start <= config('site.max_level'))
-	recipes between levels {{ $start }} and {{ $end }}
+	recipes between ilevels {{ $start }} and {{ $end }}
 	@else
 		@if ($start == 55)
 			<i class='glyphicon glyphicon-star'></i>
@@ -113,7 +115,7 @@
 				if ($section == 'Pre-Requisite Crafting')
 				{
 					$item_level = $item->recipe[0]->level;
-					$yields = $item->recipe[0]->yields;
+					$yields = $item->recipe[0]->yield;
 					foreach ($item->recipe[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
 					$link = 'recipe/' . $item->recipe[0]->id;
@@ -127,7 +129,7 @@
 					</a>
 					@endif
 					<a href='http://xivdb.com/?{{ $link }}' target='_blank'>
-						<img src='{{ assetcdn('items/nq/' . $item->id . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $item->name->term }}</span>
+						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $item->name }}</span>
 					</a>
 					@if ($yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
@@ -150,22 +152,22 @@
 				</td>
 				<td class='valign total'>0</td>
 				<td>
-					@if(count($item->vendors))
-					<a href='#' class='btn btn-default vendors{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' rel='tooltip' title='Available for {{ $item->min_price }} gil, Click to load Vendors'>
+					@if(count($item->shops))
+					<a href='#' class='btn btn-default click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops' rel='tooltip' title='Available for {{ $item->price }} gil, Click to load Vendors'>
 						<img src='/img/coin.png' width='24' height='24'>
-						{{ number_format($item->min_price) }}
+						{{ number_format($item->price) }}
 					</a>
 					@endif
 				</td>
 				<td class='crafted_gathered'>
 					@foreach(array_keys(array_reverse($reagent['cluster_jobs'])) as $cluster_job)
-					<i class='class-icon {{ $cluster_job }} clusters' title='{{ $cluster_job }}'></i>
+					<i class='class-icon click-to-view {{ $cluster_job }} clusters' data-type='{{ strtolower($cluster_job) }}nodes' title='{{ $cluster_job }}'></i>
 					@endforeach
-					@foreach($item->recipe as $recipe)
-					<i class='class-icon {{ $recipe->classjob->abbr->term }}' title='{{ $recipe->classjob->abbr->term }}'></i>
+					@foreach($item->recipes as $recipe)
+					<i class='class-icon click-to-view {{ $recipe->job->abbr }}' data-type='recipes' title='{{ $recipe->job->abbr }}'></i>
 					@endforeach
-					@if(count($item->beasts))
-					<img src='/img/mob.png' width='20' height='20' class='mob-icon beasts' data-item-id='{{ $item->id }}' rel='tooltip' title='Click to load Beasts' data-container='body'>
+					@if(count($item->mobs))
+					<img src='/img/mob.png' class='click-to-view mob-icon' type='mobs' width='20' height='20' rel='tooltip' title='Click to load Beasts' data-container='body'>
 					@endif
 				</td>
 				<?php continue; ?>
@@ -187,14 +189,14 @@
 				foreach ($recipe->reagents as $item)
 					$requires[] = $item->pivot->amount . 'x' . $item->id;
 			?>
-			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yields }}'>
+			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yield }}'>
 				<td class='text-left'>
 					<a class='close ilvl' rel='tooltip' title='Level'>
-						{{ $recipe->level }}
+						{{ $recipe->recipe_level }}
 					</a>
-					<a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'>
-						<img src='{{ assetcdn('items/nq/' . $recipe->item->id . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->name->term }}</span>
-					</a>
+					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'> --}}
+						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->name }}</span>
+					{{-- </a> --}}
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
 						<img src="/img/stats/nq/Craftsmanship.png" class="stat-icon">
@@ -207,9 +209,9 @@
 						{{ $recipe->req_control }}
 					</span>
 					@endif
-					@if ($recipe->yields > 1)
+					@if ($recipe->yield > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
-						x {{ $recipe->yields }}
+						x {{ $recipe->yield }}
 					</span>
 					@endif
 					<div class='pull-right' style='clear: right;'>
@@ -232,14 +234,14 @@
 				<td class='needed valign hidden-print'>
 					<?php 
 						$needed = (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))); 
-						$needed = ceil($needed / $recipe->yields) * $recipe->yields;
+						$needed = ceil($needed / $recipe->yield) * $recipe->yield;
 					?>
 
-					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yields }}' value='{{ $needed }}' style='padding: 6px 3px;'>
+					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yield }}' value='{{ $needed }}' style='padding: 6px 3px;'>
 				</td>
 				<td class='valign hidden-print'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' step='{{ $recipe->yields }}' value='0' style='padding: 6px 3px;'>
+						<input type='number' class='form-control obtained text-center' min='0' step='{{ $recipe->yield }}' value='0' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>
@@ -247,15 +249,15 @@
 				</td>
 				<td class='valign total'>{{ $needed }}</td>
 				<td>
-					@if(count($recipe->item->vendors))
-					<a href='#' class='btn btn-default vendors{{ $reagent['self_sufficient'] ? ' opaque' : '' }}'>
-						<img src='/img/coin.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->min_price }} gil, Click to load Vendors'>
-						{{ number_format($recipe->item->min_price) }}
+					@if(count($recipe->item->shops))
+					<a href='#' class='btn btn-default click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
+						<img src='/img/coin.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Vendors'>
+						{{ number_format($recipe->item->price) }}
 					</a>
 					@endif
 				</td>
 				<td class='crafted_gathered'>
-					<i class='class-icon {{ $recipe->classjob->abbr->term }}' title='{{ $recipe->classjob->abbr->term }}'></i>
+					<i class='class-icon {{ $recipe->job->abbr }} click-to-view' data-type='recipes' title='{{ $recipe->job->abbr }}'></i>
 				</td>
 			</tr>
 			@endforeach
@@ -327,20 +329,15 @@
 					@foreach($quest_items as $quest)
 					<li>
 						@if(count($job) > 2)
-						{{ $quest->classjob->abbr->term }} 
+						{{ $quest->job->abbr }} 
 						@endif
 						Level {{ $quest->level }}: 
-						@if ( ! $quest->item)
-							No data! Please help complete the list.
+						@if ( ! $quest->requirements)
+							No data!
 						@else
-							{{ $quest->item->name->term }} 
-							<small>x</small>{{ $quest->amount }}
-							@if($quest->quality)
-							<strong>(HQ)</strong>
-							@endif
-						@endif
-						@if($quest->notes)
-						({{ $quest->notes }})
+							@foreach ($quest->requirements as $req_item)
+							{{ $req_item->name }}
+							@endforeach
 						@endif
 					</li>
 					@endforeach

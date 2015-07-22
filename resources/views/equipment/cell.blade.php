@@ -5,48 +5,50 @@
 			@foreach($items as $ilvl => $gear)
 			@foreach($gear as $item)
 			
-			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ count($item->recipe) ? ' craftable' : '' }}' 
-				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->level }}' data-cannot-equip='{{{ $item->cannot_equip }}}'>
+			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ count($item->recipes) ? ' craftable' : '' }}' 
+				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}'>
 
 				<div class='icons pull-left text-center'>
 					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
-						<img src='{{ assetcdn('items/nq/' . $item->id . '.png') }}' width='40' height='40' class='main-icon nq'>
+						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='40' height='40' class='main-icon nq'>
 						@if ($item->can_hq)
-						<img src='{{ assetcdn('items/hq/' . $item->id . '.png') }}' width='40' height='40' class='main-icon hq hidden'>
+						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='40' height='40' class='main-icon hq hidden'>
 						@endif
 					</a>
 					<div>
-						@if(count($item->recipe))
+						@if(count($item->recipes))
 						<div class='crafted_by'>
-							<i class='class-icon class-id-{{ $item->recipe[0]->classjob_id }} stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name->term }}}' rel='tooltip' title='Crafted By {{ $item->recipe[0]->classjob->name->term }}, Click to Add to List'></i>
+							<i class='class-icon class-id-{{ $item->recipes[0]->job_id }} stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}, Click to Add to List'></i>
 						</div>
-						@elseif($item->rewarded || $item->achievable)
+						@elseif(count($item->instances) || count($item->achievement) || count($item->mobs) || count($item->ventures))
 						<div class='rewarded'>
 							<img src='/img/reward.png' class='rewarded' width='20' height='20' rel='tooltip' title='Reward from {{ $item->achievable ? 'an Achievement' : 'a Quest' }}'>
 						</div>
 						@endif
-						@if(count($item->vendors))
+						@if(count($item->shops))
 						<div class='gil'>
-							<img src='/img/coin.png' class='vendors' width='24' height='24' rel='tooltip' title='Available for {{ $item->min_price }} gil, Click to load Vendors'>
+							<img src='/img/shop.png' class='click-to-view' data-type='shops' width='24' height='24' rel='tooltip' title='Available for {{ $item->price }} gil, Click to load Shop'>
 						</div>
 						@endif
 					</div>
 				</div>
 				
 				<div class='name-box'>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary'>{{ $item->name->term }}</a>
+					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary'>{{ $item->name }}</a>
 				</div>
 
 				<div class='stats-box row'>
-					@foreach($item->baseparam as $param)
-					<div class='col-sm-6 text-center nq stat{{ ! in_array($param->id, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $param->name->term }}' data-amount='{{ (int) $param->pivot->nq_amount }}'>
-						<img src='/img/stats/nq/{{ $param->name->term }}.png' class='stat-icon' rel='tooltip' title='{{ $param->name->term }}'>
-						<span>{{ (int) $param->pivot->nq_amount }}</span>
+					@foreach($item->attributes as $attribute)
+					@if($attribute->quality == 'nq')
+					<div class='col-sm-6 text-center nq stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}'>
+						<img src='/img/stats/nq/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
+						<span>{{ (int) $attribute->amount }}</span>
 					</div>
-					@if($param->pivot->hq_amount)
-					<div class='col-sm-6 text-center hq hidden stat{{ ! in_array($param->id, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $param->name->term }}' data-amount='{{ (int) $param->pivot->hq_amount }}'>
-						<img src='/img/stats/hq/{{ $param->name->term }}.png' class='stat-icon' rel='tooltip' title='{{ $param->name->term }}'>
-						<span>{{ (int) $param->pivot->hq_amount }}</span>
+					@endif
+					@if($attribute->quality == 'hq')
+					<div class='col-sm-6 text-center hq hidden stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}'>
+						<img src='/img/stats/hq/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
+						<span>{{ (int) $attribute->amount }}</span>
 					</div>
 					@endif
 					@endforeach

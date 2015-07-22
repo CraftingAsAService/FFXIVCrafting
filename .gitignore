@@ -1,6 +1,7 @@
 /vendor
 /node_modules
 .env
+.env.local
 .env.qa
 .env.production
 composer.phar

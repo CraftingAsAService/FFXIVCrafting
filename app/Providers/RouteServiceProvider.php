@@ -35,6 +35,9 @@ class RouteServiceProvider extends ServiceProvider {
 
 		parent::boot($router);
 
+		// Route Model Binding
+		$router->model('item', 'App\Models\Garland\Item');
+
 		//
 	}
 

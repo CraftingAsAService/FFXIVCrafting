@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('banner')
-	<h1>{{ $classjob->name->term }} Gear Profile</h1>
+	<h1>{{ $job->name }} Gear Profile</h1>
 	<h2>A look at level {{ $start_level }}</h2>
 @stop
 
@@ -20,7 +20,7 @@
 			<col width='50px'>
 			@endforeach
 			<col width='50px'>
-			<col width='60px'>
+			<col width='94px'>
 			<col width='80px'>
 		</colgroup>
 		<thead>
@@ -56,26 +56,29 @@
 					: (
 						$item->{$quality . '_worth'} == $bucket['bis_worth'] 
 						? (
-							$level == $start_level 
-							? 'success' 
-							: ($level == $bucket['lcd'] ? 'info' : '')
+							$level == $start_level || $level == $bucket['lcd']
+							? 'success' : ''
 						)
 						: ''
 					) 
 			}}' data-item-id='{{ $item->id }}'>
 				@if($i++ == 0)
 				<td class='level{{ 
-					$level == $start_level
-					? ' success' 
-					: ($level == $bucket['lcd'] ? ' info' : '')
+					$level == $start_level || $level == $bucket['lcd']
+					? ' success' : ''
 				}}' rowspan='{{ count($bucket['nq']) + (isset($bucket['hq']) ? count($bucket['hq']) : 0) }}'>
 					{{ $level }}
 				</td>
 				@endif
 				<td class='item'>
-					<span class='ilvl'>{{ $item->level }}</span>
+					<span class='ilvl'>{{ $item->ilvl }}</span>
 					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
-						<img src='{{ assetcdn('items/' . $quality . '/' . $item->id . '.png') }}' width='20' height='20' class='item-icon {{ $quality }}'>{{ $item->name->term }}
+						<span class='overlay-container'>
+						@if($quality == 'hq')
+						<img src='/img/hq-overlay.png' width='20' height='20' class='hq-overlay'>
+						@endif
+						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='20' height='20' class='item-icon'>
+						</span>{{ $item->name }}
 					</a>
 					{{--
 					@if ($item->{$quality . '_worth'} == $bucket['bis_worth'])
@@ -85,39 +88,56 @@
 				</td>
 				@foreach ($stat_focus_ids as $stat_id)
 					<?php $use = null; ?>
-					@foreach ($item->baseparam as $baseparam)
-					@if ($baseparam->id == $stat_id)
-					<?php $use = (int) $baseparam->pivot->{$quality . '_amount'}; ?>
+					@foreach ($item->attributes as $attribute)
+					@if ($attribute->attribute == $stat_id && $attribute->quality == $quality)
+					<?php $use = (int) $attribute->amount; ?>
 					@endif
 					@endforeach
-				<td class='stat @if($item->rarity == 7 && ! $use)aetherial' rel='tooltip' title='Aetherial items have random stats.@endif'>@if($item->rarity == 7 && ! $use)<span></span>@else{{ $use }}@endif</td>
+				<td class='stat {{ $stat_id }} @if($item->rarity == 7 && ! $use)aetherial' rel='tooltip' title='Aetherial items have random stats.@endif'>@if($item->rarity == 7 && ! $use)<span></span>@else{{ $use }}@endif</td>
 				@endforeach
 				<td class='stat materia'>
-					@if($item->materia > 0)
-					<img src="/img/{{ $item->materia }}.png" class="stat-icon" rel='tooltip' title='{{ $item->materia }} materia {{ $item->materia == 1 ? 'slot' : 'slots' }} available'>
+					@if($item->sockets > 0)
+					<img src="/img/{{ $item->sockets }}.png" class="stat-icon" rel='tooltip' title='{{ $item->sockets }} materia {{ $item->sockets == 1 ? 'slot' : 'slots' }} available'>
 					@endif
 				</td>
 				<td class='obtained'>
-					@if(($item->rewarded || $item->achievable) && $quality != 'hq')
-					<span class='rewarded'>
-						<img src='/img/reward.png' class='rewarded' width='20' height='20' rel='tooltip' title='Reward from {{ $item->achievable ? 'an Achievement' : 'a Quest' }}'>
-					</span>
-					@endif
-					@if(count($item->vendors) && $quality != 'hq')
+					@if($quality != 'hq')
+						@if(count($item->shops))
 					<span class='gil'>
-						<img src='/img/coin.png' class='vendors' width='24' height='24' rel='tooltip' title='Available for {{ $item->min_price }} gil, Click to load Vendors'>
+						<img src='/img/shop.png' class='click-to-view' data-type='shops' width='24' height='24' rel='tooltip' title='Purchase for {{ number_format($item->price, 0, '.', ',') }} gil, Click to View'>
 					</span>
-					@endif
-					@if(count($item->dungeon_drop))
-					<span class='dungeon'>
-						<img src='/img/dungeon.png' class='dungeon_drop' width='24' height='24' rel='tooltip' title='Dungeon Reward'>
+						@endif
+						@if(count($item->quests))
+					<span class='gil'>
+						<img src='/img/quest.png' class='click-to-view' data-type='quests' width='24' height='24' rel='tooltip' title='Quest Reward, Click to View'>
 					</span>
+						@endif
+						@if(count($item->leves))
+					<span class='gil'>
+						<img src='/img/leve_icon.png' class='click-to-view' data-type='leves' width='24' height='24' rel='tooltip' title='Leve Reward, Click to View'>
+					</span>
+						@endif
+						@if(count($item->mobs))
+					<span class='gil'>
+						<img src='/img/mob.png' class='click-to-view' data-type='mobs' width='24' height='24' rel='tooltip' title='Drops from a Monster, Click to View'>
+					</span>
+						@endif
+						@if(count($item->instances))
+					<span class='gil'>
+						<img src='/img/dungeon.png' class='click-to-view' data-type='instances' width='24' height='24' rel='tooltip' title='Instance Coffer Loot, Click to View'>
+					</span>
+						@endif
+						@if(count($item->achievements))
+					<span class='gil'>
+						<img src='{{ assetcdn('achievement/' . $item->achievements[0]->icon . '.png') }}' width='24' height='24' rel='tooltip' title='Achievement Reward: {{ $item->achievements[0]->name }}'>
+					</span>
+						@endif
 					@endif
 				</td>
 				<td class='cart'>
-					@if(count($item->recipe))
-					<img src='/img/jobs/{{ $item->recipe[0]->classjob->en_abbr->term }}.png' width='24' height='24' rel='tooltip' title='Crafted By {{ $item->recipe[0]->classjob->name->term }}'></i>
-					<button class='btn btn-default btn-xs add-to-list success-after-add' data-item-id='{{ $item->id }}' data-item-name='{{ $item->name->term }}'>
+					@if(count($item->recipes))
+					<img src='/img/jobs/{{ $item->recipes[0]->job->abbr }}.png' width='24' height='24' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}'></i>
+					<button class='btn btn-default btn-xs add-to-list success-after-add' data-item-id='{{ $item->id }}' data-item-name='{{ $item->name }}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>
@@ -131,6 +151,22 @@
 	</table>
 	@endforeach
 
-	<a href='/gear?job={{ $classjob->en_abbr->term }}&amp;level={{ $start_level }}&amp;options={{ implode(',', $options) }}' class='btn btn-primary pull-right'>Select Another Profile</a>
+	<nav class='text-center'>
+		<ul class="pagination pagination">
+			@foreach(range($start_level - 5, $start_level + 5) as $level)
+			<?php if ($level < 1 || $level > config('site.max_level')) continue; ?>
+			<li class='{{ $level == $start_level ? 'active' : '' }}'>
+				@if($level == $start_level)
+				<span>{{ $level }}</span>
+				@else
+				<a href="{{ $level }}">{{ $level }}</a>
+				@endif
+			</li>
+			@endforeach
+			{{-- <li><a href="#">{{ $start_level }}</a></li> --}}
+		</ul>
+	</nav>
+
+	<a href='/gear?job={{ $job->abbr }}&amp;level={{ $start_level }}&amp;options={{ implode(',', $options) }}' class='btn btn-primary pull-right'>Select Another Profile</a>
 	
 @stop

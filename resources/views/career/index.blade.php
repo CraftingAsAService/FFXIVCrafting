@@ -29,8 +29,8 @@
 
 				<select class='multiselect hidden' id='supporter-producer-class' name='supporter-producer-class'>
 					@foreach($crafting_job_list as $job)
-					<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' selected="selected"' : '' }}>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}'{{ $job->id == reset($job_ids['crafting']) ? ' selected="selected"' : '' }}>
+						{{ $job->name }}
 					</option>
 					@endforeach
 				</select>
@@ -39,19 +39,19 @@
 
 				<select class='multiselect hidden' multiple='multiple' id='supporter-supported-classes' name='supporter-supported-classes[]'>
 					@foreach($crafting_job_list as $job)
-					<option value='{{ $job->en_abbr->term }}' selected='selected'>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}' selected='selected'>
+						{{ $job->name }}
 					</option>
 					@endforeach
 				</select>
 
-				between levels
+				between ilevels
 
-				<input type='number' min='0' max='70' value='1' class='form-control text-center inline-input level-input' id='supporter-min-level' name='supporter-min-level'>
+				<input type='number' min='0' value='1' class='form-control text-center inline-input level-input' id='supporter-min-level' name='supporter-min-level'>
 
 				and
 
-				<input type='number' min='0' max='70' value='70' class='form-control text-center inline-input level-input' id='supporter-max-level' name='supporter-max-level'>
+				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='supporter-max-level' name='supporter-max-level'>
 
 				?
 			</div>
@@ -76,8 +76,8 @@
 
 				<select class='multiselect hidden' id='receiver-recipient-class' name='receiver-recipient-class'>
 					@foreach($crafting_job_list as $job)
-					<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['crafting']) ? ' selected="selected"' : '' }}>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}'{{ $job->id == reset($job_ids['crafting']) ? ' selected="selected"' : '' }}>
+						{{ $job->name }}
 					</option>
 					@endforeach
 				</select>
@@ -85,19 +85,19 @@
 
 				<select class='multiselect hidden' multiple='multiple' id='receiver-producer-classes' name='receiver-producer-classes[]'>
 					@foreach($crafting_job_list as $job)
-					<option value='{{ $job->en_abbr->term }}' selected='selected'>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}' selected='selected'>
+						{{ $job->name }}
 					</option>
 					@endforeach
 				</select>
 
-				make for me between levels
+				make for me between ilevels
 
-				<input type='number' min='0' max='70' value='1' class='form-control text-center inline-input level-input' id='receiver-min-level' name='receiver-min-level'>
+				<input type='number' min='0' value='1' class='form-control text-center inline-input level-input' id='receiver-min-level' name='receiver-min-level'>
 
 				and
 
-				<input type='number' min='0' max='70' value='70' class='form-control text-center inline-input level-input' id='receiver-max-level' name='receiver-max-level'>
+				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='receiver-max-level' name='receiver-max-level'>
 
 				?
 			</div>
@@ -122,8 +122,8 @@
 
 				<select class='multiselect hidden' id='gatherer-class' name='gatherer-class'>
 					@foreach($gathering_job_list as $job)
-					<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($job_ids['gathering']) ? ' selected="selected"' : '' }}>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}'{{ $job->id == reset($job_ids['gathering']) ? ' selected="selected"' : '' }}>
+						{{ $job->name }}
 					</option>
 					@endforeach
 				</select>
@@ -133,20 +133,20 @@
 				<select class='multiselect hidden' multiple='multiple' id='gathering-supported-classes' name='gathering-supported-classes[]'>
 					@foreach(array('crafting','gathering') as $type)
 					@foreach(${$type . '_job_list'} as $job)
-					<option value='{{ $job->en_abbr->term }}' selected='selected'>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}' selected='selected'>
+						{{ $job->name }}
 					</option>
 					@endforeach
 					@endforeach
 				</select>
 
-				between levels
+				between ilevels
 
-				<input type='number' min='0' max='70' value='1' class='form-control text-center inline-input level-input' id='gathering-min-level' name='gathering-min-level'>
+				<input type='number' min='0' value='1' class='form-control text-center inline-input level-input' id='gathering-min-level' name='gathering-min-level'>
 
 				and
 
-				<input type='number' min='0' max='70' value='70' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
+				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
 				
 				?
 			</div>
@@ -174,19 +174,19 @@
 
 				<select class='multiselect hidden' multiple='multiple' id='battling-supported-classes' name='gathering-supported-classes[]'>
 					@foreach($crafting_job_list as $job)
-					<option value='{{ $job->en_abbr->term }}' selected='selected'>
-						{{ $job->name->term }}
+					<option value='{{ $job->abbr }}' selected='selected'>
+						{{ $job->name }}
 					</option>
 					@endforeach
 				</select>
 
-				between levels
+				between ilevels
 
-				<input type='number' min='0' max='70' value='1' class='form-control text-center inline-input level-input' id='gathering-min-level' name='gathering-min-level'>
+				<input type='number' min='0' value='1' class='form-control text-center inline-input level-input' id='gathering-min-level' name='gathering-min-level'>
 
 				and
 
-				<input type='number' min='0' max='70' value='70' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
+				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
 				
 				?
 			</div>
