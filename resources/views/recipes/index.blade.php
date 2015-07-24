@@ -43,10 +43,10 @@
 					</div>
 					<div class='col-xs-3'>
 						<select name='order-by' id='order-by' class='form-control'>
-							<option value='' selected='selected'>Name: a to z</option>
-							<option value='name_desc'>Name: z to a</option>
-							<option value='level_asc'>Level: low to high</option>
-							<option value='level_desc'>Level: high to low</option>
+							<option value='name.asc' selected='selected'>Name: a to z</option>
+							<option value='name.desc'>Name: z to a</option>
+							<option value='recipe_level.asc'>Level: low to high</option>
+							<option value='recipe_level.desc'>Level: high to low</option>
 						</select>
 					</div>
 				</th>
@@ -65,9 +65,9 @@
 							</li>
 							@foreach($crafting_job_list as $job)
 							<li>
-								<a href='#' data-class='{{ $job->en_abbr->term }}'>
-									<img src='/img/classes/{{ $job->en_abbr->term }}.png'>
-									{{ $job->name->term }}
+								<a href='#' data-class='{{ $job->abbr }}'>
+									<img src='/img/classes/{{ $job->abbr }}.png'>
+									{{ $job->name }}
 								</a>
 							</li>
 							@endforeach

@@ -37,6 +37,7 @@ class RouteServiceProvider extends ServiceProvider {
 
 		// Route Model Binding
 		$router->model('item', 'App\Models\Garland\Item');
+		$router->model('leve', 'App\Models\Garland\Leve');
 
 		//
 	}

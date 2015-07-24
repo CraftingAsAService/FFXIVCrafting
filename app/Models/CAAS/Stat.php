@@ -296,6 +296,8 @@ class Stat
 			'Vitality' => 'vitality',
 			'Water Resistance' => 'water_res',
 			'Wind Resistance' => 'wind_res',
+			
+			'Careful Desynthesis' => 'careful_desynthesis',
 		];
 
 	public static function get_ids($stats, $preserve_order = false)

@@ -140,6 +140,8 @@ var global = {
 		name += '=';
 		var cookie_array = document.cookie.split(';');
 
+		console.log(cookie_array);
+
 		for (var x = 0; x < cookie_array.length; x++) {
 			var cookie = cookie_array[x];
 			while (cookie.charAt(0) == ' ')
@@ -234,7 +236,9 @@ var global = {
 
 		return;
 	},
-	click_to_view:function() {
+	click_to_view:function(event) {
+		event.preventDefault();
+		
 		var el = $(this),
 			type = el.data('type'),
 			id = el.closest('[data-item-id]').data('itemId');

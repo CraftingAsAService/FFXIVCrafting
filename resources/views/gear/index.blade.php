@@ -93,10 +93,6 @@
 
 @section('content')
 
-	<div class='alert alert-info'>
-		The commonly reported bugs have been fixed, promise!
-	</div>
-
 	{!! Form::open(['url' => '#', 'method' => 'get', 'id' => 'gear-form', 'class' => 'form-horizontal', 'data-source-url' => '/gear/profile/JOB/LEVEL?options=']) !!}
 		<fieldset>
 			<legend>Select your Class</legend>
@@ -189,7 +185,10 @@
 		
 	<hr>
 	<div class='alert alert-info'>
-		You can still use the old <a href='/equipment'>Equipment Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>
+		You can still use the <a href='/equipment'>Equipment Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>
+		<div>
+			<strong>Vote Again</strong> now that the tool's fixed!   I've cleared all of the old votes.  The commonly reported bugs have been fixed, promise!
+		</div>
 	</div>
 
 @stop

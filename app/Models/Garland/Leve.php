@@ -8,9 +8,14 @@ class Leve extends Model {
 	
 	protected $table = 'leve';
 
-	public function items()
+	public function requirements()
 	{
-		return $this->belongsToMany('App\Models\Garland\Item');
+		return $this->belongsToMany('App\Models\Garland\Item', 'leve_required')->withPivot('amount');
+	}
+
+	public function rewards()
+	{
+		return $this->belongsToMany('App\Models\Garland\Item', 'leve_reward')->withPivot('amount', 'rate');
 	}
 
 	public function location()

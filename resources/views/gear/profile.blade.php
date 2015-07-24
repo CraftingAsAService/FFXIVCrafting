@@ -159,7 +159,7 @@
 				@if($level == $start_level)
 				<span>{{ $level }}</span>
 				@else
-				<a href="{{ $level }}">{{ $level }}</a>
+				<a href="{{ $level }}?{{ $_SERVER['QUERY_STRING'] }}">{{ $level }}</a>
 				@endif
 			</li>
 			@endforeach

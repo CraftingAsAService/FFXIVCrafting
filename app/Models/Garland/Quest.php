@@ -8,6 +8,8 @@ class Quest extends Model {
 
 	protected $table = 'quest';
 
+	protected $guarded = ['id'];
+
 	public function rewards()
 	{
 		return $this->belongsToMany('App\Models\Garland\Item', 'quest_reward');

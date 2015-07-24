@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session;
 
-use App\Models\CAAS\Item;
-use App\Models\CAAS\ClassJob;
+use App\Models\Garland\Item;
+use App\Models\Garland\Job;
 
 class ListController extends Controller
 {
@@ -22,12 +22,12 @@ class ListController extends Controller
 			// $l starts as the amount integer and we're transforming it to an array
 			$l = [
 				'amount' => $l, 
-				'item' => Item::with(array('recipe' => function($query) {
+				'item' => Item::with(['recipes' => function($query) {
 					$query->limit(1);
-				}, 'name'))->find($k)
+				}])->find($k)
 			];
 
-			if (count($l['item']->recipe) == 0)
+			if (count($l['item']->recipes) == 0)
 				unset($list[$k]);
 		}
 		unset($l);
@@ -38,7 +38,7 @@ class ListController extends Controller
 				$saved_link[] = $id . ',' . $info['amount'];
 		$saved_link = implode(':', $saved_link);
 
-		$job_list = ClassJob::get_name_abbr_list();
+		$job_list = Job::lists('name', 'abbr');
 		$active = 'list';
 
 		return view('pages.list', compact('active', 'list', 'saved_link', 'job_list'));

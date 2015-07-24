@@ -669,7 +669,8 @@ class DatabaseSeeder extends Seeder
 	{
 		// Setup Data Var
 		$this->data['leve'] = [];
-		$this->data['item_leve'] = [];
+		$this->data['leve_reward'] = [];
+		$this->data['leve_required'] = [];
 
 		// Loop through nodes
 		foreach ($leve as $l)
@@ -702,16 +703,29 @@ class DatabaseSeeder extends Seeder
 				$row = [
 					'item_id' => $r->item,
 					'leve_id' => $l->id,
-					'rate' => $r->rate,
+					'rate' => $r->rate * 100,
 					'amount' => isset($r->amount) ? $r->amount : null,
 				];
 
-				$this->set_data('item_leve', $row);
+				$this->set_data('leve_reward', $row);
 			}
+
+			if (isset($l->requires))
+				foreach ($l->requires as $r)
+				{
+					$row = [
+						'item_id' => $r->item,
+						'leve_id' => $l->id,
+						'amount' => isset($r->amount) ? $r->amount : 1,
+					];
+
+					$this->set_data('leve_required', $row);
+				}
 		}
 
 		echo __FUNCTION__ . ', ' . count($this->data['leve']) . ' rows' . PHP_EOL;
-		echo 'item_leve, ' . count($this->data['item_leve']) . ' rows' . PHP_EOL;
+		echo 'leve_reward, ' . count($this->data['leve_reward']) . ' rows' . PHP_EOL;
+		echo 'leve_required, ' . count($this->data['leve_required']) . ' rows' . PHP_EOL;
 		$this->output_memory();
 	}
 
@@ -806,13 +820,29 @@ class DatabaseSeeder extends Seeder
 				foreach ((array) $i->attr as $attr => $amount)
 				{
 					if ($attr == 'action')
+					{
+						foreach ($amount as $attr => $data)
+						{
+							$row = [
+								'item_id' => $i->id,
+								'attribute' => $attr,
+								'quality' => 'nq',
+								'amount' => isset($data->rate) ? $data->rate : null,
+								'limit' => isset($data->limit) ? $data->limit : null,
+							];
+
+							$this->set_data('item_attribute', $row);
+						}
+
 						continue;
+					}
 
 					$row = [
 						'item_id' => $i->id,
 						'attribute' => $attr,
 						'quality' => 'nq',
 						'amount' => $amount,
+						'limit' => null,
 					];
 
 					$this->set_data('item_attribute', $row);
@@ -822,13 +852,29 @@ class DatabaseSeeder extends Seeder
 				foreach ((array) $i->attr_hq as $attr => $amount)
 				{
 					if ($attr == 'action')
+					{
+						foreach ($amount as $attr => $data)
+						{
+							$row = [
+								'item_id' => $i->id,
+								'attribute' => $attr,
+								'quality' => 'hq',
+								'amount' => isset($data->rate) ? $data->rate : null,
+								'limit' => isset($data->limit) ? $data->limit : null,
+							];
+
+							$this->set_data('item_attribute', $row);
+						}
+
 						continue;
+					}
 
 					$row = [
 						'item_id' => $i->id,
 						'attribute' => $attr,
 						'quality' => 'hq',
 						'amount' => $amount,
+						'limit' => null,
 					];
 
 					$this->set_data('item_attribute', $row);
@@ -837,14 +883,12 @@ class DatabaseSeeder extends Seeder
 			if (isset($i->attr_max))
 				foreach ((array) $i->attr_max as $attr => $amount)
 				{
-					if ($attr == 'action')
-						continue;
-
 					$row = [
 						'item_id' => $i->id,
 						'attribute' => $attr,
 						'quality' => 'max',
 						'amount' => $amount,
+						'limit' => null,
 					];
 
 					$this->set_data('item_attribute', $row);
@@ -857,6 +901,7 @@ class DatabaseSeeder extends Seeder
 					'attribute' => $i->materia->attr,
 					'quality' => 'nq',
 					'amount' => $i->materia->value,
+					'limit' => null,
 				];
 
 				$this->set_data('item_attribute', $row);
@@ -1006,9 +1051,9 @@ class DatabaseSeeder extends Seeder
 		{
 			echo '--------------------------------------------------' . PHP_EOL;
 			// $count = 0;
-			foreach (array_chunk($rows, $batch_limit) as $data)
+			foreach (array_chunk($rows, $batch_limit) as $batch_id => $data)
 			{
-				echo 'Inserting ' . count($data) . ' rows for ' . $table . PHP_EOL;
+				echo 'Inserting ' . count($data) . ' rows for ' . $table . ' (' . ($batch_id + 1) . ')' . PHP_EOL;
 				
 				// if (++$count == 29 && $table == 'item_shop')
 				// 	dd($data);

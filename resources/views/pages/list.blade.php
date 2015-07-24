@@ -42,7 +42,7 @@
 		</thead>
 		<tbody>
 		@foreach($list as $item_id => $list_item)
-		@if ($list_item['item'] == null)
+		@if (is_null($list_item['item']))
 			{{--
 			<tr>
 				<td colspan='4'>
@@ -51,14 +51,14 @@
 			</tr>
 			--}}
 		@else
-			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name->term }}}'>
+			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name }}}'>
 				<td class='text-left'>
-					<a href='http://xivdb.com/?recipe/{{ $list_item['item']->recipe[0]->id }}' target='_blank'>
-						<img src='{{ assetcdn('items/nq/' . $list_item['item']->id . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name->term }}
-					</a>
+					{{-- <a href='http://xivdb.com/?recipe/{{ $list_item['item']->recipes[0]->id }}' target='_blank'> --}}
+						<img src='{{ assetcdn('item/' . $list_item['item']->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name }}
+					{{-- </a> --}}
 				</td>
 				<td class='text-center valign'>
-					{{ $list_item['item']->recipe[0]->yields }}
+					{{ $list_item['item']->recipes[0]->yield }}
 				</td>
 				<td class='text-center valign'>
 					<input type='number' class='form-control update-list-item text-center' value='{{ $list_item['amount'] }}'>

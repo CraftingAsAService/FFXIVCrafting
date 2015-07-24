@@ -23,7 +23,7 @@ class Item extends Model {
 
 	public function leves()
 	{
-		return $this->belongsToMany('App\Models\Garland\Leve')->withPivot('rate', 'amount');
+		return $this->belongsToMany('App\Models\Garland\Leve', 'leve_reward')->withPivot('rate', 'amount');
 	}
 
 	public function mobs()

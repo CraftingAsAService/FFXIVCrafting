@@ -132,7 +132,10 @@
 		
 	<hr>
 	<div class='alert alert-info'>
-		This page is being replaced by the <a href='/equipment'>Gear Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the one question survey!</a>
+		You can still use the <a href='/gear'>Gear Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>
+		<div>
+			<strong>Vote Again</strong> now that the tool's fixed!   I've cleared all of the old votes.  The commonly reported bugs have been fixed, promise!
+		</div>
 	</div>
 
 @stop

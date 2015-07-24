@@ -167,7 +167,7 @@
 					<i class='class-icon click-to-view {{ $recipe->job->abbr }}' data-type='recipes' title='{{ $recipe->job->abbr }}'></i>
 					@endforeach
 					@if(count($item->mobs))
-					<img src='/img/mob.png' class='click-to-view mob-icon' type='mobs' width='20' height='20' rel='tooltip' title='Click to load Beasts' data-container='body'>
+					<img src='/img/mob.png' class='click-to-view mob-icon' data-type='mobs' width='20' height='20' rel='tooltip' title='Click to load Beasts' data-container='body'>
 					@endif
 				</td>
 				<?php continue; ?>

@@ -330,12 +330,23 @@ class GarlandTables extends Migration
 			$table->index('area_id');
 		});
 
-		Schema::create('item_leve', function(Blueprint $table)
+		Schema::create('leve_reward', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
 			$table->integer('item_id')->unsigned();
 			$table->integer('leve_id')->unsigned();
-			$table->decimal('rate', 5, 2)->unsigned();
+			$table->smallInteger('rate')->unsigned();
+			$table->smallInteger('amount')->unsigned()->nullable();
+
+			$table->index('item_id');
+			$table->index('leve_id');
+		});
+
+		Schema::create('leve_required', function(Blueprint $table)
+		{
+			$table->increments('id')->unsigned();
+			$table->integer('item_id')->unsigned();
+			$table->integer('leve_id')->unsigned();
 			$table->smallInteger('amount')->unsigned()->nullable();
 
 			$table->index('item_id');
@@ -394,6 +405,7 @@ class GarlandTables extends Migration
 			// $table->integer('attribute_id')->unsigned();
 			$table->string('attribute');
 			$table->integer('amount')->unsigned();
+			$table->integer('limit')->unsigned()->nullable();
 
 			$table->index('item_id');
 			$table->index('quality');
@@ -493,7 +505,8 @@ class GarlandTables extends Migration
 			'venture',
 			'item_venture',
 			'leve',
-			'item_leve',
+			'leve_reward',
+			'leve_required',
 			'item_category',
 			'item',
 			// 'attribute',
