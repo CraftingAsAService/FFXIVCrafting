@@ -39,6 +39,10 @@ module.exports = function(grunt) {
 		},
 
 		sass: {
+			options: {
+				cacheLocation: 'node_modules/.sass-cache',
+				update: true // Only update changed files
+			},
 			all: { // Target
 				options: {
 					style: 'compressed',

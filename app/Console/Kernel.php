@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel {
 		'App\Console\Commands\DatabaseImport',
 		'App\Console\Commands\CDNAssets',
 		'App\Console\Commands\CDNImages',
+		'App\Console\Commands\Build',
 	];
 
 	/**
