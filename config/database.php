@@ -122,7 +122,7 @@ return [
 		'cluster' => false,
 
 		'default' => [
-			'host'     => env('REDIS_HOST', 'HOSTNAME', '127.0.0.1'),
+			'host'     => env('REDIS_HOST', env('HOSTNAME', '127.0.0.1'),
 			'port'     => 6379,
 			'database' => env('REDIS_DATABASE', 0),
 		],
