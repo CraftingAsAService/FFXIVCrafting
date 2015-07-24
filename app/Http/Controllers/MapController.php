@@ -16,6 +16,8 @@ class MapController extends Controller
 
 	public function getIndex()
 	{
+		abort('404'); // FIXME, there's just not enough data
+		
 		// The config doesn't have the names, cache it per language
 		$map = Cache::get('map_config_' . Config::get('language'), function() {
 			$map = Config::get('site.map');

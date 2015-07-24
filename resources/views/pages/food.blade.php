@@ -41,7 +41,7 @@
 									<th></th>
 									@foreach($section['headers'] as $header)
 									<th>
-										<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $translations[$header] }}'>
+										<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $header }}'>
 									</th>
 									@endforeach
 								</tr>
@@ -53,7 +53,7 @@
 										<span class='glyphicon glyphicon-cutlery'></span>
 									</td>
 									@foreach($section['headers'] as $j)
-									<td class='{{ $section['intersections'][$j][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $j }}' data-b='{{ $j }}' rel='tooltip' title='{{ $translations[$j] }} Foods'>
+									<td class='{{ $section['intersections'][$j][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $j }}' data-b='{{ $j }}' rel='tooltip' title='{{ $j }} Foods'>
 										{{ $section['intersections'][$j][$j] }}
 									</td>
 									@endforeach
@@ -62,10 +62,10 @@
 								@foreach($section['headers'] as $i)
 								<tr>
 									<td class='row-header'>
-										<img src='/img/stats/nq/{{ $i }}.png' class='stat-icon' rel='tooltip' title='{{ $translations[$i] }}'>
+										<img src='/img/stats/nq/{{ $i }}.png' class='stat-icon' rel='tooltip' title='{{ $i }}'>
 									</td>
 									@foreach($section['headers'] as $j)
-									<td class='{{ $section['intersections'][$i][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $i }}' data-b='{{ $j }}' rel='tooltip' title='{{ $translations[$i] }}@if($i != $j) &amp; {{ $translations[$j] }}@endif Foods'>
+									<td class='{{ $section['intersections'][$i][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $i }}' data-b='{{ $j }}' rel='tooltip' title='{{ $i }}@if($i != $j) &amp; {{ $j }}@endif Foods'>
 										{{ $section['intersections'][$i][$j] }}
 									</td>
 									@endforeach
@@ -82,8 +82,8 @@
 						</li>
 						@foreach($section['headers'] as $header)
 						<li class='list-group-item'>
-							<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $translations[$header] }}'>
-							{{ $translations[$header] }}
+							<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $header }}'>
+							{{ $header }}
 						</li>
 						@endforeach
 					</ul>
@@ -105,26 +105,38 @@
 							<tbody>
 								@foreach($section['data'] as $stat_names => $group)
 									@foreach($group as $item)
-									@foreach(array('nq', 'hq') as $quality)
+									@foreach(['nq', 'hq'] as $quality)
 									<?php if ($quality == 'hq' && ! $item['has_hq']) continue; ?>
-									<tr class='hidden' data-stats='{{ $stat_names }}' data-quality='{{ $quality }}'>
+									<tr class='hidden' data-stats='{{ $stat_names }}' data-quality='{{ $quality }}' data-item-id='{{ $item['id'] }}'>
 										<td>
-											@if($item['vendor_count'] && $quality == 'nq')
-											<a href='#' class='vendors pull-right' data-item-id='{{ $item['id'] }}' rel='tooltip' title='Available for {{ $item['min_price'] }} gil, Click to load Vendors'>
+											@if($item['shops_count'] && $quality == 'nq')
+											<a href='#' class='click-to-view pull-right' data-type='shops' rel='tooltip' title='Available for {{ $item['price'] }} gil, Click to load Shops'>
 												<img src='/img/coin.png' width='24' height='24'>
 											</a>
 											@endif
 
 											<a href='http://xivdb.com/?item/{{ $item['id'] }}' target='_blank'>
-												<img src='{{ assetcdn('items/' . $quality . '/' . $item['id'] . '.png') }}' width='36' height='36'>
+												<span class='overlay-container'>
+												@if($quality == 'hq')
+												<img src='/img/hq-overlay.png' width='36' height='36' class='hq-overlay' style='top: inherit;'>
+												@endif
+												<img src='{{ assetcdn('item/' . $item['icon'] . '.png') }}' width='36' height='36'>
+												</span>
 												{{ $item['name'] }}
 											</a>
 										</td>
 										@foreach(explode('|', $stat_names) as $stat_name)
-										<td class='text-center valign' data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $translations[$stat_name] }}' rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $translations[$stat_name] }}'>
+										@if(isset($item['stats'][$stat_name][$quality]))
+										<td class='text-center valign' data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $stat_name }}' rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $stat_name }}'>
 											+{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}
 											<img src='/img/stats/{{ $quality }}/{{ $stat_name }}.png' class='stat-icon'>
 										</td>
+										@else
+										<td data-stat-name='{{ $stat_name }}' rel='tooltip'>
+											+0
+											<img src='/img/stats/{{ $quality }}/{{ $stat_name }}.png' class='stat-icon'>
+										</td>
+										@endif
 										@endforeach
 									</tr>
 									@endforeach

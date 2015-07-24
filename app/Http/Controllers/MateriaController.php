@@ -5,7 +5,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-use App\Models\CAAS\Item;
+use App\Models\Garland\Item;
+use App\Models\CAAS\Stat;
 
 class MateriaController extends Controller
 {
@@ -19,30 +20,35 @@ class MateriaController extends Controller
 	public function getIndex()
 	{
 		// Items that are Materia
-		$results = Item::with('name', 'en_name', 'baseparam', 'baseparam.name', 'baseparam.en_name')
-			->where('itemcategory_id', 13)
+		$results = Item::with('attributes')
+			->where('item_category_id', 58)
 			->orderBy('id')
 			->get();
 
 		// Flatten materia list
-		$materia_list = array();
-		foreach ($results as $row)
+		$materia_list = [];
+		foreach ($results as $item)
 		{
-			preg_match('/^(.*)\sMateria\s(.*)$/', $row->en_name->term, $matches);
+			preg_match('/^(.*)\sMateria\s(.*)$/', $item->name, $matches);
 			
 			list($ignore, $name, $power) = $matches;
 
-			if ( ! isset($materia_list[$name]))
-				$materia_list[$name] = array(
-					'icon' => $row->baseparam[0]->en_name->term,
-					'stat' => $row->baseparam[0]->name->term,
-					'power' => array()
-				);
+			if (count($item->attributes) == 0)
+				continue;
 
-			$materia_list[$name]['power'][$power] = array(
-				'id' => $row->id,
-				'amount' => $row->baseparam[0]->pivot->nq_amount
-			);
+			$attribute = $item->attributes[0];
+
+			if ( ! isset($materia_list[$name]))
+				$materia_list[$name] = [
+					'icon' => Stat::name($attribute->attribute),
+					'stat' => Stat::name($attribute->attribute),
+					'power' => []
+				];
+
+			$materia_list[$name]['power'][$power] = [
+				'item' => $item,
+				'amount' => $attribute->amount
+			];
 		}
 
 		return view('pages.materia', compact('materia_list'));

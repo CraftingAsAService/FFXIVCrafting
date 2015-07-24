@@ -7,13 +7,13 @@ return array(
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
 
-	'available_languages' => array('en', 'ja', 'de', 'fr'),
-	'full_languages' => array(
+	'available_languages' => ['en'], //, 'ja', 'de', 'fr'],
+	'full_languages' => [
 		'en' => 'English',
 		'fr' => 'Français',
 		'de' => 'Deutsch',
 		'ja' => '日本語',
-	),
+	],
 	'default_language' => 'en',
 	// 'donation_slogans' => array(
 	// 	"Support Alcoholism, <a href='#buymeabeer' id='buymeabeer'>Buy me a beer!</a>",

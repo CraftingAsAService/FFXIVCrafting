@@ -32,6 +32,8 @@ Route::controllers([
 	'gear'			=> 'GearController',
 ]);
 
+Route::get('entity/{item}/{type}', 'EntityController@show');
+
 // Old/Redirect Controllers
 
 Route::any('leve', function() {

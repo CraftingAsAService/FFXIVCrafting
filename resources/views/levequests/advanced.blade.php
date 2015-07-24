@@ -19,6 +19,10 @@
 
 @section('content')
 
+<div class='alert alert-warning'>
+	Sorry, I've disabled this page.  Express your anger!  Visit the <a href='http://reddit.com/r/ffxivcrafting'>Subreddit</a>.
+</div>
+{{-- 
 <div class='panel panel-default'>
 	<div class='panel-heading'>
 		Levequest Filter
@@ -117,5 +121,5 @@
 <div class='well'>
 	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BlueGartr user Seravi Edalborez</a>.  Thanks Seravi!
 </div>
-
+ --}}
 @stop

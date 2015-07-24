@@ -5,8 +5,8 @@ use App\Http\Controllers\Controller;
 
 use Config;
 
-use App\Models\CAAS\QuestItem;
-use App\Models\CAAS\ClassJob;
+use App\Models\Garland\Quest;
+use App\Models\Garland\Job;
 
 class QuestsController extends Controller
 {
@@ -20,32 +20,42 @@ class QuestsController extends Controller
 	public function getIndex()
 	{
 		// All Quests
-		$quest_records = QuestItem::with('classjob', 'classjob.en_abbr', 'item', 'item.name', 'item.recipe')
-			->orderBy('classjob_id')
+		$results = Quest::with('job_category', 'job_category.jobs', 'requirements', 'requirements.recipes')
+			->has('requirements')
+			->whereHas('requirements', function($query) {
+				$query->has('recipes');
+			})
+			->whereIn('job_category_id', range(9,19)) // 9-19 are solo categories for DOL/H
+			->orderBy('job_category_id')
 			->orderBy('level')
-			->orderBy('item_id')
+			->orderBy('sort')
 			->get();
 
-		$quests = array();	
-		foreach($quest_records as $quest)
+		$quests = [];
+		foreach($results as $quest)
 		{
-			if ( ! isset($quests[$quest->classjob->en_abbr->term]))
-				$quests[$quest->classjob->en_abbr->term] = array();
+			$quest->job = $quest->job_category->jobs[0];
+			$items = [];
 
-			if (empty($quest->item->recipe))
-			{
-				var_dump($quest);
-				exit;
-			}
-			foreach ($quest->item->recipe as $r)
-				if ($r->classjob_id == $quest->classjob_id)
-					$quest->recipe = $r;
+			if ( ! isset($quests[$quest->job->abbr]))
+				$quests[$quest->job->abbr] = [];
 
-			$quests[$quest->classjob->en_abbr->term][] = $quest;
+			foreach ($quest->requirements as $requirement)
+				foreach ($requirement->recipes as $recipe)
+					if ($recipe->job_id == $quest->job->id)
+						$items[] = [
+							'id' => $requirement->id,
+							'name' => $requirement->name,
+							'icon' => $requirement->icon,
+						];
+
+			$quest->items = $items;
+
+			$quests[$quest->job->abbr][] = $quest;
 		}
 
 		$job_ids = array_merge(Config::get('site.job_ids.crafting'), Config::get('site.job_ids.gathering'));
-		$job_list = ClassJob::with('name', 'en_abbr')->whereIn('id', $job_ids)->get();
+		$job_list = Job::whereIn('id', $job_ids)->get();
 
 		return view('pages.quests', compact('quests', 'job_ids', 'job_list'));
 	}

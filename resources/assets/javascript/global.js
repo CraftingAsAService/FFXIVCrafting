@@ -41,6 +41,8 @@ var global = {
 			});
 		});
 
+		$(document).on('click', '.click-to-view', global.click_to_view);
+
 		$('.toggle-mobile-nav').click(function() {
 			$('body').toggleClass('mobile-nav-enabled');
 		});
@@ -138,6 +140,8 @@ var global = {
 		name += '=';
 		var cookie_array = document.cookie.split(';');
 
+		console.log(cookie_array);
+
 		for (var x = 0; x < cookie_array.length; x++) {
 			var cookie = cookie_array[x];
 			while (cookie.charAt(0) == ' ')
@@ -229,6 +233,48 @@ var global = {
 		// Special MSIE11 check
 		if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./))
 			$('body').addClass('msie11');
+
+		return;
+	},
+	click_to_view:function(event) {
+		event.preventDefault();
+		
+		var el = $(this),
+			type = el.data('type'),
+			id = el.closest('[data-item-id]').data('itemId');
+
+		if (el.hasClass('loading'))
+				return;
+
+		var modal = $('#' + type + '-for-' + id);
+
+		if (modal.length > 0)
+			return $('#' + type + '-for-' + id).modal('show');
+
+		// Load the entity
+		$.ajax({
+			url: '/entity/' + id + '/' + type,
+			dataType: 'html',
+			beforeSend:function() {
+
+				el.addClass('loading');
+
+				global.noty({
+					type: 'warning',
+					text: 'Loading ' + type.substring( 0, 1 ).toUpperCase() + type.substring(1)
+				});
+
+			},
+			success:function(response) {
+				
+				$('body').append(response);
+
+				$('#' + type + '-for-' + id).modal();
+
+				el.removeClass('loading');
+
+			}
+		});
 
 		return;
 	}

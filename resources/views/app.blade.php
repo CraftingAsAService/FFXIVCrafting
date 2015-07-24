@@ -85,7 +85,7 @@
 
 					{{-- See /app/Helpers/ViewHelper.php for menu_item() function --}}
 					{!! menu_item('/',			'Home',			'home'		) !!}
-					{!! menu_item('/gear',		'Gear',			'gear'	) !!}
+					{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 					{!! menu_item('/career',	'Career',		'career'	) !!}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
@@ -95,6 +95,7 @@
 					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
 					{!! menu_item('/food',		'Food',			'food'		) !!}
 
+					<?php /*
 					<li>
 						<hr>
 					</li>
@@ -107,6 +108,7 @@
 						</a>
 					</li>
 					@endforeach
+					*/ ?>
 				</ul>
 
 			</div>
@@ -124,6 +126,7 @@
 								</a>
 							</li>
 							@endif
+							<?php /*
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 									<img src="/img/icons/flags/{!! $lang !!}.png">
@@ -133,13 +136,14 @@
 									@foreach(Config::get('site.full_languages') as $slug => $language)
 									<?php if ($slug == $lang) continue; ?>
 									<li>
-										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'> {{-- $lbu set above --}}
+										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'> 
 											<img src="/img/icons/flags/{!! $slug !!}.png"> {!! $language !!}
 										</a>
 									</li>
 									@endforeach
 								</ul>
 							</li>
+							*/ ?>
 							<li>
 								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
 									@if(isset($account) && $account)
@@ -185,7 +189,7 @@
 										<ul class='nav navbar-nav'>
 											{{-- See /app/helpers.php for menu_item() function --}}
 											{{-- menu_item('/',			'Home',			'home'		) --}}
-											{!! menu_item('/gear',		'Gear',			'gear'	) !!}
+											{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 											{!! menu_item('/career',	'Career',		'career'	) !!}
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
@@ -253,7 +257,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
 								<img src="/img/current_patch.png" class="img-responsive">
-								<p>This site has been optimized for Patch 2.5 Before The Fall</p>
+								<p>This site has been optimized for Patch 3.01 Heavensward</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>

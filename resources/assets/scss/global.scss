@@ -509,8 +509,8 @@ $gear_warning_accent: #a46868;
 		.icons div div {
 			display: inline-block;
 			img {
-				width: 12px;
-				height: 12px;
+				width: 16px;
+				height: 16px;
 			}
 		}
 
@@ -1347,5 +1347,34 @@ table.table-curved {
 	.class-selector {
 		text-align: left;
 		min-width: 145px;
+	}
+}
+
+.click-to-view {
+	cursor: pointer;
+}
+
+.overlay-container {
+	position: relative;
+	img {
+		position: relative; top: 0; left: 0;
+		z-index: 5;
+	}
+	.hq-overlay {
+		position: absolute;
+		z-index: 6;
+	}
+}
+
+.entity-modal {
+	.modal-body {
+		max-height: calc(90vh - 60px); // 60px from margin top/bottom of modal
+		overflow: auto;
+		caption {
+			font-size: 1.25em;
+			text-decoration: underline;
+			font-weight: bold;
+			margin-bottom: .25em;
+		}
 	}
 }

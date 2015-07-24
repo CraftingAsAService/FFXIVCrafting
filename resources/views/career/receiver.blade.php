@@ -9,9 +9,9 @@
 @stop
 
 @section('banner')
-	<h1>{{ $job->name->term }}'s Receiver Career</h1>
+	<h1>{{ $job->name }}'s Receiver Career</h1>
 
-	<p>The following class{{ count($jobs) > 1 ? 'es' : '' }} produce items for {{ $job->name->term }} between levels {{ $min_level }} and {{ $max_level }}:</p>
+	<p>The following class{{ count($jobs) > 1 ? 'es' : '' }} produce items for {{ $job->name }} between levels {{ $min_level }} and {{ $max_level }}:</p>
 	<p>@foreach($jobs as $j) <span class='label label-default'>{{ $j }}</span> @endforeach</p>
 @stop
 
@@ -23,9 +23,9 @@
 				<th class='invisible'>&nbsp;</th>
 				<th class='text-left'>Recipe</th>
 				<th class='text-center'>Amount Needed</th>
-				@if($show_quests)
+				{{-- @if($show_quests)
 				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!' data-container='body'>Quest</th>
-				@endif
+				@endif --}}
 				<th class='text-center'>Purchase</th>
 				<th class='text-center valign' rel='tooltip' title='Add to Crafting List'>
 					<i class='glyphicon glyphicon-shopping-cart'></i>
@@ -35,41 +35,42 @@
 		</thead>
 		<tbody>
 			<?php $total = 0; ?>
-			@foreach($recipies as $recipe)
-			<?php if($recipe->vendors) $total += round($recipe->amount + .49) * $recipe->min_price; ?>
-			<tr>
+			@foreach($recipes as $recipe)
+			<?php if($amounts[$recipe->id] == 1) continue; ?>
+			<?php if(count($recipe->item->shops)) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
+			<tr data-item-id='{{ $recipe->item_id }}'>
 				<td width='24' class='valign'>
-					<i class='class-icon class-id-{{ $recipe->classjob_id }}'></i>
+					<i class='class-icon class-id-{{ $recipe->job_id }}'></i>
 				</td>
 				<td>
-					@if(isset($recipe->level))
-					<span class='close' rel='tooltip' title='Job Level'>{{ $recipe->level }}</span>
+					@if(isset($recipe->recipe_level))
+					<span class='close' rel='tooltip' title='Level'>{{ $recipe->recipe_level }}</span>
 					@endif
-					<a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'>
-						<img src='{{ assetcdn('items/nq/' . $recipe->item_id . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->term }}
-					</a>
+					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'> --}}
+						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name }}
+					{{-- </a> --}}
 				</td>
 				<td class='valign text-center'>
-					{{ number_format($recipe->amount + .49) }}
+					{{ number_format($amounts[$recipe->id] + .49) }}
 				</td>
-				@if($show_quests)
+				{{-- @if($show_quests)
 				<td class='valign text-center quest_amount'>
 					@if(isset($recipe->quest_level) && $recipe->quest_level > 0)
 						<img src='/img/{{ $recipe->quest_quality ? 'H' : 'N' }}Q.png' width='24' height='24' class='quest_marker' rel='tooltip' title='Level {{ $recipe->quest_level }} Quest{{ $recipe->quest_quality ? '<br>HQ Items required' : '' }}' data-container='body' data-html='true'>
 						<span class='amount'>{{ number_format($recipe->quest_amount) }}</span>
 					@endif
 				</td>
-				@endif
+				@endif --}}
 				<td class='valign text-center'>
-					@if($recipe->vendors)
-					<a href='#' class='btn btn-default vendors' data-item-id='{{ $recipe->item_id }}' rel='tooltip' title='Available for {{ $recipe->min_price }} gil, Click to load Vendors'>
+					@if(count($recipe->item->shops))
+					<a href='#' class='btn btn-default click-to-view' data-type='shops' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Vendors'>
 						<img src='/img/coin.png' width='24' height='24'>
-						{{ number_format($recipe->min_price) }}
+						{{ number_format($recipe->item->price) }}
 					</a>
 					@endif
 				</td>
 				<td class='text-center valign'>
-					<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->term }}}'>
+					<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->item->name }}}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>

@@ -17,10 +17,10 @@
 
 <div class='row'>
 	<div class='col-sm-4 homepage-step'>
-		<div class='home-callout' data-href='/gear'>
+		<div class='home-callout' data-href='/equipment'>
 			<img src='/img/homepage/icon-equipment.png' width='40' height='40'>
 			<p class='title'>
-				Gear<span class='hidden-sm'>&nbsp;Profiler</span>
+				Equipment<span class='hidden-sm'>&nbsp;Profiler</span>
 			</p>
 			<p class='description'>
 				Your goal is to create HQ items every time, and the only way to do that is with the proper gear.  Start with your gear!

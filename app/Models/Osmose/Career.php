@@ -1,4 +1,6 @@
-<?php namespace App\Models\Osmose;
+<?php
+
+namespace App\Models\Osmose;
 
 // How often will you be crafting each recipe, if you make one of everything?
 //   Future note, be sure to mark leves and quests

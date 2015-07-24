@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Config;
 use Session;
 
-use App\Models\CAAS\ClassJob;
-use App\Models\CAAS\Recipes;
+use App\Models\Garland\Job;
+use App\Models\Garland\Recipe;
 
 class RecipesController extends Controller
 {
@@ -22,15 +22,12 @@ class RecipesController extends Controller
 
 	public function getIndex()
 	{
-		$list = Recipes::with('item', 'item.name')
-			->select('*', 'recipes.id AS recipe_id')
-			->join('items AS i', 'i.id', '=', 'recipes.item_id')
-			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'))
+		$list = Recipe::with('item')
 			->orderBy(\DB::raw('RAND()'))
 			->paginate(10);
 
-		$crafting_job_list = ClassJob::with('name', 'en_abbr')->whereIn('id', Config::get('site.job_ids.crafting'))->get();
-		$job_list = ClassJob::get_name_abbr_list();
+		$crafting_job_list = Job::whereIn('id', Config::get('site.job_ids.crafting'))->get();
+		$job_list = Job::lists('name', 'abbr');
 
 		$crafting_list_ids = array_keys(Session::get('list', []));
 
@@ -59,43 +56,46 @@ class RecipesController extends Controller
 		if ($min > $max)
 			list($max, $min) = [$min, $max];
 
-		$job_list = ClassJob::get_name_abbr_list();
+		$job_list = Job::lists('name', 'abbr');
 
 		if ($class && $class != 'all')
-			$classjob = ClassJob::get_by_abbr($class);
+			$job = Job::where('abbr', $class)->first();
 			
-		$sorting = explode('_', $sorting);
+		$sorting = explode('.', $sorting);
 		$order_by = 'name'; $sort = 'asc';
 		if (count($sorting) == 2)
 		{
 			// Only overwrite if need-be (i.e. don't test for "name" or "asc")
 
-			if ($sorting[0] == 'level')
+			if ($sorting[0] == 'recipe_level')
 				$order_by = $sorting[0];
 
 			if ($sorting[1] == 'desc')
 				$sort = $sorting[1];
 		}
 		
-		$query = Recipes::with('item', 'item.name')
-			->select('*', 'recipes.id AS recipe_id', 'recipes.level AS level')
-			->join('items AS i', 'i.id', '=', 'recipes.item_id')
-			->join('translations AS t', 't.id', '=', 'i.name_' . Config::get('language'));
+		$query = Recipe::with('item');
 
-		$query->orderBy($order_by == 'name' ? 't.term' : 'recipes.' . $order_by, $sort);
+		// We need this next bit for both an order by and a name search
+		if ($order_by == 'name' || $name)
+			$query
+				->select('recipe.*') // Avoid selecting any data from the item table
+				->join('item as i', 'i.id', '=', 'recipe.item_id');
+
+		if ($order_by == 'name')
+			$query->orderBy('i.name', $sort);
+
+		if ($order_by != 'name')
+			$query->orderBy($order_by, $sort);
 		
 		if ($name)
-			$query->whereHas('item', function($query) use ($name) {
-				$query->whereHas('name', function($query) use ($name) {
-					$query->where('term', 'like', '%' . $name . '%');
-				});
-			});
+			$query->where('i.name', 'like', '%' . $name . '%');
 
 		if ($min && $max)
-			$query->whereBetween('recipes.level', [$min, $max]);
+			$query->whereBetween('recipe_level', [$min, $max]);
 
-		if (isset($classjob))
-			$query->where('recipes.classjob_id', $classjob->id);
+		if (isset($job))
+			$query->where('job_id', $job->id);
 
 		$list = $query->paginate($per_page);
 

@@ -92,8 +92,10 @@ class CDNImages extends Command {
 		$files_to_upload = array();
 
 		$tally = 0;
-		foreach (array('items/nq', 'items/hq') as $ext)
-			foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator('resources/assets/images/' . $ext)) as $filename)
+		chdir('resources/assets/images');
+		// This only gets two levels deep, but is good enough.
+		foreach (array_merge(glob('*', GLOB_ONLYDIR),glob('*/*', GLOB_ONLYDIR)) as $ext)
+			foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($ext)) as $filename)
 			{
 				// Ignore '..' or '.' directories.
 				if (in_array(substr($filename, -2), array('..', '\.', '/.'))) // \. for windows, /. for linux
@@ -110,14 +112,33 @@ class CDNImages extends Command {
 					);
 			}
 
-		$this->info('Uploading ' . count($files_to_upload) . ' files in batches of 100.');
+		$this->info('Uploading ' . count($files_to_upload) . ' files.');
+
+		// Upload files individually.  Multiple upload fails too much.
+		foreach ($files_to_upload as $file)
+		{
+			// Protect against japanese filenames
+			$is_japanese = preg_match('/[\x{4E00}-\x{9FBF}\x{3040}-\x{309F}\x{30A0}-\x{30FF}]/u', $file['name']);
+			if ($is_japanese)
+			{
+				$this->comment('Skipping ' . $file['name'] . '; Japanese characters.');
+				continue;
+			}
+			
+			$this->info('Uploading ' . $file['name']);
+			$container->uploadObject($file['name'], fopen($file['path'], 'r+'));
+		}
+		
+		// $batch_amount = 50;
+
+		// $this->info('Uploading ' . count($files_to_upload) . ' files in batches of ' . $batch_amount . '.');
 		
 		// Upload in batches
-		foreach (array_chunk($files_to_upload, 100) as $files)
-		{
-			$this->info('Uploading ' . count($files) . ' files.');
-			$container->uploadObjects($files);
-		}
+		// foreach (array_chunk($files_to_upload, $batch_amount) as $files)
+		// {
+		// 	$this->info('Uploading ' . count($files) . ' files.');
+		// 	$container->uploadObjects($files);
+		// }
 
 		$this->info('cdn images publish finished');
 	}

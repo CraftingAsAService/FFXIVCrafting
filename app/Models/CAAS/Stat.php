@@ -1,15 +1,17 @@
-<?php namespace App\Models\CAAS;
+<?php
+
+namespace App\Models\CAAS;
 
 class Stat
 {
 
 	public static function avoid($job = 'CRP')
 	{
-		$hand_land = array('Control', 'CP', 'Craftsmanship', 'Gathering', 'GP', 'Perception');
+		$hand_land = ['Control', 'CP', 'Craftsmanship', 'Gathering', 'GP', 'Perception'];
 		$melee_set = array_merge(array('Intelligence', 'Mind', 'Spell Speed'), $hand_land);
 		$magic_set = array_merge(array('Strength', 'Dexterity', 'Skill Speed', 'Parry'), $hand_land);
 
-		$avoid = array(
+		$avoid = [
 			'ARC' => $melee_set,
 			'GLA' => $melee_set,
 			'PGL' => $melee_set,
@@ -32,21 +34,21 @@ class Stat
 			'BLM' => $magic_set,
 			'SMN' => $magic_set,
 			'SCH' => $magic_set,
-		);
+		];
 
-		return isset($avoid[$job]) ? $avoid[$job] : array();
+		return isset($avoid[$job]) ? $avoid[$job] : [];
 	}
 
 	public static function advanced_avoidance($job = 'CRP')
 	{
-		$avoid = array(
+		$avoid = [
 			// Don't suggest pieces that have Intelligence unless they have Mind
-			'CNJ' => array('Intelligence w/o Mind'),
+			'CNJ' => ['Intelligence w/o Mind'],
 			// THM: "Avoid Mind pieces without Intelligence"
-			'THM' => array('Mind w/o Intelligence')
-		);
+			'THM' => ['Mind w/o Intelligence']
+		];
 
-		return isset($avoid[$job]) ? $avoid[$job] : array();
+		return isset($avoid[$job]) ? $avoid[$job] : [];
 	}
 
 	public static function primary($job = 'CRP')
@@ -72,9 +74,9 @@ class Stat
 	public static function focus($job = 'CRP')
 	{
 
-		$look_for = array($job);
+		$look_for = [$job];
 
-		$shortcuts = array(
+		$shortcuts = [
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
 			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN',
@@ -84,13 +86,13 @@ class Stat
 			'MDPS' => 'THM,BLM,ACN,SMN', // Magical DPS
 			'Heals' => 'CNJ,SCH,WHM',
 			'Tanks' => 'GLA,MRD,PLD,WAR',
-		);
+		];
 
 		foreach ($shortcuts as $role => $classes)
 			if (in_array($job, explode(',', $classes)))
 				$look_for[] = $role;
 
-		$benefactors = array(
+		$benefactors = [
 			// Everyone Benefits
 			'Materia' => 'DOH,DOL,DOW,DOM',
 
@@ -136,9 +138,9 @@ class Stat
 			'Mind' => 'Heals',//,CUL,BSM,WVR,MIN',
 			'Piety' => 'Heals,RDPS',//,ALC,CUL,FSH',
 
-		);
+		];
 
-		$focus = array();
+		$focus = [];
 
 		foreach ($benefactors as $stat => $roles)
 			foreach($look_for as $job)
@@ -223,7 +225,7 @@ class Stat
 	public static function boring()
 	{
 		// A list of the "boring" stats
-		return array(
+		return [
 			'Increased Spiritbond Gain',
 			'Reduced Durability Loss',
 
@@ -242,34 +244,117 @@ class Stat
 			'Sleep Resistance',
 			'Water Resistance',
 			'Wind Resistance',
-		);
+		];
 	}
+
+	static public $stat_conversion = [
+			'Accuracy' => 'accuracy',
+			'Bind Resistance' => 'bind_res',
+			'Blind Resistance' => 'blind_res',
+			'Block Rate' => 'block_rate',
+			'Block Strength' => 'block_strength',
+			'Blunt Resistance' => 'blunt_res',
+			'Control' => 'control',
+			'CP' => 'cp',
+			'Craftsmanship' => 'craftsmanship',
+			'Critical Hit Rate' => 'critical_rate',
+			'Defense' => 'def',
+			'Delay' => 'delay',
+			'Determination' => 'determination',
+			'Dexterity' => 'dexterity',
+			'Physical Damage' => 'dmg',
+			'Doom Resistance' => 'doom_res',
+			'Reduced Durability Loss' => 'durability_loss',
+			'Earth Resistance' => 'earth_res',
+			'Fire Resistance' => 'fire_res',
+			'Gathering' => 'gathering',
+			'GP' => 'gp',
+			'Heavy Resistance' => 'heavy_res',
+			'Ice Resistance' => 'ice_res',
+			'Intelligence' => 'intelligence',
+			'Lightning Resistance' => 'lightning_res',
+			'Magic Defense' => 'mdef',
+			'Magic Damage' => 'mdmg',
+			'Mind' => 'mind',
+			'Morale' => 'morale',
+			'Paralysis Resistance' => 'paralysis_res',
+			'Parry' => 'parry',
+			'Perception' => 'perception',
+			'Petrification Resistance' => 'petrify_res',
+			'Piercing Resistance' => 'pierce_res',
+			'Piety' => 'piety',
+			'Poison Resistance' => 'poison_res',
+			'Silence Resistance' => 'silence_res',
+			'Skill Speed' => 'skill_speed',
+			'Slashing Resistance' => 'slash_res',
+			'Sleep Resistance' => 'sleep_res',
+			'Slow Resistance' => 'slow_res',
+			'Spell Speed' => 'spell_speed',
+			'Increased Spiritbond Gain' => 'spiritbond_gain',
+			'Strength' => 'strength',
+			'Stun Resistance' => 'stun_res',
+			'Vitality' => 'vitality',
+			'Water Resistance' => 'water_res',
+			'Wind Resistance' => 'wind_res',
+			
+			'Careful Desynthesis' => 'careful_desynthesis',
+		];
 
 	public static function get_ids($stats, $preserve_order = false)
 	{
 		if (empty($stats))
 			return [];
 
-		if ( ! $preserve_order)
-			return BaseParam::with('en_name')
-			->whereHas('en_name', function($q) use ($stats) {
-				$q->whereIn('term', $stats);
-			})
-			->lists('id');
-
 		$results = [];
 
+		// if ( ! $preserve_order)
+		// 	return BaseParam::with('en_name')
+		// 	->whereHas('en_name', function($q) use ($stats) {
+		// 		$q->whereIn('term', $stats);
+		// 	})
+		// 	->lists('id');
+
+		// foreach ($stats as $stat)
+		// {
+		// 	$r = BaseParam::with('en_name')
+		// 		->whereHas('en_name', function($q) use ($stat) {
+		// 			$q->where('term', $stat);
+		// 		})
+		// 		->first();
+		// 	$results[] = isset($r->id) ? $r->id : 0;
+		// }
+
+		// Translate the full names into the slugs
+		// Slugs will act as an "id" to avoid rewriting a bunch of stuff
+		//  This was part of the Libra->Garland transition
+		
+
+		// Enfeebling Magic Potency
+		// Enhancement Magic Potency
+		// Enmity
+		// Enmity Reduction
+		// Evasion
+		// Healing Magic Potency
+		// HP
+		// Magic Resistance
+		// Movement Speed
+		// MP
+		// Projectile Resistance
+		// Refresh
+		// Regen
+		// Spikes
+		// TP
 		foreach ($stats as $stat)
-		{
-			$r = BaseParam::with('en_name')
-				->whereHas('en_name', function($q) use ($stat) {
-					$q->where('term', $stat);
-				})
-				->first();
-			$results[] = isset($r->id) ? $r->id : 0;
-		}
+			if (isset(self::$stat_conversion[$stat]))
+				$results[] = self::$stat_conversion[$stat];
 		
 		return $results;
+	}
+
+	static public function name($attribute)
+	{
+		// dd(array_flip(self::$stat_conversion), $attribute);
+		return array_flip(self::$stat_conversion)[$attribute];
 	}
 
 }

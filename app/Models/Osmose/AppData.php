@@ -1,4 +1,6 @@
-<?php namespace App\Models\Osmose;
+<?php
+
+namespace App\Models\Osmose;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -51,7 +51,7 @@
 					options = '';
 
 				$('#gear-form input:checkbox:checked').each(function() {
-					console.log($(this));
+					// console.log($(this));
 					options += $(this).attr('name') + ',';
 					return;
 				});
@@ -67,8 +67,13 @@
 
 			$('#gear-form').submit(function(event) {
 				event.preventDefault();
+				$('#gear-form').trigger('build_url');
 				window.location = $(this).attr('action');
 				return false;
+			});
+
+			$('#level').change(function() {
+				$('#gear-form').trigger('build_url');
 			});
 
 			if ($('.class-selector.select-me').length == 1)
@@ -96,19 +101,19 @@
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($crafting_job_list as $job)
-						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
-						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
-							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($gathering_job_list as $job)
-						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
-						<label class='btn btn-info class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
-							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<label class='btn btn-info class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
 						@endforeach
 					</div>
@@ -120,19 +125,19 @@
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($basic_melee_job_list as $job)
-						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
-						<label class='btn btn-danger class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
-							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<label class='btn btn-danger class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($basic_magic_job_list as $job)
-						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->en_abbr->term; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->en_name->term)] : 1); ?>
-						<label class='btn btn-warning class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->en_abbr->term }}' data-level='{{ $default_level }}'>
-							<img src='/img/jobs/{{ $job->en_abbr->term }}-inactive.png' data-active-src='/img/jobs/{{ $job->en_abbr->term }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name->term }}'>
+						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<label class='btn btn-warning class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
+							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
 						@endforeach
 					</div>
@@ -180,7 +185,10 @@
 		
 	<hr>
 	<div class='alert alert-info'>
-		You can still use the old <a href='/equipment'>Equipment Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>
+		You can still use the <a href='/equipment'>Equipment Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>
+		<div>
+			<strong>Vote Again</strong> now that the tool's fixed!   I've cleared all of the old votes.  The commonly reported bugs have been fixed, promise!
+		</div>
 	</div>
 
 @stop

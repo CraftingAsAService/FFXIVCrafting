@@ -102,6 +102,7 @@
 				</div>
 			</div>
 
+			{{--
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Component Items</label>
 				<div class='col-sm-8 col-md-9'>
@@ -111,6 +112,7 @@
 					</div>
 				</div>
 			</div>
+			--}}
 		</fieldset>
 		<fieldset>
 			<div class='form-group'>

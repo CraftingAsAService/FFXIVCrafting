@@ -9,7 +9,7 @@ use Config;
 use Cache;
 use Session;
 
-use App\Models\CAAS\ClassJob;
+use App\Models\Garland\Job;
 
 use Viion\Lodestone\LodestoneAPI;
 
@@ -31,10 +31,10 @@ class AccountController extends Controller
 
 		$job_ids = Config::get('site.job_ids');
 
-		$crafting_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['crafting'])->get();
-		$gathering_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['gathering'])->get();
-		$melee_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['basic_melee'])->get();
-		$magic_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['basic_magic'])->get();
+		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
+		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
+		$melee_job_list = Job::whereIn('id', $job_ids['basic_melee'])->get();
+		$magic_job_list = Job::whereIn('id', $job_ids['basic_magic'])->get();
 		
 		return view('account.index', compact('crafting_job_list', 'gathering_job_list', 'melee_job_list', 'magic_job_list'));
 	}

@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Config;
 use Cookie;
 
-use App\Models\CAAS\ClassJob;
 use App\Models\CAAS\Stat;
-use App\Models\CAAS\ClassJobCategory;
-use App\Models\CAAS\Item;
+use App\Models\Garland\Item;
+Use App\Models\Garland\Job;
+use App\Models\Garland\JobCategory;
 
 class EquipmentController extends Controller
 {
@@ -25,10 +25,10 @@ class EquipmentController extends Controller
 	public function getIndex()
 	{
 		$job_ids = Config::get('site.job_ids');
-		$crafting_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['crafting'])->get();
-		$gathering_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['gathering'])->get();
-		$basic_melee_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['basic_melee'])->get();
-		$basic_magic_job_list = ClassJob::with('name', 'en_abbr', 'en_name')->whereIn('id', $job_ids['basic_magic'])->get();
+		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
+		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
+		$basic_melee_job_list = Job::whereIn('id', $job_ids['basic_melee'])->get();
+		$basic_magic_job_list = Job::whereIn('id', $job_ids['basic_magic'])->get();
 		$previous = Cookie::get('previous_equipment_load');
 		$error = false;
 
@@ -74,13 +74,13 @@ class EquipmentController extends Controller
 		elseif ($level > config('site.max_level')) $level = config('site.max_level');
 
 		// All Jobs
-		$job_list = ClassJob::get_name_abbr_list();
+		$job_list = Job::lists('name', 'abbr');
 
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);
 
 		// Make sure it's a real job
-		$job = ClassJob::get_by_abbr($desired_job);
+		$job = Job::get_by_abbr($desired_job);
 
 		// If the job isn't real, error out
 		if ( ! $job)
@@ -91,7 +91,7 @@ class EquipmentController extends Controller
 		$roles = Config::get('site.equipment_roles');
 
 		// What stats do the class like?
-		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
+		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr));
 
 		view()->share('job_list', $job_list);
 		view()->share('job', $job);
@@ -108,8 +108,8 @@ class EquipmentController extends Controller
 		{
 			// Get the "DOW/M" classes
 			$dowm_class_ids = [];
-			$cj = ClassJobCategory::with('classjob')->find(34); // "Disciples of War or Magic"
-			foreach ($cj->classjob as $c)
+			$cj = JobCategory::with('Job')->find(34); // "Disciples of War or Magic"
+			foreach ($cj->Job as $c)
 				$dowm_class_ids[] = $c->id;
 
 			if (in_array($job->id, $dowm_class_ids))
@@ -130,9 +130,12 @@ class EquipmentController extends Controller
 
 		// 3 + ($slim_mode ? 1 : 0)
 		$equipment = Item::calculate($job->id, $level - 1, 4, $craftable_only, $rewardable_too);
+		// dd($equipment);
+		// dd($equipment[7]['Hands'][6][0]->attributes);//->relations['attributes']);
+		// dd($equipment[7]['Hands'][6][0]->relations['attributes']);
 		$equipment = $this->getOutput($equipment);
 
-		//dd($equipment);
+		// dd($equipment);
 		//dd($equipment['46']);
 
 		// if ($level > 1)
@@ -165,15 +168,15 @@ class EquipmentController extends Controller
 		$rewardable_too = $request['rewardable_too'];
 
 		// All Jobs
-		$job_list = ClassJob::get_name_abbr_list();
+		$job_list = Job::lists('name', 'abbr');//get_name_abbr_list();
 
 		// Jobs are capital
 		$desired_job = strtoupper($job);
 
-		$job = ClassJob::get_by_abbr($desired_job);
+		$job = Job::where('abbr', $desired_job)->first();
 
 		// What stats do the class like?
-		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr->term));
+		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr));
 
 		view()->share(compact('job_list', 'job', 'stat_ids_to_focus', 'level'));
 

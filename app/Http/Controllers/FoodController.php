@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Cache;
 use Config;
 
-use App\Models\CAAS\Item;
+use App\Models\Garland\Item;
+use App\Models\CAAS\Stat;
 
 class FoodController extends Controller
 {
@@ -20,15 +21,15 @@ class FoodController extends Controller
 
 	public function getIndex()
 	{
-		list($sections, $translations) = Cache::get('food_sections_' . Config::get('language'), function() {
+		$sections = Cache::get('food_sections_' . Config::get('language'), function() {
 
-			$core_crafting_headers = array('CP', 'Control', 'Craftsmanship', 'Careful Desynthesis');
-			$core_gathering_headers = array('GP', 'Gathering', 'Perception');
-			$core_battle_headers = array('Accuracy', 'Critical Hit Rate', 'Determination', 'Parry', 'Piety', 'Skill Speed', 'Spell Speed', 'Vitality');
-			$core_resistances_headers = array('Reduced Durability Loss');
+			$core_crafting_headers = ['CP', 'Control', 'Craftsmanship', 'Careful Desynthesis'];
+			$core_gathering_headers = ['GP', 'Gathering', 'Perception'];
+			$core_battle_headers = ['Accuracy', 'Critical Hit Rate', 'Determination', 'Parry', 'Piety', 'Skill Speed', 'Spell Speed', 'Vitality'];
+			$core_resistances_headers = ['Reduced Durability Loss'];
 			// Items that are Food
-			$results = Item::with('name', 'baseparam', 'baseparam.name',  'baseparam.en_name', 'vendors')
-				->where('itemcategory_id', 5)
+			$results = Item::with('attributes', 'shops', 'recipes')
+				->where('item_category_id', 46)
 				->orderBy('id')
 				->get();
 
@@ -36,33 +37,28 @@ class FoodController extends Controller
 			$food_groups = $translations = [];
 			foreach($results as $item)
 			{
-				$stats = $names = $key_name = [];
-				foreach ($item->baseparam as $baseparam)
+				$nq_limit = $hq_limit = 0;
+				$stats = [];
+				foreach ($item->attributes as $attribute)
 				{
-					$nq_limit = $baseparam->pivot->nq_limit ?: (int) $baseparam->pivot->nq_amount;
-					$hq_limit = $baseparam->pivot->hq_limit ?: (int) $baseparam->pivot->hq_amount;
-					
-					$translations[$baseparam->en_name->term] = $baseparam->name->term;
-					$stats[$baseparam->en_name->term] = [
-						'name' => $baseparam->name->term,
-						'nq' => [
-							'amount' => (int) $baseparam->pivot->nq_amount,
-							'limit' => $nq_limit,
-							'threshold' => round($nq_limit / ($baseparam->pivot->nq_amount / 100))
-						], 
-						'hq' => [
-							'amount' => (int) $baseparam->pivot->hq_amount,
-							'limit' => $hq_limit,
-							'threshold' => $baseparam->pivot->hq_amount == 0 ? 0 : round($hq_limit / ($baseparam->pivot->hq_amount / 100))
-						]
+					if ( ! in_array($attribute->quality, ['nq', 'hq']))
+						continue;
+
+					$attribute_name = Stat::name($attribute->attribute);
+
+					$stats[$attribute_name]['name'] = $attribute_name;
+					$stats[$attribute_name][$attribute->quality] = [
+						'amount' => $attribute->amount,
+						'limit' => $attribute->limit,
+						'threshold' => $attribute->amount > 0 ? round($attribute->limit / ($attribute->amount / 100)) : null,
 					];
 				}
 
 				if (empty($stats))
 					continue;
 
-				// if ($item->id == 10146)
-				// 	dd($names, $item);
+				// if ($item->id == 12844)
+				// 	dd($stats);
 
 				// For each combination of two, add a new entry
 				foreach ($stats as $i => $i_stats)
@@ -78,14 +74,15 @@ class FoodController extends Controller
 
 						$food_groups[$names][$item->id] = [
 							'id' => $item->id,
-							'has_hq' => $item->has_hq,
-							'name' => $item->name->term,
-							'min_price' => $item->min_price,
-							'vendor_count' => count($item->vendors),
+							'icon' => $item->icon,
+							'has_hq' => (boolean) (count($item->recipes) > 0 ? $item->recipes[0]->hq : false),
+							'name' => $item->name,
+							'price' => $item->price,
+							'shops_count' => count($item->shops),
 							'stats' => [
 								$x => $stats[$x], 
-								$y => $stats[$y]
-							]
+								$y => $stats[$y],
+							],
 						];
 					}
 				}
@@ -179,10 +176,10 @@ class FoodController extends Controller
 
 			unset($food_groups);
 
-			return array($sections, $translations);
+			return $sections;
 		});
 
-		return view('pages.food', compact('sections', 'translations'));
+		return view('pages.food', compact('sections'));
 	}
 
 }
