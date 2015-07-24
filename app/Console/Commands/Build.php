@@ -104,7 +104,6 @@ class Build extends Command {
 			exec('git push --tags origin master');
 		}
 
-
 		$this->info('Done!');
 	}
 
