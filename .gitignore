@@ -1,10 +1,7 @@
 /vendor
 /node_modules
-.env
-.env.local
-.env.qa
-.env.production
+.env*
 composer.phar
 composer.lock
 .DS_Store
-.sass-cache
+Thumbs.db
