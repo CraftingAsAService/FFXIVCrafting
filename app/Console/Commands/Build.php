@@ -41,6 +41,9 @@ class Build extends Command {
 		$env = $this->option('qa') ? 'qa' : 'production';
 		$php = $this->option('php') ? 'php' : 'hhvm';
 
+		if ($this->options('reset'))
+			return $this->reset($php);
+
 		$this->info('Exporting MySQL Database');
 		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-k8s-clus/caas-db/caas.sql');
 
@@ -60,9 +63,10 @@ class Build extends Command {
 		$this->info('Updating an Optimized/NoDev Composer');
 		echo exec('composer update --no-dev -o') . PHP_EOL;
 
-		$this->info('Caching!');
-		echo exec($php . ' artisan route:cache') . PHP_EOL;
-		echo exec($php . ' artisan config:cache') . PHP_EOL;
+		// $this->info('Caching!');
+		// echo exec($php . ' artisan route:cache') . PHP_EOL;
+		// echo exec($php . ' artisan config:cache') . PHP_EOL;
+		// echo exec($php . ' artisan view:cache') . PHP_EOL;
 
 		$this->info('Creating Tarball');
 
@@ -78,7 +82,7 @@ class Build extends Command {
 
 		exec('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/') . PHP_EOL;
 
-		$this->reset();
+		$this->reset($php);
 
 		if ($this->confirm('Ready to Tag and Push? [yes|no]'))
 		{
@@ -93,7 +97,7 @@ class Build extends Command {
 	/**
 	 * Run commands to reset the instance back to normal
 	 */
-	public function reset()
+	public function reset($php)
 	{
 		$this->info('Resetting back to normal, clearing caches again');
 		echo exec($php . ' artisan route:clear') . PHP_EOL;
@@ -130,6 +134,7 @@ class Build extends Command {
 		return [
 			['php', null, InputOption::VALUE_NONE, 'Use PHP instead of HHVM', null],
 			['qa', null, InputOption::VALUE_NONE, 'Run for a QA build over Production', null],
+			['reset', null, InputOption::VALUE_NONE, 'Jump to the reset and exit', null],
 		];
 	}
 
