@@ -41,42 +41,22 @@ class Build extends Command {
 		$env = $this->option('qa') ? 'qa' : 'production';
 		$php = $this->option('php') ? 'php' : 'hhvm';
 
-// 		$this->info('QA? ' . ($env ? 'Yes' : 'No'));
-
-// 		$this->info('PHP? ' . $use);
-
-// 		$this->info('bye ' . $tag);
-
-// 		return;
-
-// 		$this->info('Display this on the screen');
-
-// $this->error('Something went wrong!');
-
-// $name = $this->ask('What is your name?');
-
-// $password = $this->secret('What is the password?');
-
-
-// $this->info('bye ' . $name . ' ' . $password . ' ' . $tag);
-
-
 		$this->info('Prepare for Release, clear caches');
 
-		exec($php . ' artisan cache:clear');
-		exec($php . ' artisan route:clear');
-		exec($php . ' artisan config:clear');
-		exec($php . ' artisan view:clear');
-		exec($php . ' artisan inspire');
-		exec('cp .env.' . $env . ' .env');
-		exec('composer update --no-dev -o');
-		exec($php . ' artisan route:cache');
-		exec($php . ' artisan config:cache');
-		exec($php . ' artisan migrate');
+		$this->error($php . ' artisan cache:clear');
+		$this->error($php . ' artisan route:clear');
+		$this->error($php . ' artisan config:clear');
+		$this->error($php . ' artisan view:clear');
+		$this->error($php . ' artisan inspire');
+		$this->error('cp .env.' . $env . ' .env');
+		$this->error('composer update --no-dev -o');
+		$this->error($php . ' artisan route:cache');
+		$this->error($php . ' artisan config:cache');
+		$this->error($php . ' artisan migrate');
 
-		exec('mysqldump -u homestead -psecret ffxivcrafting > docker/caas.sql');
-		exec('tar -zhcvf docker/caas-db.tar.gz docker/caas.sql');
-		exec('rm docker/caas.sql');
+		$this->error('mysqldump -u homestead -psecret ffxivcrafting > docker/caas.sql');
+		$this->error('tar -zhcvf docker/caas-db.tar.gz docker/caas.sql');
+		$this->error('rm docker/caas.sql');
 
 		$exclude_from_tar = [
 			'caas/.env.*',
@@ -88,20 +68,20 @@ class Build extends Command {
 			'caas/resources/assets/maps/*',
 		];
 
-		exec('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/');
+		$this->error('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/');
 
-		exec($php . ' artisan route:clear');
-		exec($php . ' artisan config:clear');
-		exec($php . ' artisan cache:clear');
-		exec($php . ' artisan view:clear');
-		exec('cp .env.local  .env');
-		exec('composer update');
+		$this->error($php . ' artisan route:clear');
+		$this->error($php . ' artisan config:clear');
+		$this->error($php . ' artisan cache:clear');
+		$this->error($php . ' artisan view:clear');
+		$this->error('cp .env.local  .env');
+		$this->error('composer update');
 
 		if ($this->confirm('Ready to Tag and Push? [yes|no]'))
 		{
-			exec('git commit -a -m "' . $tag . ' Release"');
-			exec('git tag ' . $tag . '');
-			exec('git push --tags origin master');
+			$this->error('git commit -a -m "' . $tag . ' Release"');
+			$this->error('git tag ' . $tag . '');
+			$this->info('RUN THIS: git push --tags origin master');
 		}
 
 		$this->info('Done!');
