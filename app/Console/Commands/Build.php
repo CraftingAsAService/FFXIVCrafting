@@ -41,22 +41,30 @@ class Build extends Command {
 		$env = $this->option('qa') ? 'qa' : 'production';
 		$php = $this->option('php') ? 'php' : 'hhvm';
 
-		$this->info('Prepare for Release, clear caches');
+		$this->info('Exporting MySQL Database');
+		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-k8s-clus/caas-db/caas.sql');
 
-		$this->error($php . ' artisan cache:clear');
-		$this->error($php . ' artisan route:clear');
-		$this->error($php . ' artisan config:clear');
-		$this->error($php . ' artisan view:clear');
-		$this->error($php . ' artisan inspire');
-		$this->error('cp .env.' . $env . ' .env');
-		$this->error('composer update --no-dev -o');
-		$this->error($php . ' artisan route:cache');
-		$this->error($php . ' artisan config:cache');
-		$this->error($php . ' artisan migrate');
 
-		$this->error('mysqldump -u homestead -psecret ffxivcrafting > docker/caas.sql');
-		$this->error('tar -zhcvf docker/caas-db.tar.gz docker/caas.sql');
-		$this->error('rm docker/caas.sql');
+		// TODO, add 2>&1
+
+		$this->info('Clearing caches');
+		echo exec($php . ' artisan cache:clear') . PHP_EOL;
+		echo exec($php . ' artisan route:clear') . PHP_EOL;
+		echo exec($php . ' artisan config:clear') . PHP_EOL;
+		echo exec($php . ' artisan view:clear') . PHP_EOL;
+		echo exec($php . ' artisan inspire') . PHP_EOL;
+
+		$this->info('Switching Environment to ' . strtoupper($env));
+		echo exec('cp .env.' . $env . ' .env');
+
+		$this->info('Updating an Optimized/NoDev Composer');
+		echo exec('composer update --no-dev -o') . PHP_EOL;
+
+		$this->info('Caching!');
+		echo exec($php . ' artisan route:cache') . PHP_EOL;
+		echo exec($php . ' artisan config:cache') . PHP_EOL;
+
+		$this->info('Creating Tarball');
 
 		$exclude_from_tar = [
 			'caas/.env.*',
@@ -64,27 +72,40 @@ class Build extends Command {
 			'caas/node_modules/*',
 			'caas/caas/*',
 			'caas/docker/*',
-			'caas/resources/assets/images/*',
-			'caas/resources/assets/maps/*',
+			'caas/resources/assets/*',
+			'caas/storage/app/osmose/*',
 		];
 
-		$this->error('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/');
+		exec('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/') . PHP_EOL;
 
-		$this->error($php . ' artisan route:clear');
-		$this->error($php . ' artisan config:clear');
-		$this->error($php . ' artisan cache:clear');
-		$this->error($php . ' artisan view:clear');
-		$this->error('cp .env.local  .env');
-		$this->error('composer update');
+		$this->reset();
 
 		if ($this->confirm('Ready to Tag and Push? [yes|no]'))
 		{
-			$this->error('git commit -a -m "' . $tag . ' Release"');
-			$this->error('git tag ' . $tag . '');
+			echo exec('git commit -a -m "' . $tag . ' Release"') . PHP_EOL;
+			echo exec('git tag ' . $tag . '') . PHP_EOL;
 			$this->info('RUN THIS: git push --tags origin master');
 		}
 
 		$this->info('Done!');
+	}
+
+	/**
+	 * Run commands to reset the instance back to normal
+	 */
+	public function reset()
+	{
+		$this->info('Resetting back to normal, clearing caches again');
+		echo exec($php . ' artisan route:clear') . PHP_EOL;
+		echo exec($php . ' artisan config:clear') . PHP_EOL;
+		echo exec($php . ' artisan cache:clear') . PHP_EOL;
+		echo exec($php . ' artisan view:clear') . PHP_EOL;
+
+		$this->info('Switching Environment to Local');
+		echo exec('cp .env.local  .env') . PHP_EOL;
+
+		$this->info('Updating Composer for Development');
+		echo exec('composer update') . PHP_EOL;
 	}
 
 	/**
