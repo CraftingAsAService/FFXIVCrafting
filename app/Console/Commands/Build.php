@@ -37,18 +37,27 @@ class Build extends Command {
 	 */
 	public function fire()
 	{
-		$tag = $this->argument('tag');
+		// $tag = $this->argument('tag');
 		$env = $this->option('qa') ? 'qa' : 'production';
 		$php = $this->option('php') ? 'php' : 'hhvm';
 
-		if ($this->options('reset'))
+		if ($this->option('reset'))
 			return $this->reset($php);
+
+		$latest_tag = exec('git tag');
+
+		$tmp = explode('.', $latest_tag);
+		$tmp[count($tmp) - 1] = end($tmp) + 1;
+
+		$new_tag = implode('.', $tmp);
+
+		$this->info('Latest tag is ' . $latest_tag);
+		$this->info('Suggested tag is ' . $new_tag);
+		$tag = $this->ask('Name this branch: (`enter` to use default)', $new_tag);
+
 
 		$this->info('Exporting MySQL Database');
 		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-k8s-clus/caas-db/caas.sql');
-
-
-		// TODO, add 2>&1
 
 		$this->info('Clearing caches');
 		echo exec($php . ' artisan cache:clear') . PHP_EOL;
@@ -63,10 +72,9 @@ class Build extends Command {
 		$this->info('Updating an Optimized/NoDev Composer');
 		echo exec('composer update --no-dev -o') . PHP_EOL;
 
-		// $this->info('Caching!');
-		// echo exec($php . ' artisan route:cache') . PHP_EOL;
-		// echo exec($php . ' artisan config:cache') . PHP_EOL;
-		// echo exec($php . ' artisan view:cache') . PHP_EOL;
+		$this->info('Caching!');
+		echo exec($php . ' artisan route:cache') . PHP_EOL;
+		echo exec($php . ' artisan config:cache') . PHP_EOL;
 
 		$this->info('Creating Tarball');
 
@@ -91,6 +99,14 @@ class Build extends Command {
 			$this->info('RUN THIS: git push --tags origin master');
 		}
 
+		// TODO, push the DB repo??
+		// if ($this->confirm('Ready to Tag and Push? [yes|no]'))
+		// {
+		// 	echo exec('git commit -a -m "' . $tag . ' Release"') . PHP_EOL;
+		// 	echo exec('git tag ' . $tag . '') . PHP_EOL;
+		// 	$this->info('RUN THIS: git push --tags origin master');
+		// }
+
 		$this->info('Done!');
 	}
 
@@ -103,7 +119,6 @@ class Build extends Command {
 		echo exec($php . ' artisan route:clear') . PHP_EOL;
 		echo exec($php . ' artisan config:clear') . PHP_EOL;
 		echo exec($php . ' artisan cache:clear') . PHP_EOL;
-		echo exec($php . ' artisan view:clear') . PHP_EOL;
 
 		$this->info('Switching Environment to Local');
 		echo exec('cp .env.local  .env') . PHP_EOL;
@@ -120,7 +135,7 @@ class Build extends Command {
 	protected function getArguments()
 	{
 		return [
-			['tag', InputArgument::REQUIRED, 'What to tag, like 3.0.1'],
+			// ['tag', InputArgument::REQUIRED, 'What to tag, like 3.0.1'],
 		];
 	}
 

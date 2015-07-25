@@ -49,7 +49,7 @@ class GarlandSeeder_Bad extends Seeder
 		DB::connection()->disableQueryLog();
 
 		echo "\n" . '** Initializing Translations **' . "\n";
-		TranslationsMapper::init();
+		TranslationsMapperX::init();
 
 		// We want the storage path in another repository
 		// It exists at the same level as this repository
@@ -91,7 +91,7 @@ class GarlandSeeder_Bad extends Seeder
 
 			// Basic data
 			$item['id'] = $item_id;
-			$item['name_en'] = TranslationsMapper::get($i['name']);
+			$item['name_en'] = TranslationsMapperX::get($i['name']);
 			$item['level'] = $i['ilvl'];
 			$item['min_price'] = $i['sell_price'];
 			$item['max_price'] = $i['price'];
@@ -117,7 +117,7 @@ class GarlandSeeder_Bad extends Seeder
 					if ( ! $mob->exists)
 					{
 						$mob->genus = 'beast';
-						$mob->name_en = TranslationsMapper::get($mob_data['name']);
+						$mob->name_en = TranslationsMapperX::get($mob_data['name']);
 						$mob->save();
 					}
 
@@ -189,7 +189,7 @@ class GarlandSeeder_Bad extends Seeder
 			// Item Category
 			$category = $this->core->item->categoryIndex->$i['category']->name;
 			// Garland Categories != Libra Categories, translate the id
-			$translate_id = TranslationsMapper::get($category);
+			$translate_id = TranslationsMapperX::get($category);
 			$item['itemuicategory_id'] = DB::table('item_ui_category')->select('id')->where('name_en', $translate_id)->pluck('id');
 
 			if (empty($item['itemuicategory_id']))
@@ -265,7 +265,7 @@ class GarlandSeeder_Bad extends Seeder
 
 }
 
-class TranslationsMapper extends Seeder
+class TranslationsMapperX extends Seeder
 {
 	private static $t = [],
 					$new = [],
@@ -305,12 +305,12 @@ class TranslationsMapper extends Seeder
 				'term' => $term
 			];
 
-		$batch = Batch::insert($batch, 'translations');
+		$batch = BatchX::insert($batch, 'translations');
 	}
 
 }
 
-class Batch extends Seeder
+class BatchX extends Seeder
 {
 	public static $batch_limit = 300;
 

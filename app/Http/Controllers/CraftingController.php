@@ -61,7 +61,7 @@ class CraftingController extends Controller
 	public function getList()
 	{
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr');
+		$job_list = Job::lists('name', 'abbr')->all();
 		view()->share('job_list', $job_list);
 
 		$include_quests = TRUE;
@@ -143,7 +143,7 @@ class CraftingController extends Controller
 				foreach (array('MIN','BTN','FSH') as $job)
 				{
 					$job = Job::with('categories')->where('abbr', $job)->first();
-					$jc_ids = $job->categories->lists('id');
+					$jc_ids = $job->categories->lists('id')->all();
 					$quests[$job] = Quest::whereIn('job_category_id', $jc_ids)
 						->orderBy('level')
 						->with('item')
@@ -160,7 +160,7 @@ class CraftingController extends Controller
 			foreach ($job as $j)
 			{
 				$job_ids[] = $j->id;
-				$ids = $j->categories->lists('id');
+				$ids = $j->categories->lists('id')->all();
 				$jc_ids = array_merge($ids, $jc_ids);
 			}
 			array_unique($jc_ids);
@@ -294,7 +294,7 @@ class CraftingController extends Controller
 			'Crafting List' => [],
 		];
 
-		$gathering_class_abbreviations = Job::whereIn('id', Config::get('site.job_ids.gathering'))->lists('abbr');
+		$gathering_class_abbreviations = Job::whereIn('id', Config::get('site.job_ids.gathering'))->lists('abbr')->all();
 
 		foreach ($reagent_list as $reagent)
 		{

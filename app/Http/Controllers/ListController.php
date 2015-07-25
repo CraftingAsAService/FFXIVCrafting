@@ -38,7 +38,7 @@ class ListController extends Controller
 				$saved_link[] = $id . ',' . $info['amount'];
 		$saved_link = implode(':', $saved_link);
 
-		$job_list = Job::lists('name', 'abbr');
+		$job_list = Job::lists('name', 'abbr')->all();
 		$active = 'list';
 
 		return view('pages.list', compact('active', 'list', 'saved_link', 'job_list'));

@@ -74,7 +74,7 @@ class EquipmentController extends Controller
 		elseif ($level > config('site.max_level')) $level = config('site.max_level');
 
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr');
+		$job_list = Job::lists('name', 'abbr')->all();
 
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);
@@ -168,7 +168,7 @@ class EquipmentController extends Controller
 		$rewardable_too = $request['rewardable_too'];
 
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr');//get_name_abbr_list();
+		$job_list = Job::lists('name', 'abbr')->all();
 
 		// Jobs are capital
 		$desired_job = strtoupper($job);
