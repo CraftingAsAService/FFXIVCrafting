@@ -8,7 +8,14 @@
 			<div class="modal-body">
 				@foreach ($item->recipes as $recipe)
 				<table class='table table-bordered table-striped'>
-					<caption><i class='class-icon {{ $recipe->job->abbr }} margin-right'></i>{{ $recipe->job->name }} (lvl {{ $recipe->recipe_level }})</caption>
+					<caption>
+						@if (is_null($recipe->job))
+						<img src='/img/FC.png' width='20' height='20' class='margin-right'></i>Free Company Craft
+						@else
+						<i class='class-icon {{ $recipe->job->abbr }} margin-right'></i>{{ $recipe->job->name }}
+						@endif
+						(lvl {{ $recipe->recipe_level }})
+					</caption>
 					<thead>
 						<tr>
 							<th>Item</th>

@@ -257,7 +257,11 @@
 					@endif
 				</td>
 				<td class='crafted_gathered'>
+					@if (is_null($recipe->job))
+					<img src='/img/FC.png' width='20' height='20' class='click-to-view' data-type='recipes' title='Free Company Craft'></i>
+					@else
 					<i class='class-icon {{ $recipe->job->abbr }} click-to-view' data-type='recipes' title='{{ $recipe->job->abbr }}'></i>
+					@endif
 				</td>
 			</tr>
 			@endforeach
