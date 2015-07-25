@@ -34,6 +34,12 @@ RUN a2ensite 000-default
 
 # Configure CAAS domain in Apache
 ADD . /var/www/
+# Install Composer
+RUN apt-get -qq install curl
+RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer
+# Composer install
+WORKDIR /var/www/
+RUN /usr/local/bin/composer install
 # Fix permissions issue on DocRoot
 RUN chown -R www-data.www-data /var/www/
 
