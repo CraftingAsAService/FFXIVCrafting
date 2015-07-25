@@ -108,6 +108,7 @@ class Build extends Command {
 		// }
 
 		$this->info('Done!');
+		$this->info('Consider running osmose:cdn:assets!');
 	}
 
 	/**
