@@ -199,7 +199,7 @@ class Item extends Model {
 				if ($advanced_stat_avoidance)
 					foreach ($advanced_stat_avoidance as $ava)
 						// If the [0] stat exists, but the [1] stat doesn't, drop the piece completely
-						if ($param_count[$ava[0]] > 0 && $param_count[$ava[1]] == 0)
+						if (isset($param_count[$ava[0]]) && isset($param_count[$ava[1]]) && $param_count[$ava[0]] > 0 && $param_count[$ava[1]] == 0)
 							$avoid += 10; // Really sell that this should be avoided
 				
 				# echo '<strong>' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . ' (' . $focus . ',' . $avoid . ')<br>';
