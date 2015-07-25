@@ -185,7 +185,11 @@ class Item extends Model {
 					if ($attribute->quality != 'nq')
 						continue;
 
-					$param_count[$attribute->attribute]++;
+					if ( ! isset($param_count[$attribute->attribute]))
+						$param_count[$attribute->attribute] = 1;
+					else
+						$param_count[$attribute->attribute]++;
+
 					if (in_array($attribute->attribute, $stat_ids_to_avoid))
 						$avoid++;
 					elseif (in_array($attribute->attribute, $stat_ids_to_focus))
