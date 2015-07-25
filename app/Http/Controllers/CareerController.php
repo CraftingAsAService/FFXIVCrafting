@@ -61,7 +61,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = Job::lists('id', 'abbr');
+		$all_classes = Job::lists('id', 'abbr')->all();
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -128,7 +128,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = Job::lists('id', 'abbr');
+		$all_classes = Job::lists('id', 'abbr')->all();
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -197,7 +197,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = Job::lists('id', 'abbr');
+		$all_classes = Job::lists('id', 'abbr')->all();
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];

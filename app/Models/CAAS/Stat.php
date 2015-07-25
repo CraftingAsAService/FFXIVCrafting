@@ -312,7 +312,7 @@ class Stat
 		// 	->whereHas('en_name', function($q) use ($stats) {
 		// 		$q->whereIn('term', $stats);
 		// 	})
-		// 	->lists('id');
+		// 	->lists('id')->all();
 
 		// foreach ($stats as $stat)
 		// {

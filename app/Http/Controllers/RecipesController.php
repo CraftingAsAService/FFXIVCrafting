@@ -27,7 +27,7 @@ class RecipesController extends Controller
 			->paginate(10);
 
 		$crafting_job_list = Job::whereIn('id', Config::get('site.job_ids.crafting'))->get();
-		$job_list = Job::lists('name', 'abbr');
+		$job_list = Job::lists('name', 'abbr')->all();
 
 		$crafting_list_ids = array_keys(Session::get('list', []));
 
@@ -56,7 +56,7 @@ class RecipesController extends Controller
 		if ($min > $max)
 			list($max, $min) = [$min, $max];
 
-		$job_list = Job::lists('name', 'abbr');
+		$job_list = Job::lists('name', 'abbr')->all();
 
 		if ($class && $class != 'all')
 			$job = Job::where('abbr', $class)->first();

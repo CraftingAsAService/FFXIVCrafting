@@ -137,7 +137,7 @@ class Item extends Model {
 		// craftable only?
 		// rewardable?
 		
-		$job_category_ids = $job->categories->lists('id');
+		$job_category_ids = $job->categories->lists('id')->all();
 		
 		foreach ($slots as $slot_identifier => $slot_name)
 		{
