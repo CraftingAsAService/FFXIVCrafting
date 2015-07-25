@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/blpop
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ListPopFirstBlocking extends Command

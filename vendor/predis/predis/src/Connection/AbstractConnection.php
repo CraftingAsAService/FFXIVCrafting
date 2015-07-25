@@ -11,8 +11,9 @@
 
 namespace Predis\Connection;
 
-use Predis\Command\CommandInterface;
+use InvalidArgumentException;
 use Predis\CommunicationException;
+use Predis\Command\CommandInterface;
 use Predis\Protocol\ProtocolException;
 
 /**
@@ -51,20 +52,20 @@ abstract class AbstractConnection implements NodeConnectionInterface
      *
      * @param ParametersInterface $parameters Initialization parameters for the connection.
      *
-     * @throws \InvalidArgumentException
      * @return ParametersInterface
      *
+     * @throws \InvalidArgumentException
      */
     protected function assertParameters(ParametersInterface $parameters)
     {
-        switch ($parameters->scheme) {
-            case 'tcp':
-            case 'redis':
-            case 'unix':
-                break;
+        $scheme = $parameters->scheme;
 
-            default:
-                throw new \InvalidArgumentException("Invalid scheme: '$parameters->scheme'.");
+        if ($scheme !== 'tcp' && $scheme !== 'unix') {
+            throw new InvalidArgumentException("Invalid scheme: '$scheme'.");
+        }
+
+        if ($scheme === 'unix' && !isset($parameters->path)) {
+            throw new InvalidArgumentException('Missing UNIX domain socket path.');
         }
 
         return $parameters;

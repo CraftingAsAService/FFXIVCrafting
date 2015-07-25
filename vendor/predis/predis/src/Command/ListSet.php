@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/lset
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ListSet extends Command

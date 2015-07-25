@@ -11,8 +11,8 @@
 
 namespace Predis\Connection;
 
-use Predis\Command\CommandInterface;
 use Predis\NotSupportedException;
+use Predis\Command\CommandInterface;
 use Predis\Response\Error as ErrorResponse;
 use Predis\Response\Status as StatusResponse;
 
@@ -32,7 +32,7 @@ use Predis\Response\Status as StatusResponse;
  *
  * The connection parameters supported by this class are:
  *
- *  - scheme: it can be either 'redis', 'tcp' or 'unix'.
+ *  - scheme: it can be either 'tcp' or 'unix'.
  *  - host: hostname or IP address of the server.
  *  - port: TCP port of the server.
  *  - path: path of a UNIX domain socket when scheme is 'unix'.
@@ -40,7 +40,6 @@ use Predis\Response\Status as StatusResponse;
  *  - read_write_timeout: timeout of read / write operations.
  *
  * @link http://github.com/nrk/phpiredis
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class PhpiredisSocketConnection extends AbstractConnection
@@ -93,15 +92,13 @@ class PhpiredisSocketConnection extends AbstractConnection
      */
     protected function assertParameters(ParametersInterface $parameters)
     {
-        parent::assertParameters($parameters);
-
         if (isset($parameters->persistent)) {
             throw new NotSupportedException(
-                'Persistent connections are not supported by this connection backend.'
+                "Persistent connections are not supported by this connection backend."
             );
         }
 
-        return $parameters;
+        return parent::assertParameters($parameters);
     }
 
     /**
@@ -194,6 +191,10 @@ class PhpiredisSocketConnection extends AbstractConnection
      */
     private function setSocketOptions($socket, ParametersInterface $parameters)
     {
+        if ($parameters->scheme !== 'tcp') {
+            return;
+        }
+
         if (!socket_set_option($socket, SOL_TCP, TCP_NODELAY, 1)) {
             $this->emitSocketError();
         }
@@ -353,7 +354,7 @@ class PhpiredisSocketConnection extends AbstractConnection
         $reader = $this->reader;
 
         while (PHPIREDIS_READER_STATE_INCOMPLETE === $state = phpiredis_reader_get_state($reader)) {
-            if (@socket_recv($socket, $buffer, 4096, 0) === false || $buffer === '' || $buffer === null) {
+            if (@socket_recv($socket, $buffer, 4096, 0) === false || $buffer === '') {
                 $this->emitSocketError();
             }
 

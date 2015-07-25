@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/hset
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class HashSet extends Command
@@ -24,5 +23,13 @@ class HashSet extends Command
     public function getId()
     {
         return 'HSET';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseResponse($data)
+    {
+        return (bool) $data;
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Predis\Session;
 
+use SessionHandlerInterface;
 use Predis\ClientInterface;
 
 /**
@@ -23,7 +24,7 @@ use Predis\ClientInterface;
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
-class Handler implements \SessionHandlerInterface
+class Handler implements SessionHandlerInterface
 {
     protected $client;
     protected $ttl;

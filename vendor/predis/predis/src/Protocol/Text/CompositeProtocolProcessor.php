@@ -22,7 +22,6 @@ use Predis\Protocol\ResponseReaderInterface;
  * pluggable handlers to serialize requests and deserialize responses.
  *
  * @link http://redis.io/topics/protocol
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class CompositeProtocolProcessor implements ProtocolProcessorInterface

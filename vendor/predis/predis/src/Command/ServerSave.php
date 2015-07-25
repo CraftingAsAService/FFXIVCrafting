@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/save
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ServerSave extends Command

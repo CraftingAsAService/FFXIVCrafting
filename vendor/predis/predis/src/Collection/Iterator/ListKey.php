@@ -11,6 +11,8 @@
 
 namespace Predis\Collection\Iterator;
 
+use InvalidArgumentException;
+use Iterator;
 use Predis\ClientInterface;
 use Predis\NotSupportedException;
 
@@ -25,10 +27,9 @@ use Predis\NotSupportedException;
  * times (trimmed, deleted, overwritten) during the iteration process.
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
- *
  * @link http://redis.io/commands/lrange
  */
-class ListKey implements \Iterator
+class ListKey implements Iterator
 {
     protected $client;
     protected $count;
@@ -52,7 +53,7 @@ class ListKey implements \Iterator
         $this->requiredCommand($client, 'LRANGE');
 
         if ((false === $count = filter_var($count, FILTER_VALIDATE_INT)) || $count < 0) {
-            throw new \InvalidArgumentException('The $count argument must be a positive integer.');
+            throw new InvalidArgumentException('The $count argument must be a positive integer.');
         }
 
         $this->client = $client;
@@ -121,7 +122,7 @@ class ListKey implements \Iterator
      */
     protected function extractNext()
     {
-        ++$this->position;
+        $this->position++;
         $this->current = array_shift($this->elements);
     }
 

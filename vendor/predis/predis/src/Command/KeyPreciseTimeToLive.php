@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/pttl
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class KeyPreciseTimeToLive extends KeyTimeToLive

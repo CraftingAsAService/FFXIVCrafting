@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/sismember
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class SetIsMember extends Command
@@ -24,5 +23,13 @@ class SetIsMember extends Command
     public function getId()
     {
         return 'SISMEMBER';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseResponse($data)
+    {
+        return (bool) $data;
     }
 }

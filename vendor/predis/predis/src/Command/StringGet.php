@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/get
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class StringGet extends Command

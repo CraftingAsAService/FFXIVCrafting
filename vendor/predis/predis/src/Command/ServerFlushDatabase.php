@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/flushdb
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ServerFlushDatabase extends Command

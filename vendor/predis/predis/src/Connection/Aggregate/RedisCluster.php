@@ -11,13 +11,17 @@
 
 namespace Predis\Connection\Aggregate;
 
-use Predis\Cluster\RedisStrategy as RedisClusterStrategy;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use OutOfBoundsException;
+use Predis\NotSupportedException;
 use Predis\Cluster\StrategyInterface;
+use Predis\Cluster\RedisStrategy as RedisClusterStrategy;
 use Predis\Command\CommandInterface;
 use Predis\Command\RawCommand;
-use Predis\Connection\FactoryInterface;
 use Predis\Connection\NodeConnectionInterface;
-use Predis\NotSupportedException;
+use Predis\Connection\FactoryInterface;
 use Predis\Response\ErrorInterface as ErrorResponseInterface;
 
 /**
@@ -42,7 +46,7 @@ use Predis\Response\ErrorInterface as ErrorResponseInterface;
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
-class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
+class RedisCluster implements ClusterInterface, IteratorAggregate, Countable
 {
     private $useClusterSlots = true;
     private $defaultParameters = array();
@@ -232,7 +236,7 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
             $last < 0x0000 || $last > 0x3FFF ||
             $last < $first
         ) {
-            throw new \OutOfBoundsException(
+            throw new OutOfBoundsException(
                 "Invalid slot range for $connection: [$first-$last]."
             );
         }
@@ -313,14 +317,14 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
      *
      * @param int $slot Slot index.
      *
-     * @throws \OutOfBoundsException
      * @return NodeConnectionInterface
      *
+     * @throws \OutOfBoundsException
      */
     public function getConnectionBySlot($slot)
     {
         if ($slot < 0x0000 || $slot > 0x3FFF) {
-            throw new \OutOfBoundsException("Invalid slot [$slot].");
+            throw new OutOfBoundsException("Invalid slot [$slot].");
         }
 
         if (isset($this->slots[$slot])) {
@@ -427,9 +431,8 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
      * Handles -ASK responses by executing again the command against the node
      * indicated by the Redis response.
      *
-     * @param CommandInterface $command Command that generated the -ASK response.
-     * @param string           $details Parameters of the -ASK response.
-     *
+     * @param  CommandInterface $command Command that generated the -ASK response.
+     * @param  string           $details Parameters of the -ASK response.
      * @return mixed
      */
     protected function onAskResponse(CommandInterface $command, $details)
@@ -490,7 +493,7 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator(array_values($this->pool));
+        return new ArrayIterator(array_values($this->pool));
     }
 
     /**

@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/strlen
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class StringStrlen extends Command

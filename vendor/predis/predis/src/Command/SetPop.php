@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/spop
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class SetPop extends Command

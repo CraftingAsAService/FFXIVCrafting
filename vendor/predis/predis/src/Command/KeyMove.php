@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/move
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class KeyMove extends Command
@@ -24,5 +23,13 @@ class KeyMove extends Command
     public function getId()
     {
         return 'MOVE';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseResponse($data)
+    {
+        return (bool) $data;
     }
 }

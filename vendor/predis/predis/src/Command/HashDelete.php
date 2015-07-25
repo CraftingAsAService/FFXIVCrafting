@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/hdel
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class HashDelete extends Command

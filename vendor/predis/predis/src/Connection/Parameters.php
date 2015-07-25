@@ -11,6 +11,8 @@
 
 namespace Predis\Connection;
 
+use InvalidArgumentException;
+
 /**
  * Container for connection parameters used to initialize connections to Redis.
  *
@@ -69,23 +71,19 @@ class Parameters implements ParametersInterface
      *
      * @param string $uri URI string.
      *
-     * @throws \InvalidArgumentException
      * @return array
      *
+     * @throws \InvalidArgumentException
      */
     public static function parse($uri)
     {
-        if (stripos($uri, 'redis') === 0) {
-            return static::parseIANA($uri);
-        }
-
         if (stripos($uri, 'unix') === 0) {
             // Hack to support URIs for UNIX sockets with minimal effort.
             $uri = str_ireplace('unix:///', 'unix://localhost/', $uri);
         }
 
-        if (!$parsed = parse_url($uri)) {
-            throw new \InvalidArgumentException("Invalid parameters URI: $uri");
+        if (!($parsed = parse_url($uri)) || !isset($parsed['host'])) {
+            throw new InvalidArgumentException("Invalid parameters URI: $uri");
         }
 
         if (isset($parsed['query'])) {
@@ -93,49 +91,6 @@ class Parameters implements ParametersInterface
             unset($parsed['query']);
 
             $parsed = array_merge($parsed, $queryarray);
-        }
-
-        return $parsed;
-    }
-
-    /**
-     * Parses an URI string as defined by the "redis" and "rediss" URL schemes
-     * registered with the IANA.
-     *
-     * When the URI has a password in the "user-information" part or a database
-     * number the "path" part, their values override the values of "password"
-     * and "database" in the "query" part of the same URI.
-     *
-     * @link http://www.iana.org/assignments/uri-schemes/prov/redis
-     * @link http://www.iana.org/assignments/uri-schemes/prov/redis
-     *
-     * @param string $uri URI string.
-     *
-     * @throws \InvalidArgumentException
-     * @return array
-     *
-     */
-    public static function parseIANA($uri)
-    {
-        if (!$parsed = parse_url($uri)) {
-            throw new \InvalidArgumentException("Invalid parameters URI: $uri");
-        }
-
-        if (isset($parsed['query'])) {
-            parse_str($parsed['query'], $queryarray);
-            unset($parsed['query']);
-
-            $parsed = array_merge($parsed, $queryarray);
-        }
-
-        if (isset($parsed['pass'])) {
-            $parsed['password'] = $parsed['pass'];
-            unset($parsed['pass']);
-        }
-
-        if (isset($parsed['path']) && preg_match('/^\/(\d+)\/?/', $parsed['path'], $path)) {
-            $parsed['database'] = $path[1];
-            unset($parsed['path']);
         }
 
         return $parsed;

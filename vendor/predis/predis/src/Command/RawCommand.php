@@ -11,6 +11,8 @@
 
 namespace Predis\Command;
 
+use InvalidArgumentException;
+
 /**
  * Class for generic "anonymous" Redis commands.
  *
@@ -35,7 +37,7 @@ class RawCommand implements CommandInterface
     public function __construct(array $arguments)
     {
         if (!$arguments) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The arguments array must contain at least the command ID.'
             );
         }

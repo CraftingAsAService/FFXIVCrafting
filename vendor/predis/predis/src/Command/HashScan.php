@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/hscan
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class HashScan extends Command
@@ -73,7 +72,7 @@ class HashScan extends Command
             $fields = $data[1];
             $result = array();
 
-            for ($i = 0; $i < count($fields); ++$i) {
+            for ($i = 0; $i < count($fields); $i++) {
                 $result[$fields[$i]] = $fields[++$i];
             }
 

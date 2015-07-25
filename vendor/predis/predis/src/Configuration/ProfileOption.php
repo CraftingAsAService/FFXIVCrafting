@@ -11,6 +11,7 @@
 
 namespace Predis\Configuration;
 
+use InvalidArgumentException;
 use Predis\Profile\Factory;
 use Predis\Profile\ProfileInterface;
 use Predis\Profile\RedisProfile;
@@ -50,7 +51,7 @@ class ProfileOption implements OptionInterface
             $value = Factory::get($value);
             $this->setProcessors($options, $value);
         } elseif (!$value instanceof ProfileInterface) {
-            throw new \InvalidArgumentException('Invalid value for the profile option.');
+            throw new InvalidArgumentException('Invalid value for the profile option.');
         }
 
         return $value;

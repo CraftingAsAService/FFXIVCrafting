@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/setnx
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class StringSetPreserve extends Command
@@ -24,5 +23,13 @@ class StringSetPreserve extends Command
     public function getId()
     {
         return 'SETNX';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseResponse($data)
+    {
+        return (bool) $data;
     }
 }

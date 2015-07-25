@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/rpoplpush
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ListPopLastPushHead extends Command

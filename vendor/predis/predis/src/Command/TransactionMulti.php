@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/multi
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class TransactionMulti extends Command

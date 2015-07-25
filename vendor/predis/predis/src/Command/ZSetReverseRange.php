@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/zrevrange
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ZSetReverseRange extends ZSetRange

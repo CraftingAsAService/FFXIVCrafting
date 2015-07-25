@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/sort
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class KeySort extends Command
@@ -60,6 +59,7 @@ class KeySort extends Command
         if (isset($sortParams['LIMIT']) &&
             is_array($sortParams['LIMIT']) &&
             count($sortParams['LIMIT']) == 2) {
+
             $query[] = 'LIMIT';
             $query[] = $sortParams['LIMIT'][0];
             $query[] = $sortParams['LIMIT'][1];

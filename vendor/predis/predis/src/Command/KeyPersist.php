@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/persist
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class KeyPersist extends Command
@@ -24,5 +23,13 @@ class KeyPersist extends Command
     public function getId()
     {
         return 'PERSIST';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseResponse($data)
+    {
+        return (bool) $data;
     }
 }

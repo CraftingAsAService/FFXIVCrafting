@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/predis/predis/v/stable.png)](https://packagist.org/packages/predis/predis)
 [![Total Downloads](https://poser.pugx.org/predis/predis/downloads.png)](https://packagist.org/packages/predis/predis)
 [![License](https://poser.pugx.org/predis/predis/license.svg)](https://packagist.org/packages/predis/predis)
-[![Build Status](https://travis-ci.org/nrk/predis.svg?branch=master)](https://travis-ci.org/nrk/predis)
+[![Build Status](https://travis-ci.org/nrk/predis.svg?branch=v1.0)](https://travis-ci.org/nrk/predis)
 [![HHVM Status](http://hhvm.h4cc.de/badge/predis/predis.png)](http://hhvm.h4cc.de/package/predis/predis)
 
 Predis is a flexible and feature-complete [Redis](http://redis.io) client library for PHP >= 5.3.
@@ -94,9 +94,6 @@ $client = new Predis\Client([
 // Same set of parameters, but using an URI string:
 $client = new Predis\Client('tcp://10.0.0.1:6379');
 ```
-
-Starting with Predis v1.0.2 the client also understands the `redis` scheme in URI strings as defined
-by the [provisional IANA registration](http://www.iana.org/assignments/uri-schemes/prov/redis).
 
 When an array of connection parameters is provided, Predis automatically works in cluster mode using
 client-side sharding. Both named arrays and URI strings can be mixed when providing configurations

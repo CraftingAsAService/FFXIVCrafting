@@ -11,8 +11,9 @@
 
 namespace Predis\Connection;
 
-use Predis\Command\CommandInterface;
+use InvalidArgumentException;
 use Predis\NotSupportedException;
+use Predis\Command\CommandInterface;
 use Predis\Protocol\ProtocolException;
 use Predis\Response\Error as ErrorResponse;
 use Predis\Response\Status as StatusResponse;
@@ -40,7 +41,6 @@ use Predis\Response\Status as StatusResponse;
  * @link http://webd.is
  * @link http://github.com/nicolasff/webdis
  * @link http://github.com/seppo0010/phpiredis
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class WebdisConnection implements NodeConnectionInterface
@@ -59,7 +59,7 @@ class WebdisConnection implements NodeConnectionInterface
         $this->assertExtensions();
 
         if ($parameters->scheme !== 'http') {
-            throw new \InvalidArgumentException("Invalid scheme: '{$parameters->scheme}'.");
+            throw new InvalidArgumentException("Invalid scheme: '{$parameters->scheme}'.");
         }
 
         $this->parameters = $parameters;
@@ -219,9 +219,9 @@ class WebdisConnection implements NodeConnectionInterface
      *
      * @param CommandInterface $command Command instance.
      *
-     * @throws NotSupportedException
      * @return string
      *
+     * @throws NotSupportedException
      */
     protected function getCommandId(CommandInterface $command)
     {

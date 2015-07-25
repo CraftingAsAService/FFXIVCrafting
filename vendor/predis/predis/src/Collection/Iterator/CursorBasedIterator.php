@@ -11,6 +11,7 @@
 
 namespace Predis\Collection\Iterator;
 
+use Iterator;
 use Predis\ClientInterface;
 use Predis\NotSupportedException;
 
@@ -27,7 +28,7 @@ use Predis\NotSupportedException;
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
-abstract class CursorBasedIterator implements \Iterator
+abstract class CursorBasedIterator implements Iterator
 {
     protected $client;
     protected $match;
@@ -132,7 +133,7 @@ abstract class CursorBasedIterator implements \Iterator
      */
     protected function extractNext()
     {
-        ++$this->position;
+        $this->position++;
         $this->current = array_shift($this->elements);
     }
 

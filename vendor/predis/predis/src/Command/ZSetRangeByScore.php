@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/zrangebyscore
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ZSetRangeByScore extends ZSetRange
@@ -52,7 +51,7 @@ class ZSetRangeByScore extends ZSetRange
     {
         $arguments = $this->getArguments();
 
-        for ($i = 3; $i < count($arguments); ++$i) {
+        for ($i = 3; $i < count($arguments); $i++) {
             switch (strtoupper($arguments[$i])) {
                 case 'WITHSCORES':
                     return true;

@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/info
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ServerInfoV26x extends ServerInfo

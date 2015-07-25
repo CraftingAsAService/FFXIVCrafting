@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/unsubscribe
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class PubSubUnsubscribe extends Command

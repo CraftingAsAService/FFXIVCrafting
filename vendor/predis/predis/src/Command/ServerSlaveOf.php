@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/slaveof
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ServerSlaveOf extends Command

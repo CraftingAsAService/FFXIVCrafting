@@ -18,7 +18,6 @@ use Predis\ClientInterface;
  * ZSCAN command (Redis >= 2.8) wrapped in a fully-rewindable PHP iterator.
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
- *
  * @link http://redis.io/commands/scan
  */
 class SortedSetKey extends CursorBasedIterator

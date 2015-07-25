@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/psubscribe
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class PubSubSubscribeByPattern extends PubSubSubscribe

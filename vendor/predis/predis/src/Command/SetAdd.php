@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/sadd
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class SetAdd extends Command

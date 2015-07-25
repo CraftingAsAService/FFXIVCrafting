@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/rpop
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ListPopLast extends Command

@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/ltrim
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ListTrim extends Command

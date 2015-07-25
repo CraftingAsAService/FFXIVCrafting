@@ -16,7 +16,6 @@ namespace Predis\Command;
  * @link http://redis.io/commands/client-kill
  * @link http://redis.io/commands/client-getname
  * @link http://redis.io/commands/client-setname
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ServerClient extends Command

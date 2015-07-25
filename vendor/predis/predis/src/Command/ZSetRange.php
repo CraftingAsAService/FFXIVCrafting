@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/zrange
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ZSetRange extends Command
@@ -93,7 +92,7 @@ class ZSetRange extends Command
         if ($this->withScores()) {
             $result = array();
 
-            for ($i = 0; $i < count($data); ++$i) {
+            for ($i = 0; $i < count($data); $i++) {
                 $result[$data[$i]] = $data[++$i];
             }
 

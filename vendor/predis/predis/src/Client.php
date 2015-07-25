@@ -11,13 +11,15 @@
 
 namespace Predis;
 
+use InvalidArgumentException;
+use UnexpectedValueException;
 use Predis\Command\CommandInterface;
 use Predis\Command\RawCommand;
 use Predis\Command\ScriptCommand;
 use Predis\Configuration\Options;
 use Predis\Configuration\OptionsInterface;
-use Predis\Connection\AggregateConnectionInterface;
 use Predis\Connection\ConnectionInterface;
+use Predis\Connection\AggregateConnectionInterface;
 use Predis\Connection\ParametersInterface;
 use Predis\Monitor\Consumer as MonitorConsumer;
 use Predis\Pipeline\Pipeline;
@@ -40,7 +42,7 @@ use Predis\Transaction\MultiExec as MultiExecTransaction;
  */
 class Client implements ClientInterface
 {
-    const VERSION = '1.1.0-dev';
+    const VERSION = '1.0.1';
 
     protected $connection;
     protected $options;
@@ -64,9 +66,9 @@ class Client implements ClientInterface
      *
      * @param mixed $options Client options.
      *
-     * @throws \InvalidArgumentException
      * @return OptionsInterface
      *
+     * @throws \InvalidArgumentException
      */
     protected function createOptions($options)
     {
@@ -78,7 +80,7 @@ class Client implements ClientInterface
             return $options;
         }
 
-        throw new \InvalidArgumentException('Invalid type for client options.');
+        throw new InvalidArgumentException("Invalid type for client options.");
     }
 
     /**
@@ -96,9 +98,9 @@ class Client implements ClientInterface
      *
      * @param mixed $parameters Connection parameters or connection instance.
      *
-     * @throws \InvalidArgumentException
      * @return ConnectionInterface
      *
+     * @throws \InvalidArgumentException
      */
     protected function createConnection($parameters)
     {
@@ -140,7 +142,7 @@ class Client implements ClientInterface
             return $connection;
         }
 
-        throw new \InvalidArgumentException('Invalid type for connection parameters.');
+        throw new InvalidArgumentException('Invalid type for connection parameters.');
     }
 
     /**
@@ -157,7 +159,7 @@ class Client implements ClientInterface
             $connection = call_user_func_array($callable, func_get_args());
 
             if (!$connection instanceof ConnectionInterface) {
-                throw new \UnexpectedValueException(
+                throw new UnexpectedValueException(
                     'The callable connection initializer returned an invalid type.'
                 );
             }
@@ -189,14 +191,14 @@ class Client implements ClientInterface
      *
      * @param string $connectionID Identifier of a connection.
      *
-     * @throws \InvalidArgumentException
      * @return Client
      *
+     * @throws \InvalidArgumentException
      */
     public function getClientFor($connectionID)
     {
         if (!$connection = $this->getConnectionById($connectionID)) {
-            throw new \InvalidArgumentException("Invalid connection ID: $connectionID.");
+            throw new InvalidArgumentException("Invalid connection ID: $connectionID.");
         }
 
         return new static($connection, $this->options);
@@ -253,9 +255,9 @@ class Client implements ClientInterface
      *
      * @param string $connectionID Index or alias of the single connection.
      *
-     * @throws NotSupportedException
      * @return Connection\NodeConnectionInterface
      *
+     * @throws NotSupportedException
      */
     public function getConnectionById($connectionID)
     {
@@ -342,9 +344,9 @@ class Client implements ClientInterface
      * @param CommandInterface       $command  Redis command that generated the error.
      * @param ErrorResponseInterface $response Instance of the error response.
      *
-     * @throws ServerException
      * @return mixed
      *
+     * @throws ServerException
      */
     protected function onErrorResponse(CommandInterface $command, ErrorResponseInterface $response)
     {

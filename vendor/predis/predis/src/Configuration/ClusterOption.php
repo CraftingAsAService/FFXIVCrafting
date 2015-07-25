@@ -11,6 +11,7 @@
 
 namespace Predis\Configuration;
 
+use InvalidArgumentException;
 use Predis\Connection\Aggregate\ClusterInterface;
 use Predis\Connection\Aggregate\PredisCluster;
 use Predis\Connection\Aggregate\RedisCluster;
@@ -58,7 +59,7 @@ class ClusterOption implements OptionInterface
         }
 
         if (!$value instanceof ClusterInterface) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "An instance of type 'Predis\Connection\Aggregate\ClusterInterface' was expected."
             );
         }

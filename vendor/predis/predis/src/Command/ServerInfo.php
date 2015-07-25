@@ -13,7 +13,6 @@ namespace Predis\Command;
 
 /**
  * @link http://redis.io/commands/info
- *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
 class ServerInfo extends Command
@@ -31,7 +30,7 @@ class ServerInfo extends Command
      */
     public function parseResponse($data)
     {
-        $info = array();
+        $info      = array();
         $infoLines = preg_split('/\r?\n/', $data);
 
         foreach ($infoLines as $row) {
