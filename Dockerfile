@@ -17,6 +17,7 @@ RUN a2enmod rewrite
 RUN apt-get -qq install php5 php5-mysql php5-mcrypt php5-sqlite php5-curl
 RUN /usr/sbin/php5enmod mcrypt
 RUN /usr/sbin/php5enmod curl
+RUN sed -i 's/memory_limit = 128M/memory_limit = 256M/' /etc/php5/apache2/php.ini
 
 # NewRelic
 RUN apt-get -qq install wget
@@ -29,13 +30,11 @@ RUN bash newrelic-install install
 WORKDIR /
 ADD config/newrelic.ini /etc/php5/apache2/conf.d/newrelic.ini
 
-ADD config/000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN a2ensite 000-default
-
 # Configure CAAS domain in Apache
+ADD config/000-default.conf /etc/apache2/sites-available/000-default.conf
 ADD . /var/www/
 # Install Composer
-RUN apt-get -qq install curl
+RUN apt-get -qq install curl git
 RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer
 # Composer install
 WORKDIR /var/www/
