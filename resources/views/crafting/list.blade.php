@@ -221,14 +221,13 @@
 						@endif
 
 						@if(count($recipe->item->leve_required))
-							{{-- Disabled because I would also have to do it for class, and I'm lazy right now --}}
-							{{-- <a href='/leve?name={{ $recipe->item->leve[0]->name }}'> --}}
-							@if($recipe->item->leve[0]->repeats)
-							<img src='/img/repeats.png' class='rotate-90' rel='tooltip' title='Repeats Leve' style='margin-left: 5px;' width='16'>
+							@foreach ($recipe->item->leve_required as $leve)
+							@if($leve->repeats)
+							<img src='/img/leve_icon_red.png' rel='tooltip' title='{{ $leve->name }}. Repeatable Leve!' style='margin-left: 5px;' width='16'>
 							@else
-							<img src='/img/leve.png' class='rotate-90' rel='tooltip' title='Regular Leve' style='margin-left: 5px;' width='16'>
+							<img src='/img/leve_icon.png' rel='tooltip' title='{{ $leve->name }}' style='margin-left: 5px;' width='16'>
 							@endif
-							{{-- </a> --}}
+							@endforeach
 						@endif
 					</div>
 				</td>
