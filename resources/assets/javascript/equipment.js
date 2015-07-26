@@ -138,7 +138,7 @@ var equipment = {
 			
 			var lvl = equipment.options.level + 1;
 
-			if (lvl > 48)
+			if (lvl > max_level - 2)
 			{
 				$('.previous-gear, .next-gear').removeClass('disabled');
 				return;
