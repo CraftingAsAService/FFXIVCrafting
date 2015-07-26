@@ -221,7 +221,6 @@
 						@endif
 
 						@if(count($recipe->item->leve_required))
-						{{ dd($recipe->item->leve_required) }}
 							{{-- Disabled because I would also have to do it for class, and I'm lazy right now --}}
 							{{-- <a href='/leve?name={{ $recipe->item->leve[0]->name }}'> --}}
 							@if($recipe->item->leve[0]->repeats)
