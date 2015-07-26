@@ -110,7 +110,7 @@
 					Change Class <span class='caret'></span>
 					</button>
 					<ul class='dropdown-menu class-dropdown-menu' role='menu'>
-						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC') as $switch_job)
+						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC', 'ROG') as $switch_job)
 						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-danger'>
 							<img src='/img/classes/{{ $switch_job }}.png' rel='tooltip'>
 						</a></li>
