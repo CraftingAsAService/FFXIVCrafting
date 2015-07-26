@@ -134,7 +134,7 @@
 						<div>
 							{{-- <span class='pull-right'>{!! Form::checkbox('', '', true) !!}</span> --}}
 							<span class='pull-right opaque'>x {{ $item_list[$item->id] }}</span>
-							<img src='{{ assetcdn('items/nq/' . $item->id . '.png') }}' class='item-icon' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
+							<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' class='item-icon' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
 						</div>
 						<ul class='list-group'>
 						@foreach ($section['regions'] as $region_slug => $data)

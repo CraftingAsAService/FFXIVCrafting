@@ -4,14 +4,14 @@
 	<td width='24' class='valign'>
 		<i class='class-icon class-id-{{ $leve->classjob_id }}'></i>
 	</td>
-	<td class='item{{ $leve->triple ? ' triple\' rel="tooltip" title="Triple Leve" data-placement="right" data-container=\'body' : '' }}'>
+	<td class='item{{ $leve->repeats ? ' repeats\' rel="tooltip" title="Repeatable Leve" data-placement="right" data-container=\'body' : '' }}'>
 		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
 		@if($recipe_id == 0)
 		<a href='http://xivdb.com/?item/{{ $leve->item->id }}' class='item-name' target='_blank'>
 		@else
 		<a href='http://xivdb.com/?recipe/{{ $recipe_id }}' class='item-name' target='_blank'>
 		@endif
-			<img src='{{ assetcdn('items/nq/' . $leve->item->id . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
+			<img src='{{ assetcdn('item/' . $leve->item->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
 		</a>
 		@if ($leve->amount > 1)
 		<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
@@ -48,7 +48,7 @@
 			@foreach($leve_rewards[$leve->id] as $reward)
 			<div class='margin-bottom'>
 				@if($reward->item_id)
-				<img src='{{ assetcdn('items/nq/' . $reward->item->id . '.png') }}' width='36' height='36' style='margin-right: 10px;'>
+				<img src='{{ assetcdn('item/' . $reward->item->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>
 				{{ $reward->item->name->term }}
 				@else
 				<img src='/img/noitemicon.png' style='margin-right: 10px;'>

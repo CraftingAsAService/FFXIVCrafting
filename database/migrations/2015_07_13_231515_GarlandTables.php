@@ -14,6 +14,7 @@ class GarlandTables extends Migration
 	public function up()
 	{
 
+		if ( ! Schema::hasTable('node'))
 		Schema::create('node', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -28,6 +29,7 @@ class GarlandTables extends Migration
 			$table->index(['zone_id', 'area_id']);
 		});
 
+		if ( ! Schema::hasTable('node_bonuses'))
 		Schema::create('node_bonuses', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -35,6 +37,7 @@ class GarlandTables extends Migration
 			$table->string('bonus');
 		});
 
+		if ( ! Schema::hasTable('item_node'))
 		Schema::create('item_node', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -45,6 +48,7 @@ class GarlandTables extends Migration
 			$table->index('node_id');
 		});
 
+		if ( ! Schema::hasTable('fishing'))
 		Schema::create('fishing', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -61,6 +65,7 @@ class GarlandTables extends Migration
 			$table->index(['zone_id', 'area_id']);
 		});
 
+		if ( ! Schema::hasTable('fishing_item'))
 		Schema::create('fishing_item', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -72,6 +77,7 @@ class GarlandTables extends Migration
 			$table->index('fishing_id');
 		});
 
+		if ( ! Schema::hasTable('mob'))
 		Schema::create('mob', function(Blueprint $table)
 		{
 			$table->bigIncrements('id')->unsigned();
@@ -83,6 +89,7 @@ class GarlandTables extends Migration
 			$table->index('zone_id');
 		});
 
+		if ( ! Schema::hasTable('item_mob'))
 		Schema::create('item_mob', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -93,6 +100,7 @@ class GarlandTables extends Migration
 			$table->index('mob_id');
 		});
 
+		if ( ! Schema::hasTable('location'))
 		Schema::create('location', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -101,6 +109,7 @@ class GarlandTables extends Migration
 			$table->smallInteger('size')->unsigned()->nullable();
 		});
 
+		if ( ! Schema::hasTable('npc'))
 		Schema::create('npc', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -111,6 +120,7 @@ class GarlandTables extends Migration
 			$table->decimal('y', 5, 2)->unsigned()->nullable();
 		});
 
+		if ( ! Schema::hasTable('npc_shop'))
 		Schema::create('npc_shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -121,6 +131,7 @@ class GarlandTables extends Migration
 			$table->index('shop_id');
 		});
 
+		if ( ! Schema::hasTable('npc_quest'))
 		Schema::create('npc_quest', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -131,6 +142,7 @@ class GarlandTables extends Migration
 			$table->index('quest_id');
 		});
 
+		if ( ! Schema::hasTable('npc_base'))
 		Schema::create('npc_base', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -138,6 +150,7 @@ class GarlandTables extends Migration
 			$table->string('title')->nullable();
 		});
 
+		if ( ! Schema::hasTable('npc_npc_base'))
 		Schema::create('npc_npc_base', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -148,18 +161,21 @@ class GarlandTables extends Migration
 			$table->index('npc_base_id');
 		});
 
+		if ( ! Schema::hasTable('shop_name'))
 		Schema::create('shop_name', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
 			$table->string('name');
 		});
 
+		if ( ! Schema::hasTable('shop'))
 		Schema::create('shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
 			$table->integer('name_id')->unsigned();
 		});
 
+		if ( ! Schema::hasTable('item_shop'))
 		Schema::create('item_shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -170,6 +186,7 @@ class GarlandTables extends Migration
 			$table->index('shop_id');
 		});
 
+		if ( ! Schema::hasTable('instance'))
 		Schema::create('instance', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -182,6 +199,7 @@ class GarlandTables extends Migration
 			$table->index('zone_id');
 		});
 
+		if ( ! Schema::hasTable('instance_item'))
 		Schema::create('instance_item', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -192,6 +210,7 @@ class GarlandTables extends Migration
 			$table->index('item_id');
 		});
 
+		if ( ! Schema::hasTable('instance_mob'))
 		Schema::create('instance_mob', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -202,6 +221,7 @@ class GarlandTables extends Migration
 			$table->index('mob_id');
 		});
 
+		if ( ! Schema::hasTable('quest'))
 		Schema::create('quest', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -220,6 +240,7 @@ class GarlandTables extends Migration
 			$table->index('target_id');
 		});
 
+		if ( ! Schema::hasTable('quest_reward'))
 		Schema::create('quest_reward', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -231,6 +252,7 @@ class GarlandTables extends Migration
 			$table->index('quest_id');
 		});
 
+		if ( ! Schema::hasTable('quest_required'))
 		Schema::create('quest_required', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -242,6 +264,7 @@ class GarlandTables extends Migration
 			$table->index('quest_id');
 		});
 
+		if ( ! Schema::hasTable('achievement'))
 		Schema::create('achievement', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -252,6 +275,7 @@ class GarlandTables extends Migration
 			$table->index('item_id');
 		});
 
+		if ( ! Schema::hasTable('fate'))
 		Schema::create('fate', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -266,12 +290,14 @@ class GarlandTables extends Migration
 			$table->index('zone_id');
 		});
 
+		if ( ! Schema::hasTable('job_category'))
 		Schema::create('job_category', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
 			$table->string('name');
 		});
 
+		if ( ! Schema::hasTable('job_job_category'))
 		Schema::create('job_job_category', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -282,6 +308,7 @@ class GarlandTables extends Migration
 			$table->index('job_category_id');
 		});
 
+		if ( ! Schema::hasTable('job'))
 		Schema::create('job', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -289,6 +316,7 @@ class GarlandTables extends Migration
 			$table->string('abbr');
 		});
 
+		if ( ! Schema::hasTable('venture'))
 		Schema::create('venture', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -301,6 +329,7 @@ class GarlandTables extends Migration
 			$table->index('job_category_id');
 		});
 
+		if ( ! Schema::hasTable('item_venture'))
 		Schema::create('item_venture', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -311,6 +340,7 @@ class GarlandTables extends Migration
 			$table->index('venture_id');
 		});
 
+		if ( ! Schema::hasTable('leve'))
 		Schema::create('leve', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -318,18 +348,19 @@ class GarlandTables extends Migration
 			$table->smallInteger('level')->unsigned();
 			$table->integer('job_category_id')->unsigned();
 			$table->integer('area_id')->unsigned();
+			$table->tinyInteger('repeats')->unsigned()->nullable();
 			$table->integer('xp')->unsigned()->nullable();
 			$table->integer('gil')->unsigned()->nullable();
 			$table->integer('plate')->unsigned();
 			$table->integer('frame')->unsigned();
 			$table->integer('area_icon')->unsigned();
-			$table->tinyInteger('repeats')->unsigned()->nullable();
 
 			$table->index('level');
 			$table->index('job_category_id');
 			$table->index('area_id');
 		});
 
+		if ( ! Schema::hasTable('leve_reward'))
 		Schema::create('leve_reward', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -342,6 +373,7 @@ class GarlandTables extends Migration
 			$table->index('leve_id');
 		});
 
+		if ( ! Schema::hasTable('leve_required'))
 		Schema::create('leve_required', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -353,6 +385,7 @@ class GarlandTables extends Migration
 			$table->index('leve_id');
 		});
 
+		if ( ! Schema::hasTable('item_category'))
 		Schema::create('item_category', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -361,6 +394,7 @@ class GarlandTables extends Migration
 			$table->string('attribute')->nullable();
 		});
 
+		if ( ! Schema::hasTable('item'))
 		Schema::create('item', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -391,12 +425,14 @@ class GarlandTables extends Migration
 			$table->index('item_category_id');
 		});
 
+		if ( ! Schema::hasTable('attribute'))
 		// Schema::create('attribute', function(Blueprint $table)
 		// {
 		// 	$table->increments('id')->unsigned();
 		// 	$table->string('name');
 		// });
 
+		if ( ! Schema::hasTable('item_attribute'))
 		Schema::create('item_attribute', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -412,6 +448,7 @@ class GarlandTables extends Migration
 			$table->index('attribute');
 		});
 
+		if ( ! Schema::hasTable('recipe'))
 		Schema::create('recipe', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -433,6 +470,7 @@ class GarlandTables extends Migration
 			$table->index('level');
 		});
 
+		if ( ! Schema::hasTable('recipe_reagents'))
 		Schema::create('recipe_reagents', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -444,6 +482,7 @@ class GarlandTables extends Migration
 			$table->index('recipe_id');
 		});
 		
+		if ( ! Schema::hasTable('career'))
 		Schema::create('career', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -455,6 +494,7 @@ class GarlandTables extends Migration
 			$table->index('type');
 		});
 		
+		if ( ! Schema::hasTable('career_job'))
 		Schema::create('career_job', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();

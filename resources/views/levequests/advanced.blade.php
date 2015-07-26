@@ -70,7 +70,7 @@
 					<div class='form-group margin-left'>
 						<div class='checkbox'>
 							<label>
-								<input type='checkbox' id='triple_only'> Triples Only
+								<input type='checkbox' id='repeatable_only'> Repeats Only
 							</label>
 						</div>
 					</div>

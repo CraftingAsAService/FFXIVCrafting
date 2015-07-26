@@ -688,12 +688,12 @@ class DatabaseSeeder extends Seeder
 				'level' => $l->lvl,
 				'job_category_id' => $l->jobCategory,
 				'area_id' => $l->areaid,
+				'repeats' => isset($l->repeats) ? $l->repeats : null,
 				'xp' => isset($l->xp) ? $l->xp : null,
 				'gil' => isset($l->gil) ? $l->gil : null,
 				'plate' => $l->plate,
 				'frame' => $l->frame,
 				'area_icon' => $l->areaicon,
-				'repeats' => isset($l->repeats) ? $l->repeats : null,
 			];
 
 			$this->set_data('leve', $row);

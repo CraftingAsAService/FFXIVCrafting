@@ -79,9 +79,9 @@
 										</span>
 										@endif
 
-										{{-- @if($leve->triple)
-										<i class='glyphicon glyphicon-fire text-danger margin-left' rel='tooltip' title='Triple Turnin!'></i>
-										@endif --}}
+										@if($leve->repeats)
+										<i class='glyphicon glyphicon-fire text-danger margin-left' rel='tooltip' title='Repeatable Turnin!'></i>
+										@endif
 									</p>
 
 									{{-- <p>
@@ -129,7 +129,7 @@
 					<div class='row'>
 						@foreach($rewards[$job->id][$level] as $item_id => $reward)
 						<div class='col-sm-6 col-md-4 margin-bottom'>
-							<a href='http://xivdb.com/?item/{{ $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('items/nq/' . $item_id . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->name }}</a>
+							<a href='http://xivdb.com/?item/{{ $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item_id . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->name }}</a>
 
 							@foreach ($reward['amounts'] as $amount)
 							<span class='label label-primary'>{{ $amount }}</span>

@@ -10,9 +10,9 @@
 
 <h3>Notes</h3>
 
-@if($leve->triple)
+@if($leve->repeats)
 <p>
-	Because this is a Triple Turnin, using three leve allowances will net you three turnins, as opposed to three allowances allowing only one turning with other leves.
+	Because this is a Repeatable Turnin, using {{ $leve->repeats }} leve allowances will net you {{ $leve->repeats }} turnins, as opposed to {{ $leve->repeats }} allowances allowing only one turning with other leves.
 </p>
 @endif
 
@@ -26,8 +26,8 @@
 	@foreach($others as $other)
 	<li>
 		<a href='/levequests/vs/{{ $leve->id }}/{{ $other->id }}'>{{ $other->name }}</a>
-		@if($other->triple)
-		<i class='glyphicon glyphicon-fire text-danger' rel='tooltip' title='Triple Turnin!'></i>
+		@if($other->repeats)
+		<i class='glyphicon glyphicon-fire text-danger' rel='tooltip' title='Repeatable Turnin!'></i>
 		@endif
 	</li>
 	@endforeach

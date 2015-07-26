@@ -1,8 +1,8 @@
 
 <h2>
 	{{ $leve->name }}
-	@if($leve->triple)
-	<i class='glyphicon glyphicon-fire text-danger' rel='tooltip' title='Triple Turnin!'></i>
+	@if($leve->repeats)
+	<i class='glyphicon glyphicon-fire text-danger' rel='tooltip' title='Repeatable Turnin!'></i>
 	@endif
 	<small>level {{ $leve->level }}</small>
 </h2>
@@ -57,7 +57,7 @@
 		@foreach($leve->requirements[0]->recipes[0]->reagents as $reagent)
 		<li class='list-group-item'>
 			<a href='http://xivdb.com/?item/{{ $reagent->id }}' target='_blank'>
-				<img src='{{ assetcdn('items/nq/' . $reagent->id . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name }}</span>
+				<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name }}</span>
 			</a>
 			x {{ $reagent->pivot->amount * $leve->requirements[0]->pivot->amount }}
 			@if($leve->requirements[0]->pivot->amount > 1)
@@ -85,11 +85,11 @@
 		<tr>
 			<th class='text-center' rowspan='2'>Level</th>
 			<th class='text-center' rowspan='2'>Requires</th>
-			<th class='text-center' colspan='{{ 1 + ($leve->triple ? 1 : 0) + ($leve->requirements[0]->pivot->amount > 1 ? 1 : 0) }}'>
+			<th class='text-center' colspan='{{ 1 + ($leve->repeats ? 1 : 0) + ($leve->requirements[0]->pivot->amount > 1 ? 1 : 0) }}'>
 				<img src='/img/NQ.png' width='24' height='24'>
 				NQ
 			</th>
-			<th class='text-center' colspan='{{ 1 + ($leve->triple ? 1 : 0) + ($leve->requirements[0]->pivot->amount > 1 ? 1 : 0) }}'>
+			<th class='text-center' colspan='{{ 1 + ($leve->repeats ? 1 : 0) + ($leve->requirements[0]->pivot->amount > 1 ? 1 : 0) }}'>
 				<img src='/img/HQ.png' width='24' height='24'>
 				HQ
 			</th>
@@ -99,14 +99,14 @@
 			@if($leve->requirements[0]->pivot->amount > 1)
 			<th class='text-center'>Items</th>
 			@endif
-			@if($leve->triple)
+			@if($leve->repeats)
 			<th class='text-center'>Allotments</th>
 			@endif
 			<th class='text-center'>Turnins</th>
 			@if($leve->requirements[0]->pivot->amount > 1)
 			<th class='text-center'>Items</th>
 			@endif
-			@if($leve->triple)
+			@if($leve->repeats)
 			<th class='text-center'>Allotments</th>
 			@endif
 		</tr>
@@ -120,14 +120,14 @@
 			@if($leve->requirements[0]->pivot->amount > 1)
 			<td class='text-center'>{{ $leve->requirements[0]->pivot->amount * $row['turnins'] }}</td>
 			@endif
-			@if($leve->triple)
+			@if($leve->repeats)
 			<td class='text-center'>{{ ceil($row['turnins'] / 3) }}</td>
 			@endif
 			<td class='text-center'>{{ $row['hq_turnins'] }}</td>
 			@if($leve->requirements[0]->pivot->amount > 1)
 			<td class='text-center'>{{ $leve->requirements[0]->pivot->amount * $row['hq_turnins'] }}</td>
 			@endif
-			@if($leve->triple)
+			@if($leve->repeats)
 			<td class='text-center'>{{ ceil($row['hq_turnins'] / 3) }}</td>
 			@endif
 		</tr>

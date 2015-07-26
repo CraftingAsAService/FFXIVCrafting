@@ -118,7 +118,7 @@
 					$yields = $item->recipes[0]->yield;
 					foreach ($item->recipes[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
-					$link = 'recipe/' . $item->recipes[0]->id;
+					// $link = 'recipe/' . $item->recipes[0]->id;
 				}
 			?>
 			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
@@ -195,8 +195,9 @@
 						{{ $recipe->recipe_level }}
 					</a>
 					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'> --}}
+					<a href='http://xivdb.com/?item/{{ $recipe->item->id }}' target='_blank'>
 						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->name }}</span>
-					{{-- </a> --}}
+					</a>
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
 						<img src="/img/stats/nq/Craftsmanship.png" class="stat-icon">
@@ -222,8 +223,8 @@
 						@if(isset($recipe->item->leve[0]))
 							{{-- Disabled because I would also have to do it for class, and I'm lazy right now --}}
 							{{-- <a href='/leve?name={{ $recipe->item->leve[0]->name }}'> --}}
-							@if($recipe->item->leve[0]->triple)
-							<img src='/img/triple.png' class='rotate-90' rel='tooltip' title='Triple Leve' style='margin-left: 5px;' width='16'>
+							@if($recipe->item->leve[0]->repeats)
+							<img src='/img/repeats.png' class='rotate-90' rel='tooltip' title='Repeats Leve' style='margin-left: 5px;' width='16'>
 							@else
 							<img src='/img/leve.png' class='rotate-90' rel='tooltip' title='Regular Leve' style='margin-left: 5px;' width='16'>
 							@endif
