@@ -196,7 +196,7 @@ class CraftingController extends Controller
 				'job',
 				'item', // The recipe's Item
 					'item.quest_rewards', // Is the recipe used as a quest turnin?
-					'item.leves', // Is the recipe used to fufil a leve?
+					'item.leve_required', // Is the recipe used to fufil a leve?
 					'item.shops',
 					'item.mobs',
 					'item.nodes',

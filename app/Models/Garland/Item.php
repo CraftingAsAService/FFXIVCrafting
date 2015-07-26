@@ -21,11 +21,6 @@ class Item extends Model {
 		return $this->belongsToMany('App\Models\Garland\Instance');
 	}
 
-	public function leves()
-	{
-		return $this->belongsToMany('App\Models\Garland\Leve', 'leve_reward')->withPivot('rate', 'amount');
-	}
-
 	public function mobs()
 	{
 		return $this->belongsToMany('App\Models\Garland\Mob');
@@ -44,6 +39,16 @@ class Item extends Model {
 	public function quest_required()
 	{
 		return $this->belongsToMany('App\Models\Garland\Quest', 'quest_required');
+	}
+
+	public function leve_rewards()
+	{
+		return $this->belongsToMany('App\Models\Garland\Leve', 'leve_reward')->withPivot('amount', 'rate');
+	}
+
+	public function leve_required()
+	{
+		return $this->belongsToMany('App\Models\Garland\Leve', 'leve_required')->withPivot('amount');
 	}
 
 	public function shops()
