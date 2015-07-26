@@ -133,9 +133,10 @@
 					<button type='submit' class='btn btn-success btn-lg'>Synthesize!</button>
 				</div>
 				<div style='margin-top: 30px;'>
-					<a href='/crafting/advanced'>Advanced options</a>
+					{{-- <a href='/crafting/advanced'>Advanced options</a> --}}
 					@if($previous)
-					or <a href='{{ $previous }}'>load your last setup</a>
+					{{-- or  --}}
+					<a href='{{ $previous }}'>load your last setup</a>
 					@endif
 				</div>
 			</div>

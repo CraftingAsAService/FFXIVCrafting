@@ -12,6 +12,8 @@ class VendorsController extends Controller
 
 	public function getView($id = 0)
 	{
+		abort(404);
+		
 		$item = Item::with('name', 'vendors', 'vendors.npc', 'vendors.npc.name', 'vendors.npc.location', 'vendors.npc.location.name')
 			->where('id', $id)
 			// ->remember(Config::get('site.cache_length'))

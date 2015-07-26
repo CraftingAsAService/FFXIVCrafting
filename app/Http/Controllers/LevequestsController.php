@@ -163,7 +163,7 @@ class LevequestsController extends Controller
 		
 		// Parse the Job IDs
 		$selected_classes = $input['classes'];
-		foreach (Job::get_id_abbr_list(true) as $abbr => $id)
+		foreach (Job::lists('id', 'abbr')->all() as $abbr => $id)
 			if (in_array($abbr, $selected_classes))
 				$job_ids[] = $id;
 
@@ -172,7 +172,7 @@ class LevequestsController extends Controller
 
 		// All Leves
 		$query = Leve::with(array(
-				'job', 'item', 'item.name', 'item.recipe', 'item.vendors',
+				'job', 'item', 'item.name', 'item.recipe', 'item.shops',
 			))
 			->where('item_id', '>', 0) // Avoids mining/botany "bug"
 			->orderBy('job_id')

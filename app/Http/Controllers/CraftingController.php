@@ -34,7 +34,8 @@ class CraftingController extends Controller
 
 	public function getAdvanced()
 	{
-		return $this->getIndex(true);
+		return redirect('/crafting');
+		// return $this->getIndex(true);
 	}
 
 	public function postIndex(Request $request)
@@ -310,11 +311,11 @@ class CraftingController extends Controller
 			elseif ($reagent['self_sufficient'])
 			{
 				$section = 'Pre-Requisite Crafting';
-				if ( ! isset($reagent['item']->recipe[0]))
+				if ( ! isset($reagent['item']->recipes[0]))
 				{
 					dd($reagent['item']);
 				}
-				$level = $reagent['item']->recipe[0]->level;
+				$level = $reagent['item']->recipes[0]->level;
 			}
 			elseif (count($reagent['item']->vendors))
 			{
@@ -349,7 +350,7 @@ class CraftingController extends Controller
 		// });
 		// Then by classjob
 		usort($new_prc['1'], function($a, $b) {
-			return $a['item']->recipe[0]->job->id - $b['item']->recipe[0]->job->id; 
+			return $a['item']->recipes[0]->job->id - $b['item']->recipes[0]->job->id; 
 		});
 		
 		$prc = $new_prc;
@@ -397,7 +398,7 @@ class CraftingController extends Controller
 
 			foreach ($recipe->reagents as $reagent)
 			{
-				$reagent_yield = isset($reagent->recipe[0]) ? $reagent->recipe[0]->yield : 1;
+				$reagent_yield = isset($reagent->recipes[0]) ? $reagent->recipes[0]->yield : 1;
 
 				if ( ! isset($reagent_list[$reagent->id]))
 					$reagent_list[$reagent->id] = array(
@@ -442,11 +443,11 @@ class CraftingController extends Controller
 							continue;
 					}
 
-					if(isset($reagent->recipe[0]))
+					if(count($reagent->recipes) > 0)
 					{
-						$reagent_list[$reagent->id]['yield'] = $reagent->recipe[0]->yield;
-						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipe[0]->job->abbr;
-						$this->_reagents(array($reagent->recipe[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yield)));
+						$reagent_list[$reagent->id]['yield'] = $reagent->recipes[0]->yield;
+						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbr;
+						$this->_reagents(array($reagent->recipes[0]), $self_sufficient, ceil($reagent->pivot->amount * ceil($inner_multiplier / $reagent_yield)));
 					}
 				}
 			}

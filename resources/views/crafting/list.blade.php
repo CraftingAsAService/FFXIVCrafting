@@ -109,16 +109,16 @@
 			@foreach($reagents as $reagent)
 			<?php $item =& $reagent['item']; ?>
 			<?php
-				$requires = array(); $yields = 1;
+				$requires = []; $yields = 1;
 				$item_level = $item->level;
 				$link = 'item/' . $item->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
-					$item_level = $item->recipe[0]->level;
-					$yields = $item->recipe[0]->yield;
-					foreach ($item->recipe[0]->reagents as $rr_item)
+					$item_level = $item->recipes[0]->level;
+					$yields = $item->recipes[0]->yield;
+					foreach ($item->recipes[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
-					$link = 'recipe/' . $item->recipe[0]->id;
+					$link = 'recipe/' . $item->recipes[0]->id;
 				}
 			?>
 			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
@@ -185,7 +185,7 @@
 			</tr>
 			@foreach($recipes as $recipe)
 			<?php
-				$requires = array();
+				$requires = [];
 				foreach ($recipe->reagents as $item)
 					$requires[] = $item->pivot->amount . 'x' . $item->id;
 			?>
