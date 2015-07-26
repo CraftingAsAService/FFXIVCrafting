@@ -17,6 +17,7 @@
 		var job = '{{ $job->abbr }}';
 		var craftable_only = Boolean({{ $craftable_only }});
 		var rewardable_too = Boolean({{ $rewardable_too }});
+		var max_level = {{ config('site.max_level') }};
 	</script>
 	<script type='text/javascript' src='{{ cdn('/js/equipment.js') }}'></script>
 @stop

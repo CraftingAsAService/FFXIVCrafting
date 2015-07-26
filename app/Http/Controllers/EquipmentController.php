@@ -97,9 +97,9 @@ class EquipmentController extends Controller
 		view()->share('job', $job);
 		view()->share('stat_ids_to_focus', $stat_ids_to_focus);
 
-		$limit = 48;
+		$limit = config('site.max_level') - 2;
 		if ($slim_mode)
-			$limit = 47;
+			$limit = config('site.max_level') - 3;
 
 		// The limit may need to take one off.
 		// If this is a DOW or DOM class, there's too many items at level 50 to produce good results
@@ -108,8 +108,8 @@ class EquipmentController extends Controller
 		{
 			// Get the "DOW/M" classes
 			$dowm_class_ids = [];
-			$cj = JobCategory::with('Job')->find(34); // "Disciples of War or Magic"
-			foreach ($cj->Job as $c)
+			$cj = JobCategory::with('jobs')->find(34); // "Disciples of War or Magic"
+			foreach ($cj->jobs as $c)
 				$dowm_class_ids[] = $c->id;
 
 			if (in_array($job->id, $dowm_class_ids))

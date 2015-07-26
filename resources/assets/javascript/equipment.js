@@ -154,7 +154,7 @@ var equipment = {
 				equipment.same_cell_heights();
 
 				// preload the next level
-				if (lvl + equipment.options.level_range <= 50 && $('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length == 0)
+				if (lvl + equipment.options.level_range <= max_level && $('td[data-level=' + (lvl + equipment.options.level_range - 1) + ']').length == 0)
 					equipment.load_column(lvl + equipment.options.level_range - 1, 'Pre');
 				else
 					$('.previous-gear, .next-gear').removeClass('disabled');
@@ -239,7 +239,7 @@ var equipment = {
 
 		if (viewport.current == 'mobile') verb = 'Pre';
 		
-		if (parseInt(level) > 50)
+		if (parseInt(level) > max_level)
 		{
 			$('.previous-gear, .next-gear').removeClass('disabled');
 			return;
@@ -298,8 +298,8 @@ var equipment = {
 	column_display:function(level) {
 		var start = equipment.options.level;
 
-		if (start > 50 - equipment.options.level_range + 1)
-			start = 50 - equipment.options.level_range + 1;
+		if (start > max_level - equipment.options.level_range + 1)
+			start = max_level - equipment.options.level_range + 1;
 
 		$('#gear td[data-level]').addClass('hidden');
 		$('#gear th[data-level]').addClass('hidden');
