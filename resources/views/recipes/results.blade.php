@@ -1,12 +1,10 @@
 {{-- inside a tbody --}}
-<?php $count = 0; ?>
-@foreach($list as $recipe)
-<?php $count++; ?>
+@forelse($list as $recipe)
 <tr>
 	<td class='text-left valign'>
-		{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'> --}}
+		<a href='http://xivdb.com/?item/{{ $recipe->item->id }}' target='_blank'>
 			<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name }}
-		{{-- </a> --}}
+		</a>
 	</td>
 	<td class='text-center valign'>
 		<i class='class-icon class-id-{{ $recipe->job_id }} add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{ $recipe->item->name }}'></i>
@@ -21,11 +19,10 @@
 		</button>
 	</td>
 </tr>
-@endforeach
-@if($count == 0)
+@empty
 <tr>
 	<td colspan='4'>
 		No Results
 	</td>
 </tr>
-@endif
+@endforelse

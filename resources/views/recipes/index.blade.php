@@ -32,8 +32,7 @@
 			</tr>
 			<tr>
 				<th class='valign'>
-					<div class='row'>
-					<div class='col-xs-9'>
+					<div style='width: 30vw; float: left;'>
 						<div class='input-group' style='margin: 0 auto;' id='name-search'>
 							<input type='text' class='form-control'>
 							<span class='input-group-btn'>
@@ -41,7 +40,7 @@
 							</span>
 						</div>
 					</div>
-					<div class='col-xs-3'>
+					<div style='width: 10vw; float: left; margin-left: 15px;'>
 						<select name='order-by' id='order-by' class='form-control'>
 							<option value='name.asc' selected='selected'>Name: a to z</option>
 							<option value='name.desc'>Name: z to a</option>
