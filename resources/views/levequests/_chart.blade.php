@@ -11,16 +11,10 @@
 <p class='xp-reward'>
 	<img src='/img/xp.png' width='24' height='24'>
 	{{ number_format($leve->xp) }}
-	@if ($leve->xp_spread > 0)
-	<span>&plusmn;<span>{{ number_format($leve->xp_spread) }}</span></span>
-	@endif
 </p>
 <p class='gil-reward'>
 	<img src='/img/coin.png' width='24' height='24'>
 	{{ number_format($leve->gil) }}
-	@if ($leve->gil_spread > 0)
-	<span>&plusmn;<span>{{ number_format($leve->gil_spread) }}</span></span>
-	@endif
 </p>
 
 <h3>Requires</h3>
@@ -121,14 +115,14 @@
 			<td class='text-center'>{{ $leve->requirements[0]->pivot->amount * $row['turnins'] }}</td>
 			@endif
 			@if($leve->repeats)
-			<td class='text-center'>{{ ceil($row['turnins'] / 3) }}</td>
+			<td class='text-center'>{{ ceil($row['turnins'] / ($leve->repeats + 1)) }}</td>
 			@endif
 			<td class='text-center'>{{ $row['hq_turnins'] }}</td>
 			@if($leve->requirements[0]->pivot->amount > 1)
 			<td class='text-center'>{{ $leve->requirements[0]->pivot->amount * $row['hq_turnins'] }}</td>
 			@endif
 			@if($leve->repeats)
-			<td class='text-center'>{{ ceil($row['hq_turnins'] / 3) }}</td>
+			<td class='text-center'>{{ ceil($row['hq_turnins'] / ($leve->repeats + 1)) }}</td>
 			@endif
 		</tr>
 		@endforeach

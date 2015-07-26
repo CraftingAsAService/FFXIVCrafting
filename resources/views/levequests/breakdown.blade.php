@@ -12,7 +12,7 @@
 
 @if($leve->repeats)
 <p>
-	Because this is a Repeatable Turnin, using {{ $leve->repeats }} leve allowances will net you {{ $leve->repeats }} turnins, as opposed to {{ $leve->repeats }} allowances allowing only one turning with other leves.
+	Because this is a Repeatable Turnin, using one leve allowances will net you {{ $leve->repeats + 1 }} turnins, as opposed to {{ $leve->repeats }} allowances allowing only one turnins with other leves.
 </p>
 @endif
 

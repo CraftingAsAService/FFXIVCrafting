@@ -89,11 +89,10 @@
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 					{!! menu_item('/career',	'Career',		'career'	) !!}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
-					{!! menu_item('/quests',	'Quests',		'quests'	) !!}
+					{!! menu_item('/food',		'Food',			'food'		) !!}
 					{!! menu_item('/levequests','Leves',		'leves'		) !!}
 					{!! menu_item('/stats',		'Stats',		'stats'		) !!}
 					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
-					{!! menu_item('/food',		'Food',			'food'		) !!}
 
 					<?php /*
 					<li>
@@ -191,16 +190,16 @@
 											{{-- menu_item('/',			'Home',			'home'		) --}}
 											{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
-											{!! menu_item('/career',	'Career',		'career'	) !!}
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
-											{!! menu_item('/quests',	'Quests',		'quests'	) !!}
 											{!! menu_item('/levequests','Leves',		'leves'		) !!}
-											<li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'food'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
+											{!! menu_item('/career',	'Career',		'career'	) !!}
+											{!! menu_item('/food',		'Food',			'food'		) !!}
+											<li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
 												<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 												<ul class='dropdown-menu dropdown-menu-right'>
 													<li{!! isset($active) && $active == 'stats' ? ' class="active"' : '' !!}><a href='/stats'>Stats</a></li>
 													<li{!! isset($active) && $active == 'materia' ? ' class="active"' : '' !!}><a href='/materia'>Materia</a></li>
-													<li{!! isset($active) && $active == 'food' ? ' class="active"' : '' !!}><a href='/food'>Food</a></li>
+													<li{!! isset($active) && $active == 'quests' ? ' class="active"' : '' !!}><a href='/quests'>Quests</a></li>
 													<li class='divider'></li>
 													<li><a href='http://www.reddit.com/r/ffxivcrafting'>Subreddit</a></li>
 												</ul>
