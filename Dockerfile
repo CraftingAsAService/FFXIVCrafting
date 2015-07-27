@@ -32,11 +32,11 @@ ADD config/newrelic.ini /etc/php5/apache2/conf.d/newrelic.ini
 
 # Configure CAAS domain in Apache
 ADD config/000-default.conf /etc/apache2/sites-available/000-default.conf
-ADD . /var/www/
-# Install Composer
 RUN apt-get -qq install curl git
-RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer
+# Install Composer
 # Composer install
+RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer
+ADD . /var/www/
 WORKDIR /var/www/
 # Fix permissions issue on DocRoot
 # Join composer install and perm fix to optimize docker image size
