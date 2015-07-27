@@ -1,21 +1,17 @@
 @foreach($leves as $leve)
-<?php $recipe_id = count($leve->item->recipe) ? $leve->item->recipe[0]->id : 0; ?>
+{{ dd($leve) }}
 <tr>
 	<td width='24' class='valign'>
-		<i class='class-icon class-id-{{ $leve->classjob_id }}'></i>
+		<i class='class-icon class-id-{{ $leve->job_category->jobs[0]->id }}'></i>
 	</td>
 	<td class='item{{ $leve->repeats ? ' repeats\' rel="tooltip" title="Repeatable Leve" data-placement="right" data-container=\'body' : '' }}'>
 		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
-		@if($recipe_id == 0)
-		<a href='http://xivdb.com/?item/{{ $leve->item->id }}' class='item-name' target='_blank'>
-		@else
-		<a href='http://xivdb.com/?recipe/{{ $recipe_id }}' class='item-name' target='_blank'>
-		@endif
-			<img src='{{ assetcdn('item/' . $leve->item->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->item->name->term }}
+		<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name' target='_blank'>
+			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->name }}
 		</a>
-		@if ($leve->amount > 1)
+		@if ($leve->requirements[0]->pivot->amount > 1)
 		<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
-			x {{ $leve->amount }}
+			x {{ $leve->requirements[0]->pivot->amount }}
 		</span>
 		@endif
 	</td>
@@ -35,11 +31,11 @@
 		<img src='/img/coin.png' width='24' height='24'>
 		{{ number_format($leve->gil) }}
 	</td>
-	<td class='text-center location {{ preg_replace('/\W/', '', strtolower($leve->major_location)) }}'>
-		<div>{{ ! empty($leve->location) ? $leve->location : '' }}</div>
-		<div>{{ ! empty($leve->minor_location) ? $leve->minor_location : '' }}</div>
+	<td class='text-center location {{ preg_replace('/\W/', '', strtolower($leve->location->name)) }}'>
+		{{ $leve->location->name }}
 	</td>
-	<td class='text-center valign'>
+	<td></td>
+	{{-- <td class='text-center valign'>
 		<button class='btn btn-default leve_rewards' data-toggle='popover' data-content-id='#rewards_for_{{ $leve->id }}'>
 			<i class='glyphicon glyphicon-gift'></i>
 		</button>
@@ -49,7 +45,7 @@
 			<div class='margin-bottom'>
 				@if($reward->item_id)
 				<img src='{{ assetcdn('item/' . $reward->item->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>
-				{{ $reward->item->name->term }}
+				{{ $reward->item->name }}
 				@else
 				<img src='/img/noitemicon.png' style='margin-right: 10px;'>
 				{{ $reward->item_name }}
@@ -62,9 +58,9 @@
 			None listed
 			@endif
 		</div>
-	</td>
+	</td> --}}
 	<td class='text-center valign'>
-		<button class='btn btn-default add-to-list' data-item-id='{{ $leve->item->id }}' data-item-name='{{{ $leve->item->name->term }}}' data-item-quantity='{{{ $leve->amount }}}'>
+		<button class='btn btn-default add-to-list' data-item-id='{{ $leve->requirements[0]->id }}' data-item-name='{{{ $leve->requirements[0]->name }}}' data-item-quantity='{{{ $leve->requirements[0]->pivot->amount }}}'>
 			<i class='glyphicon glyphicon-shopping-cart'></i>
 			<i class='glyphicon glyphicon-plus'></i>
 		</button>

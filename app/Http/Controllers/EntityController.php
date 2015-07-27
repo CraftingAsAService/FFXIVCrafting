@@ -25,10 +25,10 @@ class EntityController extends Controller {
 
 	private function leves($item)
 	{
-		$item->load('leves', 'leves.job_category', 'leves.job_category.jobs');
+		$item->load('leve_rewards', 'leve_rewards.job_category', 'leve_rewards.job_category.jobs');
 		
 		$leves = [];
-		foreach ($item->leves as $leve)
+		foreach ($item->leve_rewards as $leve)
 			$leves[$leve->pivot->rate * 100][$leve->pivot->amount ?: 1][$leve->level][] = [
 				'name' => $leve->name, 
 				'job_count' => count($leve->job_category->jobs),

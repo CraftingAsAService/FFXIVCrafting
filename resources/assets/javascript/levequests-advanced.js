@@ -23,7 +23,7 @@ var leves = {
 		$('#max-level').val(hash[2]);
 		$('#type-selector').multiselect('deselect', ['Town', 'Courier', 'Field']).multiselect('select', hash[3].split(','));
 		if (hash[4] == '1')
-			$('#triple_only').prop('checked', true);
+			$('#repeatable_only').prop('checked', true);
 
 		if (hash[5] != '' || hash[6] != '' || hash[7] != '')
 			$('.toggle-advanced').trigger('click');
@@ -174,7 +174,7 @@ var leves = {
 	search:function() {
 		var classes = [], //$('#class-selector + .btn-group input:checked'),
 			types = [], //$('#type-selector + .btn-group input:checked'),
-			triple_only = $('#triple_only').is(':checked'),
+			repeatable_only = $('#repeatable_only').is(':checked'),
 			min_level = parseInt($('#min-level').val()),
 			max_level = parseInt($('#max-level').val()),
 			leve_item = $('#leve_item').val(),
@@ -193,7 +193,7 @@ var leves = {
 				min_level, 
 				max_level, 
 				types.join(','),
-				triple_only == true ? 1 : 0,
+				repeatable_only == true ? 1 : 0,
 				leve_item,
 				leve_name,
 				leve_location
@@ -208,7 +208,7 @@ var leves = {
 			data: {
 				classes : classes,
 				types : types,
-				triple_only : triple_only,
+				repeatable_only : repeatable_only,
 				min_level : min_level,
 				max_level : max_level,
 				leve_item : leve_item,

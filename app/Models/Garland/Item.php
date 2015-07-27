@@ -146,7 +146,7 @@ class Item extends Model {
 		
 		foreach ($slots as $slot_identifier => $slot_name)
 		{
-			$query = Item::with('attributes', 'shops', 'recipes', 'recipes.job', 'quest_rewards', 'leves', 'ventures', 'achievements')
+			$query = Item::with('attributes', 'shops', 'recipes', 'recipes.job', 'quest_rewards', 'leve_rewards', 'ventures', 'achievements')
 				->where('slot', $slot_identifier)
 				->whereBetween('elvl', array($level - 10, $level + $range))
 				->whereIn('job_category_id', $job_category_ids)
@@ -164,7 +164,7 @@ class Item extends Model {
 							$query->where('item_id', \DB::raw('item.id'));
 						})
 						->orHas('quest_rewards')
-						->orHas('leves')
+						->orHas('leve_rewards')
 						->orHas('ventures')
 						->orHas('achievements');
 				});

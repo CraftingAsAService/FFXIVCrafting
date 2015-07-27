@@ -10,7 +10,7 @@
 @stop
 
 @section('banner')
-	<a href='/levequests' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+	<a href='/levequests/advanced' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
 	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
 
 	<h1>Levequests</h1>
@@ -19,10 +19,6 @@
 
 @section('content')
 
-<div class='alert alert-warning'>
-	Sorry, I've disabled this page.  Express your anger!  Visit the <a href='http://reddit.com/r/ffxivcrafting'>Subreddit</a>.
-</div>
-{{-- 
 <div class='panel panel-default'>
 	<div class='panel-heading'>
 		Levequest Filter
@@ -41,8 +37,8 @@
 						<label>Class</label>
 						<select class='multiselect hidden' multiple='multiple' id='class-selector'>
 							@foreach($crafting_job_list as $job)
-							<option value='{{ $job->en_abbr->term }}'{{ $job->id == reset($crafting_job_ids) ? ' selected="selected"' : '' }}>
-								{{ $job->name->term }}
+							<option value='{{ $job->abbr }}'{{ $job->id == reset($crafting_job_ids) ? ' selected="selected"' : '' }}>
+								{{ $job->name }}
 							</option>
 							@endforeach
 						</select>
@@ -50,18 +46,18 @@
 
 					<div class='form-group margin-left'>
 						<label>Min Level</label>
-						<input type='number' min='0' max='45' step='5' value='1' class='form-control text-center' id='min-level'>
+						<input type='number' min='0' max='{{ config('site.max_level') }}' value='1' class='form-control text-center' id='min-level'>
 					</div>
 
 					<div class='form-group margin-left'>
 						<label>Max Level</label>
-						<input type='number' min='0' max='45' step='5' value='45' class='form-control text-center' id='max-level'>
+						<input type='number' min='0' max='{{ config('site.max_level') }}' value='{{ config('site.max_level') }}' class='form-control text-center' id='max-level'>
 					</div>
 
 					<div class='form-group margin-left'>
 						<label>Type</label>
 						<select class='multiselect hidden' multiple='multiple' id='type-selector'>
-							@foreach(array('Town', 'Field', 'Courier', 'Reverse Courier') as $role)
+							@foreach(['Town', 'Field', 'Courier', 'Reverse Courier'] as $role)
 							<option value='{{ $role }}' selected='selected'>{{ $role }}</option>
 							@endforeach
 						</select>
@@ -118,8 +114,4 @@
 	</table>
 </div>
 
-<div class='well'>
-	Information gathered from <a href='http://www.bluegartr.com/threads/118238-DoH-DoL-Leves-Dyes-Material-Tiers' target='_blank'>BlueGartr user Seravi Edalborez</a>.  Thanks Seravi!
-</div>
- --}}
 @stop

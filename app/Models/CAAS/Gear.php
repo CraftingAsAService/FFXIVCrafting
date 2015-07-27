@@ -225,7 +225,7 @@ class Gear
 		// Get all items where:
 		// Slot isn't zero
 		// The class can use it
-		$query = Item::with('job_category', 'job_category.jobs', 'instances', 'achievements', 'attributes', 'mobs', 'shops', 'recipes', 'recipes.job', 'quest_rewards', 'leves', 'ventures')
+		$query = Item::with('job_category', 'job_category.jobs', 'instances', 'achievements', 'attributes', 'mobs', 'shops', 'recipes', 'recipes.job', 'quest_rewards', 'leve_rewards', 'ventures')
 			->whereIn('slot', $slot_ids)
 			->whereBetween('elvl', [$level_start, $level_end])
 			->whereIn('job_category_id', $job_category_ids)
@@ -245,7 +245,7 @@ class Gear
 							$query->where('item_id', \DB::raw('item.id'));
 						})
 						->orHas('quest_rewards')
-						->orHas('leves')
+						->orHas('leve_rewards')
 						->orHas('ventures')
 						->orHas('achievements');
 				});

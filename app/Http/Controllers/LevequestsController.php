@@ -9,6 +9,7 @@ use Config;
 
 use App\Models\Garland\Leve;
 use App\Models\Garland\Job;
+use App\Models\Garland\JobCategory;
 
 class LevequestsController extends Controller
 {
@@ -142,14 +143,12 @@ class LevequestsController extends Controller
 	 */
 	public function getAdvanced()
 	{
-		return view('levequests.advanced');
+		$crafting_job_ids = Config::get('site.job_ids.crafting');
+		$crafting_job_ids[] = Config::get('site.job_ids.fishing');
 
-		// $crafting_job_ids = Config::get('site.job_ids.crafting');
-		// $crafting_job_ids[] = Config::get('site.job_ids.fishing');
+		$crafting_job_list = Job::whereIn('id', $crafting_job_ids)->get();
 
-		// $crafting_job_list = Job::whereIn('id', $crafting_job_ids)->get();
-
-		// return view('levequests.advanced', compact('crafting_job_list', 'crafting_job_ids'));
+		return view('levequests.advanced', compact('crafting_job_list', 'crafting_job_ids'));
 	}
 
 	/**
@@ -159,91 +158,105 @@ class LevequestsController extends Controller
 	 */
 	public function getPopulateAdvanced(Request $request)
 	{
-		$input = $request->all();
-		
 		// Parse the Job IDs
-		$selected_classes = $input['classes'];
-		foreach (Job::lists('id', 'abbr')->all() as $abbr => $id)
-			if (in_array($abbr, $selected_classes))
-				$job_ids[] = $id;
+		$selected_classes = $request->input('classes', []);
+		if (empty($selected_classes)) $selected_classes = ['CRP']; // CRP default
+		$jc_ids = JobCategory::whereIn('name', $selected_classes)->lists('id')->all();
 
-		if (empty($job_ids))
-			$job_ids[] = 1;
+		// Level Range
+		$min = $request->input('min_level');
+		$max = $request->input('max_level');
+		// Invert if needed
+		if ($min > $max) list($max, $min) = [$min, $max];
 
 		// All Leves
 		$query = Leve::with(array(
-				'job', 'item', 'item.name', 'item.recipe', 'item.shops',
+				'job_category', 'job_category.jobs',
+				'location',
+				'requirements', 'requirements.recipes', 'requirements.shops',
 			))
-			->where('item_id', '>', 0) // Avoids mining/botany "bug"
-			->orderBy('job_id')
+			->whereIn('job_category_id', $jc_ids)
+			->whereBetween('level', [$min, $max])
+			->orderBy('job_category_id')
 			->orderBy('level')
 			->orderBy('xp')
 			->orderBy('gil');
-
-		// Job IDs
-		$query->whereIn('job_id', $job_ids);
-
-		// Level Range
-		$min = $input['min_level'];
-		$max = $input['max_level'];
-
-		// Invert if needed
-		if ($min > $max) list($max, $min) = array($min, $max);
-
-		$query->whereBetween('level', array($min, $max));
 		
-		// Triple Only
-		if ($input['triple_only'] == 'true')
-			$query->where('triple', 1);
+		// Repeatable Only
+		if ($request->input('repeatable_only') == 'true')
+			$query->where('repeats', '>', 1);
 
-		// Types
-		$query->whereIn('type', $input['types']);
+		// Types are a little complicated.
+		// Types are separated by either being In or Out of a main location
+		$main_locations = [27, 39, 51]; // Limsa, Ul'dah, Gridania
+		// Combined with a Plate
+		$plates = [
+			'courier' => [80034], // && Not in Main
+			'field' => [80034, 80041], // && Not in Main
+			'reverse-courier' => [80034], // && in Main
+			'town' => [80033, 80041, 80045, 80057], // && in Main, 45 & 57 are for FSH
+		];
+		$types = $request->input('types', []);
+		array_walk($types, function(&$x) { $x = str_slug($x); });
+
+		$query->where(function($query) use ($main_locations, $plates, $types) {
+			$query->where('name', 'FAILBOAT'); // Will Fail, but gives a starting point for the "orWhere"'s
+			if (in_array('courier', $types))
+				$query->orWhere(function($query) use ($plates, $main_locations) {
+					$query->whereNotIn('area_id', $main_locations)
+						->whereIn('plate', $plates['courier']);
+				});
+			if (in_array('field', $types))
+				$query->orWhere(function($query) use ($plates, $main_locations) {
+					$query->whereNotIn('area_id', $main_locations)
+						->whereIn('plate', $plates['field']);
+				});
+			if (in_array('reverse-courier', $types))
+				$query->orWhere(function($query) use ($plates, $main_locations) {
+					$query->whereIn('area_id', $main_locations)
+						->whereIn('plate', $plates['reverse-courier']);
+				});
+			if (in_array('town', $types))
+				$query->orWhere(function($query) use ($plates, $main_locations) {
+					$query->whereIn('area_id', $main_locations)
+						->whereIn('plate', $plates['town']);
+				});
+		});
 
 		// Text Searches
-		if ($input['leve_name'])
-			$query->where('name', 'like', '%' . $input['leve_name'] . '%');
+		if ($request->input('leve_name'))
+			$query->where('name', 'like', '%' . $request->input('leve_name') . '%');
+		if ($request->input('leve_location'))
+			$query->whereHas('location', function($query) use ($request) {
+				$query->whereHas('name', 'like', '%' . $request->input('leve_location') . '%');
+			});
+		if ($request->input('leve_item'))
+			$query->whereHas('requirements', function($query) use ($request) {
+				$query->whereHas('name', 'like', '%' . $request->input('leve_item') . '%');
+			});
 
-		$leves = $query
-			// ->remember(Config::get('site.cache_length'))
-			->get();
+		// \DB::connection()->enableQueryLog();
+		$leves = $query->get();
 
-		$location_search = strtolower($input['leve_location']);
-		$item_search = strtolower($input['leve_item']);
-
-		$rewards = LeveReward::with('item')
-			->whereBetween('level', array($min, $max))
-			->whereIn('job_id', $job_ids)
-			->get();
-
-		$leve_rewards = [];
-
-		foreach ($leves as $k => $row)
-		{
-			if ($item_search && ! preg_match('/' . $item_search . '/', strtolower($row->item->name->term)))
-			{
-				unset($leves[$k]);
-				continue;
-			}
-			
-			// TODO this can be moved into the query itself now, most likely
-			if ($location_search)
-			{
-				if ( ! preg_match('/' . $location_search . '/', strtolower($row->location)) &&
-					 ! preg_match('/' . $location_search . '/', strtolower($row->major_location)) && 
-					 ! preg_match('/' . $location_search . '/', strtolower($row->minor_location))
-				)
-				{
-					unset($leves[$k]);
-					continue;
-				}
-			}
-
-			foreach($rewards as $reward)
-				if ($reward->job_id == $row->job_id && $reward->level == $row->level)
-					$leve_rewards[$row->id][] = $reward;
-		}
+		// dd(self::logger());
+		// dd($leves[0]->type);
+		// dd($leves[0]->requirements[0]->pivot->amount);
 		
-		return view('levequests.rows', compact('leves', 'leve_rewards', 'input'));
+		return view('levequests.rows', compact('leves'));
 	}
+
+	// static private function logger() {
+	// 	// \DB::connection()->enableQueryLog();
+	//     $queries = \DB::getQueryLog();
+	//     $formattedQueries = [];
+	//     foreach( $queries as $query ) :
+	//         $prep = $query['query'];
+	//         foreach( $query['bindings'] as $binding ) :
+	//             $prep = preg_replace("#\?#", $binding, $prep, 1);
+	//         endforeach;
+	//         $formattedQueries[] = $prep;
+	//     endforeach;
+	//     return $formattedQueries;
+	// }
 
 }
