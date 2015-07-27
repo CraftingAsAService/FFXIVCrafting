@@ -1,11 +1,13 @@
 @foreach($leves as $leve)
-{{ dd($leve) }}
 <tr>
 	<td width='24' class='valign'>
 		<i class='class-icon class-id-{{ $leve->job_category->jobs[0]->id }}'></i>
 	</td>
-	<td class='item{{ $leve->repeats ? ' repeats\' rel="tooltip" title="Repeatable Leve" data-placement="right" data-container=\'body' : '' }}'>
-		<span class='close' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
+	<td class='item'>
+		<span class='close ilvl' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>
+		@if($leve->repeats)
+		<img src='/img/leve_icon_red.png' rel='tooltip' title='Repeatable Leve!' width='16' class='pull-right' style='clear: right;'>
+		@endif
 		<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name' target='_blank'>
 			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->name }}
 		</a>
@@ -34,8 +36,7 @@
 	<td class='text-center location {{ preg_replace('/\W/', '', strtolower($leve->location->name)) }}'>
 		{{ $leve->location->name }}
 	</td>
-	<td></td>
-	{{-- <td class='text-center valign'>
+	<td class='text-center valign'>
 		<button class='btn btn-default leve_rewards' data-toggle='popover' data-content-id='#rewards_for_{{ $leve->id }}'>
 			<i class='glyphicon glyphicon-gift'></i>
 		</button>
@@ -58,7 +59,7 @@
 			None listed
 			@endif
 		</div>
-	</td> --}}
+	</td>
 	<td class='text-center valign'>
 		<button class='btn btn-default add-to-list' data-item-id='{{ $leve->requirements[0]->id }}' data-item-name='{{{ $leve->requirements[0]->name }}}' data-item-quantity='{{{ $leve->requirements[0]->pivot->amount }}}'>
 			<i class='glyphicon glyphicon-shopping-cart'></i>

@@ -97,6 +97,10 @@ class LevequestsController extends Controller
 		$leve = Leve::with('job_category', 'job_category.jobs', 'requirements', 'requirements.recipes', 'requirements.recipes.reagents')->find($leve_id);
 		$experience = array_intersect_key(config('experience'), array_flip(range($leve->level + 1, $leve->level + 10)));
 		
+		// Leve breakdown only exists to handle Crafting (and Fishing) realted jobs
+		if ( ! in_array($leve->job_category_id, range(9,16)) && $leve->job_category_id != 19) // 9-16 CRP-WVR, 19 = FSH
+			abort(404);
+
 		$chart = [];
 		foreach ($experience as $xp_level => $xp)
 		{
@@ -175,6 +179,7 @@ class LevequestsController extends Controller
 				'location',
 				'requirements', 'requirements.recipes', 'requirements.shops',
 			))
+			->has('requirements')
 			->whereIn('job_category_id', $jc_ids)
 			->whereBetween('level', [$min, $max])
 			->orderBy('job_category_id')
@@ -228,11 +233,11 @@ class LevequestsController extends Controller
 			$query->where('name', 'like', '%' . $request->input('leve_name') . '%');
 		if ($request->input('leve_location'))
 			$query->whereHas('location', function($query) use ($request) {
-				$query->whereHas('name', 'like', '%' . $request->input('leve_location') . '%');
+				$query->where('name', 'like', '%' . $request->input('leve_location') . '%');
 			});
 		if ($request->input('leve_item'))
 			$query->whereHas('requirements', function($query) use ($request) {
-				$query->whereHas('name', 'like', '%' . $request->input('leve_item') . '%');
+				$query->where('name', 'like', '%' . $request->input('leve_item') . '%');
 			});
 
 		// \DB::connection()->enableQueryLog();

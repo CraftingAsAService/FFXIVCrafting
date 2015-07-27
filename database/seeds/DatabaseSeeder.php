@@ -454,7 +454,7 @@ class DatabaseSeeder extends Seeder
 		foreach ($quest as $q)
 		{
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '../garlanddeploy/db/data/quest/' . $q->i . '.json';
+			$json_file = base_path() . '/../garlanddeploy/db/data/quest/' . $q->i . '.json';
 			$q = $this->get_cleaned_json($json_file);
 			$q = $q->quest;
 			
@@ -676,7 +676,7 @@ class DatabaseSeeder extends Seeder
 		foreach ($leve as $l)
 		{
 			// Get /db/data/leve/#.json
-			$json_file = base_path() . '../garlanddeploy/db/data/leve/' . $l->i . '.json';
+			$json_file = base_path() . '/../garlanddeploy/db/data/leve/' . $l->i . '.json';
 			$l = $this->get_cleaned_json($json_file);
 
 			$rewards = isset($l->rewards) && isset($l->rewards->entries) ? $l->rewards->entries : [];
@@ -763,7 +763,7 @@ class DatabaseSeeder extends Seeder
 		foreach ($item as $i)
 		{
 			// Get /db/data/item/#.json
-			$json_file = base_path() . '../garlanddeploy/db/data/item/' . $i->i . '.json';
+			$json_file = base_path() . '/../garlanddeploy/db/data/item/' . $i->i . '.json';
 			$i = $this->get_cleaned_json($json_file);
 			$i = $i->item;
 

@@ -38,68 +38,60 @@ class Build extends Command {
 	public function fire()
 	{
 		// $tag = $this->argument('tag');
-		$env = $this->option('qa') ? 'qa' : 'production';
-		$php = $this->option('php') ? 'php' : 'hhvm';
+		// $env = $this->option('qa') ? 'qa' : 'production';
+		// $php = $this->option('php') ? 'php' : 'hhvm';
 
-		if ($this->option('reset'))
-			return $this->reset($php);
+		// if ($this->option('reset'))
+		// 	return $this->reset($php);
 
-		$latest_tag = exec('git tag');
+		// $latest_tag = exec('git tag');
 
-		$tmp = explode('.', $latest_tag);
-		$tmp[count($tmp) - 1] = end($tmp) + 1;
+		// $tmp = explode('.', $latest_tag);
+		// $tmp[count($tmp) - 1] = end($tmp) + 1;
 
-		$new_tag = implode('.', $tmp);
+		// $new_tag = implode('.', $tmp);
 
-		$this->info('Latest tag is ' . $latest_tag);
-		$this->info('Suggested tag is ' . $new_tag);
-		$tag = $this->ask('Name this branch: (`enter` to use default)', $new_tag);
+		// $this->info('Latest tag is ' . $latest_tag);
+		// $this->info('Suggested tag is ' . $new_tag);
+		// $tag = $this->ask('Name this branch: (`enter` to use default)', $new_tag);
 
 
 		$this->info('Exporting MySQL Database');
 		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-k8s-clus/caas-db/caas.sql');
 
-		$this->info('Clearing caches');
-		echo exec($php . ' artisan cache:clear') . PHP_EOL;
-		echo exec($php . ' artisan route:clear') . PHP_EOL;
-		echo exec($php . ' artisan config:clear') . PHP_EOL;
-		echo exec($php . ' artisan view:clear') . PHP_EOL;
-		echo exec($php . ' artisan inspire') . PHP_EOL;
+		// $this->info('Clearing caches');
+		// echo exec($php . ' artisan cache:clear') . PHP_EOL;
+		// echo exec($php . ' artisan route:clear') . PHP_EOL;
+		// echo exec($php . ' artisan config:clear') . PHP_EOL;
+		// echo exec($php . ' artisan view:clear') . PHP_EOL;
+		// echo exec($php . ' artisan inspire') . PHP_EOL;
 
-		$this->info('Switching Environment to ' . strtoupper($env));
-		echo exec('cp .env.' . $env . ' .env');
+		// $this->info('Switching Environment to ' . strtoupper($env));
+		// echo exec('cp .env.' . $env . ' .env');
 
-		$this->info('Updating an Optimized/NoDev Composer');
-		echo exec('composer update --no-dev -o') . PHP_EOL;
+		// $this->info('Updating an Optimized/NoDev Composer');
+		// echo exec('composer update --no-dev -o') . PHP_EOL;
 
-		$this->info('Caching!');
-		echo exec($php . ' artisan route:cache') . PHP_EOL;
-		echo exec($php . ' artisan config:cache') . PHP_EOL;
+		// $this->info('Caching!');
+		// echo exec($php . ' artisan route:cache') . PHP_EOL;
+		// echo exec($php . ' artisan config:cache') . PHP_EOL;
 
-		$this->info('Creating Tarball');
+		// $this->info('Creating Tarball');
 
-		$exclude_from_tar = [
-			'caas/.env.*',
-			'caas/.git/*',
-			'caas/node_modules/*',
-			'caas/caas/*',
-			'caas/docker/*',
-			'caas/resources/assets/*',
-			'caas/storage/app/osmose/*',
-		];
+		// $exclude_from_tar = [
+		// 	'caas/.env.*',
+		// 	'caas/.git/*',
+		// 	'caas/node_modules/*',
+		// 	'caas/caas/*',
+		// 	'caas/docker/*',
+		// 	'caas/resources/assets/*',
+		// 	'caas/storage/app/osmose/*',
+		// ];
 
-		exec('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/') . PHP_EOL;
+		// exec('tar --exclude="' . implode('" --exclude="', $exclude_from_tar) . '" -zhcvf docker/caas-web.tar.gz caas/') . PHP_EOL;
 
-		$this->reset($php);
+		// $this->reset($php);
 
-		if ($this->confirm('Ready to Tag and Push? [yes|no]'))
-		{
-			echo exec('git commit -a -m "' . $tag . ' Release"') . PHP_EOL;
-			echo exec('git tag ' . $tag . '') . PHP_EOL;
-			$this->info('RUN THIS: git push --tags origin master');
-		}
-
-		// TODO, push the DB repo??
 		// if ($this->confirm('Ready to Tag and Push? [yes|no]'))
 		// {
 		// 	echo exec('git commit -a -m "' . $tag . ' Release"') . PHP_EOL;
@@ -107,8 +99,16 @@ class Build extends Command {
 		// 	$this->info('RUN THIS: git push --tags origin master');
 		// }
 
-		$this->info('Done!');
-		$this->info('Consider running osmose:cdn:assets!');
+		// // TODO, push the DB repo??
+		// // if ($this->confirm('Ready to Tag and Push? [yes|no]'))
+		// // {
+		// // 	echo exec('git commit -a -m "' . $tag . ' Release"') . PHP_EOL;
+		// // 	echo exec('git tag ' . $tag . '') . PHP_EOL;
+		// // 	$this->info('RUN THIS: git push --tags origin master');
+		// // }
+
+		// $this->info('Done!');
+		// $this->info('Consider running osmose:cdn:assets!');
 	}
 
 	/**
