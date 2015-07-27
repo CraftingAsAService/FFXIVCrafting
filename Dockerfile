@@ -38,9 +38,9 @@ RUN apt-get -qq install curl git
 RUN curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer
 # Composer install
 WORKDIR /var/www/
-RUN /usr/local/bin/composer install
 # Fix permissions issue on DocRoot
-RUN chown -R www-data.www-data /var/www/
+# Join composer install and perm fix to optimize docker image size
+RUN /usr/local/bin/composer install;chown -R www-data.www-data /var/www/
 
 # Services script
 ENTRYPOINT [ "/usr/sbin/apache2ctl", "-D", "FOREGROUND" ]
