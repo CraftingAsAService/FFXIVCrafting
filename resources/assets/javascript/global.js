@@ -140,7 +140,7 @@ var global = {
 		name += '=';
 		var cookie_array = document.cookie.split(';');
 
-		console.log(cookie_array);
+		// console.log(cookie_array);
 
 		for (var x = 0; x < cookie_array.length; x++) {
 			var cookie = cookie_array[x];
