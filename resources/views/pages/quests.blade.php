@@ -100,10 +100,12 @@
 				</td> --}}
 				{{-- <td>{{ $quest->notes }}</td> --}}
 				<td class='text-center valign'>
+					@if(count($quest->requirements[0]->recipes))
 					<button class='btn btn-default add-to-list' data-item-id='{{ $item['id'] }}' data-item-name='{{ $item['name'] }}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>
+					@endif
 				</td>
 			</tr>
 			@endforeach
