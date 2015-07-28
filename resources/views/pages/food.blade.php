@@ -132,7 +132,7 @@
 											<img src='/img/stats/{{ $quality }}/{{ $stat_name }}.png' class='stat-icon'>
 										</td>
 										@else
-										<td data-stat-name='{{ $stat_name }}' rel='tooltip'>
+										<td class='text-center valign' data-stat-name='{{ $stat_name }}' rel='tooltip'>
 											+0
 											<img src='/img/stats/{{ $quality }}/{{ $stat_name }}.png' class='stat-icon'>
 										</td>
