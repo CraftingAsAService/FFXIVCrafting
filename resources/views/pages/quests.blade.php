@@ -88,9 +88,9 @@
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $quest->level }}</span>
-					{{-- <a href='http://xivdb.com/?{{ $quest->recipe ? ('recipe/' . $quest->recipe->id) : ('item/' . $item['id']) }}' class='item-name' target='_blank'> --}}
+					<a href='http://xivdb.com/?item/{{ $item['id'] }}' class='item-name' target='_blank'>
 						<img src='{{ assetcdn('item/' . $item['icon'] . '.png') }}' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $item['name'] }}</span>
-					{{-- </a> --}}
+					</a>
 				</td>
 				{{-- <td class='text-center amount'>{{ $quest->amount }}</td> --}}
 				{{-- <td class='text-center'>

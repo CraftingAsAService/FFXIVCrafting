@@ -22,9 +22,9 @@ class QuestsController extends Controller
 		// All Quests
 		$results = Quest::with('job_category', 'job_category.jobs', 'requirements', 'requirements.recipes')
 			->has('requirements')
-			->whereHas('requirements', function($query) {
-				$query->has('recipes');
-			})
+			// ->whereHas('requirements', function($query) {
+			// 	$query->has('recipes');
+			// })
 			->whereIn('job_category_id', range(9,19)) // 9-19 are solo categories for DOL/H
 			->orderBy('job_category_id')
 			->orderBy('level')
@@ -41,8 +41,8 @@ class QuestsController extends Controller
 				$quests[$quest->job->abbr] = [];
 
 			foreach ($quest->requirements as $requirement)
-				foreach ($requirement->recipes as $recipe)
-					if ($recipe->job_id == $quest->job->id)
+				// foreach ($requirement->recipes as $recipe)
+				// 	if ($recipe->job_id == $quest->job->id)
 						$items[] = [
 							'id' => $requirement->id,
 							'name' => $requirement->name,
