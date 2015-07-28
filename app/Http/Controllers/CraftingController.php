@@ -176,7 +176,7 @@ class CraftingController extends Controller
 			// Starting maximum of 1
 			if ($start < 0) $start = 1;
 			if ($start > $end) $end = $start;
-			if ($end - $start > 9) $end = $start + 9;
+			// if ($end - $start > 9) $end = $start + 9;
 
 			// Check for quests
 			// We're only looking for proper crafting quests, so take out anything that's not between 9 and 16 (CRP to CUL)
@@ -226,8 +226,7 @@ class CraftingController extends Controller
 				->whereBetween('recipe_level', [$start, $end]);
 		}
 
-		$recipes = $query
-			->get();
+		$recipes = $query->get();
 
 		// Do we not want miscellaneous items?
 		if ($misc_items == 0 && $desired_job != 'List')

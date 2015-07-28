@@ -126,7 +126,14 @@ class CDNImages extends Command {
 			}
 			
 			$this->info('Uploading ' . $file['name']);
-			$container->uploadObject($file['name'], fopen($file['path'], 'r+'));
+
+			try {
+				$container->uploadObject($file['name'], fopen($file['path'], 'r+'));
+			} catch (\Guzzle\Http\Exception\CurlException $e) {
+				exec('echo -ne \'\007\'');
+				$this->error('CURL Failure');
+				exit;
+			}
 		}
 		
 		// $batch_amount = 50;
