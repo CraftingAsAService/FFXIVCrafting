@@ -4,11 +4,6 @@ var crafting = {
 		crafting_tour.init();
 	},
 	events:function() {
-		$('.bootswitch').bootstrapSwitch({
-			onSwitchChange:function() {
-				$(this).closest('form').submit();	
-			}
-		});
 
 		$('#obtain-these-items .collapse').click(function() {
 			var button = $(this);
@@ -25,8 +20,16 @@ var crafting = {
 		// If they change needed or obtained
 
 		$('.needed input').change(function() {
-			var root_engaged = $(this).closest('#CraftingList-section').length > 0;
-			return crafting.recalculate_all(root_engaged);
+			var el = $(this),
+				// Why is this a thing?  It's always `true`... right?
+				root_engaged = el.closest('#CraftingList-section').length > 0;
+			
+			crafting.recalculate_all(root_engaged);
+
+			// Fix #CraftingList totals
+			el.closest('tr').find('.total').html(el.val());
+
+			return;
 		});
 
 		$('input.obtained').change(function() {
@@ -43,6 +46,12 @@ var crafting = {
 			return;
 		});
 
+		$('#clear-localstorage').click(crafting.clear_localstorage);
+
+		crafting.set_localstorage_id();
+
+		crafting.restore_localstorage();
+
 		crafting.init_reagents();
 
 		crafting.recalculate_all(true);
@@ -50,51 +59,51 @@ var crafting = {
 		$('#map_all, #map_remaining').click(function(event) {
 			event.preventDefault();
 
-			var remaining = $(this).attr('id') == 'map_remaining';
+			// var remaining = $(this).attr('id') == 'map_remaining';
 
-			global.noty({
-				type: 'warning',
-				text: 'Loading Map'
-			});
+			// global.noty({
+			// 	type: 'warning',
+			// 	text: 'Loading Map'
+			// });
 
-			var data = [];
+			// var data = [];
 
-			// Go through the form and get the item id's and what's needed
-			$('#Gathered-section, #Bought-section, #Other-section').find('tr.reagent').each(function() {
-				var td = $(this),
-					id = td.data('itemId'),
-					needed = td.find('.needed span').html();
+			// // Go through the form and get the item id's and what's needed
+			// $('#Gathered-section, #Bought-section, #Other-section').find('tr.reagent').each(function() {
+			// 	var td = $(this),
+			// 		id = td.data('itemId'),
+			// 		needed = td.find('.needed span').html();
 
-				if (remaining && needed == '0')
-					return;
+			// 	if (remaining && needed == '0')
+			// 		return;
 
-				data[data.length] = id + '|' + needed;
-			});
+			// 	data[data.length] = id + '|' + needed;
+			// });
 
-			data = data.join('||');
+			// data = data.join('||');
 
-			var title = $('#banner h1').text();
-			if ($('#banner h2').length > 0)
-				title += ' ' + $('#banner h2').text();
+			// var title = $('#banner h1').text();
+			// if ($('#banner h2').length > 0)
+			// 	title += ' ' + $('#banner h2').text();
 
-			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			// var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
-			var form = $('<form action="/map" method="POST">' + 
-				'<input type="hidden" name="_token" value="' + csrf_token + '">' + 
-				'<input type="hidden" name="items" value="' + data + '">' +
-				'<input type="hidden" name="title" value="' + title + '">' +
-				'</form>');
+			// var form = $('<form action="/map" method="POST">' + 
+			// 	'<input type="hidden" name="_token" value="' + csrf_token + '">' + 
+			// 	'<input type="hidden" name="items" value="' + data + '">' +
+			// 	'<input type="hidden" name="title" value="' + title + '">' +
+			// 	'</form>');
 			
-			$('body').append(form);
+			// $('body').append(form);
 			
-			form.submit();
+			// form.submit();
 		});
 
 		$('#csv_download').click(function(event) {
 			event.preventDefault();
 
 			// var data = [["name1", "city1", "some other info"], ["name2", "city2", "more info"]];
-			var data = [["Item", "iLevel", "Yields", "Needed", "Purchase", "Source"]];
+			var data = [["Item", "iLevel", "Yields", "Needed", "Purchase"]];//, "Source"]];
 
 			$('tr.reagent').each(function() {
 				var row = [],
@@ -114,15 +123,15 @@ var crafting = {
 
 				row.push(el.find('.vendors').length ? (el.find('.vendors').text().replace(/\s|\n/ig, '') + ' gil') : '');
 
-				var source = [];
-				el.find('.crafted_gathered .class-icon').each(function() {
-					return source.push($(this).attr('title'));
-				});
+				// var source = [];
+				// el.find('.crafted_gathered .class-icon').each(function() {
+				// 	return source.push($(this).attr('title'));
+				// });
 
-				if (el.find('.crafted_gathered .beasts').length > 0)
-					source.push('Beasts');
+				// if (el.find('.crafted_gathered .beasts').length > 0)
+				// 	source.push('Beasts');
 
-				row.push(source.join(', '));
+				// row.push(source.join(', '));
 
 				data.push(row);
 
@@ -134,7 +143,104 @@ var crafting = {
 			global.exportToCsv(filename + '.csv', data);
 
 			return;
-		})
+		});
+
+		return;
+	},
+	obtained_click:function() {
+
+	},
+	localstorage_id: null,
+	set_localstorage_id:function() {
+		crafting.localstorage_id = 'page:' + encodeURIComponent(window.location.pathname);
+		return;
+	},
+	clear_localstorage:function(event) {
+		event.preventDefault();
+		
+		localStorage.removeItem(crafting.localstorage_id);
+
+		// Refresh the page
+		location.reload();
+
+		return;
+	},
+	restore_localstorage:function() {
+		var page_items = JSON.parse(localStorage.getItem(crafting.localstorage_id));
+
+		if (page_items === null)
+			return;
+
+		// Fill in reagents from the progress bucket
+		$('.reagent').not('.exempt').each(function() {
+			var el = $(this),
+				itemId = el.data('itemId'),
+				obtainedEl = el.find('input.obtained');
+
+			if (typeof page_items.progress.hasOwnProperty('item' + itemId) !== 'undefined')
+				if (page_items.progress['item' + itemId] > 0)
+					obtainedEl.val(page_items.progress['item' + itemId]);
+
+			return;
+		});
+
+		// Fill in reciepts from the the contents bucket
+		$('.reagent.exempt').each(function() {
+			var el = $(this),
+				itemId = el.data('itemId'),
+				neededEl = el.find('.needed input'),
+				obtainedEl = el.find('input.obtained');
+
+			if (typeof page_items.contents.hasOwnProperty('needed' + itemId) !== 'undefined')
+				if (page_items.contents['needed' + itemId] > 0)
+					neededEl.val(page_items.contents['needed' + itemId]);
+
+			if (typeof page_items.contents.hasOwnProperty('item' + itemId) !== 'undefined')
+				if (page_items.contents['item' + itemId] > 0)
+					obtainedEl.val(page_items.contents['item' + itemId]);
+
+			return;
+		});
+
+		return;
+	},
+	store_localstorage:function() {
+		var page_items = {
+			'progress': {}, // Obtainable items
+			'contents': {}, // Needed items
+		};
+
+		// Populate the progress bucket
+		$('.reagent').not('.exempt').each(function() {
+			var el = $(this),
+				itemId = el.data('itemId'),
+				obtainedEl = el.find('input.obtained'),
+				val = parseInt(obtainedEl.val());
+
+			if (val > 0)
+				page_items.progress['item' + itemId] = val;
+
+			return;
+		});
+
+		// Populate the contents bucket
+		$('.reagent.exempt').each(function() {
+			var el = $(this),
+				itemId = el.data('itemId'),
+				neededEl = el.find('.needed input'),
+				obtainedEl = el.find('input.obtained'),
+				neededVal = parseInt(neededEl.val()),
+				obtainedVal = parseInt(obtainedEl.val());
+
+			if (neededVal > 0)
+				page_items.contents['needed' + itemId] = neededVal;
+			if (obtainedVal > 0)
+				page_items.contents['item' + itemId] = obtainedVal;
+
+			return;
+		});
+
+		localStorage.setItem(crafting.localstorage_id, JSON.stringify(page_items));
 
 		return;
 	},
@@ -265,10 +371,12 @@ var crafting = {
 			recipe.elements.needed.html(needed);
 			recipe.elements.obtained.attr('max', max);
 
-			recipe.elements.total.html(recipe.total < 0 ? 0 : Math.ceil(recipe.total / recipe.yields) * recipe.yields);
+			recipe.elements.total.html(recipe.total < 0 ? 0 : (Math.ceil(recipe.total / recipe.yields) * recipe.yields));
 
 			recipe.elements.row[(recipe.needed == 0 ? 'add' : 'remove') + 'Class']('success');
 		}
+
+		crafting.store_localstorage();
 
 		return;
 	},

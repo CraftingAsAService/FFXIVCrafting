@@ -23,7 +23,7 @@
 				<th class='text-left'>Recipe</th>
 				<th class='text-center'>Amount Needed</th>
 				{{-- @if($show_quests)
-				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!' data-container='body'>Quest</th>
+				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!'>Quest</th>
 				@endif --}}
 				<th class='text-center'>Purchase</th>
 				<th class='text-center valign' rel='tooltip' title='Add to Crafting List'>
@@ -52,7 +52,7 @@
 				{{-- @if($show_quests)
 				<td class='valign text-center quest_amount'>
 					@if(isset($recipe->quest_level) && $recipe->quest_level > 0)
-						<img src='/img/{{ $recipe->quest_quality ? 'H' : 'N' }}Q.png' width='24' height='24' class='quest_marker' rel='tooltip' title='Level {{ $recipe->quest_level }} Quest{{ $recipe->quest_quality ? '<br>HQ Items required' : '' }}' data-container='body' data-html='true'>
+						<img src='/img/{{ $recipe->quest_quality ? 'H' : 'N' }}Q.png' width='24' height='24' class='quest_marker' rel='tooltip' title='Level {{ $recipe->quest_level }} Quest{{ $recipe->quest_quality ? '<br>HQ Items required' : '' }}' data-html='true'>
 						<span class='amount'>{{ number_format($recipe->quest_amount) }}</span>
 					@endif
 				</td>

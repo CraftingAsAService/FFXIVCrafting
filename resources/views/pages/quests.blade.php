@@ -19,7 +19,7 @@
 
 @section('content')
 <div class='alert alert-info'>
-	<a href='#' data-toggle='popover' data-container='body' data-placement='bottom' title='Data Warning' data-content='Amounts required, HQ requirement and materia melding data are missing.  Generally speaking quest requirements at and above level 25 require a High Quality item.  Visit your local quest giver for more information.'>Data Warning, Please Read</a>
+	<a href='#' data-toggle='popover' data-placement='bottom' title='Data Warning' data-content='Amounts required, HQ requirement and materia melding data are missing.  Generally speaking quest requirements at and above level 25 require a High Quality item.  Visit your local quest giver for more information.'>Data Warning, Please Read</a>
 </div>
 <div class='panel panel-default'>
 	<div class='panel-heading'>

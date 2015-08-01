@@ -29,7 +29,7 @@
 				<th class='text-left'>Item</th>
 				<th class='text-center'>Amount Needed</th>
 				{{-- @if($show_quests)
-				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!' data-container='body'>Quest</th>
+				<th class='text-center quest_amount' rel='tooltip' title='Gather this many extra for your quests!'>Quest</th>
 				@endif --}}
 				@if($job == 'BTL')
 				<th class='text-center'>Beasts</th>
@@ -57,7 +57,7 @@
 				{{-- @if($show_quests)
 				<td class='valign text-center quest_amount'>
 					@if(isset($item->quest_level) && $item->quest_level > 0)
-						<img src='/img/{{ $item->quest_quality ? 'H' : 'N' }}Q.png' width='24' height='24' class='quest_marker' rel='tooltip' title='Level {{ $item->quest_level }} Quest{{ $item->quest_quality ? '<br>HQ Items required' : '' }}' data-container='body' data-html='true'>
+						<img src='/img/{{ $item->quest_quality ? 'H' : 'N' }}Q.png' width='24' height='24' class='quest_marker' rel='tooltip' title='Level {{ $item->quest_level }} Quest{{ $item->quest_quality ? '<br>HQ Items required' : '' }}' data-html='true'>
 						<span class='amount'>{{ number_format($item->quest_amount) }}</span>
 					@endif
 				</td>

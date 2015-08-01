@@ -1378,3 +1378,35 @@ table.table-curved {
 		}
 	}
 }
+
+.jobs-list {
+	@media (max-width: 767px) {
+		.btn {
+			padding: 6px 5px;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.mobile-margin-top {
+		margin-top: 28px;
+	}
+	.mobile-text-right {
+		text-align: right;
+	}
+}
+
+.inclusions-list {
+	.label {
+		cursor: pointer;
+		margin-top: 10px;
+	}
+	@media (max-width: 767px) {
+		.label {
+			margin-left: 0px;
+			margin-right: 10px;
+			font-size: 1em;
+			line-height: 2;
+		}
+	}
+}

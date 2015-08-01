@@ -2,6 +2,8 @@ var global = {
 	init:function() {
 		global.detect_systems();
 
+		global.hide_me();
+
 		global.add_token_to_ajax_calls();
 
 		$('[rel=tooltip]').tooltip({
@@ -55,6 +57,40 @@ var global = {
 		// 		mainContainer[(mainContainer.hasClass('nav-handler-checked') ? 'remove' : 'add') + 'Class']('nav-handler-checked');
 		// 	});
 		// }
+	},
+	hide_me:function() {
+		$('.hide-me').each(function() {
+			var el = $(this);
+
+			if (localStorage.getItem('config:' + el.data('storage')) !== 'true')
+			{
+				var target = el;
+				if (el.data('target') != '')
+					target = $(el.data('target'));
+
+				target.removeClass('hidden');
+			}
+
+			return;
+		});
+
+		$('.hide-me').click(function(event) {
+			event.preventDefault();
+
+			var el = $(this);
+
+			localStorage.setItem('config:' + el.data('storage'), 'true');
+
+			var target = el;
+			if (el.data('target') != '')
+				target = $(el.data('target'));
+
+			target.addClass('hidden');
+
+			return;
+		});
+
+		return;
 	},
 	add_token_to_ajax_calls:function() {
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');

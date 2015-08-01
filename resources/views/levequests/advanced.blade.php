@@ -101,10 +101,10 @@
 				<th class='text-center'>XP</th>
 				<th class='text-center'>Gil</th>
 				<th class='text-center valign'>Location</th>
-				<th class='text-center valign' rel='tooltip' title='View Leve Rewards' data-container='body'>
+				<th class='text-center valign' rel='tooltip' title='View Leve Rewards'>
 					<i class='glyphicon glyphicon-gift'></i>
 				</th>
-				<th class='text-center valign' rel='tooltip' title='Add to Crafting List' data-container='body'>
+				<th class='text-center valign' rel='tooltip' title='Add to Crafting List'>
 					<i class='glyphicon glyphicon-shopping-cart'></i>
 					<i class='glyphicon glyphicon-plus'></i>
 				</th>

@@ -12,7 +12,7 @@
 			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->name }}
 		</a>
 		@if ($leve->requirements[0]->pivot->amount > 1)
-		<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
+		<span class='label label-primary' rel='tooltip' title='Amount Required'>
 			x {{ $leve->requirements[0]->pivot->amount }}
 		</span>
 		@endif
@@ -50,7 +50,7 @@
 				@else
 				<img src='/img/noitemicon.png' style='margin-right: 10px;'>
 				{{ $reward->item_name }}
-				<span class='label label-danger' rel='tooltip' title='See news post to help fill this out!' data-container='body'>Help</span>
+				<span class='label label-danger' rel='tooltip' title='See news post to help fill this out!'>Help</span>
 				@endif
 				<span class='label label-success'>x {{ number_format($reward->amount) }}</span>
 			</div>

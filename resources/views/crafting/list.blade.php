@@ -6,7 +6,7 @@
 
 @section('vendor-css')
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
-	<link href='{{ cdn('/css/bootstrap-tour.min.css') }}' rel='stylesheet'>
+	<link href='{{ cdn('/css/bootstrap-tour.css') }}' rel='stylesheet'>
 @stop
 
 @section('javascript')
@@ -17,15 +17,17 @@
 
 @section('banner')
 
-	<a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
+	{{-- <a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
 		<i class='glyphicon glyphicon-play'></i>
 		Tour
-	</a>
+	</a> --}}
 
-	<a href='#' id='csv_download' class='btn btn-info pull-right hidden-print' style='margin-top: 12px; margin-right: 10px;'>
+	<a href='#' id='csv_download' class='btn btn-info pull-right hidden-print margin-top margin-right'>
 		<i class='glyphicon glyphicon-download-alt'></i>
 		Download
 	</a>
+
+	<a href='#' class='btn btn-default pull-right hidden-print margin-top margin-right' id='clear-localstorage' rel='tooltip' title='Clear Page Progress'><i class='glyphicon glyphicon-floppy-remove'></i></a>
 
 	{{--
 	<span class="dropdown pull-right hidden-print" style='margin-top: 12px; margin-right: 10px;'>
@@ -42,35 +44,35 @@
 	--}}
 
 	<h1 class='csv-filename' style='margin-top: 0;'>
-		@if(isset($job))
-		@if(count(explode(',', $desired_job)) == 1)
-		<i class='class-icon {{ $desired_job }} large hidden-print' style='position: relative; top: 5px;'></i>
-		{{ $full_name_desired_job }}
+		@if(isset($jobs))
+		@if(count($jobs) == 1)
+		<img src='/img/jobs/{{ $jobs[0]->abbr }}-inactive.png' width='32' height='32' style='position: relative; top: -3px;'>
+		{{ $jobs[0]->name }} Crafting
 		@else
-		Crafting for {{ implode(', ', explode(',', $desired_job)) }} 
+		Crafting for {{ implode(', ', $jobs->lists('name')->all()) }} 
 		@endif
+		@elseif(isset($item))
+		Crafting {{ $item->name }}
 		@else
-		Custom Recipe List
+		Your Crafting List
 		@endif
 	</h1>
-	@if(isset($job))
+	@if(isset($jobs))
 	<h2>
-	@if($start <= config('site.max_level'))
-	recipes between ilevels {{ $start }} and {{ $end }}
+	@if($start < 55 || $start > 110)
+	recipes between {{ $start }} and {{ $end }}
 	@else
-		@if ($start == 55)
+		level 50
+		@if ($start >= 55)
 			<i class='glyphicon glyphicon-star'></i>
-		@elseif ($start == 70)
+		@endif
+		@if ($start >= 70)
 			<i class='glyphicon glyphicon-star'></i>
+		@endif
+		@if ($start >= 90)
 			<i class='glyphicon glyphicon-star'></i>
-		@elseif ($start == 90)
-			<i class='glyphicon glyphicon-star'></i>
-			<i class='glyphicon glyphicon-star'></i>
-			<i class='glyphicon glyphicon-star'></i>
-		@elseif ($start == 110)
-			<i class='glyphicon glyphicon-star'></i>
-			<i class='glyphicon glyphicon-star'></i>
-			<i class='glyphicon glyphicon-star'></i>
+		@endif
+		@if ($start >= 110)
 			<i class='glyphicon glyphicon-star'></i>
 		@endif
 		recipes
@@ -90,7 +92,6 @@
 				<th class='text-center' width='75'>Needed</th>
 				<th class='text-center hidden-print' width='102'>Obtained</th>
 				<th class='text-center hidden-print' width='75'>Total</th>
-				<th class='text-center' width='100'>Purchase</th>
 				<th class='text-center'>Source</th>
 			</tr>
 		</thead>
@@ -107,21 +108,20 @@
 			@foreach($list as $level => $reagents)
 			<?php $i = 0; ?>
 			@foreach($reagents as $reagent)
-			<?php $item =& $reagent['item']; ?>
 			<?php
 				$requires = []; $yields = 1;
-				$item_level = $item->level;
-				$link = 'item/' . $item->id;
+				$item_level = $reagent['item']->level;
+				$link = 'item/' . $reagent['item']->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
-					$item_level = $item->recipes[0]->level;
-					$yields = $item->recipes[0]->yield;
-					foreach ($item->recipes[0]->reagents as $rr_item)
+					$item_level = $reagent['item']->recipes[0]->level;
+					$yields = $reagent['item']->recipes[0]->yield;
+					foreach ($reagent['item']->recipes[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
-					// $link = 'recipe/' . $item->recipes[0]->id;
+					// $link = 'recipe/' . $reagent['item']->recipes[0]->id;
 				}
 			?>
-			<tr class='reagent' data-item-id='{{ $item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
+			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
 				<td class='text-left'>
 					@if($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>
@@ -129,10 +129,10 @@
 					</a>
 					@endif
 					<a href='http://xivdb.com/?{{ $link }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $item->name }}</span>
+						<img src='{{ assetcdn('item/' . $reagent['item']->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->name }}</span>
 					</a>
 					@if ($yields > 1)
-					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
+					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
 						x {{ $yields }}
 					</span>
 					@endif
@@ -151,24 +151,24 @@
 					</div>
 				</td>
 				<td class='valign total'>0</td>
-				<td>
-					@if(count($item->shops))
-					<a href='#' class='btn btn-default click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops' rel='tooltip' title='Available for {{ $item->price }} gil, Click to load Vendors'>
-						<img src='/img/coin.png' width='24' height='24'>
-						{{ number_format($item->price) }}
-					</a>
-					@endif
-				</td>
-				<td class='crafted_gathered'>
+				<td class='valign'>
 					@foreach(array_keys(array_reverse($reagent['cluster_jobs'])) as $cluster_job)
-					<i class='class-icon click-to-view {{ $cluster_job }} clusters' data-type='{{ strtolower($cluster_job) }}nodes' title='{{ $cluster_job }}'></i>
+					<img src='/img/jobs/{{ $cluster_job }}-inactive.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
 					@endforeach
-					@foreach($item->recipes as $recipe)
-					<i class='class-icon click-to-view {{ $recipe->job->abbr }}' data-type='recipes' title='{{ $recipe->job->abbr }}'></i>
+
+					@foreach($reagent['item']->recipes as $recipe)
+					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
 					@endforeach
-					@if(count($item->mobs))
-					<img src='/img/mob.png' class='click-to-view mob-icon' data-type='mobs' width='20' height='20' rel='tooltip' title='Click to load Beasts' data-container='body'>
+
+					@if(count($reagent['item']->shops))
+					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $reagent['item']->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
+					<span class='hidden vendors'>{{ $reagent['item']->price }}</span>
 					@endif
+
+					@if(count($reagent['item']->mobs))
+					<img src='/img/mob-inactive.png' class='click-to-view' data-type='mobs' width='24' height='24' rel='tooltip' title='Click to load Beasts'>
+					@endif
+
 				</td>
 				<?php continue; ?>
 			</tr>
@@ -186,8 +186,8 @@
 			@foreach($recipes as $recipe)
 			<?php
 				$requires = [];
-				foreach ($recipe->reagents as $item)
-					$requires[] = $item->pivot->amount . 'x' . $item->id;
+				foreach ($recipe->reagents as $reagent)
+					$requires[] = $reagent->pivot->amount . 'x' . $reagent->id;
 			?>
 			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yield }}'>
 				<td class='text-left'>
@@ -211,7 +211,7 @@
 					</span>
 					@endif
 					@if ($recipe->yield > 1)
-					<span class='label label-primary' rel='tooltip' title='Amount Yielded' data-container='body'>
+					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
 						x {{ $recipe->yield }}
 					</span>
 					@endif
@@ -248,19 +248,15 @@
 					</div>
 				</td>
 				<td class='valign total'>{{ $needed }}</td>
-				<td>
-					@if(count($recipe->item->shops))
-					<a href='#' class='btn btn-default click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
-						<img src='/img/coin.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Vendors'>
-						{{ number_format($recipe->item->price) }}
-					</a>
-					@endif
-				</td>
-				<td class='crafted_gathered'>
+				<td class='valign'>
 					@if (is_null($recipe->job))
-					<img src='/img/FC.png' width='20' height='20' class='click-to-view' data-type='recipes' title='Free Company Craft'></i>
+					<img src='/img/FC.png' width='24' height='24' class='click-to-view' data-type='recipes' title='Free Company Craft'></i>
 					@else
-					<i class='class-icon {{ $recipe->job->abbr }} click-to-view' data-type='recipes' title='{{ $recipe->job->abbr }}'></i>
+					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
+					@endif
+
+					@if(count($recipe->item->shops))
+					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					@endif
 				</td>
 			</tr>
@@ -269,61 +265,32 @@
 	</table>
 </div>
 
+@if( ! isset($item))
 <a name='options'></a>
-@if( ! isset($item_special))
 <div class='panel panel-info hidden-print'>
 	<div class='panel-heading'>
-		<small class='pull-right'><em>* Refreshes page</em></small>
-		<h3 class='panel-title'>Options</h3>
+		<span class='panel-title'>Switch Options</span>
 	</div>
 	<div class='panel-body'>
+
+		<a href='{{ toggle_query_string('self_sufficient') }}' class='btn btn-primary'>Turn Self Sufficient {{ isset($options) && isset($options['self_sufficient']) ? 'Off' : 'On' }}</a>
+
 		@if( ! isset($item_ids))
-		{!! Form::open(['url' => '/crafting', 'class' => 'form-horizontal', 'id' => 'self-sufficient-form']) !!}
-			<input type='hidden' name='class' value='{{ $desired_job }}'>
-			<input type='hidden' name='start' value='{{ $start }}'>
-			<input type='hidden' name='end' value='{{ $end }}'>
-			<label>
-				Self Sufficient
-			</label>
+
+			<a href='{{ toggle_query_string('misc_items') }}' class='btn btn-primary'>Turn Misc Items {{ isset($options) && isset($options['misc_items']) ? 'Off' : 'On' }}</a>
 			
-				<input type='checkbox' id='self_sufficient_switch' name='self_sufficient' value='1'{{ $self_sufficient ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
-			
-			<label class='margin-left'>
-				Dyes &amp; Furniture
-			</label>
-			
-				<input type='checkbox' id='misc_items_switch' name='misc_items' value='1' {{ $misc_items ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
-			
-			<label class='margin-left'>
-				Component Items
-			</label>
-			
-				<input type='checkbox' id='component_items_switch' name='component_items' value='1' {{ $component_items ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
-			
-		{!! Form::close() !!}
-		@else
-		{!! Form::open(['url' => '/crafting/list', 'class' => 'form-horizontal', 'id' => 'self-sufficient-form']) !!}
-			<input type='hidden' name='List:::{{ $self_sufficient ? 0 : 1 }}' value=''>
-			<label>
-				Self Sufficient
-			</label>
-			
-				<input type='checkbox' id='self_sufficient_switch' value='1'{{ $self_sufficient ? " checked='checked'" : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'
-			
-			<small><em>* Refreshes page</em></small>
-		{!! Form::close() !!}
 		@endif
 	</div>
 </div>
 @endif
 
 <div class='row '>
-	@if(isset($job))
+	@if(isset($jobs))
 	<div class='col-sm-6'>
 		@if($end - $start >= 4)
 		<div class='panel panel-primary' id='leveling-information'>
 			<div class='panel-heading'>
-				<h3 class='panel-title'>Leveling Information</h3>
+				<span class='panel-title'>Leveling Information</span>
 			</div>
 			<div class='panel-body'>
 				<p>Be efficient, make quest items in advance!</p>
@@ -332,8 +299,8 @@
 				<ul>
 					@foreach($quest_items as $quest)
 					<li>
-						@if(count($job) > 2)
-						{{ $quest->job->abbr }} 
+						@if(count($jobs) > 1)
+						<img src='/img/jobs/{{ $quest->job_category->jobs[0]->abbr }}-inactive.png' width='16' height='16' style='position: relative; top: -1px;' rel='tooltip' title='{{ $quest->job_category->jobs[0]->name }}'>
 						@endif
 						Level {{ $quest->level }}: 
 						@if ( ! $quest->requirements)
@@ -353,15 +320,15 @@
 		@endif
 	</div>
 	@endif
-	<div class='hidden-print col-sm-{{ isset($job) ? '6' : '12' }}'>
+	<div class='hidden-print col-sm-{{ isset($jobs) ? '6' : '12' }}'>
 		<div class='panel panel-info'>
 			<div class='panel-heading'>
-				<h3 class='panel-title'>Tips</h3>
+				<span class='panel-title'>Tips</span>
 			</div>
 			<div class='panel-body text-center'>
 				<p>Get extras in case of a failed synthesis.</p>
 
-				<p>Improve your chances for HQ items by using the <a href='/gear'>gear profiler</a>.</p>
+				<p>Improve your chances for HQ items by using the <a href='/equipment'>gear profiler</a>.</p>
 
 				<p>Don't forget the <a href='/food'>food</a> or <a href='/materia'>materia</a>!</p>
 			</div>

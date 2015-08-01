@@ -1,8 +1,8 @@
 var home = {
 	init:function() {
-		$('.class-selector:not(.multi)').click(function() {
-			$('.class-selector.active').removeClass('active');
-		});
+		// $('.class-selector:not(.multi)').click(function() {
+		// 	$('.class-selector.active').removeClass('active');
+		// });
 
 		$('#slider-range-min').slider({
 			range: 'min',

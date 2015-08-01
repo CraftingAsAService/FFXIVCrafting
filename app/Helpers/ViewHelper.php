@@ -88,3 +88,25 @@
 	{
 		return \App\Models\CAAS\Stat::name($attribute);
 	}
+
+	function toggle_query_string($argument = '', $value = 1)
+	{
+		$uri = parse_url($_SERVER['REQUEST_URI']);
+
+		if (isset($uri['query']))
+			parse_str($uri['query'], $queries);
+		else
+			$queries = [];
+
+		if (isset($queries[$argument]))
+			unset($queries[$argument]);
+		else
+			$queries[$argument] = $value;
+
+		$uri['query'] = http_build_query($queries);
+
+		if (empty($uri['query']))
+			return $uri['path'];
+
+		return implode('?', $uri);
+	}
