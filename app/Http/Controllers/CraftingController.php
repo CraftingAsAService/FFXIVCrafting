@@ -9,6 +9,7 @@ use Config;
 use Cookie;
 use Session;
 
+use App\Models\Garland\Item;
 use App\Models\Garland\Job;
 use App\Models\Garland\Quest;
 use App\Models\Garland\Recipe;
@@ -27,177 +28,169 @@ class CraftingController extends Controller
 		$crafting_job_ids = Config::get('site.job_ids.crafting');
 		$error = false;
 		$job_list = Job::whereIn('id', $crafting_job_ids)->get();
-		$previous = Cookie::get('previous_crafting_load');
+		$previous = session('previous-crafting-load');
 
-		return view('crafting.' . ($advanced ? 'advanced' : 'basic'), compact('error', 'job_list', 'crafting_job_ids', 'previous'));
+		return view('crafting.index', compact('error', 'job_list', 'crafting_job_ids', 'previous'));
 	}
 
 	public function getAdvanced()
 	{
+		flash()->info('The advanced page and the basic page are now one single page!');
 		return redirect('/crafting');
-		// return $this->getIndex(true);
-	}
-
-	public function postIndex(Request $request)
-	{
-		$inputs = $request->all();
-
-		$vars = ['class' => 'CRP', 'start' => 1, 'end' => 5, 'self_sufficient' => 0, 'misc_items' => 0, 'component_items' => 0];
-		$values = [];
-		foreach ($vars as $var => $default)
-			$values[] = isset($inputs[$var]) ? $inputs[$var] : $default;
-
-		// Overwrite Class var
-		if (isset($inputs['multi']) && isset($inputs['classes']))
-			$values[0] = implode(',', $inputs['classes']);
-
-		$url = '/crafting/list?' . implode(':', $values);
-
-		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
-		Cookie::queue('previous_crafting_load', $url, 525600); // 1 year's worth of minutes
-		
-		return redirect($url);
 	}
 
 	public function getList()
 	{
+		// TODO, outdated page link, warn, redirect
+	}
+
+	public function postIndex(Request $request)
+	{
+		$classes = $request->input('classes', ['CRP']);
+		$start = $request->input('start', 1);
+		$end = $request->input('end', 1);
+		$options = $request->except('_token', 'classes', 'start', 'end');
+
+		$url = '/crafting/by-class/' . implode(',', $classes) . '/' . $start . '/' . $end . '?' . http_build_query($options);
+
+		session()->put('previous-crafting-load', $url);
+
+		return redirect($url);
+	}
+
+	public function getByClass(Request $request, $classes = '', $start = '', $end = '')
+	{
+		if (empty($classes) || empty($start) || empty($end))
+		{
+			flash()->error('Something isn\'t set right!  How am I supposed to show you any results?');
+			return redirect()->back();
+		}
+
+		$options = $request->all();
+
+		// Fix the level numbers if needed
+		if ($start < 0) $start = 1; // Starting maximum of 1
+		if ($start > $end) $end = $start; // End can't be less than Start
+		
+		// Jobs are capital
+		$classes = explode(',', strtoupper($classes));
+
+		// Make sure it's a real job, jobs might be multiple
+		$jobs = Job::with('categories')->whereIn('abbr', $classes)->get();
+
+		// If the job isn't real, error out
+		if (count($jobs) == 0)
+		{
+			flash()->error('No valid classes!  How am I supposed to show you any results?');
+			return redirect()->back();
+		}
+
+		$job_ids = $jobs->lists('id')->all();
+
+		// Check for quests
+		// We're only looking for proper crafting quests, so take out anything that's not between 9 and 16 (CRP to CUL)
+		
+		$jc_ids = [];
+		foreach ($jobs as $job)
+			$jc_ids = array_merge($job->categories->lists('id')->all(), $jc_ids);
+		array_unique($jc_ids);
+		$jc_ids = array_intersect($jc_ids, range(9,16));
+
+		$quest_items = Quest::with('job_category', 'requirements')
+			->whereBetween('level', [$start, $end])
+			->whereIn('job_category_id', $jc_ids)
+			->orderBy('level')
+			->get();
+
+		view()->share(compact('jobs', 'classes', 'start', 'end', 'quest_items'));
+
+		$include_quests = $top_level = true;
+
+		return $this->listing(compact(
+			'start', 'end', 'options',
+			'jobs', 'quest_items', 'job_ids',
+			'include_quests', 'top_level'
+		));
+	}
+
+	public function getItem(Request $request, $item_id)
+	{
+		if (empty($item_id))
+		{
+			flash()->error('No item id!  How am I supposed to show you any results?');
+			return redirect()->back();
+		}
+
+		$item = Item::find($item_id); 
+
+		if (is_null($item))
+		{
+			flash()->error('That item doesn\'t exist!  How am I supposed to show you any results?');
+			return redirect()->back();
+		}
+
+		$options = $request->all();
+
+		// Get the list
+		$item_ids = [$item_id];
+		$item_amounts = [$item_id => 1];
+
+		view()->share(compact('item_ids', 'item_amounts', 'item'));
+
+		$start = $end = null;
+		$include_quests = false;
+		$top_level = $item_amounts;
+
+		return $this->listing(compact(
+			'item_ids', 'item_amounts',
+			'start', 'end', 'options', 
+			'include_quests', 'top_level'
+		));
+	}
+
+	public function getFromList(Request $request)
+	{
+		// Get the list
+		$item_amounts = session('list', []);
+		$item_ids = array_keys($item_amounts);
+
+		if (empty($item_ids))
+		{
+			flash()->error('There\'s nothing in your list!  How am I supposed to show you any results?');
+			return redirect('/list');
+		}
+
+		$options = $request->all();
+
+		view()->share(compact('item_ids', 'item_amounts'));
+
+		$start = $end = null;
+		$include_quests = false;
+		$top_level = $item_amounts;
+
+		return $this->listing(compact(
+			'item_ids', 'item_amounts',
+			'start', 'end', 'options', 
+			'include_quests', 'top_level'
+		));
+	}
+
+	private function listing($configuration = [])
+	{
+		extract($configuration); // $item_ids, etc, now all exist individually
+		unset($configuration);
+
 		// All Jobs
 		$job_list = Job::lists('name', 'abbr')->all();
-		view()->share('job_list', $job_list);
-
-		$include_quests = TRUE;
-
-		if ( ! \Request::all())
-			return redirect()->back();
-
-		// Get Options
-		$options = explode(':', array_keys(\Request::except('_token'))[0]);
-
-		// Parse Options              						// Defaults
-		$desired_job     = isset($options[0]) ? $options[0] : 'CRP';
-		$start           = isset($options[1]) ? $options[1] : 1;
-		$end             = isset($options[2]) ? $options[2] : 5;
-		$self_sufficient = isset($options[3]) ? $options[3] : 1;
-		$misc_items	 	 = isset($options[4]) ? $options[4] : 0;
-		$component_items = isset($options[5]) ? $options[5] : 0;
-		$special	 	 = isset($options[6]) ? $options[6] : 0;
-
-		$item_ids = $item_amounts = [];
-
-		$top_level = TRUE;
-
-		if ($desired_job == 'List')
-		{
-			$start = $end = null;
-			$include_quests = FALSE;
-
-			// Get the list
-			$item_amounts = Session::get('list', []);
-
-			$item_ids = array_keys($item_amounts);
-
-			if (empty($item_ids))
-				return redirect('/list');
-
-			view()->share(compact('item_ids', 'item_amounts'));
-
-			$top_level = $item_amounts;
-		}
-
-		if ($desired_job == 'Item')
-		{
-			$item_id = $special;
-
-			$start = $end = null;
-			$include_quests = FALSE;
-
-			// Get the list
-			$item_amounts = array($item_id => 1);
-
-			$item_ids = array_keys($item_amounts);
-
-			if (empty($item_ids))
-				return redirect('/list');
-
-			$item_special = true;
-
-			view()->share(compact('item_ids', 'item_amounts', 'item_special'));
-
-			$top_level = $item_amounts;
-		}
-
-		if ( ! $item_ids)
-		{
-			// Jobs are capital
-			$desired_job = strtoupper($desired_job);
-
-			// Make sure it's a real job, jobs might be multiple
-			$job = [];
-			foreach (explode(',', $desired_job) as $ds)
-				$job[] = Job::with('categories')->where('abbr', $ds)->first();
-
-			// If the job isn't real, error out
-			if ( ! isset($job[0]))
-			{
-				// Check for DOL quests
-				$quests = [];
-				foreach (array('MIN','BTN','FSH') as $job)
-				{
-					$job = Job::with('categories')->where('abbr', $job)->first();
-					$jc_ids = $job->categories->lists('id')->all();
-					$quests[$job] = Quest::whereIn('job_category_id', $jc_ids)
-						->orderBy('level')
-						->with('item')
-						->get();
-				}
-
-				$error = true;
-
-				return view('crafting', compact('error', 'quests'));
-			}
-
-			$job_ids = [];
-			$jc_ids = [];
-			foreach ($job as $j)
-			{
-				$job_ids[] = $j->id;
-				$ids = $j->categories->lists('id')->all();
-				$jc_ids = array_merge($ids, $jc_ids);
-			}
-			array_unique($jc_ids);
-
-			$full_name_desired_job = false;
-			if (count($job) == 1)
-			{
-				$job = $job[0];
-				$full_name_desired_job = $job->name;
-			}
-
-			// Starting maximum of 1
-			if ($start < 0) $start = 1;
-			if ($start > $end) $end = $start;
-			// if ($end - $start > 9) $end = $start + 9;
-
-			// Check for quests
-			// We're only looking for proper crafting quests, so take out anything that's not between 9 and 16 (CRP to CUL)
-			$jc_ids = array_intersect($jc_ids, range(9,16));
-			$quest_items = Quest::with('job_category', 'requirements')
-				->whereBetween('level', [$start, $end])
-				->whereIn('job_category_id', $jc_ids)
-				->orderBy('level')
-				->get();
-
-			view()->share(compact('job', 'start', 'end', 'quest_items', 'desired_job', 'full_name_desired_job'));
-		}
 
 		// Gather Recipes and Reagents
-
 		$query = Recipe::with(
 				'job',
 				'item', // The recipe's Item
 					'item.quest_rewards', // Is the recipe used as a quest turnin?
 					'item.leve_required', // Is the recipe used to fufil a leve?
 					'item.shops',
+					// 'item.shops.location',
 					'item.mobs',
 					'item.nodes',
 				'reagents', // The reagents for the recipe
@@ -213,34 +206,32 @@ class CraftingController extends Controller
 			)
 			->groupBy('item_id')
 			->orderBy('recipe_level')
+			->orderBy('id')
 			// ->orderBy('rank')
 			;
 
-		if ($item_ids)
-			$query
-				->whereIn('item_id', $item_ids);
+		if (isset($item_ids))
+			$query->whereIn('item_id', $item_ids);
 		else
-		{
 			$query
 				->whereIn('job_id', $job_ids)
 				->whereBetween('recipe_level', [$start, $end]);
-		}
 
 		$recipes = $query->get();
 
 		// Do we not want miscellaneous items?
-		if ($misc_items == 0 && $desired_job != 'List')
+		// $options only exists from the "by-class" beginning call
+		if (isset($options) && ! isset($options['misc_items']))
+		{
+			// This is any Furniture, Dyes, Other, Miscellany, Airship parts, etc etc
+			$bad_item_category_ids = array_merge(range(55,83), range(85,86), range(90,93));
 			foreach ($recipes as $key => $recipe)
-			{
-				if (in_array($recipe->item->item_category_id, 
-					// This is any Furniture, Dyes, Other, Miscellany, Airship parts, etc etc
-					array_merge(range(55,83), range(85,86), range(90,93))
-				))
+				if (in_array($recipe->item->item_category_id, $bad_item_category_ids))
 					unset($recipes[$key]);
-			}
+		}
 
 		// Fix the amount of the top level to be evenly divisible by the amount the recipe yield
-		if (is_array($top_level))
+		if (isset($top_level) && is_array($top_level))
 		{
 			foreach ($recipes as $recipe)
 			{
@@ -253,8 +244,11 @@ class CraftingController extends Controller
 			}
 			unset($tl_item);
 
+			// Overwrite the already shared item_amounts
 			view()->share('item_amounts', $top_level);
 		}
+
+		$self_sufficient = isset($options) && isset($options['self_sufficient']);
 
 		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
 
@@ -268,7 +262,7 @@ class CraftingController extends Controller
 			if ( ! isset($reagent_list[$recipe->item_id]))
 				continue;
 
-			$reagent_list[$recipe->item_id]['both_list_warning'] = TRUE;
+			$reagent_list[$recipe->item_id]['both_list_warning'] = true;
 			$reagent_list[$recipe->item_id]['make_this_many'] += 1;
 		}
 
@@ -337,7 +331,7 @@ class CraftingController extends Controller
 		// The keys don't matter either
 		$prc =& $sorted_reagent_list['Pre-Requisite Crafting'];
 		
-		$new_prc = array('1' => []);
+		$new_prc = ['1' => []];
 		foreach ($prc as $vals)
 			foreach ($vals as $v)
 				$new_prc['1'][] = $v;
@@ -356,7 +350,10 @@ class CraftingController extends Controller
 
 		$reagent_list = $sorted_reagent_list;
 
-		return view('crafting.list', compact('recipes', 'reagent_list', 'self_sufficient', 'misc_items', 'component_items', 'include_quests'));
+		return view('crafting.list', compact(
+			'recipes', 'reagent_list', 'job_list', 'options',
+			'self_sufficient', 'misc_items', 'component_items', 'include_quests'
+		));
 	}
 
 	private function _reagents($recipes = [], $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE, $top_level = FALSE)

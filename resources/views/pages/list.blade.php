@@ -74,7 +74,7 @@
 </div>
 <a href='/list/flush' class='btn btn-danger pull-right'>Delete All</a>
 <button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Get Link</button>
-<a href='/crafting/list?List' class='btn btn-success'>Craft These Items &raquo;</a>
+<a href='/crafting/from-list?self_sufficient=1' class='btn btn-success'>Craft These Items &raquo;</a>
 
 @endif
 

@@ -26,7 +26,7 @@
 	<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->name }}</a>
 
 	@if($leve->requirements[0]->pivot->amount > 1)
-	<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
+	<span class='label label-primary' rel='tooltip' title='Amount Required'>
 		x {{ $leve->requirements[0]->pivot->amount }}
 	</span>
 	@endif
@@ -60,7 +60,7 @@
 		</li>
 		@endforeach
 		<li class='list-group-item'>
-			<a href='/crafting/list?Item::::::{{ $leve->requirements[0]->id }}'>View in crafting tool</a>
+			<a href='/crafting/item/{{ $leve->requirements[0]->id }}?self_sufficient=1'>View in crafting tool</a>
 		</li>
 	</ul>
 </div>

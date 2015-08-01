@@ -74,7 +74,7 @@
 										<a href='http://xivdb.com/?item/{{ $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->name }}</a>
 
 										@if ($item->pivot->amount > 1)
-										<span class='label label-primary' rel='tooltip' title='Amount Required' data-container='body'>
+										<span class='label label-primary' rel='tooltip' title='Amount Required'>
 											x {{ $item->pivot->amount }}
 										</span>
 										@endif
