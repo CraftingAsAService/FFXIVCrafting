@@ -16,6 +16,9 @@
 @stop
 
 @section('banner')
+	@if($previous)
+	<a href='{{ $previous }}' class='btn btn-default pull-right' rel='tooltip' title='Load your last setup'><i class='glyphicon glyphicon-folder-open'></i></a>
+	@endif
 	<h1>Crafting Calculator</h1>
 	<h2>Display all the materials needed to craft one of each item between two levels.</h2>
 	<p>In general this will not level you to your desired level.  Visit the <a href='/leve'>Leves</a> page when you're done crafting!</p>
@@ -64,7 +67,7 @@
 
 				@if(isset($account) && $account)
 				
-				<a href='#' class='select-recipe-level btn btn-default btn-block margin-top' data-toggle='modal' data-target='#ilvl-modal'><img src='{!! $account['avatar'] !!}' width='16' height='16' class='border-radius'> Use Account</a>
+				<a href='#' class='btn btn-default btn-block margin-top' id='account-ilvl'><img src='{!! $account['avatar'] !!}' width='16' height='16' class='border-radius'> Use Account</a>
 
 				@else
 
@@ -122,11 +125,6 @@
 				<div class='mobile-text-right' style='margin-top: 30px;'>
 					<button type='submit' class='btn btn-success btn-lg'>Synthesize!</button>
 				</div>
-				<div style='margin-top: 30px;'>
-					@if($previous)
-					<a href='{{ $previous }}'>load your last setup</a>
-					@endif
-				</div>
 			</div>
 		</div>
 	{!! Form::close() !!}
@@ -162,10 +160,10 @@
 										<a href='#' class='select-range'>{{ $level }} - {{ $level + 4 }}</a>
 									</td>
 									<td class='text-center'>
-										<input type='radio' name='start' id='start{{$level}}' data-start='{{ $level }}'>
+										<input type='radio' name='start' id='start{{ $level }}' data-start='{{ $level }}'>
 									</td>
 									<td class='text-center'>
-										<input type='radio' name='end' id='end{{$level}}' data-end='{{ $level + 4 }}'>
+										<input type='radio' name='end' id='end{{ $level + 4 }}' data-end='{{ $level + 4 }}'>
 									</td>
 								</tr>
 								@endforeach
@@ -210,7 +208,7 @@
 										<input type='radio' name='start' id='start51' data-start='115'>
 									</td>
 									<td class='text-center'>
-										<input type='radio' name='end' id='end51' data-end='136'>
+										<input type='radio' name='end' id='end55' data-end='136'>
 									</td>
 								</tr>
 								<tr>
@@ -224,7 +222,7 @@
 										<input type='radio' name='start' id='start56' data-start='139' checked='checked'>
 									</td>
 									<td class='text-center'>
-										<input type='radio' name='end' id='end56' data-end='160' checked='checked'>
+										<input type='radio' name='end' id='end60' data-end='160' checked='checked'>
 									</td>
 								</tr>
 							</tbody>

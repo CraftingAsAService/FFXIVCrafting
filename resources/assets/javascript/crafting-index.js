@@ -2,7 +2,7 @@ var craftingIndex = {
 	init:function() {
 		$('.bootswitch').bootstrapSwitch();
 
-		craftingIndex.modal_events();
+		craftingIndex.ilvl_events();
 
 		craftingIndex.class_selection_events();
 
@@ -45,7 +45,36 @@ var craftingIndex = {
 
 		return;
 	},
-	modal_events:function() {
+	ilvl_events:function() {
+
+		$('#account-ilvl').click(function(event) {
+			event.preventDefault();
+
+			var min = null, max = null;
+			$('.class-selector.active').each(function() {
+				var el = $(this),
+					level = el.data('level'),
+					elMax = Math.ceil(level / 5) * 5,
+					elMin = elMax - 4;
+
+				if (elMin < min || min == null)
+					min = elMin;
+				if (elMax > max || max == null)
+					max = elMax;
+
+				return;
+			});
+
+			// Translate these mins and maxes to the radio buttons in the modal
+			// Grab the ilvl from there, fill in the inputs
+			$('#recipe-level-start').val($('#start' + min).data('start'));
+			$('#recipe-level-end').val($('#end' + max).data('end'));
+
+			return;
+		});
+
+		// Modal Events
+		
 		$('#ilvl-modal .select-range').click(function(event) {
 			event.preventDefault();
 

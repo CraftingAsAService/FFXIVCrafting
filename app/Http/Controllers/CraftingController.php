@@ -68,6 +68,9 @@ class CraftingController extends Controller
 
 		$options = $request->all();
 
+		if (isset($options['inclusions']) && $options['inclusions'] == '')
+			unset($options['inclusions']);
+
 		// Fix the level numbers if needed
 		if ($start < 0) $start = 1; // Starting maximum of 1
 		if ($start > $end) $end = $start; // End can't be less than Start
@@ -219,16 +222,16 @@ class CraftingController extends Controller
 
 		$recipes = $query->get();
 
-		// Do we not want miscellaneous items?
-		// $options only exists from the "by-class" beginning call
-		if (isset($options) && ! isset($options['misc_items']))
-		{
-			// This is any Furniture, Dyes, Other, Miscellany, Airship parts, etc etc
-			$bad_item_category_ids = array_merge(range(55,83), range(85,86), range(90,93));
-			foreach ($recipes as $key => $recipe)
-				if (in_array($recipe->item->item_category_id, $bad_item_category_ids))
-					unset($recipes[$key]);
-		}
+		// This is any Furniture, Dyes, Other, Miscellany, Airship parts, etc etc
+		$bad_item_category_ids = array_merge(range(55,83), range(85,86), range(90,93));
+
+		// But we want to keep the specified $inclusions
+		if (isset($options) && isset($options['inclusions']))
+			$bad_item_category_ids = array_diff($bad_item_category_ids, explode(',', $options['inclusions']));
+
+		$recipes = $recipes->filter(function($recipe) use ($bad_item_category_ids) {
+			return ! in_array($recipe->item->item_category_id, $bad_item_category_ids);
+		});
 
 		// Fix the amount of the top level to be evenly divisible by the amount the recipe yield
 		if (isset($top_level) && is_array($top_level))

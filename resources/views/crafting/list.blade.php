@@ -275,19 +275,19 @@
 
 		<a href='{{ toggle_query_string('self_sufficient') }}' class='btn btn-primary'>Turn Self Sufficient {{ isset($options) && isset($options['self_sufficient']) ? 'Off' : 'On' }}</a>
 
-		@if( ! isset($item_ids))
+		@if(isset($options['inclusions']))
 
-			<a href='{{ toggle_query_string('misc_items') }}' class='btn btn-primary'>Turn Misc Items {{ isset($options) && isset($options['misc_items']) ? 'Off' : 'On' }}</a>
+			<a href='{{ toggle_query_string('inclusions') }}' class='btn btn-primary'>Disregard Inclusions</a>
 			
 		@endif
 	</div>
 </div>
 @endif
 
-<div class='row '>
-	@if(isset($jobs))
+<div class='row'>
+	<?php $left_pane_test = isset($jobs) && isset($quest_items) && count($quest_items); ?>
+	@if($left_pane_test)
 	<div class='col-sm-6'>
-		@if($end - $start >= 4)
 		<div class='panel panel-primary' id='leveling-information'>
 			<div class='panel-heading'>
 				<span class='panel-title'>Leveling Information</span>
@@ -317,10 +317,9 @@
 				<p><em>Want to level faster?  Visit the <a href='/leve'>Leves</a> page.</em></p>
 			</div>
 		</div>
-		@endif
 	</div>
 	@endif
-	<div class='hidden-print col-sm-{{ isset($jobs) ? '6' : '12' }}'>
+	<div class='hidden-print col-sm-{{ $left_pane_test ? '6' : '12' }}'>
 		<div class='panel panel-info'>
 			<div class='panel-heading'>
 				<span class='panel-title'>Tips</span>
