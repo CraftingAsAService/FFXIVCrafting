@@ -109,8 +109,15 @@ class CraftingController extends Controller
 
 		$include_quests = $top_level = true;
 
+		// This is any Furniture, Dyes, Other, Miscellany, Airship parts, etc etc
+		$bad_item_category_ids = array_merge(range(55,83), range(85,86), range(90,93));
+
+		// But we want to keep the specified $inclusions
+		if (isset($options['inclusions']))
+			$bad_item_category_ids = array_diff($bad_item_category_ids, explode(',', $options['inclusions']));
+
 		return $this->listing(compact(
-			'start', 'end', 'options',
+			'start', 'end', 'options', 'bad_item_category_ids',
 			'jobs', 'quest_items', 'job_ids',
 			'include_quests', 'top_level'
 		));
@@ -222,16 +229,10 @@ class CraftingController extends Controller
 
 		$recipes = $query->get();
 
-		// This is any Furniture, Dyes, Other, Miscellany, Airship parts, etc etc
-		$bad_item_category_ids = array_merge(range(55,83), range(85,86), range(90,93));
-
-		// But we want to keep the specified $inclusions
-		if (isset($options) && isset($options['inclusions']))
-			$bad_item_category_ids = array_diff($bad_item_category_ids, explode(',', $options['inclusions']));
-
-		$recipes = $recipes->filter(function($recipe) use ($bad_item_category_ids) {
-			return ! in_array($recipe->item->item_category_id, $bad_item_category_ids);
-		});
+		if (isset($bad_item_category_ids))
+			$recipes = $recipes->filter(function($recipe) use ($bad_item_category_ids) {
+				return ! in_array($recipe->item->item_category_id, $bad_item_category_ids);
+			});
 
 		// Fix the amount of the top level to be evenly divisible by the amount the recipe yield
 		if (isset($top_level) && is_array($top_level))
