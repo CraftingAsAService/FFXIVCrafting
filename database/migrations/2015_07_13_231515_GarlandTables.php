@@ -345,6 +345,7 @@ class GarlandTables extends Migration
 		{
 			$table->increments('id')->unsigned();
 			$table->string('name');
+			$table->string('type', 25)->nullable();
 			$table->smallInteger('level')->unsigned();
 			$table->integer('job_category_id')->unsigned();
 			$table->integer('area_id')->unsigned();

@@ -6,7 +6,7 @@
 @stop
 
 @section('content')
-	
+	<?php /*
 	<div class='row'>
 		<div class='col-sm-3'>
 			<h3>Libra Parser</h3>
@@ -77,8 +77,8 @@
 	</div>
 
 	<hr>
-
-	<h3>Other Tools</h3>
+	*/ ?>
+	<h3>Tools</h3>
 
 	<div class='row'>
 		<div class='col-sm-4'>

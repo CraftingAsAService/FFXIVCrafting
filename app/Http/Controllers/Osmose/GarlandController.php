@@ -50,8 +50,8 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// dd('leve', $core->leve->partialIndex);
 		$id = 5718;
 		// dd('item', $core->item->categoryIndex);
-		dd('item', $core->item->index);
-		dd('gItemIndex', $core->gItemIndex);
+		// dd('item', $core->item->index);
+		// dd('gItemIndex', $core->gItemIndex);
 
 
 		dd($core);

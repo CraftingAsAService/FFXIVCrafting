@@ -19,7 +19,7 @@
 	</td>
 	<td class='text-center name_type'>
 		<span class='label label-success pull-left'>
-			{{ $leve->type }}
+			{{ $leve->simple_type }}
 		</span>
 		{{ $leve->name }}
 	</td>

@@ -672,7 +672,18 @@ class DatabaseSeeder extends Seeder
 		$this->data['leve_reward'] = [];
 		$this->data['leve_required'] = [];
 
-		// Loop through nodes
+		// Get some bonus data from the wiki
+		// For an update, run /osmose
+		$gamerescapewiki_data = json_decode(file_get_contents(storage_path() . '/app/osmose/cache/leves/leves.json'));
+
+		$gamerescapewiki_leves = [];
+		foreach ($gamerescapewiki_data as $gewd)
+		{
+			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($gewd->name)));
+			$gamerescapewiki_leves[$search_name] = $gewd;
+		}
+
+		// Loop through leves
 		foreach ($leve as $l)
 		{
 			// Get /db/data/leve/#.json
@@ -682,9 +693,12 @@ class DatabaseSeeder extends Seeder
 			$rewards = isset($l->rewards) && isset($l->rewards->entries) ? $l->rewards->entries : [];
 			$l = $l->leve;
 
+			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($l->name)));
+			
 			$row = [
 				'id' => $l->id,
 				'name' => $l->name,
+				'type' => isset($gamerescapewiki_leves[$search_name]) ? $gamerescapewiki_leves[$search_name]->issuing_npc_information : null,
 				'level' => $l->lvl,
 				'job_category_id' => $l->jobCategory,
 				'area_id' => $l->areaid,

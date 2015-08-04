@@ -160,15 +160,34 @@ class LevesController extends \App\Http\Controllers\Controller
 
 	public function getCompile()
 	{
-		$extra_leve_data = json_decode(file_get_contents(storage_path() . '/app/osmose/cache/leves/leves.json'));
+		$gamerescapewiki_data = json_decode(file_get_contents(storage_path() . '/app/osmose/cache/leves/leves.json'));
+		
+		dd($gamerescapewiki_data);
 
-		$original_leves = json_decode(file_get_contents(storage_path() . '/app/manual/leves.json'));
+		$all_leves = \App\Models\Garland\Leve::lists('id', 'name')->all();
+		$all_leves = array_change_key_case($all_leves);
+		$leves = [];
+		foreach ($all_leves as $key => $value)
+			if ($value == 483) // Brute force a weird spacing issue fix
+				$leves['actually,it\'sloyalty'] = $value;
+			else
+				$leves[trim(preg_replace('/\s|\-|\(.*\)/', '', $key))] = $value;
 
-		$improved_leves = $rewards = [];
+		$gamerescapewiki_leves = [];
 
-		foreach ($extra_leve_data as $extra)
+		foreach ($gamerescapewiki_data as $gewd)
 		{
-			$extra->xp = preg_replace('/,/', '', $extra->xp);
+			$search_name = trim(preg_replace('/\s|\-|\(.*\)/', '', strtolower($gewd->name)));
+			
+			if ( ! isset($leves[$search_name]))
+				dd('NOT FOUND', $leves);
+
+			continue;
+
+			// $leves[$search_name];
+
+			dd($gewd, in_array($gewd->name, $leves));
+			// $extra->xp = preg_replace('/,/', '', $extra->xp);
 
 			$leve = null;
 			foreach ($original_leves as $original)
@@ -181,7 +200,9 @@ class LevesController extends \App\Http\Controllers\Controller
 			if ($leve == null)
 				continue;
 
-			// echo 'Improving ' . $leve->name . '<br>';
+			echo 'Improving ' . $leve->name . '<br>';
+
+			continue;
 
 			foreach ($extra->rewards as $reward)
 			{
@@ -200,8 +221,10 @@ class LevesController extends \App\Http\Controllers\Controller
 
 			unset($leve->gil, $leve->xp);
 
-			$improved_leves[] = $leve;
+			$gamerescapewiki_leves[] = $leve;
 		}
+
+		dd('hi');
 
 		foreach ($rewards as $class => $levels)
 			foreach ($levels as $level => $r)
@@ -211,8 +234,8 @@ class LevesController extends \App\Http\Controllers\Controller
 					sort($rewards[$class][$level][$item]);
 				}
 
-		file_put_contents(storage_path() . '/app/libra/improved-leves.json', json_encode($improved_leves));
-		file_put_contents(storage_path() . '/app/libra/improved-leve-rewards.json', json_encode($rewards));
+		file_put_contents(storage_path() . '/app/gamerescapewiki/leves.json', json_encode($gamerescapewiki_leves));
+		file_put_contents(storage_path() . '/app/gamerescapewiki/leve-rewards.json', json_encode($rewards));
 
 		// echo 'Files built and placed in storage<br>';
 

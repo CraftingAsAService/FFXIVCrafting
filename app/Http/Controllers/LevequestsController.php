@@ -191,42 +191,6 @@ class LevequestsController extends Controller
 		if ($request->input('repeatable_only') == 'true')
 			$query->where('repeats', '>', 1);
 
-		// Types are a little complicated.
-		// Types are separated by either being In or Out of a main location
-		$main_locations = [27, 39, 51]; // Limsa, Ul'dah, Gridania
-		// Combined with a Plate
-		$plates = [
-			'courier' => [80034], // && Not in Main
-			'field' => [80034, 80041], // && Not in Main
-			'reverse-courier' => [80034], // && in Main
-			'town' => [80033, 80041, 80045, 80057], // && in Main, 45 & 57 are for FSH
-		];
-		$types = $request->input('types', []);
-		array_walk($types, function(&$x) { $x = str_slug($x); });
-
-		$query->where(function($query) use ($main_locations, $plates, $types) {
-			$query->where('name', 'FAILBOAT'); // Will Fail, but gives a starting point for the "orWhere"'s
-			if (in_array('courier', $types))
-				$query->orWhere(function($query) use ($plates, $main_locations) {
-					$query->whereNotIn('area_id', $main_locations)
-						->whereIn('plate', $plates['courier']);
-				});
-			if (in_array('field', $types))
-				$query->orWhere(function($query) use ($plates, $main_locations) {
-					$query->whereNotIn('area_id', $main_locations)
-						->whereIn('plate', $plates['field']);
-				});
-			if (in_array('reverse-courier', $types))
-				$query->orWhere(function($query) use ($plates, $main_locations) {
-					$query->whereIn('area_id', $main_locations)
-						->whereIn('plate', $plates['reverse-courier']);
-				});
-			if (in_array('town', $types))
-				$query->orWhere(function($query) use ($plates, $main_locations) {
-					$query->whereIn('area_id', $main_locations)
-						->whereIn('plate', $plates['town']);
-				});
-		});
 
 		// Text Searches
 		if ($request->input('leve_name'))
@@ -242,6 +206,15 @@ class LevequestsController extends Controller
 
 		// \DB::connection()->enableQueryLog();
 		$leves = $query->get();
+
+		// Filter the leves based on the types selected
+
+		$types = $request->input('types', []);
+		// array_walk($types, function(&$x) { $x = str_slug($x); });
+
+		$leves = $leves->filter(function($leve) use ($types) {
+			return in_array($leve->simple_type, $types);
+		});
 
 		// dd(self::logger());
 		// dd($leves[0]->type);
