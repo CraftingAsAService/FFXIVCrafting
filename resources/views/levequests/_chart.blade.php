@@ -60,7 +60,7 @@
 		</li>
 		@endforeach
 		<li class='list-group-item'>
-			<a href='/crafting/item/{{ $leve->requirements[0]->id }}?self_sufficient=1'>View in crafting tool</a>
+			<a href='/crafting/item/{{ $leve->requirements[0]->id }}?self_sufficient=1' class='fix-self-sufficient'>View in crafting tool</a>
 		</li>
 	</ul>
 </div>

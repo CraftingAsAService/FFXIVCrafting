@@ -57,6 +57,14 @@ var global = {
 		// 		mainContainer[(mainContainer.hasClass('nav-handler-checked') ? 'remove' : 'add') + 'Class']('nav-handler-checked');
 		// 	});
 		// }
+
+		// Update the button href to remove self_sufficient if applicable
+		if (localStorage.getItem('config:self_sufficient') == 0)
+			$('.fix-self-sufficient').each(function() {
+				var el = $(this);
+				el.attr('href', el.attr('href').replace(/(\?|\&)self_sufficient=1/, ''));
+				return;
+			});
 	},
 	hide_me:function() {
 		$('.hide-me').each(function() {
