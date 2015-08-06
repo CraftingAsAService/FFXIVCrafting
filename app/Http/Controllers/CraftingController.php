@@ -197,6 +197,7 @@ class CraftingController extends Controller
 		$query = Recipe::with(
 				'job',
 				'item', // The recipe's Item
+					'item.category',
 					'item.quest_rewards', // Is the recipe used as a quest turnin?
 					'item.leve_required', // Is the recipe used to fufil a leve?
 					'item.shops',
@@ -204,11 +205,13 @@ class CraftingController extends Controller
 					'item.mobs',
 					'item.nodes',
 				'reagents', // The reagents for the recipe
+					'reagents.category',
 					'reagents.shops',
 					'reagents.mobs',
 					'reagents.nodes',
 					'reagents.recipes',
 						'reagents.recipes.item', 
+							'reagents.recipes.item.category',
 							'reagents.recipes.item.shops',
 							'reagents.recipes.item.mobs',
 							'reagents.recipes.item.nodes',
@@ -255,7 +258,7 @@ class CraftingController extends Controller
 		$self_sufficient = isset($options) && isset($options['self_sufficient']);
 
 		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
-
+		
 		// Look through the list.  Is there something we're already crafting?
 		// Subtract what's being made from needed reagents.
 		//  Example, culinary 11 to 15, you need olive oil for Parsnip Salad (lvl 13)
@@ -398,6 +401,9 @@ class CraftingController extends Controller
 
 			foreach ($recipe->reagents as $reagent)
 			{
+				if ( ! isset($reagent->category))
+					$reagent->load('category');
+
 				$reagent_yield = isset($reagent->recipes[0]) ? $reagent->recipes[0]->yield : 1;
 
 				if ( ! isset($reagent_list[$reagent->id]))

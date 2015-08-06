@@ -1,4 +1,7 @@
 var global = {
+	tooltip_options: {
+		container: 'body'
+	},
 	init:function() {
 		global.detect_systems();
 
@@ -6,9 +9,7 @@ var global = {
 
 		global.add_token_to_ajax_calls();
 
-		$('[rel=tooltip]').tooltip({
-			container: 'body'
-		});
+		$('[rel=tooltip]').tooltip(global.tooltip_options);
 
 		global.reset_popovers();
 
@@ -150,7 +151,7 @@ var global = {
 
 				el.popover('show');
 
-				$('[rel=tooltip]', el).tooltip();
+				$('[rel=tooltip]', el).tooltip(global.tooltip_options);
 			}
 		});
 

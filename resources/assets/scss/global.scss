@@ -1410,3 +1410,32 @@ table.table-curved {
 		}
 	}
 }
+
+.btn.btn-sm {
+	.glyphicon-chevron-down, .glyphicon-chevron-up {
+		top: 2px;
+	}
+	.glyphicon-chevron-up {
+		left: 1px;
+	}
+}
+
+.crystal-container {
+	margin-right: 10px;
+	position: relative;
+	width: 36px;
+	height: 36px;
+	display: inline-block;
+	&:last-child {
+		margin-right: 0;
+	}
+	.label {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+}
+
+#toggle-crystals.off {
+	opacity: .5;
+}

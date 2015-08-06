@@ -5,10 +5,15 @@ var crafting = {
 	},
 	events:function() {
 
-		$('#obtain-these-items .collapse').click(function() {
+		$('#toggle-crystals').click(crafting.toggle_crystals);
+
+		if (localStorage.getItem('config:toggle-crystals') == 'off')
+			$('#toggle-crystals').trigger('click');
+
+		$('#obtain-these-items .collapsible').click(function() {
 			var button = $(this);
 
-			button.toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
+			button.find('i').toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
 
 			var tbody = $(this).closest('tbody');
 
@@ -144,6 +149,71 @@ var crafting = {
 
 			return;
 		});
+
+		return;
+	},
+	toggle_crystals:function() {
+		var toggleEl = $(this),
+			colspan = toggleEl.closest('th').attr('colspan'),
+			tr = toggleEl.closest('tr');
+
+		if (toggleEl.hasClass('off'))
+		{
+			tr.next('tr.crystals').remove();
+
+			$('[data-item-category=Crystal]').each(function() {
+				$(this).show();
+				return;
+			});
+
+			toggleEl.removeClass('off');
+			localStorage.removeItem('config:toggle-crystals');
+		}
+		else
+		{
+			// Create a new cell and row
+			var new_cell = $('<th>', { colspan: colspan, 'class': 'text-center' });
+			var new_row = $('<tr>', { 'class': 'crystals hidden' }).append(new_cell);
+
+			// Throw the row after the current one
+			tr.after(new_row);
+
+			$('[data-item-category=Crystal]').each(function() {
+				var el = $(this),
+					item_id = el.data('itemId'),
+					name = el.find('.name').first().html(),
+					img = el.find('img').first().clone(true, true),
+					total = parseInt(el.find('.total').html()),
+					label_type = total == 0 ? 'success' : 'primary';
+
+				// Hide the row.  Don't use .hidden because of the collapsible stuff
+				el.hide();
+
+				img.removeClass('margin-right');
+
+				var span = $('<span>', {
+					'id': 'crystal-' + item_id,
+					'class': 'crystal-container',
+					'html': '<span class="label label-' + label_type + '">' + total + '</span>',
+					'rel': 'tooltip',
+					'title': name
+				});
+
+				span.tooltip(global.tooltip_options);
+
+				span.append(img);
+
+				new_cell.append(span);
+
+				return;
+			});
+
+			new_row.removeClass('hidden');
+
+			toggleEl.addClass('off');
+
+			localStorage.setItem('config:toggle-crystals', 'off');
+		}
 
 		return;
 	},
@@ -376,6 +446,22 @@ var crafting = {
 		}
 
 		crafting.store_localstorage();
+
+		// Transfer the numbers to the crystals
+		if ($('tr.crystals').length > 0)
+		$('[data-item-category=Crystal]').each(function() {
+			var el = $(this),
+				item_id = el.data('itemId'),
+				total = parseInt(el.find('.total').html()),
+				label = $('#crystal-' + item_id).find('.label');
+
+			label.html(total);
+
+			label.toggleClass('label-primary', total != 0);
+			label.toggleClass('label-success', total == 0);
+
+			return;
+		});
 
 		return;
 	},

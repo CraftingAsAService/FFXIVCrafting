@@ -78,7 +78,7 @@ class Item extends Model {
 
 	public function category()
 	{
-		return $this->belongsTo('App\Models\Garland\ItemCategory');
+		return $this->belongsTo('App\Models\Garland\ItemCategory', 'item_category_id');
 	}
 
 	public function job_category()

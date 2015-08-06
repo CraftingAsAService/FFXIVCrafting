@@ -101,7 +101,10 @@
 		<tbody id='{{ preg_replace('/\s|\-/', '', $section) }}-section'>
 			<tr>
 				<th colspan='6'>
-					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
+					<button class='btn btn-default btn-sm pull-right collapsible'><i class='glyphicon glyphicon-chevron-down'></i></button>
+					@if($section == 'Gathered')
+					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-crystals'>Toggle Crystals</button>
+					@endif
 					<div style='margin-top: 4px;'>Origin: {{ $section }}</div>
 				</th>
 			</tr>
@@ -121,7 +124,7 @@
 					// $link = 'recipe/' . $reagent['item']->recipes[0]->id;
 				}
 			?>
-			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}'>
+			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-item-category='{{ $reagent['item']->category->name }}'>
 				<td class='text-left'>
 					@if($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>
@@ -146,7 +149,7 @@
 					<div class='input-group'>
 						<input type='number' class='form-control obtained text-center' min='0' value='0' step='{{ $yields }}' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
-							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
+							<button class='btn btn-default obtained-ok' type='button' style='padding: 7px 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>
 					</div>
 				</td>
@@ -179,7 +182,7 @@
 		<tbody id='CraftingList-section'>
 			<tr>
 				<th colspan='6'>
-					<button class='btn btn-default pull-right glyphicon glyphicon-chevron-down collapse'></button>
+					<button class='btn btn-default btn-sm pull-right collapsible'><i class='glyphicon glyphicon-chevron-down'></i></button>
 					<div style='margin-top: 4px;'>Crafting List</div>
 				</th>
 			</tr>
@@ -243,7 +246,7 @@
 					<div class='input-group'>
 						<input type='number' class='form-control obtained text-center' min='0' step='{{ $recipe->yield }}' value='0' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
-							<button class='btn btn-default obtained-ok' type='button' style='padding: 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
+							<button class='btn btn-default obtained-ok' type='button' style='padding: 7px 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>
 					</div>
 				</td>
