@@ -147,9 +147,6 @@ var crafting = {
 
 		return;
 	},
-	obtained_click:function() {
-
-	},
 	localstorage_id: null,
 	set_localstorage_id:function() {
 		crafting.localstorage_id = 'page:' + encodeURIComponent(window.location.pathname);
@@ -279,6 +276,10 @@ var crafting = {
 					// Required data
 					var t = requires[i].split('x');
 
+					// Don't include itself as a requirement
+					if (data.item_id == t[1])
+						continue;
+
 					data.reagents[data.reagents.length] = {
 						'item_id': t[1],
 						'quantity': parseInt(t[0]) 
@@ -289,8 +290,6 @@ var crafting = {
 
 			return;
 		});
-
-		//console.log(crafting.reagents);
 
 		return;
 	},
