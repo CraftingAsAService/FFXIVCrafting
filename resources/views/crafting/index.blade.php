@@ -98,7 +98,7 @@
 
 					<div>
 						<span>
-							<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO'>
+							<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO' data-size='small'>
 						</span>
 						<strong class='margin-left'>Self Sufficient</strong> <small class='visible-sm-inline visible-md-inline visible-lg-inline'><em>- "I want to gather things manually instead of buying them"</em></small>
 					</div>

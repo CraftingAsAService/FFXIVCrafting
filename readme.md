@@ -24,9 +24,6 @@ ImageMagick needs installed inside Homestead/Vagrant.
 
 The `ffxivcrafting` schema should be manually created.
 
-
-If necessary, the `ffxivcrafting-assets` folder is a submodule.  To initialize it, `cd resources/assets/images && git submodule init`.  `git submodule update` may come in handy as well.
-
 ---
 
 Custom artisan commands:

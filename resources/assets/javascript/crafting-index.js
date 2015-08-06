@@ -2,11 +2,27 @@ var craftingIndex = {
 	init:function() {
 		$('.bootswitch').bootstrapSwitch();
 
+		craftingIndex.options_events();
+
 		craftingIndex.ilvl_events();
 
 		craftingIndex.class_selection_events();
 
 		craftingIndex.inclusions();
+
+		return;
+	},
+	options_events:function() {
+
+		if (localStorage.getItem('config:self_sufficient') == 0)
+			$('#self_sufficient_switch').bootstrapSwitch('state', false);
+
+		$('#self_sufficient_switch').on('switchChange.bootstrapSwitch', function(event, state) {
+			if (state == true)
+				localStorage.removeItem('config:self_sufficient')
+			else
+				localStorage.setItem('config:self_sufficient', 0);
+		});
 
 		return;
 	},
