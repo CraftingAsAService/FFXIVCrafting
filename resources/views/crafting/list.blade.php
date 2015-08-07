@@ -203,13 +203,13 @@
 					</a>
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
-						<img src="/img/stats/nq/Craftsmanship.png" class="stat-icon">
+						<img src="/img/stats/Craftsmanship.png" class="stat-icon">
 						{{ $recipe->req_craftsmanship }}
 					</span>
 					@endif
 					@if ($recipe->req_control)
 					<span class='control pull-right margin-right' rel='tooltip' title='Required Control'>
-						<img src="/img/stats/nq/Control.png" class="stat-icon">
+						<img src="/img/stats/Control.png" class="stat-icon">
 						{{ $recipe->req_control }}
 					</span>
 					@endif

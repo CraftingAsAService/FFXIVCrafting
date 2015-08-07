@@ -403,7 +403,7 @@ var equipment = {
 			var img = $('<img>');
 
 			img
-				.attr('src', '/img/stats/nq/' + stat + '.png')
+				.attr('src', '/img/stats/' + stat + '.png')
 				.addClass('stat-icon')
 				.attr('rel', 'tooltip')
 				.attr('title', stat);

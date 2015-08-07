@@ -31,11 +31,11 @@
 				</th>
 				@foreach ($stat_focus as $stat)
 				<th class='stat' rel='tooltip' title='{{ $stat }}'>
-					<img src="/img/stats/nq/{{ $stat }}.png" class="stat-icon">
+					<img src="/img/stats/{{ $stat }}.png" class="stat-icon">
 				</th>
 				@endforeach
 				<th class='stat materia' rel='tooltip' title='Materia'>
-					<img src="/img/stats/nq/Materia.png" class="stat-icon">
+					<img src="/img/stats/Materia.png" class="stat-icon">
 				</th>
 				<th class='obtained' rel='tooltip' title='Obtained From'><i class='glyphicon glyphicon-gift'></i></th>
 				<th class='cart' rel='tooltip' title='Add to Crafting List'><i class='glyphicon glyphicon-shopping-cart'></i></th>

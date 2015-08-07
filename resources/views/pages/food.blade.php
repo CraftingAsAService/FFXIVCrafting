@@ -41,7 +41,7 @@
 									<th></th>
 									@foreach($section['headers'] as $header)
 									<th>
-										<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $header }}'>
+										<img src='/img/stats/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $header }}'>
 									</th>
 									@endforeach
 								</tr>
@@ -62,7 +62,7 @@
 								@foreach($section['headers'] as $i)
 								<tr>
 									<td class='row-header'>
-										<img src='/img/stats/nq/{{ $i }}.png' class='stat-icon' rel='tooltip' title='{{ $i }}'>
+										<img src='/img/stats/{{ $i }}.png' class='stat-icon' rel='tooltip' title='{{ $i }}'>
 									</td>
 									@foreach($section['headers'] as $j)
 									<td class='{{ $section['intersections'][$i][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $i }}' data-b='{{ $j }}' rel='tooltip' title='{{ $i }}@if($i != $j) &amp; {{ $j }}@endif Foods'>
@@ -82,7 +82,7 @@
 						</li>
 						@foreach($section['headers'] as $header)
 						<li class='list-group-item'>
-							<img src='/img/stats/nq/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $header }}'>
+							<img src='/img/stats/{{ $header }}.png' class='stat-icon' rel='tooltip' title='{{ $header }}'>
 							{{ $header }}
 						</li>
 						@endforeach

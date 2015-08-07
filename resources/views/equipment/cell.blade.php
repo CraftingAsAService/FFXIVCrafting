@@ -41,13 +41,13 @@
 					@foreach($item->attributes as $attribute)
 					@if($attribute->quality == 'nq')
 					<div class='col-sm-6 text-center nq stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}'>
-						<img src='/img/stats/nq/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
+						<img src='/img/stats/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
 						<span>{{ (int) $attribute->amount }}</span>
 					</div>
 					@endif
 					@if($attribute->quality == 'hq')
 					<div class='col-sm-6 text-center hq hidden stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}'>
-						<img src='/img/stats/hq/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
+						<img src='/img/stats/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
 						<span>{{ (int) $attribute->amount }}</span>
 					</div>
 					@endif
