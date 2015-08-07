@@ -1,7 +1,7 @@
 @foreach($leves as $leve)
 <tr>
 	<td width='24' class='valign'>
-		<i class='class-icon class-id-{{ $leve->job_category->jobs[0]->id }}'></i>
+		<img src='/img/jobs/{{ strtoupper($leve->job_category->jobs[0]->abbr) }}.png' width='24' height='24' rel='tooltip' title='{{ $leve->job_category->jobs[0]->name }}'>
 	</td>
 	<td class='item'>
 		<span class='close ilvl' rel='tooltip' title='Leve Level'>{{ $leve->level }}</span>

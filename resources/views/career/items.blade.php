@@ -74,7 +74,7 @@
 				@elseif ($job->abbr != 'FSH')
 				<td class='text-center'>
 					@if (count($item->nodes))
-					<i class='class-icon class-id-{{ $job->id }} click-to-view' data-type='{{ strtolower($job->abbr) }}nodes' data-item-id='{{ $item->id }}'></i>
+					<img src='/img/jobs/{{ strtoupper($job->abbr) }}.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($job->abbr) }}nodes' data-item-id='{{ $item->id }}'>
 					@endif
 				</td>
 				@endif

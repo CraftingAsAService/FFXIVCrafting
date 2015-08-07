@@ -50,7 +50,7 @@
 						@foreach($crafting_job_list as $job)
 						<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
 							<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}> 
-							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
+							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
@@ -58,7 +58,7 @@
 						@foreach($gathering_job_list as $job)
 						<label class='btn btn-info class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
 							<input type='radio' name='class' value='{{ $job->abbr }}'> 
-							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
+							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
@@ -72,7 +72,7 @@
 						@foreach($basic_melee_job_list as $job)
 						<label class='btn btn-danger class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
 							<input type='radio' name='class' value='{{ $job->abbr }}'> 
-							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
+							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
@@ -80,7 +80,7 @@
 						@foreach($basic_magic_job_list as $job)
 						<label class='btn btn-warning class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
 							<input type='radio' name='class' value='{{ $job->abbr }}'> 
-							<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->abbr }}'>
+							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>

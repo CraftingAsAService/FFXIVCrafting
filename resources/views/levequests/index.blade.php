@@ -31,7 +31,7 @@
 			<div class='btn-group jobs-list'>
 				@foreach($crafting_job_list as $job)
 				<label class='btn btn-{{ $job->abbr == 'FSH' ? 'info' : 'primary' }} class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 0 }}' data-class='{{ $job->abbr }}'>
-					<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->name }}'>
+					<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 				</label>
 				@endforeach
 			</div>

@@ -37,8 +37,7 @@ var quests = {
 					return 'None selected <b class="caret"></b>';
 				}
 				else if (options.length == 1) {
-					return '<i class="class-icon ' + $(options[0]).val() + '" style="position: relative; top: 3px;"></i>';
-					//return '<img src="/img/classes/' + $(options[0]).val() + '.png"> <b class="caret"></b>';
+					return '<img src="/img/jobs/' + $(options[0]).val().toUpperCase() + '-active.png" width="24" height="24"> <b class="caret"></b>';
 				}
 				else if (options.length > 1) {
 					return options.length + ' selected  <b class="caret"></b>';
@@ -48,7 +47,6 @@ var quests = {
 					options.each(function() {
 					selected += $(this).text() + ', ';
 					});
-					// <img src='/img/classes/{{ $job }}.png'>
 					return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
 				}
 			}

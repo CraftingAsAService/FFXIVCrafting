@@ -84,7 +84,7 @@
 			@foreach($quest->items as $item)
 			<tr class='quest{{ $quest->job->id != reset($job_ids) ? ' hidden' : '' }}' data-abbr='{{ $quest->job->abbr }}'>
 				<td width='24' class='valign'>
-					<i class='class-icon {{ $quest->job->abbr }}'></i>
+					<img src='/img/jobs/{{ strtoupper($quest->job->abbr) }}.png' width='24' height='24' rel='tooltip' title='{{ $quest->job->name }}'>
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $quest->level }}</span>

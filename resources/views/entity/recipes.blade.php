@@ -12,7 +12,7 @@
 						@if (is_null($recipe->job))
 						<img src='/img/FC.png' width='20' height='20' class='margin-right'></i>Free Company Craft
 						@else
-						<i class='class-icon {{ $recipe->job->abbr }} margin-right'></i>{{ $recipe->job->name }}
+						<img src='/img/jobs/{{ strtoupper($recipe->job->abbr) }}.png' width='32' height='32'>{{ $recipe->job->name }}
 						@endif
 						(lvl {{ $recipe->recipe_level }})
 					</caption>

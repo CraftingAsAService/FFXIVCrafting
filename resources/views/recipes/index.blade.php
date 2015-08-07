@@ -52,20 +52,20 @@
 				<th class='valign'>
 					<div class='input-group' style='margin: 0 auto;' id='class-search'>
 						<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' data-class='all'>
-							<img src='/img/classes/NA.png'>
+							<img src='/img/jobs/ALL.png' width='24' height='24'>
 							<span class='caret'></span>
 						</button>
 						<ul class='dropdown-menu'>
 							<li>
 								<a href='#' data-class='all'>
-									<img src='/img/classes/NA.png'>
+									<img src='/img/jobs/ALL.png' width='24' height='24'>
 									All Classes
 								</a>
 							</li>
 							@foreach($crafting_job_list as $job)
 							<li>
 								<a href='#' data-class='{{ $job->abbr }}'>
-									<img src='/img/classes/{{ $job->abbr }}.png'>
+									<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24'>
 									{{ $job->name }}
 								</a>
 							</li>

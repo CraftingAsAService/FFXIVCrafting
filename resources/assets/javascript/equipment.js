@@ -83,7 +83,7 @@ var equipment = {
 
 		$('#gear tbody td:visible').on('mouseleave', equipment.uncompare);
 
-		$('[rel=tooltip]').tooltip();
+		$('[rel=tooltip]').tooltip(global.tooltip_options);
 
 		$('#gear tbody tr:first-child td:visible').each(function() {
 			equipment.stat_summary($(this));

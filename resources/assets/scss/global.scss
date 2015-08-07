@@ -1,5 +1,3 @@
-@import 'sprites';
-
 $tablet_viewport: 768px;
 $desktop_viewport: 992px;
 $large_viewport: 1200px;
@@ -961,12 +959,6 @@ ul.plain {
 			-webkit-box-shadow: none;
 			text-shadow: none;
 		}
-		.crafted_gathered .class-icon {
-			width: 30px;
-		}
-		.crafted_gathered .class-icon:after {
-			content: attr(title) " ";
-		}
 	}
 }
 
@@ -1296,12 +1288,6 @@ table.gear {
 		}
 		&.obtained {
 			padding-top: 7px;
-		}
-		&.cart {
-			.class-icon {
-				position: relative;
-				top: 6px;
-			}
 		}
 	}
 }

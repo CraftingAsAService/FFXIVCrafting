@@ -17,7 +17,7 @@
 			@foreach(${$section . '_job_list'} as $job)
 			<div class='col-sm-4 col-md-3'>
 				<span class='pull-right label label-{{ $color }}'>Level {{ $account['levels'][strtolower($job->name)] }}</span>
-				<img src='/img/classes/{{ $job->abbr }}.png' rel='tooltip' title='{{ $job->name }}'>
+				<img src='/img/jobs/{{ strtoupper($job->abbr) }}.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 				{{ $job->name }}
 				<div class='progress margin-top'>
 					<div class='progress-bar progress-bar-{{ $color }} progress-bar-striped' style='width: {{ (int) (($account['levels'][strtolower($job->name)] / config('site.max_level')) * 100) }}%;'></div>

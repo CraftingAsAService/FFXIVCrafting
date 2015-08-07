@@ -30,7 +30,7 @@
 	</a>
 
 	<h1>
-		<i class='class-icon {{ $job->abbr }} large' style='position: relative; top: 5px;'></i>
+		<img src='/img/jobs/{{ strtoupper($job->abbr) }}.png' width='32' height='32' style='position: relative; top: -4px;'>
 		{{ $job->name }}
 	</h1>
 	<h2>Equipment Guide</h2>
@@ -113,22 +113,22 @@
 					<ul class='dropdown-menu class-dropdown-menu' role='menu'>
 						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC', 'ROG') as $switch_job)
 						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-danger'>
-							<img src='/img/classes/{{ $switch_job }}.png' rel='tooltip'>
+							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
 						</a></li>
 						@endforeach
 						@foreach(array('CNJ', 'THM', 'ACN') as $switch_job)
 						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-warning'>
-							<img src='/img/classes/{{ $switch_job }}.png' rel='tooltip'>
+							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
 						</a></li>
 						@endforeach
 						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $switch_job)
 						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-primary'>
-							<img src='/img/classes/{{ $switch_job }}.png' rel='tooltip'>
+							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
 						</a></li>
 						@endforeach
 						@foreach(array('MIN','BTN','FSH') as $switch_job)
 						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-info'>
-							<img src='/img/classes/{{ $switch_job }}.png' rel='tooltip'>
+							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
 						</a></li>
 						@endforeach
 					</ul>

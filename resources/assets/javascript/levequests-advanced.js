@@ -46,7 +46,7 @@ var leves = {
 					return 'None selected <b class="caret"></b>';
 				}
 				else if (options.length == 1) {
-					return '<img src="/img/classes/' + $(options[0]).val() + '.png"> <b class="caret"></b>';
+					return '<img src="/img/jobs/' + $(options[0]).val().toUpperCase() + '-active.png" width="24" height="24"> <b class="caret"></b>';
 				}
 				else if (options.length > 1) {
 					return options.length + ' selected  <b class="caret"></b>';
@@ -56,7 +56,6 @@ var leves = {
 					options.each(function() {
 					selected += $(this).text() + ', ';
 					});
-					// <img src='/img/classes/{{ $job }}.png'>
 					return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
 				}
 			}
@@ -229,7 +228,7 @@ var leves = {
 
 				global.reset_popovers();
 
-				$('[rel=tooltip]').tooltip();
+				$('[rel=tooltip]').tooltip(global.tooltip_options);
 			}
 		});
 	}

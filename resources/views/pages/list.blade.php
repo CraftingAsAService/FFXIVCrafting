@@ -21,7 +21,7 @@
 @if(empty($list))
 <p>Your list is empty.</p>
 <p>Visit the <a href='/recipes'>Recipe Book</a> to add items.</p>
-<p>Also, clicking on a DOH class icon (like <img src='/img/classes/CRP.png'>) on other pages will add that item to your crafting list.</p>
+<p>Also, clicking on a DOH class icon (like <img src='/img/jobs/CRP.png' width='24' height='24'>) on other pages will add that item to your crafting list.</p>
 @else
 
 @if(isset($saved))

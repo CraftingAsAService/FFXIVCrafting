@@ -107,8 +107,7 @@ var crafting = {
 		$('#csv_download').click(function(event) {
 			event.preventDefault();
 
-			// var data = [["name1", "city1", "some other info"], ["name2", "city2", "more info"]];
-			var data = [["Item", "iLevel", "Yields", "Needed", "Purchase"]];//, "Source"]];
+			var data = [["Item", "iLevel", "Yields", "Needed", "Purchase"]];
 
 			$('tr.reagent').each(function() {
 				var row = [],
@@ -118,25 +117,9 @@ var crafting = {
 				row.push(el.find('.ilvl').text().replace(/\s|\n/ig, ''));
 				row.push(el.data('yields'));
 
-				// if ($('.needed input', el).length > 0)
-				// 	row.push($('.needed input', el).val());
-				// else
-				// 	row.push($('.needed span', el).text());
-
-				// row.push(el.find('.obtained').val());
 				row.push(el.find('.total').text());
 
 				row.push(el.find('.vendors').length ? (el.find('.vendors').text().replace(/\s|\n/ig, '') + ' gil') : '');
-
-				// var source = [];
-				// el.find('.crafted_gathered .class-icon').each(function() {
-				// 	return source.push($(this).attr('title'));
-				// });
-
-				// if (el.find('.crafted_gathered .beasts').length > 0)
-				// 	source.push('Beasts');
-
-				// row.push(source.join(', '));
 
 				data.push(row);
 

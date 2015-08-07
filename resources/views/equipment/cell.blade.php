@@ -18,7 +18,7 @@
 					<div>
 						@if(count($item->recipes))
 						<div class='crafted_by'>
-							<i class='class-icon class-id-{{ $item->recipes[0]->job_id }} stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}, Click to Add to List'></i>
+							<img src='/img/jobs/{{ strtoupper($item->recipes[0]->job->abbr) }}.png' width='20' height='20' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}, Click to Add to List' style='margin-top: 0; position: relative; top: -3px;'>
 						</div>
 						@elseif(count($item->instances) || count($item->achievement) || count($item->mobs) || count($item->ventures))
 						<div class='rewarded'>

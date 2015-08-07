@@ -40,15 +40,15 @@
 			<?php if(count($recipe->item->shops)) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
 			<tr data-item-id='{{ $recipe->item_id }}'>
 				<td width='24' class='valign'>
-					<i class='class-icon class-id-{{ $recipe->job_id }}'></i>
+					<img src='/img/jobs/{{ strtoupper($recipe->job->abbr) }}.png' width='24' height='24'>
 				</td>
 				<td>
 					@if(isset($recipe->recipe_level))
 					<span class='close' rel='tooltip' title='Level'>{{ $recipe->recipe_level }}</span>
 					@endif
-					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'> --}}
+					<a href='http://xivdb.com/?item/{{ $recipe->item_id }}' target='_blank'>
 						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name }}
-					{{-- </a> --}}
+					</a>
 				</td>
 				<td class='valign text-center'>
 					{{ number_format($amounts[$recipe->id] + .49) }}

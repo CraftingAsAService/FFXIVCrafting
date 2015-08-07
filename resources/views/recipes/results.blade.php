@@ -7,7 +7,9 @@
 		</a>
 	</td>
 	<td class='text-center valign'>
-		<i class='class-icon class-id-{{ $recipe->job_id }} add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{ $recipe->item->name }}'></i>
+		@if (count($recipe->job))
+		<img src='/img/jobs/{{ strtoupper($recipe->job->abbr) }}.png' width='24' height='24' rel='tooltip' title='{{ $recipe->job->name }}'>
+		@endif
 	</td>
 	<td class='text-center valign'>
 		{{ $recipe->recipe_level }}
