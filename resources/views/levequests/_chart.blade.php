@@ -80,11 +80,10 @@
 			<th class='text-center' rowspan='2'>Level</th>
 			<th class='text-center' rowspan='2'>Requires</th>
 			<th class='text-center' colspan='{{ 1 + ($leve->repeats ? 1 : 0) + ($leve->requirements[0]->pivot->amount > 1 ? 1 : 0) }}'>
-				<img src='/img/NQ.png' width='24' height='24'>
 				NQ
 			</th>
 			<th class='text-center' colspan='{{ 1 + ($leve->repeats ? 1 : 0) + ($leve->requirements[0]->pivot->amount > 1 ? 1 : 0) }}'>
-				<img src='/img/HQ.png' width='24' height='24'>
+				<img src='/img/hq-icon.png' width='20' height='20'>
 				HQ
 			</th>
 		</tr>
