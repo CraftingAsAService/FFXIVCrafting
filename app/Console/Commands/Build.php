@@ -57,7 +57,7 @@ class Build extends Command {
 
 
 		$this->info('Exporting MySQL Database');
-		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-k8s-clus/caas-db/caas.sql');
+		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../k8s-clus-ffxiv/caas-db/caas.sql');
 
 		// $this->info('Clearing caches');
 		// echo exec($php . ' artisan cache:clear') . PHP_EOL;
@@ -108,7 +108,7 @@ class Build extends Command {
 		// // }
 
 		// $this->info('Done!');
-		// $this->info('Consider running osmose:cdn:assets!');
+		$this->info('Consider running osmose:cdn:assets!');
 	}
 
 	/**

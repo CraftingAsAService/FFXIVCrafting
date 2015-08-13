@@ -95,7 +95,7 @@ class LevequestsController extends Controller
 	private function _breakdown($leve_id = 0)
 	{
 		$leve = Leve::with('job_category', 'job_category.jobs', 'requirements', 'requirements.recipes', 'requirements.recipes.reagents')->find($leve_id);
-		$experience = array_intersect_key(config('experience'), array_flip(range($leve->level + 1, $leve->level + 10)));
+		$experience = array_intersect_key(config('experience'), array_flip(range($leve->level, $leve->level + 10)));
 		
 		// Leve breakdown only exists to handle Crafting (and Fishing) realted jobs
 		if ( ! in_array($leve->job_category_id, range(9,16)) && $leve->job_category_id != 19) // 9-16 CRP-WVR, 19 = FSH
