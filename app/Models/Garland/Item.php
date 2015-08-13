@@ -168,7 +168,7 @@ class Item extends Model {
 						->orHas('ventures')
 						->orHas('achievements');
 				});
-			else
+			elseif ($craftable_only)
 				$query->whereHas('recipes', function($query) {
 					$query->where('item_id', \DB::raw('item.id'));
 				});
