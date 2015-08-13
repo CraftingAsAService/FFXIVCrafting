@@ -129,12 +129,12 @@
 										@if(isset($item['stats'][$stat_name][$quality]))
 										<td class='text-center valign' data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $stat_name }}' rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $stat_name }}'>
 											+{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}
-											<img src='/img/stats/{{ $quality }}/{{ $stat_name }}.png' class='stat-icon'>
+											<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
 										</td>
 										@else
 										<td class='text-center valign' data-stat-name='{{ $stat_name }}' rel='tooltip'>
 											+0
-											<img src='/img/stats/{{ $quality }}/{{ $stat_name }}.png' class='stat-icon'>
+											<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
 										</td>
 										@endif
 										@endforeach

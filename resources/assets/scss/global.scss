@@ -1383,3 +1383,14 @@ table.table-curved {
 #toggle-crystals.off {
 	opacity: .5;
 }
+
+img[src^="http://xivdb.com"] {
+	width: 36px !important;
+	height: 36px !important;
+}
+.leve-section, .xivdb-24-icon {
+	img[src^="http://xivdb.com"] {
+		width: 24px !important;
+		height: 24px !important;
+	}
+}

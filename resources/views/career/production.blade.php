@@ -42,9 +42,9 @@
 					@if(isset($recipe->recipe_level))
 					<span class='close' rel='tooltip' title='Level'>{{ $recipe->recipe_level }}</span>
 					@endif
-					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->recipe_id }}' target='_blank'> --}}
+					<a href='http://xivdb.com/?item/{{ $recipe->item_id }}' target='_blank'>
 						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name }}
-					{{-- </a> --}}
+					</a>
 				</td>
 				<td class='valign text-center'>
 					{{ number_format($amounts[$recipe->id] + .49) }}

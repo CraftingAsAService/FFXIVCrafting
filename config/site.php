@@ -7,7 +7,7 @@ return array(
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
 
-	'available_languages' => ['en'], //, 'ja', 'de', 'fr'],
+	'available_languages' => ['en', 'ja', 'de', 'fr'],
 	'full_languages' => [
 		'en' => 'English',
 		'fr' => 'Français',

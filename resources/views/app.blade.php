@@ -94,7 +94,6 @@
 					{!! menu_item('/stats',		'Stats',		'stats'		) !!}
 					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
 
-					<?php /*
 					<li>
 						<hr>
 					</li>
@@ -107,7 +106,6 @@
 						</a>
 					</li>
 					@endforeach
-					*/ ?>
 				</ul>
 
 			</div>
@@ -125,7 +123,6 @@
 								</a>
 							</li>
 							@endif
-							<?php /*
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 									<img src="/img/icons/flags/{!! $lang !!}.png">
@@ -142,7 +139,6 @@
 									@endforeach
 								</ul>
 							</li>
-							*/ ?>
 							<li>
 								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
 									@if(isset($account) && $account)
@@ -330,12 +326,12 @@
 					"frameShadow"   : true,
 					"compact"       : false,
 					"statsOnly"     : false,
-					"replaceName"   : false,
+					"replaceName"   : {{ $lang == 'en' ? 'false' : 'true' }},
 					"colorName"     : true,
-					"showIcon"      : false,
+					"showIcon"      : {{ $lang == 'en' ? 'false' : 'true' }},
 				} 
 		</script>
-		<script type='text/javascript' src='http://xivdb.com/tooltips.js'></script>
+		<script type="text/javascript" src="http://xivdb.com/tooltips.js?v=1.6"></script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
