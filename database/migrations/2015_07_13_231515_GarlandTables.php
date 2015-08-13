@@ -23,7 +23,7 @@ class GarlandTables extends Migration
 			$table->integer('level')->unsigned();
 			$table->integer('bonus_id')->unsigned()->nullable();
 			$table->integer('zone_id')->unsigned();
-			$table->integer('area_id')->unsigned();
+			$table->integer('area_id')->unsigned()->nullable();
 
 			$table->index(['level', 'type']);
 			$table->index(['zone_id', 'area_id']);
@@ -320,7 +320,7 @@ class GarlandTables extends Migration
 		Schema::create('venture', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
-			$table->string('amounts');
+			$table->string('amounts')->nullable();
 			$table->integer('job_category_id')->unsigned();
 			$table->smallInteger('level')->unsigned();
 			$table->smallInteger('cost')->unsigned();

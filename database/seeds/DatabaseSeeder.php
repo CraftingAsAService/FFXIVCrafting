@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
 				'level' => $n->lvl,
 				'bonus_id' => isset($n->bonus) ? $n->bonus : null,
 				'zone_id' => $n->zoneid,
-				'area_id' => $n->areaid,
+				'area_id' => isset($n->areaid) ? $n->areaid : null,
 			];
 
 			$this->set_data('node', $row);
@@ -651,7 +651,7 @@ class DatabaseSeeder extends Seeder
 		{
 			$row = [
 				'id' => $v->id,
-				'amounts' => implode(',', $v->amounts),
+				'amounts' => isset($v->amounts) ? implode(',', $v->amounts) : null,
 				'job_category_id' => $v->jobs,
 				'level' => $v->lvl,
 				'cost' => $v->cost,
