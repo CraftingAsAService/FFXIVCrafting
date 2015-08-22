@@ -71,7 +71,7 @@
 									</h4>
 
 									<p>
-										<a href='http://xivdb.com/?item/{{ $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->name }}</a>
+										<a href='http://xivdb.com/?item/{{ $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->display_name }}</a>
 
 										@if ($item->pivot->amount > 1)
 										<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -105,7 +105,7 @@
 									</div>
 								</td>
 								<td class='text-center valign'>
-									<button class='btn btn-default add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{ $item->name }}' data-item-quantity='{{ $leve->amount }}'>
+									<button class='btn btn-default add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{ $item->display_name }}' data-item-quantity='{{ $leve->amount }}'>
 										<i class='glyphicon glyphicon-shopping-cart'></i>
 										<i class='glyphicon glyphicon-plus'></i>
 									</button>
@@ -129,7 +129,7 @@
 					<div class='row'>
 						@foreach($rewards[$job->id][$level] as $item_id => $reward)
 						<div class='col-sm-6 col-md-4 margin-bottom'>
-							<a href='http://xivdb.com/?item/{{ $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item_id . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->name }}</a>
+							<a href='http://xivdb.com/?item/{{ $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item_id . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->display_name }}</a>
 
 							@foreach ($reward['amounts'] as $amount)
 							<span class='label label-primary'>{{ $amount }}</span>

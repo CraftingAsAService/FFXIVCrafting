@@ -33,11 +33,7 @@ class DatabaseSeeder extends Seeder
 			$this->data = Cache::get('garland-seed');
 		else
 		{
-
-			$storage_path = preg_replace('/ffxivcrafting/', 'aspir', storage_path());
-			$garland_path = $storage_path . '/garland';
-
-			$core = json_decode(file_get_contents($garland_path . '/core.json'));
+			$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
 
 			$this->node_bonuses($core->node->bonusIndex);
 			$this->node($core->node->index);
@@ -773,7 +769,10 @@ class DatabaseSeeder extends Seeder
 		$this->data['recipe'] = [];
 		$this->data['recipe_reagents'] = [];
 
-		// Loop through nodes
+		// Eorzea Name Translations
+		$translations = (array) json_decode(file_get_contents(storage_path() . '/app/osmose/i18n_names.json'));
+
+		// Loop through items
 		foreach ($item as $i)
 		{
 			// Get /db/data/item/#.json
@@ -792,10 +791,13 @@ class DatabaseSeeder extends Seeder
 			// if ($i->id == 1609)
 			// 	dd($i);
 			
-
 			$row = [
 				'id' => $i->id,
+				'eorzea_id' => isset($translations[$i->name]) ? $translations[$i->name]->eid : null,
 				'name' => $i->name,
+				'de_name' => isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
+				'fr_name' => isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
+				'jp_name' => isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
 				'help' => isset($i->help) ? $i->help : null,
 				'price' => $i->price,
 				'sell_price' => $i->sell_price,

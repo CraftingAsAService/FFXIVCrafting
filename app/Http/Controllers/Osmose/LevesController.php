@@ -234,8 +234,8 @@ class LevesController extends \App\Http\Controllers\Controller
 					sort($rewards[$class][$level][$item]);
 				}
 
-		file_put_contents(storage_path() . '/app/gamerescapewiki/leves.json', json_encode($gamerescapewiki_leves));
-		file_put_contents(storage_path() . '/app/gamerescapewiki/leve-rewards.json', json_encode($rewards));
+		file_put_contents(storage_path() . '/app/osmose/gamerescapewiki/leves.json', json_encode($gamerescapewiki_leves));
+		file_put_contents(storage_path() . '/app/osmose/gamerescapewiki/leve-rewards.json', json_encode($rewards));
 
 		// echo 'Files built and placed in storage<br>';
 

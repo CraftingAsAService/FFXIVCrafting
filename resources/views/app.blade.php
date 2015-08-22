@@ -342,9 +342,9 @@
 					"frameShadow"   : true,
 					"compact"       : false,
 					"statsOnly"     : false,
-					"replaceName"   : {{ $lang == 'en' ? 'false' : 'true' }},
+					"replaceName"   : false, /*{{ $lang == 'en' ? 'false' : 'true' }},*/
 					"colorName"     : true,
-					"showIcon"      : {{ $lang == 'en' ? 'false' : 'true' }},
+					"showIcon"      : false /*{{ $lang == 'en' ? 'false' : 'true' }}*/
 				} 
 		</script>
 		<script type="text/javascript" src="http://xivdb.com/tooltips.js?v=1.6"></script>

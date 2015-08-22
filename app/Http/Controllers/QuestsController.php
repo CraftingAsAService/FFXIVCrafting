@@ -45,7 +45,7 @@ class QuestsController extends Controller
 				// 	if ($recipe->job_id == $quest->job->id)
 						$items[] = [
 							'id' => $requirement->id,
-							'name' => $requirement->name,
+							'name' => $requirement->display_name,
 							'icon' => $requirement->icon,
 						];
 

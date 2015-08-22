@@ -60,11 +60,12 @@ if (app()->environment('local'))
 
 		Route::get('/', 'Osmose\HomeController@index');
 		Route::controllers([
-			'libra' => 'Osmose\LibraController',
-			'maps' => 'Osmose\MapsController',
-			'icons' => 'Osmose\IconsController',
+			// 'libra' => 'Osmose\LibraController',
+			// 'maps' => 'Osmose\MapsController',
+			// 'icons' => 'Osmose\IconsController',
 			'leves' => 'Osmose\LevesController',
 			'garland' => 'Osmose\GarlandController',
+			'eorzea' => 'Osmose\EorzeaController',
 		]);
 
 	});

@@ -47,7 +47,7 @@
 					<span class='close' rel='tooltip' title='Level'>{{ $recipe->recipe_level }}</span>
 					@endif
 					<a href='http://xivdb.com/?item/{{ $recipe->item_id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->name }}
+						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
 					</a>
 				</td>
 				<td class='valign text-center'>
@@ -70,7 +70,7 @@
 					@endif
 				</td>
 				<td class='text-center valign'>
-					<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->item->name }}}'>
+					<button class='btn btn-default add-to-list' data-item-id='{{ $recipe->item_id }}' data-item-name='{{{ $recipe->item->display_name }}}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>

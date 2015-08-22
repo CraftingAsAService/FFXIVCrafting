@@ -51,10 +51,10 @@
 			</tr>
 			--}}
 		@else
-			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->name }}}'>
+			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->display_name }}}'>
 				<td class='text-left'>
 					<a href='http://xivdb.com/?item/{{ $list_item['item']->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $list_item['item']->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->name }}
+						<img src='{{ assetcdn('item/' . $list_item['item']->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->display_name }}
 					</a>
 				</td>
 				<td class='text-center valign'>

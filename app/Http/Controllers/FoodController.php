@@ -76,7 +76,7 @@ class FoodController extends Controller
 							'id' => $item->id,
 							'icon' => $item->icon,
 							'has_hq' => (boolean) (count($item->recipes) > 0 ? $item->recipes[0]->hq : false),
-							'name' => $item->name,
+							'name' => $item->display_name,
 							'price' => $item->price,
 							'shops_count' => count($item->shops),
 							'stats' => [

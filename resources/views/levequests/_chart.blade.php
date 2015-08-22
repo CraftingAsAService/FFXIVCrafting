@@ -18,12 +18,12 @@
 </p>
 
 <h3>Requires</h3>
-<button class='btn btn-default pull-right add-to-list' data-item-id='{{ $leve->requirements[0]->id }}' data-item-name='{{{ $leve->requirements[0]->name }}}' data-item-quantity='{{{ $leve->requirements[0]->pivot->amount }}}' rel='tooltip' title='Add to Crafting List'>
+<button class='btn btn-default pull-right add-to-list' data-item-id='{{ $leve->requirements[0]->id }}' data-item-name='{{{ $leve->requirements[0]->display_name }}}' data-item-quantity='{{{ $leve->requirements[0]->pivot->amount }}}' rel='tooltip' title='Add to Crafting List'>
 	<i class='glyphicon glyphicon-shopping-cart'></i>
 	<i class='glyphicon glyphicon-plus'></i>
 </button>
 <p>
-	<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name xivdb-24-icon' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->name }}</a>
+	<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name xivdb-24-icon' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
 
 	@if($leve->requirements[0]->pivot->amount > 1)
 	<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -51,7 +51,7 @@
 		@foreach($leve->requirements[0]->recipes[0]->reagents as $reagent)
 		<li class='list-group-item'>
 			<a href='http://xivdb.com/?item/{{ $reagent->id }}' target='_blank'>
-				<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name }}</span>
+				<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->display_name }}</span>
 			</a>
 			x {{ $reagent->pivot->amount * $leve->requirements[0]->pivot->amount }}
 			@if($leve->requirements[0]->pivot->amount > 1)

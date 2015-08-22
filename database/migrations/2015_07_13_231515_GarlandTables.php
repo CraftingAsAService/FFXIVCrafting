@@ -399,7 +399,11 @@ class GarlandTables extends Migration
 		Schema::create('item', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
+			$table->string('eorzea_id', 15)->nullable();
 			$table->string('name');
+			$table->string('de_name');
+			$table->string('fr_name');
+			$table->string('jp_name');
 			$table->string('help')->nullable();
 			$table->integer('price')->unsigned();
 			$table->integer('sell_price')->unsigned();
