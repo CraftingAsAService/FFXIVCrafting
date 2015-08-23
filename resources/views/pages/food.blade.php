@@ -100,6 +100,10 @@
 									{{-- The opposite is true with these.  They're unordered, so the next click will switch it to ascending. --}}
 									<th class='text-center sort cursor' data-order='desc' data-column='3' rel='tooltip' title='Sort Column'><span class='glyphicon glyphicon-sort'></span></th>
 									<th class='text-center sort cursor' data-order='desc' data-column='4' rel='tooltip' title='Sort Column'><span class='glyphicon glyphicon-sort'></span></th>
+									<th class='text-center valign' rel='tooltip' title='Add to Crafting List'>
+										<i class='glyphicon glyphicon-shopping-cart'></i>
+										<i class='glyphicon glyphicon-plus'></i>
+									</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -138,6 +142,12 @@
 										</td>
 										@endif
 										@endforeach
+										<td class='cart text-center valign'>
+											<button class='btn btn-default add-to-list' data-item-id='{{ $item['id'] }}' data-item-name='{{ $item['name'] }}'>
+												<i class='glyphicon glyphicon-shopping-cart'></i>
+												<i class='glyphicon glyphicon-plus'></i>
+											</button>
+										</td>
 									</tr>
 									@endforeach
 									@endforeach

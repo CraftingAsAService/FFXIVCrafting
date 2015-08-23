@@ -41,7 +41,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// dd('instance', $core->instance->rouletteIndex);
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
-		// dd('quest', $core->quest)
+		// dd('quest', $core->quest);
 		// dd('achievement', $core->achievement->index);
 		// dd('fate', $core->fate->index);
 		// dd('jobCategories', $core->jobCategories);
@@ -54,7 +54,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// $id = 5718;
 		// dd('item', $core->item->categoryIndex);
 		// dd('item', $core->item->index);
-		// dd('gItemIndex', $core->gItemIndex);
+		dd('gItemIndex', $core->gItemIndex);
 
 
 		dd($core);

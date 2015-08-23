@@ -405,8 +405,8 @@ class GarlandTables extends Migration
 			$table->string('fr_name');
 			$table->string('jp_name');
 			$table->string('help')->nullable();
-			$table->integer('price')->unsigned();
-			$table->integer('sell_price')->unsigned();
+			$table->integer('price')->unsigned()->nullable();
+			$table->integer('sell_price')->unsigned()->nullable();
 			$table->integer('ilvl')->unsigned();
 			$table->integer('elvl')->unsigned()->nullable();
 			$table->integer('item_category_id')->unsigned();
@@ -420,7 +420,7 @@ class GarlandTables extends Migration
 			$table->smallInteger('equip')->unsigned()->nullable();
 			$table->smallInteger('repair')->unsigned()->nullable();
 			$table->smallInteger('slot')->unsigned()->nullable();
-			$table->tinyInteger('rarity')->unsigned();
+			$table->tinyInteger('rarity')->unsigned()->nullable();
 			$table->string('icon', 25);
 			$table->smallInteger('sockets')->unsigned()->nullable();
 
