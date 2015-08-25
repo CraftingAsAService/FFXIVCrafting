@@ -89,7 +89,7 @@ class RecipesController extends Controller
 			$query->orderBy($order_by, $sort);
 		
 		if ($name)
-			$query->where('i.' . Item::getNameVarAttribute(), 'like', '%' . $name . '%');
+			$query->where('i.' . Item::localized_name_variable(), 'like', '%' . $name . '%');
 
 		if ($min && $max)
 			$query->whereBetween('recipe_level', [$min, $max]);

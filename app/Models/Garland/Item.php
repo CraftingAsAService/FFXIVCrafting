@@ -98,10 +98,10 @@ class Item extends Model {
 
 	public function getDisplayNameAttribute()
 	{
-		return $this->{$this->name_var};
+		return $this->{self::localized_name_variable()};
 	}
-
-	public function getNameVarAttribute()
+	
+	public static function localized_name_variable()
 	{
 		return [
 			'en' => '',
