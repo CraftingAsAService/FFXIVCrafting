@@ -96,6 +96,21 @@ class Item extends Model {
 		return $this->hasMany('App\Models\Garland\Career', 'identifier');
 	}
 
+	public function getDisplayNameAttribute()
+	{
+		return $this->{$this->name_var};
+	}
+
+	public function getNameVarAttribute()
+	{
+		return [
+			'en' => '',
+			'ja' => 'jp_',
+			'de' => 'de_',
+			'fr' => 'fr_',
+		][Config::get('language')] . 'name';
+	}
+
 	public static function calculate($job_id = 0, $level = 1, $range = 0, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
 		// $cache_key = __METHOD__ . '|' . Config::get('language') . '|' . $job_id . ',' . $level . ',' . $range . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');

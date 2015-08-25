@@ -100,7 +100,7 @@
 						<span>
 							<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO' data-size='small'>
 						</span>
-						<strong class='margin-left'>Self Sufficient</strong> <small class='visible-sm-inline visible-md-inline visible-lg-inline'> <i class='glyphicon glyphicon-question-sign pointer text-info' data-toggle='popover' data-title='Self Sufficient Defined' data-content='<em>"I want to gather things manually instead of buying them."</em><hr><small>Option is saved and used throughout the site.</small>'></i>
+						<strong class='margin-left'>Self Sufficient</strong> <small class='visible-sm-inline visible-md-inline visible-lg-inline'> <i class='glyphicon glyphicon-question-sign pointer text-info' data-toggle='popover' data-title='Self Sufficient Defined' data-content='<em>"I want to gather things manually instead of buying them."</em><hr><small>Option is saved and used throughout the site.</small>'></i></small>
 					</div>
 				</fieldset>
 

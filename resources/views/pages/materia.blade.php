@@ -24,7 +24,7 @@
 		<tbody>
 			@foreach(array('Crafting' => 'Craftsman', 'Gathering' => 'Gatherer', 'Battle' => '') as $section_name => $section)
 			<tr>
-				<th colspan='2' class='text-center bold'>
+				<th colspan='{{ Config::get('language') == 'na' ? 2 : 1 }}' class='text-center bold'>
 					{{ $section_name }} Materia
 				</th>
 				@foreach(array('I', 'II', 'III', 'IV') as $power)
@@ -38,7 +38,9 @@
 				unset($materia_list[$name]);
 			?>
 			<tr>
+				@if(Config::get('language') == 'na')
 				<td class='text-right valign'>{{ $name }}</td>
+				@endif
 				<td class='valign'>
 					<img src='/img/stats/{{ $materia['icon'] }}.png' class='stat-icon'>
 					{{ $materia['stat'] }}

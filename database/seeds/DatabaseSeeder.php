@@ -33,11 +33,7 @@ class DatabaseSeeder extends Seeder
 			$this->data = Cache::get('garland-seed');
 		else
 		{
-
-			$storage_path = preg_replace('/ffxivcrafting/', 'aspir', storage_path());
-			$garland_path = $storage_path . '/garland';
-
-			$core = json_decode(file_get_contents($garland_path . '/core.json'));
+			$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
 
 			$this->node_bonuses($core->node->bonusIndex);
 			$this->node($core->node->index);
@@ -453,9 +449,10 @@ class DatabaseSeeder extends Seeder
 		// Loop through nodes
 		foreach ($quest as $q)
 		{
+			$orig_q = $q;
 			// Get /db/data/quest/#.json
 			$json_file = base_path() . '/../garlanddeploy/db/data/quest/' . $q->i . '.json';
-			$q = $this->get_cleaned_json($json_file);
+			$q = $this->get_cleaned_json($json_file, TRUE);
 			$q = $q->quest;
 			
 			$row = [
@@ -773,7 +770,10 @@ class DatabaseSeeder extends Seeder
 		$this->data['recipe'] = [];
 		$this->data['recipe_reagents'] = [];
 
-		// Loop through nodes
+		// Eorzea Name Translations
+		$translations = (array) json_decode(file_get_contents(storage_path() . '/app/osmose/i18n_names.json'));
+
+		// Loop through items
 		foreach ($item as $i)
 		{
 			// Get /db/data/item/#.json
@@ -792,13 +792,16 @@ class DatabaseSeeder extends Seeder
 			// if ($i->id == 1609)
 			// 	dd($i);
 			
-
 			$row = [
 				'id' => $i->id,
+				'eorzea_id' => isset($translations[$i->name]) ? $translations[$i->name]->eid : null,
 				'name' => $i->name,
+				'de_name' => isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
+				'fr_name' => isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
+				'jp_name' => isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
 				'help' => isset($i->help) ? $i->help : null,
-				'price' => $i->price,
-				'sell_price' => $i->sell_price,
+				'price' => isset($i->price) ? $i->price : null,
+				'sell_price' => isset($i->sell_price) ? $i->sell_price : null,
 				'ilvl' => $i->ilvl,
 				'elvl' => isset($i->elvl) ? $i->elvl : null,
 				'item_category_id' => $i->category,
@@ -811,7 +814,7 @@ class DatabaseSeeder extends Seeder
 				'equip' => isset($i->equip) ? $i->equip : null,
 				'repair' => isset($i->repair) ? $i->repair : null,
 				'slot' => isset($i->slot) ? $i->slot : null,
-				'rarity' => $i->rarity,
+				'rarity' => isset($i->rarity) ? $i->rarity : null,
 				'icon' => $i->icon,
 				'sockets' => isset($i->sockets) ? $i->sockets : null,
 				'job_category_id' => isset($i->jobs) ? $i->jobs : null,
@@ -1117,9 +1120,13 @@ class DatabaseSeeder extends Seeder
 		return $size ? round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) .$filesizename[$i] : '0 Bytes';
 	}
 
-	private function get_cleaned_json($path)
+	private function get_cleaned_json($path, $debug = false)
 	{
-		$content = stripslashes(file_get_contents($path));
+		// $content = stripslashes(file_get_contents($path));
+		$content = file_get_contents($path);
+
+		// if ($debug)
+		// 	echo mb_strlen($content) . PHP_EOL . strlen($content) . PHP_EOL;
 
 		// http://stackoverflow.com/questions/17219916/json-decode-returns-json-error-syntax-but-online-formatter-says-the-json-is-ok
 		for ($i = 0; $i <= 31; ++$i) { 
@@ -1129,6 +1136,14 @@ class DatabaseSeeder extends Seeder
 
 		// This is the most common part
 		$content = $this->binary_fix($content);
+
+		// Trim null content
+		// $content = trim($content, "\x0");
+
+		// if ($debug)
+		// 	dd(mb_strlen($content), strlen($content),json_decode($content), 
+		// 		mb_check_encoding($content, 'utf-8'), json_last_error_msg(),
+		// 		$content);
 
 		return json_decode($content);
 	}
@@ -1140,6 +1155,12 @@ class DatabaseSeeder extends Seeder
 		if (0 === strpos(bin2hex($string), 'efbbbf')) {
 		   $string = substr($string, 3);
 		}
+
+		// Remove UTF-8 BOM if present, json_decode() does not like it.
+		// if(substr($string, 0, 3) == pack("CCC", 0xEF, 0xBB, 0xBF)) {
+		//     $string = substr($string, 3);
+		// }
+
 		return $string;
 	}
 }

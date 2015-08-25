@@ -52,7 +52,7 @@
 		Crafting for {{ implode(', ', $jobs->lists('name')->all()) }} 
 		@endif
 		@elseif(isset($item))
-		Crafting {{ $item->name }}
+		Crafting {{ $item->display_name }}
 		@else
 		Your Crafting List
 		@endif
@@ -132,7 +132,7 @@
 					</a>
 					@endif
 					<a href='http://xivdb.com/?{{ $link }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $reagent['item']->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->name }}</span>
+						<img src='{{ assetcdn('item/' . $reagent['item']->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->display_name }}</span>
 					</a>
 					@if ($yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
@@ -199,7 +199,7 @@
 					</a>
 					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'> --}}
 					<a href='http://xivdb.com/?item/{{ $recipe->item->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->name }}</span>
+						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
 					</a>
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
@@ -310,7 +310,7 @@
 							No data!
 						@else
 							@foreach ($quest->requirements as $req_item)
-							{{ $req_item->name }}
+							{{ $req_item->display_name }}
 							@endforeach
 						@endif
 					</li>

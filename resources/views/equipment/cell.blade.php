@@ -18,7 +18,7 @@
 					<div>
 						@if(count($item->recipes))
 						<div class='crafted_by'>
-							<img src='/img/jobs/{{ strtoupper($item->recipes[0]->job->abbr) }}.png' width='20' height='20' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->name }}}' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}, Click to Add to List' style='margin-top: 0; position: relative; top: -3px;'>
+							<img src='/img/jobs/{{ strtoupper($item->recipes[0]->job->abbr) }}.png' width='20' height='20' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->display_name }}}' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}, Click to Add to List' style='margin-top: 0; position: relative; top: -3px;'>
 						</div>
 						@elseif(count($item->instances) || count($item->achievement) || count($item->mobs) || count($item->ventures))
 						<div class='rewarded'>
@@ -34,7 +34,7 @@
 				</div>
 				
 				<div class='name-box'>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary' data-showicon="0">{{ $item->name }}</a>
+					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary' data-showicon="0">{{ $item->display_name }}</a>
 				</div>
 
 				<div class='stats-box row'>

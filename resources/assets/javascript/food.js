@@ -63,9 +63,9 @@ var food = {
 
 			// if (looking_for < 3)
 			// There's never a 4th column anymore
-			$('.items-table th:nth-child(4), .items-table td:nth-child(4)').addClass('hidden');
+			$('.items-table th:nth-child(4), .items-table td:nth-child(4)').not('.cart').addClass('hidden');
 			if (a == b)
-				$('.items-table th:nth-child(3), .items-table td:nth-child(3)').addClass('hidden');
+				$('.items-table th:nth-child(3), .items-table td:nth-child(3)').not('.cart').addClass('hidden');
 
 			// Prepare data for the HighChart
 			var series = [],

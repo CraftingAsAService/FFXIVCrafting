@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Osmose;
 
+use App\Models\Osmose\Garland;
 
 class GarlandController extends \App\Http\Controllers\Controller
 {
@@ -10,14 +11,16 @@ class GarlandController extends \App\Http\Controllers\Controller
 
 	public function getIndex()
 	{
-		// We want the storage path in another repository
-		// It exists at the same level as this repository
-		// Just replace the names
-		$storage_path = preg_replace('/' . $this->ffxivcrafting_repo . '/', $this->aspir_repo, storage_path());
-		$garland_path = $storage_path . '/garland';
-		$data_path = $garland_path . '/db/data';
+		Garland::scrape();
 
-		$core = json_decode(file_get_contents($garland_path . '/core.json'));
+		flash()->success('Garland Core Scraped');
+
+		return redirect()->back();
+	}
+
+	public function getView()
+	{
+		$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
 
 		// dd('node', $core->node->bonusIndex);
 		// $id = "3";
@@ -38,7 +41,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// dd('instance', $core->instance->rouletteIndex);
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
-		// dd('quest', $core->quest)
+		// dd('quest', $core->quest);
 		// dd('achievement', $core->achievement->index);
 		// dd('fate', $core->fate->index);
 		// dd('jobCategories', $core->jobCategories);
@@ -48,14 +51,13 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// dd('action', $core->action->categoryIndex);
 		// dd('action', $core->action->statusIndex);
 		// dd('leve', $core->leve->partialIndex);
-		$id = 5718;
+		// $id = 5718;
 		// dd('item', $core->item->categoryIndex);
 		// dd('item', $core->item->index);
-		// dd('gItemIndex', $core->gItemIndex);
+		dd('gItemIndex', $core->gItemIndex);
 
 
 		dd($core);
-		// 
 	}
 
 }

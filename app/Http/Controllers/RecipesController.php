@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Config;
-use Session;
 
 use App\Models\Garland\Job;
 use App\Models\Garland\Recipe;
+use App\Models\Garland\Item;
 
 class RecipesController extends Controller
 {
@@ -29,7 +29,7 @@ class RecipesController extends Controller
 		$crafting_job_list = Job::whereIn('id', Config::get('site.job_ids.crafting'))->get();
 		$job_list = Job::lists('name', 'abbr')->all();
 
-		$crafting_list_ids = array_keys(Session::get('list', []));
+		$crafting_list_ids = array_keys(session('list', []));
 
 		return view('recipes.index', compact('list', 'crafting_job_list', 'job_list', 'crafting_list_ids'));
 	}
@@ -89,7 +89,7 @@ class RecipesController extends Controller
 			$query->orderBy($order_by, $sort);
 		
 		if ($name)
-			$query->where('i.name', 'like', '%' . $name . '%');
+			$query->where('i.' . Item::getNameVarAttribute(), 'like', '%' . $name . '%');
 
 		if ($min && $max)
 			$query->whereBetween('recipe_level', [$min, $max]);
@@ -99,7 +99,7 @@ class RecipesController extends Controller
 
 		$list = $query->paginate($per_page);
 
-		$crafting_list_ids = array_keys(Session::get('list', []));
+		$crafting_list_ids = array_keys(session('list', []));
 
 		view()->share(compact('list', 'per_page', 'crafting_list_ids'));
 

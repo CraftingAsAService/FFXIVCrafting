@@ -9,7 +9,7 @@
 		<img src='/img/leve_icon_red.png' rel='tooltip' title='Repeatable Leve!' width='16' class='pull-right' style='clear: right;'>
 		@endif
 		<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name' target='_blank'>
-			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->name }}
+			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}
 		</a>
 		@if ($leve->requirements[0]->pivot->amount > 1)
 		<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -46,7 +46,7 @@
 			<div class='margin-bottom'>
 				@if($reward->item_id)
 				<img src='{{ assetcdn('item/' . $reward->item->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>
-				{{ $reward->item->name }}
+				{{ $reward->item->display_name }}
 				@else
 				<img src='/img/noitemicon.png' style='margin-right: 10px;'>
 				{{ $reward->item_name }}
@@ -61,7 +61,7 @@
 		</div>
 	</td>
 	<td class='text-center valign'>
-		<button class='btn btn-default add-to-list' data-item-id='{{ $leve->requirements[0]->id }}' data-item-name='{{{ $leve->requirements[0]->name }}}' data-item-quantity='{{{ $leve->requirements[0]->pivot->amount }}}'>
+		<button class='btn btn-default add-to-list' data-item-id='{{ $leve->requirements[0]->id }}' data-item-name='{{{ $leve->requirements[0]->display_name }}}' data-item-quantity='{{{ $leve->requirements[0]->pivot->amount }}}'>
 			<i class='glyphicon glyphicon-shopping-cart'></i>
 			<i class='glyphicon glyphicon-plus'></i>
 		</button>

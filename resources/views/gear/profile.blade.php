@@ -78,7 +78,7 @@
 						<img src='/img/hq-overlay.png' width='20' height='20' class='hq-overlay'>
 						@endif
 						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='20' height='20' class='item-icon'>
-						</span>{{ $item->name }}
+						</span>{{ $item->display_name }}
 					</a>
 					{{--
 					@if ($item->{$quality . '_worth'} == $bucket['bis_worth'])
@@ -137,7 +137,7 @@
 				<td class='cart'>
 					@if(count($item->recipes))
 					<img src='/img/jobs/{{ $item->recipes[0]->job->abbr }}.png' width='24' height='24' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}'></i>
-					<button class='btn btn-default btn-xs add-to-list success-after-add' data-item-id='{{ $item->id }}' data-item-name='{{ $item->name }}'>
+					<button class='btn btn-default btn-xs add-to-list success-after-add' data-item-id='{{ $item->id }}' data-item-name='{{ $item->display_name }}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>
 					</button>
