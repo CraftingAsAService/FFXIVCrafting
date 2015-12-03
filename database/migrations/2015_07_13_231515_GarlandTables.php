@@ -56,10 +56,10 @@ class GarlandTables extends Migration
 			$table->integer('category_id')->unsigned();
 			$table->integer('level')->unsigned();
 			$table->integer('radius')->unsigned();
-			$table->decimal('x', 5, 2)->unsigned();
-			$table->decimal('y', 5, 2)->unsigned();
-			$table->integer('zone_id')->unsigned();
-			$table->integer('area_id')->unsigned();
+			$table->decimal('x', 5, 2)->unsigned()->nullable();
+			$table->decimal('y', 5, 2)->unsigned()->nullable();
+			$table->integer('zone_id')->unsigned()->nullable();
+			$table->integer('area_id')->unsigned()->nullable();
 
 			$table->index('level');
 			$table->index(['zone_id', 'area_id']);
@@ -283,9 +283,9 @@ class GarlandTables extends Migration
 			$table->smallInteger('level')->unsigned();
 			$table->smallInteger('max_level')->unsigned();
 			$table->smallInteger('type')->unsigned();
-			$table->integer('zone_id')->unsigned();
-			$table->decimal('x', 5, 2)->unsigned();
-			$table->decimal('y', 5, 2)->unsigned();
+			$table->integer('zone_id')->unsigned()->nullable;
+			$table->decimal('x', 5, 2)->unsigned()->nullable;
+			$table->decimal('y', 5, 2)->unsigned()->nullable;
 
 			$table->index('zone_id');
 		});
