@@ -67,6 +67,11 @@
 				
 @endif
 
+@if ( ! empty($leve->location)) 
+<h3>Location</h3>
+<p>{{ $leve->location->name }}</p>
+@endif
+
 <h3>Leveling Up</h3>
 
 <p>

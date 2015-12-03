@@ -252,7 +252,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
 								<img src="/img/current_patch.png" class="img-responsive">
-								<p>This site has been optimized for Patch 3.01 Heavensward</p>
+								<p>This site has been optimized for Patch 3.1</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>

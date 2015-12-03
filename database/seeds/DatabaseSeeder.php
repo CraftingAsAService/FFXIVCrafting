@@ -133,10 +133,10 @@ class DatabaseSeeder extends Seeder
 				'category_id' => $f->category,
 				'level' => $f->lvl,
 				'radius' => $f->radius,
-				'x' => $f->x,
-				'y' => $f->y,
-				'zone_id' => $f->zoneid,
-				'area_id' => $f->areaid,
+				'x' => isset($f->x) ? $f->x : null,
+				'y' => isset($f->y) ? $f->y : null,
+				'zone_id' => isset($f->zoneid) ? $f->zoneid : null,
+				'area_id' => isset($f->areaid) ? $f->areaid : null,
 			];
 
 			$this->set_data('fishing', $row);
@@ -457,7 +457,7 @@ class DatabaseSeeder extends Seeder
 			
 			$row = [
 				'id' => $q->id,
-				'name' => $q->name,
+				'name' => $q->en->name,
 				'job_category_id' => isset($q->reqs) && isset($q->reqs->jobs) ? $q->reqs->jobs[0]->id : null,
 				'level' => isset($q->reqs) && isset($q->reqs->jobs) ? $q->reqs->jobs[0]->lvl : 1,
 				'sort' => $q->sort,
@@ -536,7 +536,7 @@ class DatabaseSeeder extends Seeder
 				'type' => $f->type,
 				'level' => $f->lvl,
 				'max_level' => $f->maxlvl,
-				'zone_id' => $f->zoneid,
+				'zone_id' => isset($f->zoneid) ? $f->zoneid : null,
 				'x' => isset($f->coords) ? $f->coords[0] : null,
 				'y' => isset($f->coords) ? $f->coords[1] : null,
 			];
@@ -690,11 +690,11 @@ class DatabaseSeeder extends Seeder
 			$rewards = isset($l->rewards) && isset($l->rewards->entries) ? $l->rewards->entries : [];
 			$l = $l->leve;
 
-			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($l->name)));
+			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($l->en->name)));
 			
 			$row = [
 				'id' => $l->id,
-				'name' => $l->name,
+				'name' => $l->en->name,
 				'type' => isset($gamerescapewiki_leves[$search_name]) ? $gamerescapewiki_leves[$search_name]->issuing_npc_information : null,
 				'level' => $l->lvl,
 				'job_category_id' => $l->jobCategory,
@@ -794,11 +794,11 @@ class DatabaseSeeder extends Seeder
 			
 			$row = [
 				'id' => $i->id,
-				'eorzea_id' => isset($translations[$i->name]) ? $translations[$i->name]->eid : null,
-				'name' => $i->name,
-				'de_name' => isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
-				'fr_name' => isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
-				'jp_name' => isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
+				'eorzea_id' => isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
+				'name' => $i->en->name,
+				'de_name' => $i->de->name, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
+				'fr_name' => $i->fr->name, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
+				'jp_name' => $i->ja->name, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
 				'help' => isset($i->help) ? $i->help : null,
 				'price' => isset($i->price) ? $i->price : null,
 				'sell_price' => isset($i->sell_price) ? $i->sell_price : null,
