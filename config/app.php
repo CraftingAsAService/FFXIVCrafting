@@ -153,6 +153,7 @@ return [
 		 */
 		'App\Providers\HelperServiceProvider',
 		'Laracasts\Flash\FlashServiceProvider',
+		'Clockwork\Support\Laravel\ClockworkServiceProvider',
 
 	],
 
@@ -209,6 +210,7 @@ return [
 		 * Custom 
 		 */
 		'Flash' => 'Laracasts\Flash\Flash',
+		'Clockwork' => 'Clockwork\Support\Laravel\Facade',
 
 	],
 
