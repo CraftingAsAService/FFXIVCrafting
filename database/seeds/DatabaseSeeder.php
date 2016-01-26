@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 			$this->local();
 		else
 			echo "\n" . 'Run locally instead!' . "\n";
-		
+
 		echo "\n" . 'Time Elapsed: ' . $start->diff(new DateTime('now'))->format('%I:%S') . "\n";
 
 		return;
@@ -326,6 +326,10 @@ class DatabaseSeeder extends Seeder
 		// Loop through nodes
 		foreach ($shop as $s)
 		{
+			// Don't count trade shops
+			if (isset($s->trade) && $s->trade == 1)
+				continue;
+
 			$row = [
 				'id' => $s->id,
 				'name_id' => $s->nameId,
@@ -454,7 +458,7 @@ class DatabaseSeeder extends Seeder
 			$json_file = base_path() . '/../garlanddeploy/db/data/quest/' . $q->i . '.json';
 			$q = $this->get_cleaned_json($json_file, TRUE);
 			$q = $q->quest;
-			
+
 			$row = [
 				'id' => $q->id,
 				'name' => $q->en->name,
@@ -691,7 +695,7 @@ class DatabaseSeeder extends Seeder
 			$l = $l->leve;
 
 			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($l->en->name)));
-			
+
 			$row = [
 				'id' => $l->id,
 				'name' => $l->en->name,
@@ -791,7 +795,7 @@ class DatabaseSeeder extends Seeder
 			// 	dd($i);
 			// if ($i->id == 1609)
 			// 	dd($i);
-			
+
 			$row = [
 				'id' => $i->id,
 				'eorzea_id' => isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
@@ -992,7 +996,7 @@ class DatabaseSeeder extends Seeder
 
 		foreach ($this->recipes as $recipe)
 			$this->_recursive_career($recipe, $recipe['recipe_level'], $recipe['job_id'], $recipe['yield']);
-		
+
 		foreach (['recipe' => 'career_recipes', 'item' => 'career_reagents'] as $type => $key)
 		{
 			$data =& $this->$key;
@@ -1015,7 +1019,7 @@ class DatabaseSeeder extends Seeder
 							'job_id' => $job_id,
 							'amount' => $amount,
 						];
-						
+
 						$this->set_data('career_job', $row);
 					}
 				}
@@ -1059,7 +1063,7 @@ class DatabaseSeeder extends Seeder
 	/**
 	 * Helper Functions
 	 */
-	
+
 	private function batch_insert()
 	{
 		$batch_limit = 300;
@@ -1071,7 +1075,7 @@ class DatabaseSeeder extends Seeder
 			foreach (array_chunk($rows, $batch_limit) as $batch_id => $data)
 			{
 				echo 'Inserting ' . count($data) . ' rows for ' . $table . ' (' . ($batch_id + 1) . ')' . PHP_EOL;
-				
+
 				// if (++$count == 29 && $table == 'item_shop')
 				// 	dd($data);
 
@@ -1079,7 +1083,7 @@ class DatabaseSeeder extends Seeder
 				foreach ($data as $row)
 				{
 					$values[] = '(' . str_pad('', count($row) * 2 - 1, '?,') . ')';
-					
+
 					// Cleanup value, if FALSE set to NULL
 					foreach ($row as $value)
 						$pdo[] = $value === FALSE ? NULL : $value;
@@ -1091,19 +1095,19 @@ class DatabaseSeeder extends Seeder
 			}
 		}
 	}
-	
+
 	private function output_memory()
 	{
 		echo '@' . $this->human_readable(memory_get_usage()) . PHP_EOL;
 	}
 
 	protected $data = [];
-	
+
 	private function get_data($table, $id)
 	{
 		return isset($this->data[$table][$id]) ? $this->data[$table][$id] : false;
 	}
-	
+
 	private function set_data($table, $row, $id = null)
 	{
 		// If id is null, use the length of the existing data, or check in the $row for it
@@ -1129,8 +1133,8 @@ class DatabaseSeeder extends Seeder
 		// 	echo mb_strlen($content) . PHP_EOL . strlen($content) . PHP_EOL;
 
 		// http://stackoverflow.com/questions/17219916/json-decode-returns-json-error-syntax-but-online-formatter-says-the-json-is-ok
-		for ($i = 0; $i <= 31; ++$i) { 
-			$content = str_replace(chr($i), "", $content); 
+		for ($i = 0; $i <= 31; ++$i) {
+			$content = str_replace(chr($i), "", $content);
 		}
 		$content = str_replace(chr(127), "", $content);
 
@@ -1141,7 +1145,7 @@ class DatabaseSeeder extends Seeder
 		// $content = trim($content, "\x0");
 
 		// if ($debug)
-		// 	dd(mb_strlen($content), strlen($content),json_decode($content), 
+		// 	dd(mb_strlen($content), strlen($content),json_decode($content),
 		// 		mb_check_encoding($content, 'utf-8'), json_last_error_msg(),
 		// 		$content);
 
@@ -1151,7 +1155,7 @@ class DatabaseSeeder extends Seeder
 	private function binary_fix($string)
 	{
 		// Some file begins with 'efbbbf' to mark the beginning of the file. (binary level)
-		// here we detect it and we remove it, basically it's the first 3 characters 
+		// here we detect it and we remove it, basically it's the first 3 characters
 		if (0 === strpos(bin2hex($string), 'efbbbf')) {
 		   $string = substr($string, 3);
 		}
