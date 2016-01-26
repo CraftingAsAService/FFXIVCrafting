@@ -28,7 +28,7 @@ var crafting = {
 			var el = $(this),
 				// Why is this a thing?  It's always `true`... right?
 				root_engaged = el.closest('#CraftingList-section').length > 0;
-			
+
 			crafting.recalculate_all(root_engaged);
 
 			// Fix #CraftingList totals
@@ -93,14 +93,14 @@ var crafting = {
 
 			// var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
-			// var form = $('<form action="/map" method="POST">' + 
-			// 	'<input type="hidden" name="_token" value="' + csrf_token + '">' + 
+			// var form = $('<form action="/map" method="POST">' +
+			// 	'<input type="hidden" name="_token" value="' + csrf_token + '">' +
 			// 	'<input type="hidden" name="items" value="' + data + '">' +
 			// 	'<input type="hidden" name="title" value="' + title + '">' +
 			// 	'</form>');
-			
+
 			// $('body').append(form);
-			
+
 			// form.submit();
 		});
 
@@ -203,11 +203,15 @@ var crafting = {
 	localstorage_id: null,
 	set_localstorage_id:function() {
 		crafting.localstorage_id = 'page:' + encodeURIComponent(window.location.pathname);
-		return;
+
+		if (crafting.localstorage_id.match('from-list') != null)
+			crafting.localstorage_id = $('#CraftingList-section').find('.reagent').map(function() {
+				return $(this).data('itemId') + '_' + $(this).find('.needed input').val();
+			}).get().sort().join('|');
 	},
 	clear_localstorage:function(event) {
 		event.preventDefault();
-		
+
 		localStorage.removeItem(crafting.localstorage_id);
 
 		// Refresh the page
@@ -324,7 +328,7 @@ var crafting = {
 			if (requires.length == 1 && requires[0] == '')
 				data.reagents = null;
 			else
-				for (var i = 0; i < requires.length; i++) 
+				for (var i = 0; i < requires.length; i++)
 				{
 					// Required data
 					var t = requires[i].split('x');
@@ -335,7 +339,7 @@ var crafting = {
 
 					data.reagents[data.reagents.length] = {
 						'item_id': t[1],
-						'quantity': parseInt(t[0]) 
+						'quantity': parseInt(t[0])
 					};
 				}
 
@@ -368,7 +372,7 @@ var crafting = {
 				// Ex. I need 20 of these, but already have 3.  The recipe yields 3
 				// Ex. So 17 / 3 = 5.6, rounded up is 6.  We need to bake this recipe at least 6 times
 				var bake = Math.ceil(Math.max(recipe.needed - recipe.obtained, 0) / recipe.yields);
-				
+
 				// Loop through all of it's children
 				crafting.oven(recipe, bake, root_engaged);
 			}
@@ -388,7 +392,7 @@ var crafting = {
 
 			// Let's "undo" some bakes
 			var bake = Math.ceil(Math.min(0 - recipe.obtained, 0) / recipe.yields);
-			
+
 			// Loop through all of it's children
 			crafting.oven(recipe, bake, root_engaged);
 		}
@@ -410,7 +414,7 @@ var crafting = {
 				recipe.obtained += recipe.needed; // Take the amount off of obtained
 
 				var obtained = Math.ceil(recipe.obtained / recipe.yields) * recipe.yields;
-				
+
 				recipe.elements.obtained.val(obtained < 0 ? 0 : obtained);
 
 				recipe.needed = 0; // Add the (absolute value) amount back to needed
@@ -452,7 +456,7 @@ var crafting = {
 
 		if (recipe.reagents == null)
 			return;
-		
+
 		// Loop through all our reagents
 		top: // Label for loop
 		for (var i = 0; i < recipe.reagents.length; i++)
@@ -474,14 +478,14 @@ var crafting = {
 					new_recipe.total += needed;
 
 					// Ex. Our needed now says 12.  How many times do we need to bake?
-					// The recipe says it yields 3.  
+					// The recipe says it yields 3.
 					// Well, we already have 2, so (12 - 2) / 3 = 3.33; 4 bakes, rounded up
 
 					var bake = Math.ceil(needed / new_recipe.yields);
 
 					// Put it in the oven!
 					crafting.oven(new_recipe, bake, root_engaged);
-					
+
 					continue top; // Jump to the next recipe's reagent
 				}
 			}
@@ -515,7 +519,7 @@ var crafting_tour = {
 
 			if (crafting_tour.first_run == true)
 				crafting_tour.build();
-			
+
 			if ($(this).hasClass('disabled'))
 				return;
 
@@ -526,7 +530,7 @@ var crafting_tour = {
 
 		crafting_tour.tour.addSteps([
 			{
-				element: '#CraftingList-section', 
+				element: '#CraftingList-section',
 				title: 'Recipe List',
 				content: 'The list at the bottom is your official Recipe List.  You will be making these items.',
 				placement: 'top'
@@ -556,7 +560,7 @@ var crafting_tour = {
 				placement: 'bottom'
 			},
 			{
-				element: '#self-sufficient-form', 
+				element: '#self-sufficient-form',
 				title: 'Self Sufficient',
 				content: 'By default it assumes you want to be Self Sufficient.  Turning this option off will eliminate the Gathering and Crafting aspect and appropriately force the items into either Bought or Other.',
 				placement: 'top'
