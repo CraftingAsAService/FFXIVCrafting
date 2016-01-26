@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Config;
 use App\Models\CAAS\Stat;
+use App\Models\CAAS\StatWeight;
 
 class Item extends Model {
 
@@ -100,7 +101,7 @@ class Item extends Model {
 	{
 		return $this->{self::localized_name_variable()};
 	}
-	
+
 	public static function localized_name_variable()
 	{
 		return [
@@ -114,7 +115,7 @@ class Item extends Model {
 	public static function calculate($job_id = 0, $level = 1, $range = 0, $craftable_only = TRUE, $rewardable_too = TRUE)
 	{
 		// $cache_key = __METHOD__ . '|' . Config::get('language') . '|' . $job_id . ',' . $level . ',' . $range . ($craftable_only ? ('T' . ($rewardable_too ? 'T' : 'F')) : 'F');
-		
+
 		// // Does cache exist?  Return that instead
 		// if (Cache::has($cache_key))
 		// 	return Cache::get($cache_key);
@@ -124,7 +125,7 @@ class Item extends Model {
 
 		$equipment_list = array_flip(Config::get('site.equipment_roles'));
 		array_walk($equipment_list, function(&$i) { $i = []; });
-		
+
 		// Slot data
 		$slots = Config::get('site.defined_slots');
 		$slot_alias = Config::get('site.slot_alias');
@@ -156,9 +157,11 @@ class Item extends Model {
 		// The class can use it
 		// craftable only?
 		// rewardable?
-		
+
 		$job_category_ids = $job->categories->lists('id')->all();
-		
+
+		$two_handed_weapon_ids = self::two_handed_weapon_ids();
+
 		foreach ($slots as $slot_identifier => $slot_name)
 		{
 			$query = Item::with('attributes', 'shops', 'recipes', 'recipes.job', 'quest_rewards', 'leve_rewards', 'ventures', 'achievements')
@@ -195,54 +198,49 @@ class Item extends Model {
 
 			foreach ($items as $item)
 			{
-				// Kick it to the curb because of attributes?
-				// Compare the focused vs the avoids
-				$focus = $avoid = 0;
-				$param_count = []; // DISABLING FOR GARLAND // array_fill(1, 100, 0); // 73 total stats, 100's pretty safe, not to mention we only really focus on the first dozen
-				// $item->attributes is essentially a "reserved" keyword for laravel, so we need to access it through the relations
-				foreach ($item->relations['attributes'] as $attribute)
-				{
-					if ($attribute->quality != 'nq')
-						continue;
-
-					if ( ! isset($param_count[$attribute->attribute]))
-						$param_count[$attribute->attribute] = 1;
-					else
-						$param_count[$attribute->attribute]++;
-
-					if (in_array($attribute->attribute, $stat_ids_to_avoid))
-						$avoid++;
-					elseif (in_array($attribute->attribute, $stat_ids_to_focus))
-						$focus++;
-				}
-
-				if ($advanced_stat_avoidance)
-					foreach ($advanced_stat_avoidance as $ava)
-						// If the [0] stat exists, but the [1] stat doesn't, drop the piece completely
-						if (isset($param_count[$ava[0]]) && isset($param_count[$ava[1]]) && $param_count[$ava[0]] > 0 && $param_count[$ava[1]] == 0)
-							$avoid += 10; // Really sell that this should be avoided
-				
-				# echo '<strong>' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . ' (' . $focus . ',' . $avoid . ')<br>';
-				
-				if ($avoid >= $focus || $focus == 0)
-					continue;
-
-				// if ($item->name->term == 'Linen Cowl')
-				// 	dd($item->name->term, $item->slot, $slot, $slot_cannot_equip, $slot_cannot_equip[$item->slot]);
-				
 				// Cannot equip attribute?
 				if (isset($slot_cannot_equip[$item->slot]))
 					$item->cannot_equip = implode(',', $slot_cannot_equip[$item->slot]);
+				if (empty($item->cannot_equip) && in_array($item->item_category_id, $two_handed_weapon_ids))
+					$item->cannot_equip = 'Off Hand';
+
+				$item->score = StatWeight::get_score($job, $item);
+
+				// // Kick it to the curb because of attributes?
+				// // Compare the focused vs the avoids
+				// $focus = $avoid = 0;
+				// $param_count = []; // DISABLING FOR GARLAND // array_fill(1, 100, 0); // 73 total stats, 100's pretty safe, not to mention we only really focus on the first dozen
+				// // $item->attributes is essentially a "reserved" keyword for laravel, so we need to access it through the relations
+				// foreach ($item->relations['attributes'] as $attribute)
+				// {
+				// 	if ($attribute->quality != 'nq')
+				// 		continue;
+
+				// 	if ( ! isset($param_count[$attribute->attribute]))
+				// 		$param_count[$attribute->attribute] = 1;
+				// 	else
+				// 		$param_count[$attribute->attribute]++;
+
+				// 	if (in_array($attribute->attribute, $stat_ids_to_avoid))
+				// 		$avoid++;
+				// 	elseif (in_array($attribute->attribute, $stat_ids_to_focus))
+				// 		$focus++;
+				// }
+
+				// if ($advanced_stat_avoidance)
+				// 	foreach ($advanced_stat_avoidance as $ava)
+				// 		// If the [0] stat exists, but the [1] stat doesn't, drop the piece completely
+				// 		if (isset($param_count[$ava[0]]) && isset($param_count[$ava[1]]) && $param_count[$ava[0]] > 0 && $param_count[$ava[1]] == 0)
+				// 			$avoid += 10; // Really sell that this should be avoided
+
+				// if ($avoid >= $focus || $focus == 0)
+				// 	continue;
 
 				$equipment_list[$role][] = $item;
-
-				# echo '<strong>+ ' . $item->name->term . ' [' . $item->id . ']</strong> for ' . $role . '<br>';
 			}
 
 			unset($items);
 		}
-
-		$two_handed_weapon_ids = self::two_handed_weapon_ids();
 
 		$leveled_equipment = [];
 
@@ -254,7 +252,8 @@ class Item extends Model {
 			{
 				$leveled_equipment[$l][$role] = [];
 
-				$max_elvl = 0;
+				// $max_elvl =
+				$max_score = 0;
 
 				// Find max
 				foreach ($items as $item)
@@ -267,25 +266,27 @@ class Item extends Model {
 					// 		$faux_ilvl += 2; // Treat it as 2 ilvls higher
 					// 		break;
 					// 	}
-						
-					if ($item->elvl <= $l && $item->elvl > $max_elvl)
-						$max_elvl = $item->elvl;
+
+					// if ($item->elvl <= $l && $item->elvl > $max_elvl)
+					// 	$max_elvl = $item->elvl;
+
+					if ($item->elvl <= $l && $item->score > $max_score)
+						$max_score = $item->score;
 				}
+
+				$allowable_score = $max_score * .8;
 
 				// Drop lesser items
 				// OR figure out cannot equip stuff for weapons
 				foreach ($items as $key => $item)
-					if ($item->elvl == $max_elvl)
+					if ($item->elvl <= $l && $item->score > $allowable_score)
 					{
-						if (empty($item->cannot_equip) && in_array($item->item_category_id, $two_handed_weapon_ids))
-							$item->cannot_equip = 'Off Hand';
 							//$item->cannot_equip = array_flip(Config::get('site.defined_slots'))['Off Hand'];
-						
 
-						if ( ! isset($leveled_equipment[$l][$role][$item->ilvl]))
-							$leveled_equipment[$l][$role][$item->ilvl] = [];
+						if ( ! isset($leveled_equipment[$l][$role][$item->score]))
+							$leveled_equipment[$l][$role][$item->score] = [];
 
-						$leveled_equipment[$l][$role][$item->ilvl][] = $item;
+						$leveled_equipment[$l][$role][$item->score][] = $item;
 					}
 
 				// Place highest ilvl first
