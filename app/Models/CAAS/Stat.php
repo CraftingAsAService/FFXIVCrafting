@@ -109,7 +109,7 @@ class Stat
 			// Battle Classes
 
 			'Determination' => 'DOW,DOM',
-			
+
 			'Accuracy' => 'DPS,RDPS,MDPS',
 			'Critical Hit Rate' => 'DPS,RDPS,MDPS',
 
@@ -296,7 +296,7 @@ class Stat
 			'Vitality' => 'vitality',
 			'Water Resistance' => 'water_res',
 			'Wind Resistance' => 'wind_res',
-			
+
 			'Careful Desynthesis' => 'careful_desynthesis',
 		];
 
@@ -327,7 +327,7 @@ class Stat
 		// Translate the full names into the slugs
 		// Slugs will act as an "id" to avoid rewriting a bunch of stuff
 		//  This was part of the Libra->Garland transition
-		
+
 
 		// Enfeebling Magic Potency
 		// Enhancement Magic Potency
@@ -347,14 +347,17 @@ class Stat
 		foreach ($stats as $stat)
 			if (isset(self::$stat_conversion[$stat]))
 				$results[] = self::$stat_conversion[$stat];
-		
+
 		return $results;
 	}
 
 	static public function name($attribute)
 	{
-		// dd(array_flip(self::$stat_conversion), $attribute);
-		return array_flip(self::$stat_conversion)[$attribute];
+		$flip = array_flip(self::$stat_conversion);
+		if ( ! isset($flip[$attribute]))
+			dd($flip, $attribute);
+		// dd(array_flip(self::$stat_conversion));//, $attribute);
+		return $flip[$attribute];
 	}
 
 }

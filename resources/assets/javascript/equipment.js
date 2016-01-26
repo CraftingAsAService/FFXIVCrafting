@@ -11,10 +11,10 @@ var equipment = {
 	init:function() {
 		$('.bootswitch').bootstrapSwitch({
 			onSwitchChange:function() {
-				$(this).closest('form').submit();	
+				$(this).closest('form').submit();
 			}
 		});
-		
+
 		$.fn.inlineStyle = function (prop) {
 			return this.prop("style")[$.camelCase(prop)];
 		};
@@ -25,7 +25,7 @@ var equipment = {
 
 		equipment.table_events();
 		equipment.page_events();
-		
+
 		equipment_tour.init();
 	},
 	viewport_changed:function() {
@@ -47,7 +47,7 @@ var equipment = {
 			var items = td.find('.items');
 			//equipment.el_height(items);
 			var active = items.find('.item.active');
-			
+
 			var next = active.next();
 
 			if (next.length != 1)
@@ -58,7 +58,7 @@ var equipment = {
 
 			td.trigger('mouseenter');
 
-			// Update 
+			// Update
 			var total = parseInt(td.find('.td-navigation .total').html());
 			var currentEl = td.find('.td-navigation .current');
 			var current = parseInt(currentEl.html());
@@ -74,7 +74,7 @@ var equipment = {
 			// Fire off the stat summary
 			equipment.stat_summary(td);
 
-			// 
+			//
 			$('#gear td:visible .role-wrap').css('height', 'inherit');
 			equipment.same_cell_heights();
 		});
@@ -100,7 +100,7 @@ var equipment = {
 				return;
 
 			$('.previous-gear, .next-gear').addClass('disabled');
-			
+
 			var lvl = equipment.options.level - 1;
 
 			if (lvl < 1)
@@ -135,7 +135,7 @@ var equipment = {
 				return;
 
 			$('.previous-gear, .next-gear').addClass('disabled');
-			
+
 			var lvl = equipment.options.level + 1;
 
 			if (lvl > max_level - 2)
@@ -238,7 +238,7 @@ var equipment = {
 		if (typeof(verb) == 'undefined') verb = '';
 
 		if (viewport.current == 'mobile') verb = 'Pre';
-		
+
 		if (parseInt(level) > max_level)
 		{
 			$('.previous-gear, .next-gear').removeClass('disabled');
@@ -282,9 +282,9 @@ var equipment = {
 		// Fix the cells to a proper order
 		$('#gear tr').each(function() {
 			var tr = $(this);
-			
+
 			var list = tr.find('th:visible, td:visible').get();
-			
+
 			list.sort(function(a, b) {
 				var al = parseInt($(a).data('level')),
 					bl = parseInt($(b).data('level'));
@@ -367,12 +367,12 @@ var equipment = {
 				var stat_data = statEl.data();
 
 				if (statEl.hasClass('hidden'))
-					hidden[hidden.length] = stat_data.stat;
+					hidden[hidden.length] = stat_data.statImage;
 
-				if (typeof(record[stat_data.stat]) === 'undefined')
-					record[stat_data.stat] = 0;
-				
-				record[stat_data.stat] += stat_data.amount;
+				if (typeof(record[stat_data.statImage]) === 'undefined')
+					record[stat_data.statImage] = 0;
+
+				record[stat_data.statImage] += stat_data.amount;
 			});
 		});
 
@@ -465,7 +465,7 @@ var equipment_tour = {
 
 			if (equipment_tour.first_run == true)
 				equipment_tour.build();
-			
+
 			if ($(this).hasClass('disabled'))
 				return;
 
@@ -479,12 +479,12 @@ var equipment_tour = {
 
 		equipment_tour.tour.addSteps([
 			{
-				element: upgradeEl, 
+				element: upgradeEl,
 				title: 'Upgrade',
 				content: 'Boxes with a border and circle icon indicate an upgrade.'
 			},
 			{
-				element: statsBoxEl, 
+				element: statsBoxEl,
 				title: 'Stats',
 				content: 'These are the stats for the item.  Hovering on them will tell you how much of an upgrade it is from the previous item.',
 				placement: 'bottom'
@@ -492,11 +492,11 @@ var equipment_tour = {
 			{
 				element: craftingEl,
 				title: 'Crafted By & Buyable',
-				content: '<p>This item can be crafted by the class indicated. <strong>Clicking on it will add that item to your Crafting Cart!</strong></p>' + 
+				content: '<p>This item can be crafted by the class indicated. <strong>Clicking on it will add that item to your Crafting Cart!</strong></p>' +
 							'<p>The coins indicate that you can buy them from a vendor.</p>'
 			},
 			{
-				element: '.previous-gear', 
+				element: '.previous-gear',
 				title: 'Level Traversing',
 				content: 'Click this bar (and the one on the right) to decrease (or increase) the gear level.'
 			},
