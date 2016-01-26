@@ -26,7 +26,7 @@
 					img = el.find('img');
 
 				$('input[name=level]').val(el.data('level'));
-				
+
 				var active_img = $('.class-selector img.active');
 				if (active_img.length) {
 					active_img.removeClass('active')
@@ -125,7 +125,7 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach($basic_melee_job_list as $job)
+						@foreach($advanced_melee_job_list as $job)
 						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
 						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
 						<label class='btn btn-danger class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
@@ -134,7 +134,7 @@
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach($basic_magic_job_list as $job)
+						@foreach($advanced_magic_job_list as $job)
 						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
 						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
 						<label class='btn btn-warning class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
@@ -183,7 +183,7 @@
 			</div>
 		</fieldset>
 	{!! Form::close() !!}
-		
+
 	<hr>
 	<div class='alert alert-info'>
 		You can still use the <a href='/equipment'>Equipment Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>

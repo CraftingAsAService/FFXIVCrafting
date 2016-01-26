@@ -27,12 +27,12 @@ return array(
 	'cache_length' => '10080', // Minutes - 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Right Ring','Right Ring'),
 	'gear_focus' => array(
-		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN' => array(
+		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN,MCH' => array(
 			'Dexterity',
 			'Critical Hit Rate',
 			'Skill Speed',
 		),
-		'GLA,MRD,PLD,WAR' => array(
+		'GLA,MRD,PLD,WAR,DRK' => array(
 			'Strength',
 			'Skill Speed',
 			'Parry',
@@ -42,7 +42,7 @@ return array(
 			'Spell Speed',
 			'Piety',
 		),
-		'CNJ,SCH,WHM' => array(
+		'CNJ,SCH,WHM,AST' => array(
 			'Mind',
 			'Spell Speed',
 			'Piety',
@@ -59,7 +59,7 @@ return array(
 		),
 	),
 	// Stat weight data gathered from http://ffxiv.ariyala.com/
-	// Missing MCH, DRK, AST; assumptions made
+	// Missing MCH, DRK, AST data; assumptions made
 	'stat_weights' => [
 		'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL' => [
 			'Control'			=> 1,
@@ -179,12 +179,15 @@ return array(
 			22, // DRG
 			23, // BRD
 			30, // NIN
+			31, // MCH
+			32, // DRK
 		),
 		'advanced_magic' => array(
 			24, // WHM
 			25, // BLM
 			27, // SMN
 			28, // SCH
+			33, // AST
 		),
 	),
 	'defined_slots' => array(

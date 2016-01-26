@@ -18,6 +18,8 @@ class Stat
 			'MRD' => $melee_set,
 			'LNC' => $melee_set,
 			'ROG' => $melee_set,
+			'MCH' => $melee_set,
+			'DRK' => $melee_set,
 
 			'BRD' => $melee_set,
 			'PLD' => $melee_set,
@@ -34,6 +36,7 @@ class Stat
 			'BLM' => $magic_set,
 			'SMN' => $magic_set,
 			'SCH' => $magic_set,
+			'AST' => $magic_set,
 		];
 
 		return isset($avoid[$job]) ? $avoid[$job] : [];
@@ -57,11 +60,11 @@ class Stat
 			// Giving DOH/DOL classes "Materia" as a skapegoat
 			// because we don't want to give Control over Craftsmanship
 			'Materia' => ['CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'WVR', 'ALC', 'CUL', 'MIN', 'BTN', 'FSH'],
-			'Vitality' => ['GLA', 'MRD', 'PLD', 'WAR'],
+			'Vitality' => ['GLA', 'MRD', 'PLD', 'WAR', 'DRK'],
 			'Strength' => ['LNC', 'PGL', 'DRG', 'MNK'],
-			'Dexterity' => ['BRD', 'ARC', 'ROG', 'NIN'],
+			'Dexterity' => ['BRD', 'ARC', 'ROG', 'NIN', 'MCH'],
 			'Intelligence' => ['THM', 'BLM', 'ACN', 'SMN'],
-			'Mind' => ['CNJ', 'SCH', 'WHM']
+			'Mind' => ['CNJ', 'SCH', 'WHM', 'AST'],
 		];
 
 		foreach ($primaries as $stat => $jobs)
@@ -79,13 +82,13 @@ class Stat
 		$shortcuts = [
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
-			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN',
-			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM',
+			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST',
 			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN', // Melee DPS
-			'RDPS' => 'BRD,ARC', // Ranged DPS
+			'RDPS' => 'BRD,ARC,MCH', // Ranged DPS
 			'MDPS' => 'THM,BLM,ACN,SMN', // Magical DPS
-			'Heals' => 'CNJ,SCH,WHM',
-			'Tanks' => 'GLA,MRD,PLD,WAR',
+			'Heals' => 'CNJ,SCH,WHM,AST',
+			'Tanks' => 'GLA,MRD,PLD,WAR,DRK',
 		];
 
 		foreach ($shortcuts as $role => $classes)
@@ -164,15 +167,15 @@ class Stat
 		$shortcuts = [
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
-			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN',
-			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM',
+			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST',
 			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN', // Melee DPS
-			'RDPS' => 'BRD,ARC', // Ranged DPS
+			'RDPS' => 'BRD,ARC,MCH', // Ranged DPS
 			'STR-DPS' => 'LNC,PGL,DRG,MNK',
-			'DEX-DPS' => 'BRD,ARC,ROG,NIN',
+			'DEX-DPS' => 'BRD,ARC,ROG,NIN,MCH',
 			'MDPS' => 'THM,BLM,ACN,SMN', // Magical DPS
-			'Heals' => 'CNJ,SCH,WHM',
-			'Tanks' => 'GLA,MRD,PLD,WAR',
+			'Heals' => 'CNJ,SCH,WHM,AST',
+			'Tanks' => 'GLA,MRD,PLD,WAR,DRK',
 		];
 
 		$look_for = [$job];

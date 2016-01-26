@@ -50,7 +50,7 @@
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($crafting_job_list as $job)
 						<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}> 
+							<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}>
 							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
@@ -58,7 +58,7 @@
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($gathering_job_list as $job)
 						<label class='btn btn-info class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<input type='radio' name='class' value='{{ $job->abbr }}'>
 							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
@@ -70,17 +70,17 @@
 				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
 				<div class='col-sm-8 col-md-9'>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach($basic_melee_job_list as $job)
+						@foreach($advanced_melee_job_list as $job)
 						<label class='btn btn-danger class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<input type='radio' name='class' value='{{ $job->abbr }}'>
 							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
 					</div>
 					<div class='btn-group' data-toggle='buttons'>
-						@foreach($basic_magic_job_list as $job)
+						@foreach($advanced_magic_job_list as $job)
 						<label class='btn btn-warning class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->abbr }}'> 
+							<input type='radio' name='class' value='{{ $job->abbr }}'>
 							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
 						</label>
 						@endforeach
@@ -130,7 +130,7 @@
 			</div>
 		</fieldset>
 	{!! Form::close() !!}
-		
+
 	<hr>
 	<div class='alert alert-info'>
 		You can still use the <a href='/gear'>Gear Calculator</a>!  Have an opinion on the matter?  <a href='http://goo.gl/forms/ZttFqMd9CD' target='_blank'>Fill out the survey!</a>

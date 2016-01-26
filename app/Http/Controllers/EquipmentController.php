@@ -27,12 +27,12 @@ class EquipmentController extends Controller
 		$job_ids = Config::get('site.job_ids');
 		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
 		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
-		$basic_melee_job_list = Job::whereIn('id', $job_ids['basic_melee'])->get();
-		$basic_magic_job_list = Job::whereIn('id', $job_ids['basic_magic'])->get();
+		$advanced_melee_job_list = Job::whereIn('id', $job_ids['advanced_melee'])->get();
+		$advanced_magic_job_list = Job::whereIn('id', $job_ids['advanced_magic'])->get();
 		$previous = Cookie::get('previous_equipment_load');
 		$error = false;
 
-		return view('equipment.index', compact('error', 'crafting_job_list', 'gathering_job_list', 'basic_melee_job_list', 'basic_magic_job_list', 'job_ids', 'previous'));
+		return view('equipment.index', compact('error', 'crafting_job_list', 'gathering_job_list', 'advanced_melee_job_list', 'advanced_magic_job_list', 'job_ids', 'previous'));
 	}
 
 	public function badUrl()
@@ -53,7 +53,7 @@ class EquipmentController extends Controller
 
 		// Queueing the cookie, we won't need it right away, so it'll save for the next Response::
 		Cookie::queue('previous_equipment_load', $url, 525600); // 1 year's worth of minutes
-		
+
 		return redirect($url);
 	}
 
@@ -125,7 +125,7 @@ class EquipmentController extends Controller
 		$original_level = $level;
 
 		view()->share(compact('original_level', 'slim_mode', 'fifty_warning'));
-		
+
 		#$starting_equipment = [];
 
 		// 3 + ($slim_mode ? 1 : 0)
@@ -141,7 +141,7 @@ class EquipmentController extends Controller
 		// if ($level > 1)
 		// {
 		// 	view()->share('level', $level - 1);
-			
+
 		// 	$starting_equipment[$level - 1] = $this->getOutput($equipment, $roles);
 		// }
 
@@ -149,7 +149,7 @@ class EquipmentController extends Controller
 		// foreach (range($level, $level + ($slim_mode ? 3 : 2)) as $e_level)
 		// {
 		// 	view()->share('level', $e_level);
-			
+
 		// 	$equipment = Item::calculate($job->id, $e_level, $craftable_only, $rewardable_too);
 		// 	$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
 		// }
@@ -181,7 +181,7 @@ class EquipmentController extends Controller
 		view()->share(compact('job_list', 'job', 'stat_ids_to_focus', 'level'));
 
 		$equipment = Item::calculate($job->id, $level, 0, $craftable_only, $rewardable_too);
-		
+
 		return $this->getOutput($equipment);
 	}
 
