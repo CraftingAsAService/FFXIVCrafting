@@ -357,8 +357,8 @@ class Stat
 	static public function name($attribute)
 	{
 		$flip = array_flip(self::$stat_conversion);
-		if ( ! isset($flip[$attribute]))
-			dd($flip, $attribute);
+		// if ( ! isset($flip[$attribute]))
+		// 	dd($flip, $attribute);
 		// dd(array_flip(self::$stat_conversion));//, $attribute);
 		return $flip[$attribute];
 	}

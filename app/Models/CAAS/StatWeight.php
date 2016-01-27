@@ -13,7 +13,7 @@ class StatWeight
 	 */
 	static public function get_score(Job $job, Item $item)
 	{
-		$weights = StatWeight::translate_weights($job->abbr);
+		$weights = self::translate_weights($job->abbr);
 
 		$score = 0;
 		// Multi-slotted items' score should be adjusted to only account for that slot equally
@@ -35,8 +35,8 @@ class StatWeight
 
 	static public function translate_weights($job_abbr)
 	{
-		if (isset(StatWeight::$translated_score[$job_abbr]))
-			return StatWeight::$translated_score[$job_abbr];
+		if (isset(self::$translated_score[$job_abbr]))
+			return self::$translated_score[$job_abbr];
 
 		// $weights = ;
 		foreach (config('site.stat_weights') as $jobs => $weights)
@@ -46,10 +46,10 @@ class StatWeight
 
 			foreach ($weights as $key => $value)
 			{
-				if ( ! isset(StatWeight::$stat_conversion[$key]))
+				if ( ! isset(self::$stat_conversion[$key]))
 					continue;
 
-				$weights[StatWeight::$stat_conversion[$key]] = $value;
+				$weights[self::$stat_conversion[$key]] = $value;
 				unset($weights[$key]);
 			}
 
