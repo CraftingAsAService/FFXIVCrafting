@@ -49,7 +49,7 @@
 		<img src='/img/jobs/{{ $jobs[0]->abbr }}-inactive.png' width='32' height='32' style='position: relative; top: -3px;'>
 		{{ $jobs[0]->name }} Crafting
 		@else
-		Crafting for {{ implode(', ', $jobs->lists('name')->all()) }} 
+		Crafting for {{ implode(', ', $jobs->lists('name')->all()) }}
 		@endif
 		@elseif(isset($item))
 		Crafting {{ $item->display_name }}
@@ -124,7 +124,7 @@
 					// $link = 'recipe/' . $reagent['item']->recipes[0]->id;
 				}
 			?>
-			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-item-category='{{ $reagent['item']->category->name }}'>
+			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}'>
 				<td class='text-left'>
 					@if($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>
@@ -235,8 +235,8 @@
 					</div>
 				</td>
 				<td class='needed valign hidden-print'>
-					<?php 
-						$needed = (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0))); 
+					<?php
+						$needed = (isset($item_amounts) && isset($item_amounts[$recipe->item->id]) ? $item_amounts[$recipe->item->id] : (1 + (@$recipe->item->quest[0]->amount ? $recipe->item->quest[0]->amount - 1 : 0)));
 						$needed = ceil($needed / $recipe->yield) * $recipe->yield;
 					?>
 
@@ -281,7 +281,7 @@
 		@if(isset($options['inclusions']))
 
 			<a href='{{ toggle_query_string('inclusions') }}' class='btn btn-primary'>Disregard Inclusions</a>
-			
+
 		@endif
 	</div>
 </div>
@@ -305,7 +305,7 @@
 						@if(count($jobs) > 1)
 						<img src='/img/jobs/{{ $quest->job_category->jobs[0]->abbr }}-inactive.png' width='16' height='16' style='position: relative; top: -1px;' rel='tooltip' title='{{ $quest->job_category->jobs[0]->name }}'>
 						@endif
-						Level {{ $quest->level }}: 
+						Level {{ $quest->level }}:
 						@if ( ! $quest->requirements)
 							No data!
 						@else
