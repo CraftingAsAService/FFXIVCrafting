@@ -25,7 +25,7 @@ return array(
 	// 	#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
 	// ),
 	'cache_length' => '10080', // Minutes - 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
-	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Right Ring','Right Ring'),
+	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Left Ring','Right Ring'),
 	'gear_focus' => array(
 		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN,MCH' => array(
 			'Dexterity',

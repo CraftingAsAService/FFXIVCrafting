@@ -339,7 +339,8 @@
 				var xivdb_tooltips = {
 					language: "{!! strtoupper($lang == 'ja' ? 'jp' : $lang) !!}",
 					seturlname: false,
-					seturlicon: false
+					seturlicon: false,
+					includeCredits: false // Sorry, but it's bugged and shows up a ton :(
 				}
 		</script>
 		<script src="{!! cdn('/js/xivdb-tooltips.js') !!}" type="text/javascript"></script>

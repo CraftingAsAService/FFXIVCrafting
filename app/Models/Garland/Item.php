@@ -242,6 +242,9 @@ class Item extends Model {
 			unset($items);
 		}
 
+		// Copy the Right Ring into the Left Ring
+		$equipment_list['Left Ring'] = $equipment_list['Right Ring'];
+
 		$leveled_equipment = [];
 
 		// We now have a proper list, but now we need to widdle down further by ilvl
