@@ -25,14 +25,14 @@ return array(
 	// 	#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
 	// ),
 	'cache_length' => '10080', // Minutes - 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
-	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Right Ring','Right Ring'),
+	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Left Ring','Right Ring'),
 	'gear_focus' => array(
-		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN' => array(
+		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN,MCH' => array(
 			'Dexterity',
 			'Critical Hit Rate',
 			'Skill Speed',
 		),
-		'GLA,MRD,PLD,WAR' => array(
+		'GLA,MRD,PLD,WAR,DRK' => array(
 			'Strength',
 			'Skill Speed',
 			'Parry',
@@ -42,7 +42,7 @@ return array(
 			'Spell Speed',
 			'Piety',
 		),
-		'CNJ,SCH,WHM' => array(
+		'CNJ,SCH,WHM,AST' => array(
 			'Mind',
 			'Spell Speed',
 			'Piety',
@@ -58,6 +58,90 @@ return array(
 			'Perception',
 		),
 	),
+	// Stat weight data gathered from http://ffxiv.ariyala.com/
+	// Missing MCH, DRK, AST data; assumptions made
+	'stat_weights' => [
+		'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL' => [
+			'Control'			=> 1,
+			'CP'				=> 1,
+			'Craftsmanship'		=> 1,
+		],
+		'MIN,BTN,FSH' => [
+			'Gathering'			=> 1,
+			'GP'				=> 1,
+			'Perception'		=> 1,
+		],
+		'ARC,BRD,MCH' => [
+			'Physical Damage'	=> 11.602,
+			'Dexterity'			=> 1,
+			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.224,
+			'Determination'		=> 0.14,
+			'Skill Speed'		=> 0.111,
+		],
+		'ROG,NIN' => [
+			'Physical Damage'	=> 10.775,
+			'Dexterity'			=> 1,
+			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.166,
+			'Determination'		=> 0.141,
+			'Skill Speed'		=> 0.074,
+		],
+		'PGL,MNK' => [
+			'Physical Damage'	=> 10.714,
+			'Strength'			=> 1,
+			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.167,
+			'Determination'		=> 0.139,
+			'Skill Speed'		=> 0.116,
+		],
+		'LNC,DRG' => [
+			'Physical Damage'	=> 10.625,
+			'Strength'			=> 1,
+			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.162,
+			'Determination'		=> 0.139,
+			'Skill Speed'		=> 0.104,
+		],
+		'GLA,PLD,MRD,WAR,DRK' => [
+			'Physical Damage'	=> 8.732,
+			'Strength'			=> 1,
+			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.204,
+			'Determination'		=> 0.325,
+			'Skill Speed'		=> 0.178,
+			'Vitality'			=> 1,
+			'Parry'				=> 1,
+			// Defense matters, but it's not a stat focus
+			'Defense'			=> 0.1,
+			'Block Strength'	=> 0.05,
+			'Block Rate'		=> 0.05,
+		],
+		'THM,BLM' => [
+			'Physical Damage'	=> 6.726,
+			'Intelligence'		=> 1,
+			'Accuracy'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.234,
+			'Determination'		=> 0.246,
+			'Spell Speed'		=> 0.281,
+		],
+		'ACN,SMN' => [
+			'Physical Damage'	=> 11.602,
+			'Intelligence'		=> 1,
+			'Accuracy'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
+			'Critical Hit Rate'	=> 0.147,
+			'Determination'		=> 0.137,
+			'Spell Speed'		=> 0.119,
+		],
+		'CNJ,WHM,SCH,AST' => [
+			'Physical Damage'	=> 8.732,
+			'Mind'				=> 1,
+			'Accuracy'			=> 0, // Healers don't need Accuracy
+			'Critical Hit Rate'	=> 0.204,
+			'Determination'		=> 0.325,
+			'Spell Speed'		=> 0.178,
+		],
+	],
 	'job_ids' => array(
 		'crafting' => array(
 			8, // CRP
@@ -95,12 +179,15 @@ return array(
 			22, // DRG
 			23, // BRD
 			30, // NIN
+			31, // MCH
+			32, // DRK
 		),
 		'advanced_magic' => array(
 			24, // WHM
 			25, // BLM
 			27, // SMN
 			28, // SCH
+			33, // AST
 		),
 	),
 	'defined_slots' => array(

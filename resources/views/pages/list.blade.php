@@ -81,7 +81,7 @@
 @stop
 
 @section('modals')
-<div class="modal fade" id='savedList'>
+<div class="modal fade" id='savedList' data-base-url='http://{{ $_SERVER['HTTP_HOST'] }}/list/saved/'>
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -89,7 +89,7 @@
 				<h4 class="modal-title">Copy this link</h4>
 			</div>
 			<div class="modal-body">
-				<textarea class='form-control'>http://{{ $_SERVER['HTTP_HOST'] }}/list/saved/{{ $saved_link }}</textarea>
+				<textarea class='form-control'></textarea>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

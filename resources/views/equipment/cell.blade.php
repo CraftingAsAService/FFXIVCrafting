@@ -4,9 +4,9 @@
 			<?php $i = 0; ?>
 			@foreach($items as $ilvl => $gear)
 			@foreach($gear as $item)
-			
-			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ count($item->recipes) ? ' craftable' : '' }}' 
-				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}'>
+
+			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ count($item->recipes) ? ' craftable' : '' }}'
+				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}' data-score='{{ $item->score }}'>
 
 				<div class='icons pull-left text-center'>
 					<a href='http://xivdb.com/?item/{{ $item->id }}' data-replacename="0" data-colorname="0" data-showicon="0" target='_blank'>
@@ -32,7 +32,7 @@
 						@endif
 					</div>
 				</div>
-				
+
 				<div class='name-box'>
 					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary' data-showicon="0">{{ $item->display_name }}</a>
 				</div>
@@ -40,13 +40,13 @@
 				<div class='stats-box row'>
 					@foreach($item->attributes as $attribute)
 					@if($attribute->quality == 'nq')
-					<div class='col-sm-6 text-center nq stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}'>
+					<div class='col-sm-6 text-center nq stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}' data-stat-image='{{ stat_name($attribute->attribute) }}'>
 						<img src='/img/stats/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
 						<span>{{ (int) $attribute->amount }}</span>
 					</div>
 					@endif
 					@if($attribute->quality == 'hq')
-					<div class='col-sm-6 text-center hq hidden stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}'>
+					<div class='col-sm-6 text-center hq hidden stat{{ ! in_array($attribute->attribute, $stat_ids_to_focus) ? ' hidden boring' : '' }}' data-stat='{{ $attribute->attribute }}' data-amount='{{ (int) $attribute->amount }}' data-stat-image='{{ stat_name($attribute->attribute) }}'>
 						<img src='/img/stats/{{ stat_name($attribute->attribute) }}.png' class='stat-icon' rel='tooltip' title='{{ $attribute->attribute }}'>
 						<span>{{ (int) $attribute->amount }}</span>
 					</div>

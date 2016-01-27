@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Osmose;
 
@@ -37,7 +37,13 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// $id = "Merchant & Mender";
 		// dd('npc, base index', $core->npc->baseIndex);//->$id);
 		// dd('npc, shopnames', $core->npc->shopNames);
-		// dd('npc, shops', $core->npc->shops);
+		// echo '<pre>';
+		// foreach ($core->npc->shops as $shop)
+		// 	if (isset($shop->trade) && $shop->trade == 1)
+		// 		var_dump($shop);
+		// 		// dd($shop);
+		// 	exit;
+		dd('npc, shops', $core->npc->shops);
 		// dd('instance', $core->instance->rouletteIndex);
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
@@ -50,10 +56,12 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// dd('action', $core->action->index);
 		// dd('action', $core->action->categoryIndex);
 		// dd('action', $core->action->statusIndex);
-		dd('leve', $core->leve->partialIndex);
+		// dd('leve', $core->leve->partialIndex);
 		// $id = 5718;
 		// dd('item', $core->item->categoryIndex);
 		// dd('item', $core->item->index);
+		$id = 4687;
+		dd('gItemIndex', $core->gItemIndex[$id]);
 		dd('gItemIndex', $core->gItemIndex);
 
 

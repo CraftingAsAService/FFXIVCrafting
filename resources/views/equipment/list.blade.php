@@ -157,7 +157,7 @@
 					<input type='hidden' name='level' value='{{ $original_level }}'>
 					<input type='hidden' name='slim_mode' value='{{ $slim_mode ? 1 : 0 }}'>
 					<input type='hidden' name='rewardable_too' value='{{ $rewardable_too }}'>
-					
+
 					Only Craftable
 					<input type='checkbox' id='craftable_only_switch' name='craftable_only' value='1' {{ $craftable_only ? ' checked="checked"' : '' }} class='bootswitch' data-on-text='YES' data-off-text='NO'>
 				{!! Form::close() !!}
@@ -172,7 +172,7 @@
 
 @if($fifty_warning)
 <div class='alert alert-warning'>
-	There are too many results for level 50 DOW/DOM classes.  It was excluded on initial load.  Feel free to hit that right arrow though.
+	There are too many results for level {{ config('site.max_level') }} DOW/DOM classes.  It was excluded on initial load.  Feel free to hit that right arrow though.
 </div>
 @endif
 

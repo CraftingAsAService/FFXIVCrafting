@@ -2,7 +2,7 @@
 	// Config options not always present (maintenance page)
 	$lang = Config::get('language');
 	if ( ! is_string($lang)) $lang = 'en';
-	$lbu = Config::get('language_base_url'); 
+	$lbu = Config::get('language_base_url');
 	if ( ! is_string($lbu)) $lbu = $_SERVER['REQUEST_URI'];
 ?><!DOCTYPE html>
 <html lang='en-us'>
@@ -78,7 +78,7 @@
 							@endif
 						</a>
 					</li>
-					
+
 					<li>
 						<hr>
 					</li>
@@ -97,7 +97,7 @@
 					<li>
 						<hr>
 					</li>
-					
+
 					@foreach(Config::get('site.full_languages') as $slug => $language)
 					<?php if ($slug == $lang) continue; ?>
 					<li>
@@ -132,7 +132,7 @@
 									@foreach(Config::get('site.full_languages') as $slug => $language)
 									<?php if ($slug == $lang) continue; ?>
 									<li>
-										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'> 
+										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
 											<img src="/img/icons/flags/{!! $slug !!}.png"> {!! $language !!}
 										</a>
 									</li>
@@ -252,7 +252,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
 								<img src="/img/current_patch.png" class="img-responsive">
-								<p>This site has been optimized for Patch 3.1</p>
+								<p>This site has been optimized for Patch 3.15</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>
@@ -336,18 +336,14 @@
 
 		<script type='text/javascript'>
 			if (typeof(xivdb_tooltips) === 'undefined')
-				var xivdb_tooltips = 
-				{ 
-					"language"      : "{!! strtoupper($lang == 'ja' ? 'jp' : $lang) !!}",
-					"frameShadow"   : true,
-					"compact"       : false,
-					"statsOnly"     : false,
-					"replaceName"   : false, /*{{ $lang == 'en' ? 'false' : 'true' }},*/
-					"colorName"     : true,
-					"showIcon"      : false /*{{ $lang == 'en' ? 'false' : 'true' }}*/
-				} 
+				var xivdb_tooltips = {
+					language: "{!! strtoupper($lang == 'ja' ? 'jp' : $lang) !!}",
+					seturlname: false,
+					seturlicon: false,
+					includeCredits: false // Sorry, but it's bugged and shows up a ton :(
+				}
 		</script>
-		<script type="text/javascript" src="http://xivdb.com/tooltips.js?v=1.6"></script>
+		<script src="{!! cdn('/js/xivdb-tooltips.js') !!}" type="text/javascript"></script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
