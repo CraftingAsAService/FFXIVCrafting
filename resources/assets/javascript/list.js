@@ -46,6 +46,21 @@ var list = {
 				}
 			});
 		});
+
+		$('#savedList').on('show.bs.modal', function() {
+			// Repopulate the textarea
+			var el = $(this),
+				base_url = el.data('baseUrl'),
+				data = [];
+
+			$('#list tbody tr').each(function() {
+				var tr = $(this);
+				data.push(tr.data('itemId') + ',' + tr.find('input').val());
+			});
+
+			// 4421,2:2546,1:6775,1
+			el.find('textarea').html(base_url + data.join(':'));
+		});
 	},
 	check_if_empty:function() {
 		if ($('#list tbody tr').length == 0)
