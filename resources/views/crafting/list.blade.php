@@ -147,7 +147,7 @@
 				</td>
 				<td class='valign hidden-print'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' value='0' step='{{ $yields }}' style='padding: 6px 3px;'>
+						<input type='number' autocomplete='off' class='form-control obtained text-center' min='0' value='0' step='{{ $yields }}' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 7px 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>
@@ -240,11 +240,11 @@
 						$needed = ceil($needed / $recipe->yield) * $recipe->yield;
 					?>
 
-					<input type='number' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yield }}' value='{{ $needed }}' style='padding: 6px 3px;'>
+					<input type='number' autocomplete='off' class='recipe-amount form-control text-center' min='0' step='{{ $recipe->yield }}' value='{{ $needed }}' style='padding: 6px 3px;'>
 				</td>
 				<td class='valign hidden-print'>
 					<div class='input-group'>
-						<input type='number' class='form-control obtained text-center' min='0' step='{{ $recipe->yield }}' value='0' style='padding: 6px 3px;'>
+						<input type='number' autocomplete='off' class='form-control obtained text-center' min='0' step='{{ $recipe->yield }}' value='0' style='padding: 6px 3px;'>
 						<div class='input-group-btn'>
 							<button class='btn btn-default obtained-ok' type='button' style='padding: 7px 6px 6px;'><span class='glyphicon glyphicon-ok-circle'></span></button>
 						</div>
