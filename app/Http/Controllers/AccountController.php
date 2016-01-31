@@ -25,7 +25,7 @@ class AccountController extends Controller
 	public function getIndex()
 	{
 		$account = Session::get('account');
-		
+
 		if (empty($account))
 			return redirect('/account/login');
 
@@ -33,12 +33,12 @@ class AccountController extends Controller
 
 		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
 		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
-		$melee_job_list = Job::whereIn('id', $job_ids['basic_melee'])->get();
-		$magic_job_list = Job::whereIn('id', $job_ids['basic_magic'])->get();
-		
+		$melee_job_list = Job::whereIn('id', $job_ids['advanced_melee'])->get();
+		$magic_job_list = Job::whereIn('id', $job_ids['advanced_magic'])->get();
+
 		return view('account.index', compact('crafting_job_list', 'gathering_job_list', 'melee_job_list', 'magic_job_list'));
 	}
-			
+
 	public function getLogin()
 	{
 		$character_name = session('character_name', '');
@@ -64,7 +64,7 @@ class AccountController extends Controller
 
 		if ( ! Cache::has($cache_key))
 			Cache::put($cache_key, $this->api_register($character, $server), 30);
-			
+
 		$account = Cache::get($cache_key);
 
 		if (empty($account))
@@ -90,9 +90,35 @@ class AccountController extends Controller
 
 		$character = $api->Search->Character($character, $server);
 
+		$basic_to_advanced = [
+			'gladiator' => 'paladin',
+			'pugilist' => 'monk',
+			'marauder' => 'warrior',
+			'lancer' => 'dragoon',
+			'archer' => 'bard',
+			'rogue' => 'ninja',
+			'conjurer' => 'white mage',
+			'thaumaturge' => 'black mage',
+			'arcanist' => 'scholar',
+			// 'arcanist' => 'summoner', // Special logic will handle this one
+		];
+
 		$levels = [];
 		foreach ((array) $character->classjobs as $classjob)
-			$levels[strtolower($classjob['name'])] = $classjob['level'];
+		{
+			$name = strtolower($classjob['name']);
+
+			$levels[$name] = $classjob['level'];
+
+			if (isset($basic_to_advanced[$name]))
+			{
+				$name = $basic_to_advanced[$name];
+				if ($name == 'scholar') // Normal method handles Scholar
+					$levels['summoner'] = $classjob['level'];
+
+				$levels[$name] = $classjob['level'];
+			}
+		}
 
 		return [
 			'avatar' => (string) $character->avatar,
@@ -109,7 +135,7 @@ class AccountController extends Controller
 		$cache_key = $character . '|' . $server;
 
 		Cache::put($cache_key, $this->api_register($character, $server), 30);
-			
+
 		$account = Cache::get($cache_key);
 
 		Session::put('account', $account);
