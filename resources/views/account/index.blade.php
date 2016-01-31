@@ -8,7 +8,7 @@
 @stop
 
 @section('content')
-	
+
 	@foreach(array('crafting' => 'primary', 'gathering' => 'info', 'melee' => 'danger', 'magic' => 'warning') as $section => $color)
 	<h2>{{ ucfirst($section) }} Levels</h2>
 
