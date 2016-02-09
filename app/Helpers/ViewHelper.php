@@ -3,7 +3,7 @@
 	function cdn($asset)
 	{
 		$cdn = config('site.cdn');
-		
+
 		// Check if we added cdn's to the config file
 		if( ! $cdn)
 			return asset( $asset );
@@ -22,11 +22,11 @@
 	function assetcdn($asset)
 	{
 		$cdn = config('site.asset_cdn');
-		
+
 		// Check if we added cdn's to the config file
 		if( ! $cdn)
 			return asset( $asset );
-		
+
 		return '//' . $cdn . '/' . $asset;
 	}
 
@@ -46,7 +46,7 @@
 	{
 		$class .= View::shared('active') == $active ? ' active' : '';
 		$tag = $class ? '<li class="' . trim($class) . '">' : '<li>';
-		return $tag . '<a href=\'' . $href . '\'>' . $label . '</a></li>'; 
+		return $tag . '<a href=\'' . $href . '\'>' . $label . '</a></li>';
 	}
 
 	function recent_posts($limit = 3)
@@ -54,30 +54,35 @@
 		return Cache::remember('reddit-posts', 30, function() use($limit)
 		{
 			$user_agent = 'User-Agent: php:ffxivcrafting:v0.0.1 (by /u/tickthokk)';
-			
-			$request = new Jyggen\Curl\Request('http://api.reddit.com/user/tickthokk/submitted.json');
-			$request->setOption(CURLOPT_HTTPHEADER, [$user_agent]);
-			$request->execute();
-			
-			if ( ! $request->isSuccessful())
-				return [];
 
-			$response = json_decode($request->getResponse()->getContent());
-		
 			$posts = [];
-			foreach ($response->data->children as $child)
-			{
-				if ($child->data->subreddit == 'ffxivcrafting')
-				{
-					$posts[] = [
-						'title' => $child->data->title,
-						'url' => 'http://reddit.com' . $child->data->permalink,
-						'created' => Carbon\Carbon::createFromTimeStamp($child->data->created)->format('M d, Y')
-					];
-				}
 
-				if (count($posts) == $limit)
-					break;
+			try {
+				$request = new Jyggen\Curl\Request('http://api.reddit.com/user/tickthokk/submitted.json');
+				$request->setOption(CURLOPT_HTTPHEADER, [$user_agent]);
+				$request->execute();
+
+				if ($request->isSuccessful())
+				{
+					$response = json_decode($request->getResponse()->getContent());
+
+					foreach ($response->data->children as $child)
+					{
+						if ($child->data->subreddit == 'ffxivcrafting')
+						{
+							$posts[] = [
+								'title' => $child->data->title,
+								'url' => 'http://reddit.com' . $child->data->permalink,
+								'created' => Carbon\Carbon::createFromTimeStamp($child->data->created)->format('M d, Y')
+							];
+						}
+
+						if (count($posts) == $limit)
+							break;
+					}
+				}
+			} catch (Exception $e) {
+				// Do nothing
 			}
 
 			return $posts;
