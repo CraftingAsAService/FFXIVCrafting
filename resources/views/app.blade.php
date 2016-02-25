@@ -252,7 +252,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
 								<img src="/img/current_patch.png" class="img-responsive">
-								<p>This site has been optimized for Patch 3.15</p>
+								<p>This site has been optimized for Patch 3.2</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>

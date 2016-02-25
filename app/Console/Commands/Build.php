@@ -18,7 +18,7 @@ class Build extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Build the site for Docker usage';
+	protected $description = 'Export DB to K8S-Cluster repository';
 
 	/**
 	 * Create a new command instance.
