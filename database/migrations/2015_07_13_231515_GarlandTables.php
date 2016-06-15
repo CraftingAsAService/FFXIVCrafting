@@ -161,18 +161,11 @@ class GarlandTables extends Migration
 			$table->index('npc_base_id');
 		});
 
-		if ( ! Schema::hasTable('shop_name'))
-		Schema::create('shop_name', function(Blueprint $table)
-		{
-			$table->increments('id')->unsigned();
-			$table->string('name');
-		});
-
 		if ( ! Schema::hasTable('shop'))
 		Schema::create('shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
-			$table->integer('name_id')->unsigned();
+			$table->integer('name')->unsigned();
 		});
 
 		if ( ! Schema::hasTable('item_shop'))
@@ -486,7 +479,7 @@ class GarlandTables extends Migration
 			$table->index('item_id');
 			$table->index('recipe_id');
 		});
-		
+
 		if ( ! Schema::hasTable('career'))
 		Schema::create('career', function(Blueprint $table)
 		{
@@ -498,7 +491,7 @@ class GarlandTables extends Migration
 			$table->index('identifier');
 			$table->index('type');
 		});
-		
+
 		if ( ! Schema::hasTable('career_job'))
 		Schema::create('career_job', function(Blueprint $table)
 		{

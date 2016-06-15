@@ -40,10 +40,10 @@ class DatabaseSeeder extends Seeder
 			$this->fishing($core->fishing->index);
 			$this->mob($core->mob->index);
 			$this->location($core->location->index);
-			$this->npc($core->npc->index);
+			$this->npc($core->npc->partialIndex);
 			$this->npc_base($core->npc->baseIndex);
-			$this->shop_name($core->npc->shopNames);
-			$this->shop($core->npc->shops);
+			// $this->shop_name($core->npc->shopNames);
+			// $this->shop($core->npc->shops);
 			$this->instance($core->instance->index);
 			$this->quest($core->quest->partialIndex);
 			$this->achievement($core->achievement->index);
@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
 				'name' => $n->name,
 				'type' => $n->type,
 				'level' => $n->lvl,
-				'bonus_id' => isset($n->bonus) ? $n->bonus : null,
+				'bonus_id' => isset($n->bonus) ? (is_array($n->bonus) ? $n->bonus[0] : $n->bonus) : null,
 				'zone_id' => $n->zoneid,
 				'area_id' => isset($n->areaid) ? $n->areaid : null,
 			];
@@ -217,16 +217,25 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function npc($npc)
+	private function npc($npcs)
 	{
 		// Setup Data Var
 		$this->data['npc'] = [];
 		$this->data['npc_shop'] = [];
 		$this->data['npc_quest'] = [];
+		$this->data['shop'] = [];
+		$this->data['item_shop'] = [];
+
+		$used_shop = [];
 
 		// Loop through nodes
-		foreach ($npc as $n)
+		foreach ($npcs as $npc)
 		{
+			// Get /db/data/quest/#.json
+			$json_file = base_path() . '/../garlanddeploy/db/data/npc/' . $npc->i . '.json';
+			$n = $this->get_cleaned_json($json_file, TRUE);
+			$n = $n->npc;
+
 			$row = [
 				'id' => $n->id,
 				'name' => $n->name,
@@ -239,14 +248,47 @@ class DatabaseSeeder extends Seeder
 			$this->set_data('npc', $row);
 
 			if (isset($n->shops))
-				foreach ($n->shops as $shop_id)
+				foreach ($n->shops as $shop)
 				{
 					$row = [
-						'shop_id' => $shop_id,
+						'shop_id' => $shop->id,
 						'npc_id' => $n->id,
 					];
 
 					$this->set_data('npc_shop', $row);
+
+					$row = [
+						'id' => $shop->id,
+						'name' => $shop->name,
+					];
+
+					$this->set_data('shop', $row);
+
+					if (isset($shop->entries))
+						foreach ($shop->entries as $item_id)
+						{
+							if (gettype($item_id) == 'object')
+							{
+								foreach ($item_id->item as $iii)
+								{
+									$row = [
+										'item_id' => $iii->id,
+										'shop_id' => $shop->id,
+									];
+
+									$this->set_data('item_shop', $row);
+								}
+							}
+							else
+							{
+								$row = [
+									'item_id' => $item_id,
+									'shop_id' => $shop->id,
+								];
+
+								$this->set_data('item_shop', $row);
+							}
+						}
 				}
 
 			if (isset($n->quests))
@@ -264,6 +306,8 @@ class DatabaseSeeder extends Seeder
 		echo __FUNCTION__ . ', ' . count($this->data['npc']) . ' rows' . PHP_EOL;
 		echo 'npc_shop, ' . count($this->data['npc_shop']) . ' rows' . PHP_EOL;
 		echo 'npc_quest, ' . count($this->data['npc_quest']) . ' rows' . PHP_EOL;
+		echo 'shop, ' . count($this->data['shop']) . ' rows' . PHP_EOL;
+		echo 'item_shop, ' . count($this->data['item_shop']) . ' rows' . PHP_EOL;
 		$this->output_memory();
 	}
 
@@ -273,18 +317,18 @@ class DatabaseSeeder extends Seeder
 		$this->data['npc_base'] = [];
 		$this->data['npc_npc_base'] = [];
 
-		// Loop through nodes
-		foreach ($npc_base as $nb)
+		// Loop through bases
+		foreach ($npc_base as $name => $list)
 		{
 			$row = [
-				'name' => $nb->id, // id is actually the name
-				'title' => isset($nb->title) ? $nb->title : null,
+				'name' => $name, // id is actually the name
+				// 'title' => isset($nb->title) ? $nb->title : null,
 			];
 
 			$given_id = $this->set_data('npc_base', $row);
 
-			if (isset($nb->npcs))
-				foreach ($nb->npcs as $npc_id)
+			if (isset($list->x))
+				foreach ($list->x as $npc_id)
 				{
 					$row = [
 						'npc_id' => $npc_id,
@@ -300,73 +344,73 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function shop_name($shop_name)
-	{
-		// Setup Data Var
-		$this->data['shop_name'] = [];
+	// private function shop_name($shop_name)
+	// {
+	// 	// Setup Data Var
+	// 	$this->data['shop_name'] = [];
 
-		// Loop through nodes
-		foreach ($shop_name as $id => $name)
-		{
-			$row = compact('id', 'name');
+	// 	// Loop through nodes
+	// 	foreach ($shop_name as $id => $name)
+	// 	{
+	// 		$row = compact('id', 'name');
 
-			$this->set_data('shop_name', $row);
-		}
+	// 		$this->set_data('shop_name', $row);
+	// 	}
 
-		echo __FUNCTION__ . ', ' . count($this->data['shop_name']) . ' rows' . PHP_EOL;
-		$this->output_memory();
-	}
+	// 	echo __FUNCTION__ . ', ' . count($this->data['shop_name']) . ' rows' . PHP_EOL;
+	// 	$this->output_memory();
+	// }
 
-	private function shop($shop)
-	{
-		// Setup Data Var
-		$this->data['shop'] = [];
-		$this->data['item_shop'] = [];
+	// private function shop($shop)
+	// {
+	// 	// Setup Data Var
+	// 	$this->data['shop'] = [];
+	// 	$this->data['item_shop'] = [];
 
-		// Loop through nodes
-		foreach ($shop as $s)
-		{
-			// Don't count trade shops
-			if (isset($s->trade) && $s->trade == 1)
-				continue;
+	// 	// Loop through nodes
+	// 	foreach ($shop as $s)
+	// 	{
+	// 		// Don't count trade shops
+	// 		if (isset($s->trade) && $s->trade == 1)
+	// 			continue;
 
-			$row = [
-				'id' => $s->id,
-				'name_id' => $s->nameId,
-			];
+	// 		$row = [
+	// 			'id' => $s->id,
+	// 			'name_id' => $s->nameId,
+	// 		];
 
-			$this->set_data('shop', $row);
+	// 		$this->set_data('shop', $row);
 
-			foreach ($s->entries as $item_id)
-			{
-				if (gettype($item_id) == 'object')
-				{
-					foreach ($item_id->item as $iii)
-					{
-						$row = [
-							'item_id' => $iii->id,
-							'shop_id' => $s->id,
-						];
+	// 		foreach ($s->entries as $item_id)
+	// 		{
+	// 			if (gettype($item_id) == 'object')
+	// 			{
+	// 				foreach ($item_id->item as $iii)
+	// 				{
+	// 					$row = [
+	// 						'item_id' => $iii->id,
+	// 						'shop_id' => $s->id,
+	// 					];
 
-						$this->set_data('item_shop', $row);
-					}
-				}
-				else
-				{
-					$row = [
-						'item_id' => $item_id,
-						'shop_id' => $s->id,
-					];
+	// 					$this->set_data('item_shop', $row);
+	// 				}
+	// 			}
+	// 			else
+	// 			{
+	// 				$row = [
+	// 					'item_id' => $item_id,
+	// 					'shop_id' => $s->id,
+	// 				];
 
-					$this->set_data('item_shop', $row);
-				}
-			}
-		}
+	// 				$this->set_data('item_shop', $row);
+	// 			}
+	// 		}
+	// 	}
 
-		echo __FUNCTION__ . ', ' . count($this->data['shop']) . ' rows' . PHP_EOL;
-		echo 'item_shop, ' . count($this->data['item_shop']) . ' rows' . PHP_EOL;
-		$this->output_memory();
-	}
+	// 	echo __FUNCTION__ . ', ' . count($this->data['shop']) . ' rows' . PHP_EOL;
+	// 	echo 'item_shop, ' . count($this->data['item_shop']) . ' rows' . PHP_EOL;
+	// 	$this->output_memory();
+	// }
 
 	private function instance($instance)
 	{
@@ -796,6 +840,10 @@ class DatabaseSeeder extends Seeder
 			// if ($i->id == 1609)
 			// 	dd($i);
 
+			// No translations?  Worthless item probably; Skip
+			if ( ! isset($i->de))
+				continue;
+
 			$row = [
 				'id' => $i->id,
 				'eorzea_id' => isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
@@ -1078,7 +1126,6 @@ class DatabaseSeeder extends Seeder
 
 				// if (++$count == 29 && $table == 'item_shop')
 				// 	dd($data);
-
 				$values = $pdo = [];
 				foreach ($data as $row)
 				{
@@ -1091,6 +1138,8 @@ class DatabaseSeeder extends Seeder
 
 				$keys = ' (`' . implode('`,`', array_keys($data[0])) . '`)';
 
+				// if ($table == 'node')
+				// 	dd($values, $pdo);
 				\DB::insert('INSERT IGNORE INTO ' . $table . $keys . ' VALUES ' . implode(',', $values), $pdo);
 			}
 		}
