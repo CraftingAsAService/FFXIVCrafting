@@ -26,11 +26,11 @@ class EntityController extends Controller {
 	private function leves($item)
 	{
 		$item->load('leve_rewards', 'leve_rewards.job_category', 'leve_rewards.job_category.jobs');
-		
+
 		$leves = [];
 		foreach ($item->leve_rewards as $leve)
 			$leves[$leve->pivot->rate * 100][$leve->pivot->amount ?: 1][$leve->level][] = [
-				'name' => $leve->name, 
+				'name' => $leve->name,
 				'job_count' => count($leve->job_category->jobs),
 				'job_category_name' => $leve->job_category->name,
 				'job' => $leve->job_category->jobs[0],
@@ -41,7 +41,7 @@ class EntityController extends Controller {
 		{
 			krsort($leves[$percent]);
 			foreach (array_keys($leves[$percent]) as $amount)
-				krsort($leves[$percent][$amount]);	
+				krsort($leves[$percent][$amount]);
 		}
 
 		return view('entity.leves', compact('item', 'leves'));
@@ -56,12 +56,12 @@ class EntityController extends Controller {
 
 	private function shops($item)
 	{
-		$item->load('shops', 'shops.name', 'shops.npcs', 'shops.npcs.location');
-		
+		$item->load('shops', 'shops.npcs', 'shops.npcs.location');
+
 		$shops = [];
 		foreach ($item->shops as $shop)
 			foreach ($shop->npcs as $npc)
-				$shops[isset($shop->name->name) ? $shop->name->name : ''][] = [
+				$shops[isset($shop->name) ? $shop->name : ''][] = [
 					'name' => $npc->name,
 					'location' => is_null($npc->location) ? '' : $npc->location->name,
 					'x' => (int) $npc->x,
@@ -74,7 +74,7 @@ class EntityController extends Controller {
 	private function mobs($item)
 	{
 		$item->load('mobs', 'mobs.location', 'mobs.instances');
-		
+
 		return view('entity.mobs', compact('item', 'shops'));
 	}
 
