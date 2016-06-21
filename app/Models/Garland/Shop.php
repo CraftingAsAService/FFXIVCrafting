@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Shop extends Model {
 
 	protected $table = 'shop';
-	
+
 	public function npcs()
 	{
 		return $this->belongsToMany('App\Models\Garland\Npc');
@@ -18,9 +18,9 @@ class Shop extends Model {
 		return $this->belongsToMany('App\Models\Garland\Item');
 	}
 
-	public function name()
-	{
-		return $this->belongsTo('App\Models\Garland\ShopName');
-	}
+	// public function name()
+	// {
+	// 	return $this->belongsTo('App\Models\Garland\ShopName');
+	// }
 
 }
