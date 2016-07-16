@@ -49,7 +49,7 @@ class LevequestsController extends Controller
 			$leves[$leve->job_category->jobs[0]->abbr][$leve->level][] = $leve;
 
 		/* $rewards = Cache::remember('rewards_' . Config::get('language'), 60, function() use ($all_leves) { */
-			
+
 			$rewards = [];
 			foreach($all_leves as $leve)
 			{
@@ -71,7 +71,7 @@ class LevequestsController extends Controller
 
 		/*	return $rewards;
 		}); */
-		
+
 		$crafting_job_list = Job::whereIn('id', $crafting_job_ids)->get();
 		$opening_level = 1;
 		$opening_class = 'CRP';
@@ -82,7 +82,7 @@ class LevequestsController extends Controller
 	public function getBreakdown($leve_id)
 	{
 		extract($this->_breakdown($leve_id)); // Reverse a compact, sets $leve and $chart
-		
+
 		// Get other Leve's at this level
 		$others = Leve::where('level', $leve->level)
 			->where('job_category_id', $leve->job_category_id)
@@ -96,7 +96,7 @@ class LevequestsController extends Controller
 	{
 		$leve = Leve::with('location', 'job_category', 'job_category.jobs', 'requirements', 'requirements.recipes', 'requirements.recipes.reagents')->find($leve_id);
 		$experience = array_intersect_key(config('experience'), array_flip(range($leve->level, $leve->level + 10)));
-		
+
 		// Leve breakdown only exists to handle Crafting (and Fishing) realted jobs
 		if ( ! in_array($leve->job_category_id, range(9,16)) && $leve->job_category_id != 19) // 9-16 CRP-WVR, 19 = FSH
 			abort(404);
@@ -186,7 +186,7 @@ class LevequestsController extends Controller
 			->orderBy('level')
 			->orderBy('xp')
 			->orderBy('gil');
-		
+
 		// Repeatable Only
 		if ($request->input('repeatable_only') == 'true')
 			$query->where('repeats', '>', 1);
@@ -219,7 +219,7 @@ class LevequestsController extends Controller
 		// dd(self::logger());
 		// dd($leves[0]->type);
 		// dd($leves[0]->requirements[0]->pivot->amount);
-		
+
 		return view('levequests.rows', compact('leves'));
 	}
 

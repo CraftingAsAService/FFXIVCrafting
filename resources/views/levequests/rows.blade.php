@@ -8,7 +8,7 @@
 		@if($leve->repeats)
 		<img src='/img/leve_icon_red.png' rel='tooltip' title='Repeatable Leve!' width='16' class='pull-right' style='clear: right;'>
 		@endif
-		<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name' target='_blank'>
+		<a href='{{ xivdb_item_link() . $leve->requirements[0]->id }}' class='item-name' target='_blank'>
 			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}
 		</a>
 		@if ($leve->requirements[0]->pivot->amount > 1)

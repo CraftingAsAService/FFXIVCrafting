@@ -114,7 +114,7 @@
 			<?php
 				$requires = []; $yields = 1;
 				$item_level = $reagent['item']->level;
-				$link = 'item/' . $reagent['item']->id;
+				$link = xivdb_item_link() . $reagent['item']->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
 					$item_level = $reagent['item']->recipes[0]->level;
@@ -131,7 +131,7 @@
 						{{ $item_level }}
 					</a>
 					@endif
-					<a href='http://xivdb.com/?{{ $link }}' target='_blank'>
+					<a href='{{ $link }}' target='_blank'>
 						<img src='{{ assetcdn('item/' . $reagent['item']->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->display_name }}</span>
 					</a>
 					@if ($yields > 1)
@@ -198,7 +198,7 @@
 						{{ $recipe->recipe_level }}
 					</a>
 					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'> --}}
-					<a href='http://xivdb.com/?item/{{ $recipe->item->id }}' target='_blank'>
+					<a href='{{ xivdb_item_link() . $recipe->item->id }}' target='_blank'>
 						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
 					</a>
 					@if ($recipe->req_craftsmanship)
