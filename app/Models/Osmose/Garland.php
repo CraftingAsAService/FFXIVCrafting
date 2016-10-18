@@ -6,7 +6,7 @@ use Cache;
 
 class Garland
 {
-    
+
 	static public function scrape()
 	{
 		$core = Garland::get_core();
@@ -19,7 +19,7 @@ class Garland
 		return Cache::remember('garland.core', 30, function()
 		{
 			$core_url = 'http://www.garlandtools.org/db/js/gt.data.core.js';
-			$core_contents = Garland::curl($core_url);
+			$core_contents = preg_replace("/\\r/", '', Garland::curl($core_url));
 			$core_array = array_diff(explode("\n", Garland::binary_fix($core_contents)), ['']);
 
 			$core = [];
@@ -52,8 +52,8 @@ class Garland
 	static private function json_cleaner($content)
 	{
 		// http://stackoverflow.com/questions/17219916/json-decode-returns-json-error-syntax-but-online-formatter-says-the-json-is-ok
-		for ($i = 0; $i <= 31; ++$i) { 
-		    $content = str_replace(chr($i), "", $content); 
+		for ($i = 0; $i <= 31; ++$i) {
+		    $content = str_replace(chr($i), "", $content);
 		}
 		$content = str_replace(chr(127), "", $content);
 
@@ -66,7 +66,7 @@ class Garland
 	static private function binary_fix($string)
 	{
 		// Some file begins with 'efbbbf' to mark the beginning of the file. (binary level)
-		// here we detect it and we remove it, basically it's the first 3 characters 
+		// here we detect it and we remove it, basically it's the first 3 characters
 		if (0 === strpos(bin2hex($string), 'efbbbf')) {
 		   $string = substr($string, 3);
 		}
@@ -85,7 +85,7 @@ class Garland
 
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); 
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 0);
 
 		// Thank you, we'll take that!

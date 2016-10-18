@@ -219,8 +219,7 @@ var recipe_book = {
 			recipe_book.search(e.target.search);
 		});
 
-		if (typeof(XIVDBTooltips) != 'undefined')
-			XIVDBTooltips.initialize();
+		global.trigger_xivdb_tooltips();
 	},
 	disable:function() {
 		$('#name-search input, #name-search button, #order-by, #min-level, #max-level, #class-search button').addClass('disabled');

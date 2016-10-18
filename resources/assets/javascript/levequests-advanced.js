@@ -223,8 +223,7 @@ var leves = {
 			success:function(output) {
 				$('.leve-table tbody').html(output);
 
-				if (typeof(XIVDBTooltips) != 'undefined')
-					XIVDBTooltips.initialize();
+				global.trigger_xivdb_tooltips();
 
 				global.reset_popovers();
 
