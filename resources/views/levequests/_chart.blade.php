@@ -23,7 +23,7 @@
 	<i class='glyphicon glyphicon-plus'></i>
 </button>
 <p>
-	<a href='http://xivdb.com/?item/{{ $leve->requirements[0]->id }}' class='item-name xivdb-24-icon' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
+	<a href='{{ xivdb_item_link() . $leve->requirements[0]->id }}' class='item-name xivdb-24-icon' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
 
 	@if($leve->requirements[0]->pivot->amount > 1)
 	<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -50,7 +50,7 @@
 	<ul class='list-group'>
 		@foreach($leve->requirements[0]->recipes[0]->reagents as $reagent)
 		<li class='list-group-item'>
-			<a href='http://xivdb.com/?item/{{ $reagent->id }}' target='_blank'>
+			<a href='{{ xivdb_item_link() . $reagent->id }}' target='_blank'>
 				<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->display_name }}</span>
 			</a>
 			x {{ $reagent->pivot->amount * $leve->requirements[0]->pivot->amount }}
@@ -64,10 +64,10 @@
 		</li>
 	</ul>
 </div>
-				
+
 @endif
 
-@if ( ! empty($leve->location)) 
+@if ( ! empty($leve->location))
 <h3>Location</h3>
 <p>{{ $leve->location->name }}</p>
 @endif
@@ -75,7 +75,7 @@
 <h3>Leveling Up</h3>
 
 <p>
-	Each Turnin of HQ items will grant a reward of <em>{{ number_format($leve->xp * 2) }} XP</em> and {{ number_format($leve->gil * 2) }} Gil.  
+	Each Turnin of HQ items will grant a reward of <em>{{ number_format($leve->xp * 2) }} XP</em> and {{ number_format($leve->gil * 2) }} Gil.
 	You will make a gil profit if you can obtain the {{ $leve->requirements[0]->pivot->amount }} items for less than {{ number_format(($leve->gil * 2) / $leve->requirements[0]->pivot->amount) }} each.
 </p>
 

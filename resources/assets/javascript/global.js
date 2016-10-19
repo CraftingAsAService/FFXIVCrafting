@@ -32,7 +32,7 @@ var global = {
 				data: { 'item-id' : id , 'qty' : qty },
 				beforeSend:function() {
 					global.noty({
-						type: 'success', 
+						type: 'success',
 						text: 'Adding ' + (qty > 1 ? (qty + ' x ') : '') + name + ' to your list'
 					});
 					if (el.hasClass('success-after-add'))
@@ -66,6 +66,10 @@ var global = {
 				el.attr('href', el.attr('href').replace(/(\?|\&)self_sufficient=1/, ''));
 				return;
 			});
+	},
+	trigger_xivdb_tooltips:function() {
+		if (typeof(XIVDBTooltips) != 'undefined')
+			XIVDBTooltips.setOptions("undefined" != typeof xivdb_tooltips ? xivdb_tooltips : xivdb_tooltips_default).init();
 	},
 	hide_me:function() {
 		$('.hide-me').each(function() {
@@ -125,7 +129,7 @@ var global = {
 		var popovers = $('[data-toggle=popover]');
 
 		// enable popovers
-		popovers.popover({ 
+		popovers.popover({
 			'container': 'body',
 			'html': 'true'
 		});
@@ -160,7 +164,7 @@ var global = {
 			{
 				if (global.visible_popover !== null)
 					global.visible_popover.trigger('click');
-				
+
 				global.visible_popover = null;
 				popovers.popover('hide');
 			}
@@ -283,7 +287,7 @@ var global = {
 	},
 	click_to_view:function(event) {
 		event.preventDefault();
-		
+
 		var el = $(this),
 			type = el.data('type'),
 			id = el.closest('[data-item-id]').data('itemId');
@@ -311,7 +315,7 @@ var global = {
 
 			},
 			success:function(response) {
-				
+
 				$('body').append(response);
 
 				$('#' + type + '-for-' + id).modal();
@@ -333,7 +337,7 @@ $(function() {
 	$.fn.popover.Constructor.prototype.show = function() {
 		// Get original template
 		var template = $('<div>').html('<div class="popover tour-tour">          <div class="arrow"></div>          <h3 class="popover-title"></h3>          <div class="popover-content"></div>          <nav class="popover-navigation">            <div class="btn-group">              <button class="btn btn-sm btn-default disabled" data-role="prev">« Prev</button>              <button class="btn btn-sm btn-default" data-role="next">Next »</button>            </div>            <button class="btn btn-sm btn-default" data-role="end">End tour</button>          </nav>        </div>');
-		
+
 		// Add Moogle
 		template.find('h3').before('<img src="/img/tour_moogle.png" class="tour_moogle">');
 

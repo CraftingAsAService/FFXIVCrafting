@@ -9,7 +9,7 @@
 				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}' data-score='{{ $item->score }}'>
 
 				<div class='icons pull-left text-center'>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' data-replacename="0" data-colorname="0" data-showicon="0" target='_blank'>
+					<a href='{{ xivdb_item_link() . $item->id }}' data-replacename="0" data-colorname="0" data-showicon="0" target='_blank'>
 						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='40' height='40' class='main-icon nq'>
 						@if ($item->can_hq)
 						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='40' height='40' class='main-icon hq hidden'>
@@ -34,7 +34,7 @@
 				</div>
 
 				<div class='name-box'>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank' class='text-primary' data-showicon="0">{{ $item->display_name }}</a>
+					<a href='{{ xivdb_item_link() . $item->id }}' target='_blank' class='text-primary' data-showicon="0">{{ $item->display_name }}</a>
 				</div>
 
 				<div class='stats-box row'>

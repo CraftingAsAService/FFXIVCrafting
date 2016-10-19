@@ -36,8 +36,7 @@ var equipment = {
 		equipment.mark_upgrades();
 		equipment.same_cell_heights();
 
-		if (typeof(initXIVDBTooltips) != 'undefined')
-			initXIVDBTooltips();
+		global.trigger_xivdb_tooltips();
 
 		$('#gear tbody td:visible .td-navigation .item-next').on('click', function(event) {
 			event.preventDefault();

@@ -3,7 +3,7 @@ var leves = {
 		leves.events();
 
 		leves.decipher_hash();
-			
+
 		leves.search();
 
 		return;
@@ -131,7 +131,7 @@ var leves = {
 					val = max_el_val;
 				}
 			}
-			
+
 			// Prevent going over/under min/max attributes
 			if (val < this_min) val = this_min;
 			if (val > this_max) val = this_max;
@@ -188,9 +188,9 @@ var leves = {
 		});
 
 		document.location.hash = [
-				classes.join(','), 
-				min_level, 
-				max_level, 
+				classes.join(','),
+				min_level,
+				max_level,
 				types.join(','),
 				repeatable_only == true ? 1 : 0,
 				leve_item,
@@ -223,8 +223,7 @@ var leves = {
 			success:function(output) {
 				$('.leve-table tbody').html(output);
 
-				if (typeof(initXIVDBTooltips) != 'undefined')
-					initXIVDBTooltips();
+				global.trigger_xivdb_tooltips();
 
 				global.reset_popovers();
 

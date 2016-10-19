@@ -38,7 +38,7 @@ class CDNImages extends Command {
 	public function fire()
 	{
 		$this->info('Starting Image CDN Publish');
-		
+
 		$client = new \OpenCloud\Rackspace('https://identity.api.rackspacecloud.com/v2.0/', [
 			'username' => env('RACKSPACE_USERNAME'),
 			'apiKey' => env('RACKSPACE_API_KEY')
@@ -48,7 +48,7 @@ class CDNImages extends Command {
 		$container = $objectStoreService->getContainer('CAAS_Assets');
 		// There's more than 10,000 items
 		// http://docs.php-opencloud.com/en/latest/services/object-store/objects.html?highlight=objectlist#list-over-10-000-objects
-		
+
 		$existing_files = [];
 		$marker = '';
 
@@ -57,7 +57,7 @@ class CDNImages extends Command {
 		while ($marker !== null)
 		{
 			echo '.';
-			
+
 			$objects = $container->objectList(['marker' => $marker]);
 			$total = $objects->count();
 			$count = 0;
@@ -84,7 +84,7 @@ class CDNImages extends Command {
 		$this->info(count($existing_files) . ' files found');
 
 		// Recursively go through Images.
-		// Get the md5 of the contents.  
+		// Get the md5 of the contents.
 		// If it's already in the deleted block, remove it from that array, no action
 		// Otherwise, prepare the new filename
 		//   and upload that file as the new filename into the cdn
@@ -93,8 +93,8 @@ class CDNImages extends Command {
 
 		$tally = 0;
 		chdir('../garlanddeploy/db/icons');
-		// This only gets two levels deep, but is good enough.
-		foreach (array_merge(glob('*', GLOB_ONLYDIR),glob('*/*', GLOB_ONLYDIR)) as $ext)
+		// This only gets three levels deep, but is good enough.
+		foreach (array_merge(glob('*', GLOB_ONLYDIR),glob('*/*', GLOB_ONLYDIR),glob('*/*/*', GLOB_ONLYDIR)) as $ext)
 			foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($ext)) as $filename)
 			{
 				// Ignore '..' or '.' directories.
@@ -124,7 +124,7 @@ class CDNImages extends Command {
 				$this->comment('Skipping ' . $file['name'] . '; Japanese characters.');
 				continue;
 			}
-			
+
 			$this->info('Uploading ' . $file['name']);
 
 			try {
@@ -135,11 +135,11 @@ class CDNImages extends Command {
 				exit;
 			}
 		}
-		
+
 		// $batch_amount = 50;
 
 		// $this->info('Uploading ' . count($files_to_upload) . ' files in batches of ' . $batch_amount . '.');
-		
+
 		// Upload in batches
 		// foreach (array_chunk($files_to_upload, $batch_amount) as $files)
 		// {

@@ -27,11 +27,11 @@
 		</li>
 		@endforeach
 	</ul>
-	
+
 	<div class='tab-content'>
 		@foreach($sections as $section_name => $section)
 		<div class='tab-pane food-selection{{ $section_name == array_keys($sections)[0] ? ' active' : '' }}' id='{{ strtolower($section_name) }}'>
-			
+
 			<div class='row'>
 				<div class='col-sm-6 food-grid'>
 					<div class='table-responsive'>
@@ -119,7 +119,7 @@
 											</a>
 											@endif
 
-											<a href='http://xivdb.com/?item/{{ $item['id'] }}' target='_blank'>
+											<a href='{{ xivdb_item_link() . $item['id'] }}' target='_blank'>
 												<span class='overlay-container'>
 												@if($quality == 'hq')
 												<img src='/img/hq-overlay.png' width='36' height='36' class='hq-overlay' style='top: inherit;'>

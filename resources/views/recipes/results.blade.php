@@ -2,7 +2,7 @@
 @forelse($list as $recipe)
 <tr>
 	<td class='text-left valign'>
-		<a href='http://xivdb.com/?item/{{ $recipe->item->id }}' target='_blank'>
+		<a href='{{ xivdb_item_link() . $recipe->item->id }}' target='_blank'>
 			<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
 		</a>
 	</td>

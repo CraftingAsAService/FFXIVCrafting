@@ -251,8 +251,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/3.3.png" class="img-responsive">
-								<p>This site has been optimized for Patch 3.3</p>
+								<img src="/img/patch/3.4.png" class="img-responsive">
+								<p>This site has been optimized for Patch 3.4</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>
@@ -335,15 +335,15 @@
 		@yield('javascript')
 
 		<script type='text/javascript'>
-			if (typeof(xivdb_tooltips) === 'undefined')
+			if (typeof xivdb_tooltips === 'undefined')
 				var xivdb_tooltips = {
 					language: "{!! strtoupper($lang == 'ja' ? 'jp' : $lang) !!}",
+					jqueryEmbed: false,
 					seturlname: false,
-					seturlicon: false,
-					includeCredits: false // Sorry, but it's bugged and shows up a ton :(
+					seturlicon: false
 				}
 		</script>
-		<script src="{!! cdn('/js/xivdb-tooltips.js') !!}" type="text/javascript"></script>
+		<script src="http://xivdb.com/tooltips.min.js"></script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

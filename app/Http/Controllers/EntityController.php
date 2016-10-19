@@ -121,6 +121,9 @@ class EntityController extends Controller {
 			if ( ! in_array($node->type, $allowed_types))
 				continue;
 
+			if ( ! isset($node->zone->name) || ! isset($node->area->name))
+				continue;
+
 			$nodes[$node->zone->name][$node->area->name][$type_translation[$node->type]] = true;
 		}
 

@@ -311,6 +311,7 @@ var crafting = {
 					needed: 0,
 					obtained: 0,
 					total: 0,
+					remainder: 0,
 					elements: {
 						'row': tr,
 						'needed': $('td.needed span', tr).length > 0 ? $('td.needed span', tr) : $('td.needed input', tr),
@@ -471,17 +472,41 @@ var crafting = {
 				// If both match, bake it!
 				if (new_recipe.item_id == reagent.item_id)
 				{
+					// if (new_recipe.name.match(/Glass Fiber/))
+					// 	console.log('---');
+
 					// Ex. Parent recipe is being baked 6 times.  The reagent indicates 2 are required.
 					// Ex. 6 * 2 = 12; That's our immediate need, so add it to the total and needed
 					var needed = parent_bake * reagent.quantity;
+
 					new_recipe.needed += needed;
 					new_recipe.total += needed;
+
+					// Remove any previous remainder from this round's needed amount
+					if (new_recipe.remainder > 0) {
+						var usedRemainder = Math.min(needed, new_recipe.remainder);
+						// if (new_recipe.name.match(/Glass Fiber/)) {
+						// 	console.log('Has ', new_recipe.remainder, ' remaining ', new_recipe.name);
+						// 	console.log('Need ', needed, ' more ', new_recipe.name);
+						// 	console.log('Using ', usedRemainder, ' remainder of ', new_recipe.name);
+						// }
+						needed -= usedRemainder;
+						new_recipe.remainder -= usedRemainder;
+					}
 
 					// Ex. Our needed now says 12.  How many times do we need to bake?
 					// The recipe says it yields 3.
 					// Well, we already have 2, so (12 - 2) / 3 = 3.33; 4 bakes, rounded up
 
 					var bake = Math.ceil(needed / new_recipe.yields);
+
+					new_recipe.remainder += (bake * new_recipe.yields) - needed;
+
+					// if (new_recipe.name.match(/Glass Fiber/)) {
+					// 	console.log('Need ', needed, ' more ', new_recipe.name);
+					// 	console.log('Making ', bake * new_recipe.yields, ' more ', new_recipe.name);
+					// 	console.log('Leaves remainder of ', new_recipe.remainder, ' ', new_recipe.name);
+					// }
 
 					// Put it in the oven!
 					crafting.oven(new_recipe, bake, root_engaged);

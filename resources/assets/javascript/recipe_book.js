@@ -41,12 +41,12 @@ var recipe_book = {
 			if (recipe_book.check_input_length() == true)
 				recipe_book.search();
 		});
-		
+
 		$('#name-search button').click(function() {
 			if (recipe_book.check_input_length() == true)
 				recipe_book.search();
 		});
-		
+
 		$('#order-by').change(function(e) {
 			return recipe_book.search();
 		});
@@ -76,7 +76,7 @@ var recipe_book = {
 					val = max_el_val;
 				}
 			}
-			
+
 			// Prevent going over/under min/max attributes
 			if (val < this_min) val = this_min;
 			if (val > this_max) val = this_max;
@@ -142,7 +142,7 @@ var recipe_book = {
 	},
 	check_input_length:function() {
 		var val = $('#name-search input').val();
-		
+
 		$('#name-search').removeClass('has-error');
 
 		if (val.length < 3 && val.length > 0)
@@ -171,14 +171,14 @@ var recipe_book = {
 		if (recipe_book.hash_per_page != null)
 			per_page = recipe_book.hash_per_page;
 
-		if (typeof(qs) === 'undefined') 
+		if (typeof(qs) === 'undefined')
 			qs = '';
 
 		document.location.hash = [
 				name,
 				cls,
-				min, 
-				max, 
+				min,
+				max,
 				per_page,
 				order_by
 			].join('|');
@@ -187,7 +187,7 @@ var recipe_book = {
 			url: '/recipes/search' + qs,
 			// type: 'post',
 			dataType: 'json',
-			data: { 
+			data: {
 				name : name,
 				min : min,
 				max : max,
@@ -218,9 +218,8 @@ var recipe_book = {
 			e.preventDefault();
 			recipe_book.search(e.target.search);
 		});
-		
-		if (typeof(initXIVDBTooltips) != 'undefined')
-			initXIVDBTooltips();
+
+		global.trigger_xivdb_tooltips();
 	},
 	disable:function() {
 		$('#name-search input, #name-search button, #order-by, #min-level, #max-level, #class-search button').addClass('disabled');

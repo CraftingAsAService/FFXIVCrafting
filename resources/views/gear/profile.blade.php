@@ -50,20 +50,20 @@
 			{{-- Less than the LCD, opaque --}}
 			{{-- Is LCD, and LCD != real starting level, warning color --}}
 			{{-- Is LCD, and LCD == real starting level, success color --}}
-			<tr class='{{ 
-				$level < $bucket['lcd'] 
-					? 'opaque' 
+			<tr class='{{
+				$level < $bucket['lcd']
+					? 'opaque'
 					: (
-						$item->{$quality . '_worth'} == $bucket['bis_worth'] 
+						$item->{$quality . '_worth'} == $bucket['bis_worth']
 						? (
 							$level == $start_level || $level == $bucket['lcd']
 							? 'success' : ''
 						)
 						: ''
-					) 
+					)
 			}}' data-item-id='{{ $item->id }}'>
 				@if($i++ == 0)
-				<td class='level{{ 
+				<td class='level{{
 					$level == $start_level || $level == $bucket['lcd']
 					? ' success' : ''
 				}}' rowspan='{{ count($bucket['nq']) + (isset($bucket['hq']) ? count($bucket['hq']) : 0) }}'>
@@ -72,7 +72,7 @@
 				@endif
 				<td class='item'>
 					<span class='ilvl'>{{ $item->ilvl }}</span>
-					<a href='http://xivdb.com/?item/{{ $item->id }}' target='_blank'>
+					<a href='{{ xivdb_item_link() . $item->id }}' target='_blank'>
 						<span class='overlay-container'>
 						@if($quality == 'hq')
 						<img src='/img/hq-overlay.png' width='20' height='20' class='hq-overlay'>
@@ -168,5 +168,5 @@
 	</nav>
 
 	<a href='/gear?job={{ $job->abbr }}&amp;level={{ $start_level }}&amp;options={{ implode(',', $options) }}' class='btn btn-primary pull-right'>Select Another Profile</a>
-	
+
 @stop
