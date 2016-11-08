@@ -33,8 +33,6 @@ var crafting = {
 
 			// Fix #CraftingList totals
 			el.closest('tr').find('.total').html(el.val());
-
-			return;
 		});
 
 		$('input.obtained').change(function() {
@@ -47,8 +45,6 @@ var crafting = {
 				total = $('td.total', tr).html();
 
 			$('input.obtained', tr).val(total).trigger('change');
-
-			return;
 		});
 
 		$('#clear-localstorage').click(crafting.clear_localstorage);
@@ -132,8 +128,6 @@ var crafting = {
 
 			return;
 		});
-
-		return;
 	},
 	toggle_crystals:function() {
 		var toggleEl = $(this),
@@ -352,7 +346,6 @@ var crafting = {
 		return;
 	},
 	recalculate_all:function(root_engaged) {
-
 		// Update "obtained" for each item
 		// If it's Exempt, that means use it as a starting point
 		for (var i = 0; i < crafting.reagents.length; i++)
@@ -361,6 +354,7 @@ var crafting = {
 			recipe.obtained = parseInt(recipe.elements.obtained.val());
 
 			recipe.total = 0;
+			recipe.remainder = 0;
 
 			if (recipe.exempt == true)
 			{
