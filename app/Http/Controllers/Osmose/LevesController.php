@@ -161,8 +161,8 @@ class LevesController extends \App\Http\Controllers\Controller
 	public function getCompile()
 	{
 		$gamerescapewiki_data = json_decode(file_get_contents(storage_path() . '/app/osmose/cache/leves/leves.json'));
-		
-		dd($gamerescapewiki_data);
+
+		// dd($gamerescapewiki_data);
 
 		$all_leves = \App\Models\Garland\Leve::lists('id', 'name')->all();
 		$all_leves = array_change_key_case($all_leves);
@@ -178,7 +178,7 @@ class LevesController extends \App\Http\Controllers\Controller
 		foreach ($gamerescapewiki_data as $gewd)
 		{
 			$search_name = trim(preg_replace('/\s|\-|\(.*\)/', '', strtolower($gewd->name)));
-			
+
 			if ( ! isset($leves[$search_name]))
 				dd('NOT FOUND', $leves);
 
@@ -186,7 +186,7 @@ class LevesController extends \App\Http\Controllers\Controller
 
 			// $leves[$search_name];
 
-			dd($gewd, in_array($gewd->name, $leves));
+			// dd($gewd, in_array($gewd->name, $leves));
 			// $extra->xp = preg_replace('/,/', '', $extra->xp);
 
 			$leve = null;
@@ -224,7 +224,7 @@ class LevesController extends \App\Http\Controllers\Controller
 			$gamerescapewiki_leves[] = $leve;
 		}
 
-		dd('hi');
+		// dd('hi');
 
 		foreach ($rewards as $class => $levels)
 			foreach ($levels as $level => $r)
@@ -252,7 +252,7 @@ class LevesController extends \App\Http\Controllers\Controller
 			$results[] = trim($f->nodeValue);
 
 		$results = array_diff($results, array(''));
-		
+
 		if (count($results) == 1 && $return_type != 'array')
 			return end($results);
 		elseif (empty($results))
