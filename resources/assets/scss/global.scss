@@ -1162,7 +1162,7 @@ body.mobile-nav-enabled #mobile-nav {
 			position: absolute;
 			top: 0;
 			left: 0;
-			// background-image: url(/wp-content/uploads/2010/11/tandem.jpg); 
+			// background-image: url(/wp-content/uploads/2010/11/tandem.jpg);
 			background-repeat: no-repeat;
 			background-position: center center;
 			width: 100%;
@@ -1392,5 +1392,12 @@ img[src^="http://xivdb.com"] {
 	img[src^="http://xivdb.com"] {
 		width: 24px !important;
 		height: 24px !important;
+	}
+}
+
+a[data-xivdb-key] {
+	line-height: 36px;
+	img {
+		border-radius: 0 !important;
 	}
 }
