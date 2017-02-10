@@ -38,7 +38,7 @@
 
 		<!-- New Theme, woot woot! -->
 		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
-		<link href='{!! cdn('/css/theme.css') !!}' rel='stylesheet' />
+		<link href='{!! cdn('/css/dark-theme.css') !!}' rel='stylesheet' />
 
 		@yield('css')
 	</head>
