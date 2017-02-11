@@ -58,7 +58,7 @@
 			$posts = [];
 
 			try {
-				$request = new Jyggen\Curl\Request('http://api.reddit.com/user/tickthokk/submitted.json');
+				$request = new Jyggen\Curl\Request('https://api.reddit.com/user/tickthokk/submitted.json');
 				$request->setOption(CURLOPT_HTTPHEADER, [$user_agent]);
 				$request->execute();
 
