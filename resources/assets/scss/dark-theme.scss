@@ -15,21 +15,8 @@ $theme_color_dark_gray: #18191A;
 	Color names:
 	http://chir.ag/projects/name-that-color/#253137
 	http://www.color-blindness.com/color-name-hue/
- */
 
-
-
-// New Dark Theme Colors!
-$color_outer_space: #253137;
-// $color_cutty_sark: #546e7a;
-$color_limed_spruce: #3e515a;
-$color_shark: #212629;
-$color_tower_gray: #afbdc4;
-
-
-
-/*
-	// New colors!!!!!!! USE THIS ONE
+	New colors!!
 */
 $color_cod_gray: #1b1b1b;
 $color_mine_shaft: #333333;
@@ -40,6 +27,10 @@ $color_quill_gray: #dbdad5;
 $color_silver_chalice: #a8a8a8;
 $color_cape_cod: #404446;
 $color_timberwolf: #d6d4cf;
+$color_silver: #CCCCCC;
+$color_astral: #3274ae;
+$color_biscay: #1c466b;
+$color_outer_space: #253137;
 
 
 
@@ -55,7 +46,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 
 body {
 	background: $theme_color_black;
-	color: $color_tower_gray;
+	color: $color_silver;
 }
 
 h1, .h1, h2, .h2, h3, .h3 {
@@ -64,8 +55,8 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 legend {
-	color: $color_tower_gray;
-	border-bottom-color: $color_limed_spruce;
+	color: $color_timberwolf;
+	border-bottom-color: $color_abbey;
 }
 
 /*
@@ -106,19 +97,75 @@ legend {
 	Buttons
 */
 
+// background-image: linear-gradient(to bottom, #3274ae 0, #1c466b 100%);
 .btn-primary {
 	text-shadow: 0 1px 0 $theme_color_white;
-	background-image: -webkit-gradient(linear, left 0, left 100%, from($color_cape_cod), to($color_abbey));
-	background-image: -webkit-linear-gradient(top, $color_cape_cod, 0%, $color_abbey, 100%);
-	background-image: -moz-linear-gradient(top, $color_cape_cod 0, $color_abbey 100%);
-	background-image: linear-gradient(to bottom, $color_cape_cod 0, $color_abbey 100%);
+	background-image: -webkit-gradient(linear, left 0, left 100%, from($color_astral), to($color_biscay));
+	background-image: -webkit-linear-gradient(top, $color_astral, 0%, $color_biscay, 100%);
+	background-image: -moz-linear-gradient(top, $color_astral 0, $color_biscay 100%);
+	background-image: linear-gradient(to bottom, $color_astral 0, $color_biscay 100%);
+	background-repeat: repeat-x;
+	border-color: $color_biscay;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$color_astral',endColorstr='#ff$color_biscay',GradientType=0);
+
+	// Active States
+	&:hover, &:active, &.active {
+		background-image: -webkit-gradient(linear, left 0, left 100%, from($color_astral), to($color_astral));
+		background-image: -webkit-linear-gradient(top, $color_astral, 0%, $color_astral, 100%);
+		background-image: -moz-linear-gradient(top, $color_astral 0, $color_astral 100%);
+		background-image: linear-gradient(to bottom, $color_astral 0, $color_astral 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$color_biscay',endColorstr='#ff$color_astral',GradientType=0);
+		background-color: $color_astral;
+		border-color: $color_biscay;
+	}
+}
+
+.btn-primary:active:hover,
+.btn-primary:active:focus,
+.btn-primary:active.focus,
+.btn-primary.active:hover,
+.btn-primary.active:focus,
+.btn-primary.active.focus,
+.open>.btn-primary.dropdown-toggle:hover,
+.open>.btn-primary.dropdown-toggle:focus,
+.open>.btn-primary.dropdown-toggle.focus {
+	background-color: $color_astral;
+	border-color: $color_biscay;
+}
+
+.btn-dark {
+	text-shadow: 0 1px 0 $theme_color_white;
+	background-image: -webkit-gradient(linear, left 0, left 100%, from($color_abbey), to($color_cod_gray));
+	background-image: -webkit-linear-gradient(top, $color_abbey, 0%, $color_cod_gray, 100%);
+	background-image: -moz-linear-gradient(top, $color_abbey 0, $color_cod_gray 100%);
+	background-image: linear-gradient(to bottom, $color_abbey 0, $color_cod_gray 100%);
 	background-repeat: repeat-x;
 	border-color: $color_cod_gray;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdbdad5',endColorstr='#ffa8a8a8',GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$color_abbey',endColorstr='#ff$color_cod_gray',GradientType=0);
 
-	&:hover {
-		border-color: $theme_color_black;
+	// Active States
+	&:hover, &:active, &.active {
+		background-image: -webkit-gradient(linear, left 0, left 100%, from($color_mine_shaft), to($color_abbey));
+		background-image: -webkit-linear-gradient(top, $color_mine_shaft, 0%, $color_abbey, 100%);
+		background-image: -moz-linear-gradient(top, $color_mine_shaft 0, $color_abbey 100%);
+		background-image: linear-gradient(to bottom, $color_mine_shaft 0, $color_abbey 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$color_cod_gray',endColorstr='#ff$color_abbey',GradientType=0);
+		background-color: $theme_color_medium_gray;
+		border-color: $color_cod_gray;
 	}
+}
+
+.btn-dark:active:hover,
+.btn-dark:active:focus,
+.btn-dark:active.focus,
+.btn-dark.active:hover,
+.btn-dark.active:focus,
+.btn-dark.active.focus,
+.open>.btn-dark.dropdown-toggle:hover,
+.open>.btn-dark.dropdown-toggle:focus,
+.open>.btn-dark.dropdown-toggle.focus {
+	background-color: $theme_color_medium_gray;
+	border-color: $theme_color_black;
 }
 
 .btn-default {
@@ -501,7 +548,7 @@ div.logo {
 	}
 	.tagline {
 		text-decoration: none;
-		color: $color_tower_gray;
+		color: $theme_color_medium_gray;
 		margin-left: 55px;
 		letter-spacing: .33em;
 		white-space: nowrap;
