@@ -173,7 +173,7 @@
 							<div class="row">
 								<div class="col-xs-12 col-md-3 logo">
 									<a href='/'>
-										<img src="/img/logo.png" class="img-responsive" width='263' height='45' alt='FFXIV Crafting'>
+										<img src="/themes/dark/images/logo.png" class="img-responsive" width='263' height='45' alt='FFXIV Crafting'>
 										<span class='tagline'>Crafting as a Service</span>
 									</a>
 								</div>

@@ -224,7 +224,7 @@ legend {
 
 			a, label {
 				border-right: 1px solid #333536;
-				color: #969696;
+				color: $color_silver_chalice;
 				display: block;
 				margin: 0;
 				padding: {
@@ -262,6 +262,7 @@ legend {
 			background: $theme_color_black;
 			border-top: 0px;
 			border-radius: 0 0 4px 4px;
+			margin-top: 2px;
 			li {
 				float: none;
 				a {
@@ -280,13 +281,16 @@ legend {
 	.dropdown-menu>.active>a,
 	.dropdown-menu>.active>a:hover,
 	.dropdown-menu>.active>a:focus {
-		background-color: $color_cod_gray;
-		background-image: -webkit-gradient(linear, left 0, left 100%, from($color_cod_gray), to($theme_color_black));
-		background-image: -webkit-linear-gradient(top, $color_cod_gray, 0%, $theme_color_black, 100%);
-		background-image: -moz-linear-gradient(top, $color_cod_gray 0, $theme_color_black 100%);
-		background-image: linear-gradient(to bottom, $color_cod_gray 0, $theme_color_black 100%);
-		background-repeat: repeat-x;
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$color_cod_gray',endColorstr='#ff$theme_color_black',GradientType=0);
+		// background-color: $color_cod_gray;
+		// background-image: -webkit-gradient(linear, left 0, left 100%, from($color_cod_gray), to($theme_color_black));
+		// background-image: -webkit-linear-gradient(top, $color_cod_gray, 0%, $theme_color_black, 100%);
+		// background-image: -moz-linear-gradient(top, $color_cod_gray 0, $theme_color_black 100%);
+		// background-image: linear-gradient(to bottom, $color_cod_gray 0, $theme_color_black 100%);
+		// background-repeat: repeat-x;
+		// filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff$color_cod_gray',endColorstr='#ff$theme_color_black',GradientType=0);
+
+
+		background: none !important;
 	}
 }
 
@@ -341,7 +345,7 @@ legend {
 
 				a {
 					background: none;
-					color: #969696;
+					color: $color_silver_chalice;
 					&:hover {
 						color: $theme_color_white;
 					}
@@ -355,11 +359,14 @@ legend {
 			}
 
 			.dropdown .dropdown-menu {
-				background-color: $color_abbey;
+				background-color: $color_cod_gray;
 
 				li {
 					a {
 						color: $color_timberwolf;
+						&:hover {
+							color: $theme_color_white;
+						}
 					}
 					&.divider {
 						background-color: $color_mine_shaft;
@@ -548,7 +555,7 @@ div.logo {
 	}
 	.tagline {
 		text-decoration: none;
-		color: $theme_color_medium_gray;
+		color: $color_silver_chalice;
 		margin-left: 55px;
 		letter-spacing: .33em;
 		white-space: nowrap;
@@ -655,7 +662,7 @@ div.logo {
 
 				a {
 					background: none;
-					// color: #969696;
+					// color: $color_silver_chalice;
 					color: $theme_color_white;
 					&:hover {
 						color: $theme_color_lobster;
