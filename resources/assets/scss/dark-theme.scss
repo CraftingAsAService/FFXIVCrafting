@@ -22,7 +22,7 @@ $color_cod_gray: #1b1b1b;
 $color_mine_shaft: #333333;
 $color_abbey: #4d5153;
 $color_nero: #262626;
-$color_nero_light: #212121;
+$color_nero_light: #2b2b2b;
 $color_quill_gray: #dbdad5;
 $color_silver_chalice: #a8a8a8;
 $color_cape_cod: #404446;
@@ -63,7 +63,7 @@ legend {
 	Tables
 */
 .table {
-	background: $color_nero;
+	background: $color_mine_shaft;
 }
 .table-bordered,
 .table-bordered>thead>tr>th,
