@@ -94,6 +94,59 @@ legend {
 }
 
 /*
+	Lists
+*/
+
+.list-group-item {
+	border-color: $color_nero;
+	background: $color_mine_shaft;
+
+	&:nth-of-type(odd) {
+		background-color: $color_nero_light;
+	}
+
+	&.list-group-item-info {
+		color: #888888;
+		background-color: $color_cod_gray;
+	}
+}
+
+
+/*
+	Nav Tabs
+*/
+.nav-tabs {
+	border-bottom-color: $color_abbey;
+
+	&+.tab-content{
+		border-color: $color_abbey;
+	}
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+	color: $theme_color_white;
+	background-color: $color_mine_shaft;
+	border-color: $color_abbey;
+	border-bottom-color: transparent;
+}
+
+.nav-tabs>li>a {
+	color: $color_silver_chalice;
+	&:hover {
+		border-color: $color_cod_gray;
+		border-bottom-color: $color_abbey;
+		color: $theme_color_white;
+	}
+}
+.nav>li>a:hover,
+.nav>li>a:focus {
+	background-color: $color_nero_light;
+}
+
+
+/*
 	Buttons
 */
 
