@@ -4,6 +4,7 @@
 	if ( ! is_string($lang)) $lang = 'en';
 	$lbu = Config::get('language_base_url');
 	if ( ! is_string($lbu)) $lbu = $_SERVER['REQUEST_URI'];
+	$lbu = preg_replace(['/www\./', '/\/\//'], ['', '/'], $lbu);
 ?><!DOCTYPE html>
 <html lang='en-us'>
 	<head>
