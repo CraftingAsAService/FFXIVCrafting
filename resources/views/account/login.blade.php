@@ -29,6 +29,10 @@
 
 	{!! Form::open(array('class' => 'form-horizontal')) !!}
 
+		<div class='alert alert-danger'>
+			The API I was using for the login functionality has been broken, so I've had to remove it.  Sorry! [<a href='https://github.com/viion/lodestone-nodejs'>Their GitHub</a>]
+		</div>
+
 		<fieldset>
 			<div class='form-group'>
 				<label for='name' class='col-sm-4 col-md-3 col-lg-2 control-label'>Character Name</label>

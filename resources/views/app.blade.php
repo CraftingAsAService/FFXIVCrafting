@@ -68,6 +68,7 @@
 						</a>
 					</li>
 
+					{{--
 					<li>
 						<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
 							@if(isset($account) && $account)
@@ -79,6 +80,7 @@
 							@endif
 						</a>
 					</li>
+ 					--}}
 
 					<li>
 						<hr>
@@ -140,6 +142,7 @@
 									@endforeach
 								</ul>
 							</li>
+							{{--
 							<li>
 								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
 									@if(isset($account) && $account)
@@ -151,6 +154,7 @@
 									@endif
 								</a>
 							</li>
+							 --}}
 							<li>
 								<a href="/list"{!! isset($active) && $active == 'list' ? ' class="active"' : '' !!}>
 									<img src="/img/icons/bag.png">
