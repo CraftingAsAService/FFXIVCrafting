@@ -135,6 +135,9 @@ class LevequestsController extends Controller
 
 	public function getVs($leveA = 1, $leveB = 1)
 	{
+		if ( ! (is_numeric($leveA) && is_numeric($leveB)))
+			abort(404);
+
 		$a = $this->_breakdown($leveA);
 		$b = $this->_breakdown($leveB);
 
