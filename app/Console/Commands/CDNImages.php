@@ -92,7 +92,7 @@ class CDNImages extends Command {
 		$files_to_upload = array();
 
 		$tally = 0;
-		chdir('../garlanddeploy/db/icons');
+		chdir('../garlandtools/db/icons');
 		// This only gets three levels deep, but is good enough.
 		foreach (array_merge(glob('*', GLOB_ONLYDIR),glob('*/*', GLOB_ONLYDIR),glob('*/*/*', GLOB_ONLYDIR)) as $ext)
 			foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($ext)) as $filename)

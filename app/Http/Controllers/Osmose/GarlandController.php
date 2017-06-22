@@ -33,7 +33,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// dd('location', $core->location->index);
 		// dd('skywatcher', $core->skywatcher);
 		// dd('npc', $core->npc);
-		dd('npc', $core->npc->baseIndex->{'_empty_'}->x);
+		// dd('npc', $core->npc);
 		// dd('npc, 1001276', $core->npc->partialIndex->{'1001276'});
 		// $id = 1000193;
 		// dd('npc, index', $core->npc->index->$id);
@@ -47,7 +47,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// 		// dd($shop);
 		// 	exit;
 		// dd('npc, shops', $core->npc->shops);
-		// dd('instance', $core->instance->rouletteIndex);
+		dd('instance', $core->instance);
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
 		// dd('quest', $core->quest);
