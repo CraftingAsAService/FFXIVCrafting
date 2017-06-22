@@ -62,7 +62,7 @@ legend {
 	Tables
 */
 .table {
-	background: $color_mine_shaft;
+	background: #424242;
 }
 .table-bordered,
 .table-bordered>thead>tr>th,
@@ -84,7 +84,7 @@ legend {
 }
 
 .table>thead>tr>th {
-	background: $color_cod_gray;
+	background: $color_mine_shaft;
 	border: 1px solid $color_nero;
 }
 
@@ -771,4 +771,9 @@ body.Android {
 			}
 		}
 	}
+}
+
+.close {
+	color: $theme_color_white;
+	text-shadow: 0 1px 0 $theme_color_black;
 }
