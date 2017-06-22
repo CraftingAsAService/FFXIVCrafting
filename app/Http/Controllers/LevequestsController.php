@@ -81,6 +81,9 @@ class LevequestsController extends Controller
 
 	public function getBreakdown($leve_id)
 	{
+		if ( ! is_numeric($leve_id))
+			abort(404);
+
 		extract($this->_breakdown($leve_id)); // Reverse a compact, sets $leve and $chart
 
 		// Get other Leve's at this level
@@ -135,6 +138,9 @@ class LevequestsController extends Controller
 
 	public function getVs($leveA = 1, $leveB = 1)
 	{
+		if ( ! (is_numeric($leveA) && is_numeric($leveB)))
+			abort(404);
+
 		$a = $this->_breakdown($leveA);
 		$b = $this->_breakdown($leveB);
 

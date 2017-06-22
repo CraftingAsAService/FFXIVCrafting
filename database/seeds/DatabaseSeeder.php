@@ -41,13 +41,13 @@ class DatabaseSeeder extends Seeder
 			$this->mob($core->mob->index);
 			$this->location($core->location->index);
 			$this->npc($core->npc->partialIndex);
-			$this->npc_base($core->npc->baseIndex);
+			// $this->npc_base($core->npc->baseIndex);
 			// $this->shop_name($core->npc->shopNames);
 			// $this->shop($core->npc->shops);
-			$this->instance($core->instance->index);
+			$this->instance($core->instance->partialIndex);
 			$this->quest($core->quest->partialIndex);
-			$this->achievement($core->achievement->index);
-			$this->fate($core->fate->index);
+			$this->achievement($core->achievement->partialIndex);
+			$this->fate($core->fate->partialIndex);
 			$this->job_category($core->jobCategories);
 			$this->job(); // No provided data, hard coded
 			$this->venture($core->venture->index);
@@ -232,9 +232,11 @@ class DatabaseSeeder extends Seeder
 		foreach ($npcs as $npc)
 		{
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlanddeploy/db/data/npc/' . $npc->i . '.json';
+			$json_file = base_path() . '/../garlandtools/db/data/npc/' . $npc->i . '.json';
 			$n = $this->get_cleaned_json($json_file, TRUE);
 			$n = $n->npc;
+
+			// dd($n);
 
 			$row = [
 				'id' => $n->id,
@@ -311,38 +313,38 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function npc_base($npc_base)
-	{
-		// Setup Data Var
-		$this->data['npc_base'] = [];
-		$this->data['npc_npc_base'] = [];
+	// private function npc_base($npc_base)
+	// {
+	// 	// Setup Data Var
+	// 	$this->data['npc_base'] = [];
+	// 	$this->data['npc_npc_base'] = [];
 
-		// Loop through bases
-		foreach ($npc_base as $name => $list)
-		{
-			$row = [
-				'name' => $name, // id is actually the name
-				// 'title' => isset($nb->title) ? $nb->title : null,
-			];
+	// 	// Loop through bases
+	// 	foreach ($npc_base as $name => $list)
+	// 	{
+	// 		$row = [
+	// 			'name' => $name, // id is actually the name
+	// 			// 'title' => isset($nb->title) ? $nb->title : null,
+	// 		];
 
-			$given_id = $this->set_data('npc_base', $row);
+	// 		$given_id = $this->set_data('npc_base', $row);
 
-			if (isset($list->x))
-				foreach ($list->x as $npc_id)
-				{
-					$row = [
-						'npc_id' => $npc_id,
-						'npc_base_id' => $given_id,
-					];
+	// 		if (isset($list->x))
+	// 			foreach ($list->x as $npc_id)
+	// 			{
+	// 				$row = [
+	// 					'npc_id' => $npc_id,
+	// 					'npc_base_id' => $given_id,
+	// 				];
 
-					$this->set_data('npc_npc_base', $row);
-				}
-		}
+	// 				$this->set_data('npc_npc_base', $row);
+	// 			}
+	// 	}
 
-		echo __FUNCTION__ . ', ' . count($this->data['npc_base']) . ' rows' . PHP_EOL;
-		echo 'npc_npc_base, ' . count($this->data['npc_npc_base']) . ' rows' . PHP_EOL;
-		$this->output_memory();
-	}
+	// 	echo __FUNCTION__ . ', ' . count($this->data['npc_base']) . ' rows' . PHP_EOL;
+	// 	echo 'npc_npc_base, ' . count($this->data['npc_npc_base']) . ' rows' . PHP_EOL;
+	// 	$this->output_memory();
+	// }
 
 	// private function shop_name($shop_name)
 	// {
@@ -422,6 +424,11 @@ class DatabaseSeeder extends Seeder
 		// Loop through nodes
 		foreach ($instance as $i)
 		{
+			// Get /db/data/quest/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/instance/' . $i->i . '.json';
+			$i = $this->get_cleaned_json($json_file, TRUE);
+			$i = $i->instance;
+
 			$row = [
 				'id' => $i->id,
 				'name' => $i->name,
@@ -499,7 +506,7 @@ class DatabaseSeeder extends Seeder
 		{
 			$orig_q = $q;
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlanddeploy/db/data/quest/' . $q->i . '.json';
+			$json_file = base_path() . '/../garlandtools/db/data/quest/' . $q->i . '.json';
 			$q = $this->get_cleaned_json($json_file, TRUE);
 			$q = $q->quest;
 
@@ -556,6 +563,11 @@ class DatabaseSeeder extends Seeder
 		// Loop through achievements
 		foreach ($achievement as $a)
 		{
+			// Get /db/data/quest/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/achievement/' . $a->i . '.json';
+			$a = $this->get_cleaned_json($json_file, TRUE);
+			$a = $a->achievement;
+
 			$row = [
 				'id' => $a->id,
 				'name' => $a->name,
@@ -578,6 +590,11 @@ class DatabaseSeeder extends Seeder
 		// Loop through fates
 		foreach ($fate as $f)
 		{
+			// Get /db/data/quest/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/fate/' . $f->i . '.json';
+			$f = $this->get_cleaned_json($json_file, TRUE);
+			$f = $f->fate;
+
 			$row = [
 				'id' => $f->id,
 				'name' => $f->name,
@@ -732,7 +749,7 @@ class DatabaseSeeder extends Seeder
 		foreach ($leve as $l)
 		{
 			// Get /db/data/leve/#.json
-			$json_file = base_path() . '/../garlanddeploy/db/data/leve/' . $l->i . '.json';
+			$json_file = base_path() . '/../garlandtools/db/data/leve/' . $l->i . '.json';
 			$l = $this->get_cleaned_json($json_file);
 
 			$rewards = isset($l->rewards) && isset($l->rewards->entries) ? $l->rewards->entries : [];
@@ -825,7 +842,7 @@ class DatabaseSeeder extends Seeder
 		foreach ($item as $i)
 		{
 			// Get /db/data/item/#.json
-			$json_file = base_path() . '/../garlanddeploy/db/data/item/' . $i->i . '.json';
+			$json_file = base_path() . '/../garlandtools/db/data/item/' . $i->i . '.json';
 			$i = $this->get_cleaned_json($json_file);
 			$i = $i->item;
 

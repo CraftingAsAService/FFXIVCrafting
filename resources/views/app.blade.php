@@ -4,6 +4,7 @@
 	if ( ! is_string($lang)) $lang = 'en';
 	$lbu = Config::get('language_base_url');
 	if ( ! is_string($lbu)) $lbu = $_SERVER['REQUEST_URI'];
+	$lbu = preg_replace(['/www\./', '/\/\//'], ['', '/'], $lbu);
 ?><!DOCTYPE html>
 <html lang='en-us'>
 	<head>
@@ -67,6 +68,7 @@
 						</a>
 					</li>
 
+					{{--
 					<li>
 						<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
 							@if(isset($account) && $account)
@@ -78,6 +80,7 @@
 							@endif
 						</a>
 					</li>
+ 					--}}
 
 					<li>
 						<hr>
@@ -139,6 +142,7 @@
 									@endforeach
 								</ul>
 							</li>
+							{{--
 							<li>
 								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
 									@if(isset($account) && $account)
@@ -150,6 +154,7 @@
 									@endif
 								</a>
 							</li>
+							 --}}
 							<li>
 								<a href="/list"{!! isset($active) && $active == 'list' ? ' class="active"' : '' !!}>
 									<img src="/img/icons/bag.png">
@@ -251,8 +256,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/3.5.png" class="img-responsive">
-								<p>This site has been optimized for Patch 3.5</p>
+								<img src="/img/patch/4.0.png" class="img-responsive">
+								<p>This site has been optimized for Patch 4.0</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>

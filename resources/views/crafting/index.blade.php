@@ -65,8 +65,8 @@
 
 				<a href='#' class='select-recipe-level btn btn-default btn-block margin-top' data-toggle='modal' data-target='#ilvl-modal'><img src='/img/ilvl.png' width='16' height='16' rel='tooltip' title='Item Level (ilvl)' style='position: relative; top: -2px;'> Finder</a>
 
-				@if(isset($account) && $account)
-				
+				{{-- @if(isset($account) && $account)
+
 				<a href='#' class='btn btn-default btn-block margin-top' id='account-ilvl'><img src='{!! $account['avatar'] !!}' width='16' height='16' class='border-radius'> Use Account</a>
 
 				@else
@@ -75,7 +75,7 @@
 					Use the Account option<br>for more functionality!
 				</span>
 
-				@endif
+				@endif --}}
 			</div>
 			<div class='col-sm-9 col-lg-10'>
 				<fieldset class='margin-bottom mobile-margin-top'>
@@ -85,7 +85,7 @@
 						<?php $this_job = $job->id == reset($crafting_job_ids); ?>
 						<?php $this_level = $account ? $account['levels'][strtolower($job->name)] : 0; ?>
 						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-level='{{ $this_level }}'>
-							<input type='checkbox' name='classes[]' value='{{ $job->abbr }}' class='hidden'> 
+							<input type='checkbox' name='classes[]' value='{{ $job->abbr }}' class='hidden'>
 							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
 						@endforeach
@@ -121,7 +121,7 @@
 					</div>
 
 				</fieldset>
-				
+
 				<div class='mobile-text-right' style='margin-top: 30px;'>
 					<button type='submit' class='btn btn-success btn-lg'>Synthesize!</button>
 				</div>
