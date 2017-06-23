@@ -9,7 +9,7 @@ class Stat
 	{
 		$hand_land = ['Control', 'CP', 'Craftsmanship', 'Gathering', 'GP', 'Perception'];
 		$melee_set = array_merge(array('Intelligence', 'Mind', 'Spell Speed'), $hand_land);
-		$magic_set = array_merge(array('Strength', 'Dexterity', 'Skill Speed', 'Parry'), $hand_land);
+		$magic_set = array_merge(array('Strength', 'Dexterity', 'Skill Speed', 'Tenacity'), $hand_land);
 
 		$avoid = [
 			'ARC' => $melee_set,
@@ -113,8 +113,8 @@ class Stat
 
 			'Determination' => 'DOW,DOM',
 
-			'Accuracy' => 'DPS,RDPS,MDPS',
-			'Critical Hit Rate' => 'DPS,RDPS,MDPS',
+			'Direct Hit Rate' => 'DPS,RDPS,MDPS',
+			'Critical Hit' => 'DPS,RDPS,MDPS',
 
 			'Delay' => 'DPS,RDPS',
 
@@ -129,7 +129,7 @@ class Stat
 
 			'Block Rate' => 'Tanks',
 			'Block Strength' => 'Tanks',
-			'Parry' => 'Tanks',
+			'Tenacity' => 'Tanks',
 
 			'Strength' => 'Tanks,DPS',//,BSM,ARM,BTN',
 
@@ -203,15 +203,15 @@ class Stat
 			'Intelligence' => ['MDPS'],
 			'Mind' => ['Heals'],
 
-			'Accuracy' => ['DOW','DOM'],
-			'Critical Hit Rate' => ['DOW','DOM'],
+			'Direct Hit Rate' => ['DOW','DOM'],
+			'Critical Hit' => ['DOW','DOM'],
 			'Determination' => ['DOW','DOM'],
 			'Skill Speed' => ['DOW'],
 			'Spell Speed' => ['DOM'],
 
 			'Vitality' => ['DOW','DOM'],
 
-			'Parry' => ['Tanks'],
+			'Tenacity' => ['Tanks'],
 			'Piety' => ['DOM'],
 		];
 
@@ -251,7 +251,7 @@ class Stat
 	}
 
 	static public $stat_conversion = [
-			'Accuracy' => 'accuracy',
+			'Direct Hit Rate' => 'direct_hit_rate',
 			'Bind Resistance' => 'bind_res',
 			'Blind Resistance' => 'blind_res',
 			'Block Rate' => 'block_rate',
@@ -260,7 +260,7 @@ class Stat
 			'Control' => 'control',
 			'CP' => 'cp',
 			'Craftsmanship' => 'craftsmanship',
-			'Critical Hit Rate' => 'critical_rate',
+			'Critical Hit' => 'critical_rate',
 			'Defense' => 'def',
 			'Delay' => 'delay',
 			'Determination' => 'determination',
@@ -281,7 +281,7 @@ class Stat
 			'Mind' => 'mind',
 			'Morale' => 'morale',
 			'Paralysis Resistance' => 'paralysis_res',
-			'Parry' => 'parry',
+			'Tenacity' => 'tenacity',
 			'Perception' => 'perception',
 			'Petrification Resistance' => 'petrify_res',
 			'Piercing Resistance' => 'pierce_res',
@@ -356,11 +356,12 @@ class Stat
 
 	static public function name($attribute)
 	{
-		$flip = array_flip(self::$stat_conversion);
-		// if ( ! isset($flip[$attribute]))
-		// 	dd($flip, $attribute);
-		// dd(array_flip(self::$stat_conversion));//, $attribute);
-		return $flip[$attribute];
+		return $attribute; // 4.0 changed to solid text, no funny business needed
+		// $flip = array_flip(self::$stat_conversion);
+		// // if ( ! isset($flip[$attribute]))
+		// // 	dd($flip, $attribute);
+		// // dd(array_flip(self::$stat_conversion));//, $attribute);
+		// return $flip[$attribute];
 	}
 
 }
