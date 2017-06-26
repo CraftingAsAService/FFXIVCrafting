@@ -47,13 +47,14 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// 		// dd($shop);
 		// 	exit;
 		// dd('npc, shops', $core->npc->shops);
-		dd('instance', $core->instance);
+		// dd('instance', $core->instance);
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
 		// dd('quest', $core->quest);
 		// dd('achievement', $core->achievement->index);
 		// dd('fate', $core->fate->index);
-		// dd('jobCategories', $core->jobCategories);
+		dd('jobCategories', $core->jobCategories);
+
 		// dd('venture', $core->venture->index);
 		// dd('action', $core->action->categoryIndex);
 		// dd('action', $core->action->index);
