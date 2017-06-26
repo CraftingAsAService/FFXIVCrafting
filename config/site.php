@@ -2,7 +2,7 @@
 
 return array(
 
-	'max_level' => 60,
+	'max_level' => 70,
 
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
@@ -27,7 +27,12 @@ return array(
 	'cache_length' => '10080', // Minutes - 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Left Ring','Right Ring'),
 	'gear_focus' => array(
-		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN,MCH' => array(
+		'PGL,MNK,SAM'  => array(
+			'Strength',
+			'Critical Hit',
+			'Skill Speed',
+		),
+		'LNC,DRG,BRD,ARC,ROG,NIN,MCH' => array(
 			'Dexterity',
 			'Critical Hit',
 			'Skill Speed',
@@ -37,10 +42,9 @@ return array(
 			'Skill Speed',
 			'Tenacity',
 		),
-		'THM,BLM,ACN,SMN' => array(
+		'THM,BLM,ACN,SMN,RDM' => array(
 			'Intelligence',
 			'Spell Speed',
-			'Piety',
 		),
 		'CNJ,SCH,WHM,AST' => array(
 			'Mind',
@@ -87,7 +91,7 @@ return array(
 			'Determination'		=> 0.141,
 			'Skill Speed'		=> 0.074,
 		],
-		'PGL,MNK' => [
+		'PGL,MNK,SAM' => [
 			'Physical Damage'	=> 10.714,
 			'Strength'			=> 1,
 			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
@@ -117,7 +121,7 @@ return array(
 			'Block Strength'	=> 0.05,
 			'Block Rate'		=> 0.05,
 		],
-		'THM,BLM' => [
+		'THM,BLM,RDM' => [
 			'Physical Damage'	=> 6.726,
 			'Intelligence'		=> 1,
 			'Direct Hit Rate'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
@@ -181,6 +185,7 @@ return array(
 			30, // NIN
 			31, // MCH
 			32, // DRK
+			34, // SAM
 		),
 		'advanced_magic' => array(
 			24, // WHM
@@ -188,6 +193,7 @@ return array(
 			27, // SMN
 			28, // SCH
 			33, // AST
+			35, // RDM
 		),
 	),
 	'defined_slots' => array(
