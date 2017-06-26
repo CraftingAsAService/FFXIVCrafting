@@ -685,6 +685,8 @@ class DatabaseSeeder extends Seeder
 			['31', 'Machinist', 'MCH'],
 			['32', 'Dark Knight', 'DRK'],
 			['33', 'Astrologian', 'AST'],
+			['34', 'Samurai', 'SAM'],
+			['35', 'Red Mage', 'RDM'],
 		];
 
 		// Loop through nodes
