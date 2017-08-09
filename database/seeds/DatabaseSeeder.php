@@ -516,7 +516,7 @@ class DatabaseSeeder extends Seeder
 				'job_category_id' => isset($q->reqs) && isset($q->reqs->jobs) ? $q->reqs->jobs[0]->id : null,
 				'level' => isset($q->reqs) && isset($q->reqs->jobs) ? $q->reqs->jobs[0]->lvl : 1,
 				'sort' => $q->sort,
-				'zone_id' => $q->zoneid,
+				'zone_id' => isset($q->zoneid) ? $q->zoneid : null,
 				'icon' => isset($q->icon) ? $q->icon : null,
 				'issuer_id' => isset($q->issuer_id) ? $q->issuer_id : null,
 				'target_id' => isset($q->target_id) ? $q->target_id : null,
