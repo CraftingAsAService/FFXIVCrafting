@@ -103,6 +103,13 @@ class LevesController extends \App\Http\Controllers\Controller
 			// echo 'Parsing ' . $name . '<br>';
 
 			$amounts = $this->basic_finder("//div/table/tr/td[1]/span");
+
+			if ( ! is_array($amounts))
+			{
+				flash()->error($url . ' Failed');
+				continue;
+			}
+
 			$xp = array_shift($amounts);
 
 			$gil = $this->basic_finder("//tr[4]/td[1]/div[@class='arrquestbox']/div[@class='tls']/div[@class='trt']/div[@class='tl']/div[@class='trs']/div[@class='tr']/div[@class='content']/table/tr[2]/td/div/table/tr/td[2]/span");
@@ -173,69 +180,73 @@ class LevesController extends \App\Http\Controllers\Controller
 			else
 				$leves[trim(preg_replace('/\s|\-|\(.*\)/', '', $key))] = $value;
 
-		$gamerescapewiki_leves = [];
+		// $gamerescapewiki_leves = [];
 
-		foreach ($gamerescapewiki_data as $gewd)
-		{
-			$search_name = trim(preg_replace('/\s|\-|\(.*\)/', '', strtolower($gewd->name)));
+		// foreach ($gamerescapewiki_data as $gewd)
+		// {
+		// 	$search_name = trim(preg_replace('/\s|\-|\(.*\)/', '', strtolower($gewd->name)));
 
-			if ( ! isset($leves[$search_name]))
-				dd('NOT FOUND', $leves);
+		// 	if ( ! isset($leves[$search_name]))
+		// 		continue;
 
-			continue;
+		// 	dd($gewd);
+		// 		// dd('NOT FOUND', $search_name, $leves);
 
-			// $leves[$search_name];
 
-			// dd($gewd, in_array($gewd->name, $leves));
-			// $extra->xp = preg_replace('/,/', '', $extra->xp);
+		// 	// $leves[$search_name];
 
-			$leve = null;
-			foreach ($original_leves as $original)
-				if (preg_replace('/\'/', '', strtolower($original->name)) == preg_replace('/\s\(levequest\)/', '', preg_replace('/\'/', '', strtolower($extra->name))))
-				{
-					$leve = $original;
-					break;
-				}
+		// 	// dd($gewd, in_array($gewd->name, $leves));
+		// 	// $extra->xp = preg_replace('/,/', '', $extra->xp);
 
-			if ($leve == null)
-				continue;
+		// 	// $leve = null;
+		// 	// foreach ($original_leves as $original)
+		// 	// 	if (preg_replace('/\'/', '', strtolower($original->name)) == preg_replace('/\s\(levequest\)/', '', preg_replace('/\'/', '', strtolower($extra->name))))
+		// 	// 	{
+		// 	// 		$leve = $original;
+		// 	// 		break;
+		// 	// 	}
 
-			echo 'Improving ' . $leve->name . '<br>';
+		// 	// if ($leve == null)
+		// 	// 	continue;
 
-			continue;
+		// 	// echo 'Improving ' . $leve->name . '<br>';
 
-			foreach ($extra->rewards as $reward)
-			{
-				$tmp =& $rewards[$leve->class][$leve->level][$reward->item_name];
-				$tmp[$reward->amount ?: 1]++;
-			}
+		// 	// continue;
 
-			$leve->xp_min = (int) min($leve->xp, $extra->xp);
-			$leve->xp_max = (int) max($leve->xp, $extra->xp);
+		// 	// foreach ($extra->rewards as $reward)
+		// 	// {
+		// 	// 	$tmp =& $rewards[$leve->class][$leve->level][$reward->item_name];
+		// 	// 	$tmp[$reward->amount ?: 1]++;
+		// 	// }
 
-			if (is_null($extra->gil_max))
-				$extra->gil_max = $extra->gil_min;
+		// 	// $leve->xp_min = (int) min($leve->xp, $extra->xp);
+		// 	// $leve->xp_max = (int) max($leve->xp, $extra->xp);
 
-			$leve->gil_min = (int) min($leve->gil, $extra->gil_min);
-			$leve->gil_max = (int) max($leve->gil, $extra->gil_max);
+		// 	// if (is_null($extra->gil_max))
+		// 	// 	$extra->gil_max = $extra->gil_min;
 
-			unset($leve->gil, $leve->xp);
+		// 	// $leve->gil_min = (int) min($leve->gil, $extra->gil_min);
+		// 	// $leve->gil_max = (int) max($leve->gil, $extra->gil_max);
 
-			$gamerescapewiki_leves[] = $leve;
-		}
+		// 	// unset($leve->gil, $leve->xp);
+
+		// 	$gamerescapewiki_leves[] = $leve;
+		// }
 
 		// dd('hi');
 
-		foreach ($rewards as $class => $levels)
-			foreach ($levels as $level => $r)
-				foreach ($r as $item => $amounts)
-				{
-					$rewards[$class][$level][$item] = array_keys($rewards[$class][$level][$item]);
-					sort($rewards[$class][$level][$item]);
-				}
+		// foreach ($rewards as $class => $levels)
+		// 	foreach ($levels as $level => $r)
+		// 		foreach ($r as $item => $amounts)
+		// 		{
+		// 			$rewards[$class][$level][$item] = array_keys($rewards[$class][$level][$item]);
+		// 			sort($rewards[$class][$level][$item]);
+		// 		}
+			// dd($gamerescapewiki_data[12], $gamerescapewiki_data[536]);
+			echo 'hi';
 
-		file_put_contents(storage_path() . '/app/osmose/gamerescapewiki/leves.json', json_encode($gamerescapewiki_leves));
-		file_put_contents(storage_path() . '/app/osmose/gamerescapewiki/leve-rewards.json', json_encode($rewards));
+		file_put_contents(storage_path() . '/app/osmose/gamerescapewiki/leves.json', json_encode($gamerescapewiki_data));
+		// file_put_contents(storage_path() . '/app/osmose/gamerescapewiki/leve-rewards.json', json_encode($rewards));
 
 		// echo 'Files built and placed in storage<br>';
 

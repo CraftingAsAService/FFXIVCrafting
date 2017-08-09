@@ -17,7 +17,7 @@
 		<fieldset>
 			<legend>Leve Level</legend>
 			<div class='list-group leve-level-select'>
-				@foreach(array_merge(array(1), range(5, 45, 5), range(50, 58, 2)) as $level)
+				@foreach(array_merge(array(1), range(5, 45, 5), range(50, config('site.max_level') - 2, 2)) as $level)
 				<a href='#' class='list-group-item{{ $level == 1 ? ' active' : '' }}' data-level='{{ $level }}'>
 					Level {{ $level }}
 				</a>
@@ -41,7 +41,7 @@
 			@foreach($crafting_job_list as $job)
 			<div class='leve-section' id='{{ $job->abbr }}-leves'>
 
-				@foreach(array_merge(array(1), range(5,45, 5), range(50, 58, 2)) as $level)
+				@foreach(array_merge(array(1), range(5,45, 5), range(50, config('site.max_level') - 2, 2)) as $level)
 				<div class='table-responsive hidden' id='{{ $job->abbr }}-{{ $level }}-leves'>
 					<legend>Level {{ $level }} {{ $job->name }} Levequests</legend>
 					<table class='levequests-table table table-bordered table-striped table-condensed'>
