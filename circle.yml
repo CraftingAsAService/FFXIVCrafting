@@ -1,4 +1,4 @@
 machine:
   php:
     version:
-      5.5.9
+      7.0.4
