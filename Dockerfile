@@ -12,15 +12,6 @@ ENV LANG en_US.UTF-8
 RUN apt-get -qq install apache2
 RUN a2enmod rewrite
 
-RUN apt-get -qq install wget
-RUN mkdir -p /opt/newrelic
-WORKDIR /opt/newrelic
-RUN wget -q -r -nd -np -A linux.tar.gz http://download.newrelic.com/php_agent/release/
-RUN tar -zxf newrelic-php5-*-linux.tar.gz --strip=1
-ENV NR_INSTALL_SILENT true
-RUN bash newrelic-install install
-WORKDIR /
-ADD config/newrelic.ini /etc/php5/apache2/conf.d/newrelic.ini
 RUN apt-get -qq install php php-curl php-mbstring php-mcrypt php-mysql php-sqlite3 php-xml
 RUN /usr/sbin/phpenmod curl
 RUN /usr/sbin/phpenmod mbstring
