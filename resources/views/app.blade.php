@@ -256,8 +256,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/4.0.png" class="img-responsive">
-								<p>This site has been optimized for Patch 4.05</p>
+								<img src="/img/patch/4.1.png" class="img-responsive">
+								<p>This site has been optimized for Patch 4.1</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>
