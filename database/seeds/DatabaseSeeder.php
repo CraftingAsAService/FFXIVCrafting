@@ -233,14 +233,15 @@ class DatabaseSeeder extends Seeder
 		{
 			// Get /db/data/quest/#.json
 			$json_file = base_path() . '/../garlandtools/db/data/npc/' . $npc->i . '.json';
+			if ( ! is_file($json_file))
+				continue;
+
 			$n = $this->get_cleaned_json($json_file, TRUE);
 			$n = $n->npc;
 
-			// dd($n);
-
 			$row = [
 				'id' => $n->id,
-				'name' => $n->name,
+				'name' => isset($n->en) ? $n->en->name : $n->name,
 				'zone_id' => isset($n->zoneid) ? $n->zoneid : null,
 				'approx' => isset($n->approx) ? $n->approx : null,
 				'x' => isset($n->coords) ? $n->coords[0] : null,
@@ -429,9 +430,12 @@ class DatabaseSeeder extends Seeder
 			$i = $this->get_cleaned_json($json_file, TRUE);
 			$i = $i->instance;
 
+			// if ( ! isset($i->name))
+			// 	dd($i);
+
 			$row = [
 				'id' => $i->id,
-				'name' => $i->name,
+				'name' => isset($i->en) ? $i->en->name : $i->name,
 				'type' => $i->type,
 				'zone_id' => isset($i->zoneid) ? $i->zoneid : null,
 				'icon' => $i->fullIcon,
@@ -570,7 +574,7 @@ class DatabaseSeeder extends Seeder
 
 			$row = [
 				'id' => $a->id,
-				'name' => $a->name,
+				'name' => isset($a->en) ? $a->en->name : $a->name,
 				'item_id' => isset($a->item) ? $a->item : null,
 				'icon' => $a->icon,
 			];
@@ -597,7 +601,7 @@ class DatabaseSeeder extends Seeder
 
 			$row = [
 				'id' => $f->id,
-				'name' => $f->name,
+				'name' => isset($f->en) ? $f->en->name : $f->name,
 				'type' => $f->type,
 				'level' => $f->lvl,
 				'max_level' => $f->maxlvl,
