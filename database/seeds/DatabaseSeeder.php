@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
 			$this->fishing($core->fishing->index);
 			$this->mob($core->mob->partialIndex);
 			$this->location($core->location->index);
-			$this->npc($core->npc->partialIndex);
+			$this->npc();
 			// $this->npc_base($core->npc->baseIndex);
 			// $this->shop_name($core->npc->shopNames);
 			// $this->shop($core->npc->shops);
@@ -225,7 +225,7 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function npc($npcs)
+	private function npc()
 	{
 		// Setup Data Var
 		$this->data['npc'] = [];
@@ -236,11 +236,11 @@ class DatabaseSeeder extends Seeder
 
 		$used_shop = [];
 
-		// Loop through nodes
-		foreach ($npcs as $npc)
+		// Loop through npcs
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/npc'), ['.', '..']) as $file)
 		{
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/npc/' . $npc->i . '.json';
+			$json_file = base_path() . '/../garlandtools/db/data/npc/' . $file;
 			if ( ! is_file($json_file))
 				continue;
 
