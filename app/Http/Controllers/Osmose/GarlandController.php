@@ -22,6 +22,8 @@ class GarlandController extends \App\Http\Controllers\Controller
 	{
 		$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
 
+		dd($core->item);
+
 		// dd('node', $core->node->bonusIndex);
 		// $id = "3";
 		// dd('node', $core->node->index);//->$id);
@@ -51,9 +53,9 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
 		// dd('quest', $core->quest);
-		// dd('achievement', $core->achievement->index);
+		// dd('achievement', $core->achievement->categoryIndex);
 		// dd('fate', $core->fate->index);
-		dd('jobCategories', $core->jobCategories);
+		// dd('jobCategories', $core->jobCategories);
 
 		// dd('venture', $core->venture->index);
 		// dd('action', $core->action->categoryIndex);

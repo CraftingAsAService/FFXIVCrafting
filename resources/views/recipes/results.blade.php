@@ -1,5 +1,6 @@
 {{-- inside a tbody --}}
 @forelse($list as $recipe)
+@if (isset($recipe->item->id))
 <tr>
 	<td class='text-left valign'>
 		<a href='{{ xivdb_item_link() . $recipe->item->id }}' target='_blank'>
@@ -7,7 +8,7 @@
 		</a>
 	</td>
 	<td class='text-center valign'>
-		@if (count($recipe->job))
+		@if (isset($recipe->job) && $recipe->job->count())
 		<img src='/img/jobs/{{ strtoupper($recipe->job->abbr) }}.png' width='24' height='24' rel='tooltip' title='{{ $recipe->job->name }}'>
 		@endif
 	</td>
@@ -21,6 +22,7 @@
 		</button>
 	</td>
 </tr>
+@endif
 @empty
 <tr>
 	<td colspan='4'>

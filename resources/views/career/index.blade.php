@@ -51,7 +51,7 @@
 
 				and
 
-				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='supporter-max-level' name='supporter-max-level'>
+				<input type='number' min='0' value='375' class='form-control text-center inline-input level-input' id='supporter-max-level' name='supporter-max-level'>
 
 				?
 			</div>
@@ -97,7 +97,7 @@
 
 				and
 
-				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='receiver-max-level' name='receiver-max-level'>
+				<input type='number' min='0' value='375' class='form-control text-center inline-input level-input' id='receiver-max-level' name='receiver-max-level'>
 
 				?
 			</div>
@@ -127,7 +127,7 @@
 					</option>
 					@endforeach
 				</select>
-				
+
 				, what should I obtain to support
 
 				<select class='multiselect hidden' multiple='multiple' id='gathering-supported-classes' name='gathering-supported-classes[]'>
@@ -146,8 +146,8 @@
 
 				and
 
-				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
-				
+				<input type='number' min='0' value='375' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
+
 				?
 			</div>
 			<div class='panel-footer text-right'>
@@ -186,8 +186,8 @@
 
 				and
 
-				<input type='number' min='0' value='160' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
-				
+				<input type='number' min='0' value='375' class='form-control text-center inline-input level-input' id='gathering-max-level' name='gathering-max-level'>
+
 				?
 			</div>
 			<div class='panel-footer text-right'>
@@ -210,7 +210,7 @@
 			<p>I define your Career as making one of everything, and gathering those items yourself.</p>
 
 			<p>Imagine that you are leveling Blacksmithing.  Just how many Bronze Ingots do you need?  Imagine yourself out Mining.  How many Iron Ore do you really need?</p>
-			
+
 			<p>There are items with multiple recipes (Bronze Ingots are made from BSM &amp; ARM for example).  Due to the complex nature of the calculations, items were simply split evenly between those crafts.</p>
 
 		</div>

@@ -78,9 +78,9 @@ return [
 	|
 	*/
 
-	'key' => env('APP_KEY', 'SomeRandomString'),
+	'key' => env('APP_KEY', 'SomeRandomStringWith32Characters'),
 
-	'cipher' => MCRYPT_RIJNDAEL_128,
+	'cipher' => 'AES-256-CBC',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -149,7 +149,7 @@ return [
 		'App\Providers\RouteServiceProvider',
 
 		/*
-		 * Custom 
+		 * Custom
 		 */
 		'App\Providers\HelperServiceProvider',
 		'Laracasts\Flash\FlashServiceProvider',
@@ -207,7 +207,7 @@ return [
 		'HTML'		=> 'Illuminate\Html\HtmlFacade',
 
 		/*
-		 * Custom 
+		 * Custom
 		 */
 		'Flash' => 'Laracasts\Flash\Flash',
 		'Clockwork' => 'Clockwork\Support\Laravel\Facade',
