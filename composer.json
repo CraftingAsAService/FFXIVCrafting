@@ -15,8 +15,6 @@
         "itsgoingd/clockwork": "~1.9"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4.0",
-		"phpspec/phpspec": "~2.1",
 		"rackspace/php-opencloud": "v1.13.0"
 	},
 	"autoload": {

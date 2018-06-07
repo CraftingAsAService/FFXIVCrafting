@@ -1,5 +1,7 @@
 <?php
 
+// php artisan migrate:refresh --seed
+
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,24 +35,25 @@ class DatabaseSeeder extends Seeder
 			$this->data = Cache::get('garland-seed');
 		else
 		{
+			// Manually obtain: https://www.garlandtools.org/db/doc/core/en/2/data.json
 			$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
 
-			$this->node_bonuses($core->node->bonusIndex);
-			$this->node($core->node->index);
-			$this->fishing($core->fishing->index);
-			$this->mob($core->mob->partialIndex);
-			$this->location($core->location->index);
+			$this->node_bonuses($core->nodeBonusIndex);
+			$this->node();
+			$this->fishing();
+			$this->mob();
+			$this->location($core->locationIndex);
 			$this->npc();
 			// $this->npc_base($core->npc->baseIndex);
 			// $this->shop_name($core->npc->shopNames);
 			// $this->shop($core->npc->shops);
-			$this->instance($core->instance->partialIndex);
-			$this->quest($core->quest->partialIndex);
+			$this->instance();
+			$this->quest();
 			// $this->achievement($core->achievement->partialIndex);
 			// $this->fate($core->fate->partialIndex);
 			$this->job_category($core->jobCategories);
 			$this->job(); // No provided data, hard coded
-			$this->venture($core->venture->index);
+			$this->venture($core->ventureIndex);
 			$this->leve();
 			$this->item_category($core->item->categoryIndex);
 			$this->item();
@@ -80,15 +83,20 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function node($node)
+	private function node()
 	{
 		// Setup Data Var
 		$this->data['node'] = [];
 		$this->data['item_node'] = [];
 
 		// Loop through nodes
-		foreach ($node as $n)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/node'), ['.', '..']) as $file)
 		{
+			// Get /db/data/node/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/node/' . $file;
+			$n = $this->get_cleaned_json($json_file);
+			$n = $n->node;
+
 			$row = [
 				'id' => $n->id,
 				'name' => $n->name,
@@ -118,15 +126,20 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function fishing($fishing)
+	private function fishing()
 	{
 		// Setup Data Var
 		$this->data['fishing'] = [];
 		$this->data['fishing_item'] = [];
 
-		// Loop through nodes
-		foreach ($fishing as $f)
+		// Loop through fishing
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/fishing'), ['.', '..']) as $file)
 		{
+			// Get /db/data/fishing/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/fishing/' . $file;
+			$f = $this->get_cleaned_json($json_file);
+			$f = $f->fishing;
+
 			$row = [
 				'id' => $f->id,
 				'name' => isset($f->en) ? $f->en->name : $f->name,
@@ -159,21 +172,18 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function mob($mob)
+	private function mob()
 	{
 		// Setup Data Var
 		$this->data['mob'] = [];
 		$this->data['item_mob'] = [];
 
-		// Loop through nodes
-		foreach ($mob as $m)
+		// Loop through mob
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/mob'), ['.', '..']) as $file)
 		{
-			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/mob/' . $m->i . '.json';
-			if ( ! is_file($json_file))
-				continue;
-
-			$m = $this->get_cleaned_json($json_file, TRUE);
+			// Get /db/data/mob/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/mob/' . $file;
+			$m = $this->get_cleaned_json($json_file);
 			$m = $m->mob;
 
 			$row = [
@@ -234,6 +244,8 @@ class DatabaseSeeder extends Seeder
 		$this->data['shop'] = [];
 		$this->data['item_shop'] = [];
 
+		$shopId = 0;
+
 		$used_shop = [];
 
 		// Loop through npcs
@@ -244,7 +256,7 @@ class DatabaseSeeder extends Seeder
 			if ( ! is_file($json_file))
 				continue;
 
-			$n = $this->get_cleaned_json($json_file, TRUE);
+			$n = $this->get_cleaned_json($json_file);
 			$n = $n->npc;
 
 			$row = [
@@ -261,6 +273,8 @@ class DatabaseSeeder extends Seeder
 			if (isset($n->shops))
 				foreach ($n->shops as $shop)
 				{
+					$shop->id = $shopId++;
+
 					$row = [
 						'shop_id' => $shop->id,
 						'npc_id' => $n->id,
@@ -423,23 +437,20 @@ class DatabaseSeeder extends Seeder
 	// 	$this->output_memory();
 	// }
 
-	private function instance($instance)
+	private function instance()
 	{
 		// Setup Data Var
 		$this->data['instance'] = [];
 		$this->data['instance_item'] = [];
 		$this->data['instance_mob'] = [];
 
-		// Loop through nodes
-		foreach ($instance as $i)
+		// Loop through instance
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/instance'), ['.', '..']) as $file)
 		{
-			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/instance/' . $i->i . '.json';
-			$i = $this->get_cleaned_json($json_file, TRUE);
+			// Get /db/data/instance/#.json
+			$json_file = base_path() . '/../garlandtools/db/data/instance/' . $file;
+			$i = $this->get_cleaned_json($json_file);
 			$i = $i->instance;
-
-			// if ( ! isset($i->name))
-			// 	dd($i);
 
 			$row = [
 				'id' => $i->id,
@@ -506,25 +517,24 @@ class DatabaseSeeder extends Seeder
 		$this->output_memory();
 	}
 
-	private function quest($quest)
+	private function quest()
 	{
 		// Setup Data Var
 		$this->data['quest'] = [];
 		$this->data['quest_reward'] = [];
 		$this->data['quest_required'] = [];
 
-		// Loop through nodes
-		foreach ($quest as $q)
+		// Loop through quest
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/quest'), ['.', '..']) as $file)
 		{
-			$orig_q = $q;
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/quest/' . $q->i . '.json';
-			$q = $this->get_cleaned_json($json_file, TRUE);
+			$json_file = base_path() . '/../garlandtools/db/data/quest/' . $file;
+			$q = $this->get_cleaned_json($json_file);
 			$q = $q->quest;
 
 			$row = [
 				'id' => $q->id,
-				'name' => $q->en->name,
+				'name' => $q->name ?? $q->en->name,
 				'job_category_id' => isset($q->reqs) && isset($q->reqs->jobs) ? $q->reqs->jobs[0]->id : null,
 				'level' => isset($q->reqs) && isset($q->reqs->jobs) ? $q->reqs->jobs[0]->lvl : 1,
 				'sort' => $q->sort,
@@ -769,11 +779,11 @@ class DatabaseSeeder extends Seeder
 			$rewards = isset($l->rewards) && isset($l->rewards->entries) ? $l->rewards->entries : [];
 			$l = $l->leve;
 
-			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($l->en->name)));
+			$search_name = trim(preg_replace("/\s|\-|\(.*\)| /", '', strtolower($l->name)));
 
 			$row = [
 				'id' => $l->id,
-				'name' => $l->en->name,
+				'name' => $l->name,
 				'type' => isset($gamerescapewiki_leves[$search_name]) ? $gamerescapewiki_leves[$search_name]->issuing_npc_information : null,
 				'level' => $l->lvl,
 				'job_category_id' => $l->jobCategory,
@@ -871,17 +881,13 @@ class DatabaseSeeder extends Seeder
 			// if ($i->id == 1609)
 			// 	dd($i);
 
-			// No translations?  Worthless item probably; Skip
-			if ( ! isset($i->de))
-				continue;
-
 			$row = [
 				'id' => $i->id,
-				'eorzea_id' => isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
-				'name' => $i->en->name,
-				'de_name' => isset($i->de->name) ? $i->de->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
-				'fr_name' => isset($i->fr->name) ? $i->fr->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
-				'jp_name' => isset($i->ja->name) ? $i->ja->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
+				'eorzea_id' => null,//isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
+				'name' => $i->name, //$i->en->name,
+				'de_name' => null, //isset($i->de->name) ? $i->de->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
+				'fr_name' => null, //isset($i->fr->name) ? $i->fr->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
+				'jp_name' => null, //isset($i->ja->name) ? $i->ja->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
 				'help' => isset($i->help) ? $i->help : null,
 				'price' => isset($i->price) ? $i->price : null,
 				'sell_price' => isset($i->sell_price) ? $i->sell_price : null,

@@ -230,13 +230,13 @@
 										61 - 70
 									</td>
 									<td>
-										<a href='#' class='select-range'>161 - 320</a>
+										<a href='#' class='select-range'>161 - 375</a>
 									</td>
 									<td class='text-center'>
 										<input type='radio' name='start' id='start61' data-start='161' checked='checked'>
 									</td>
 									<td class='text-center'>
-										<input type='radio' name='end' id='end70' data-end='320' checked='checked'>
+										<input type='radio' name='end' id='end70' data-end='375' checked='checked'>
 									</td>
 								</tr>
 							</tbody>

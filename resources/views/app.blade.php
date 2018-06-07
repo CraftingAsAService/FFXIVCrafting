@@ -38,7 +38,7 @@
 		<link href='{!! cdn('/css/global.css') !!}' rel='stylesheet' />
 
 		<!-- New Theme, woot woot! -->
-		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 		<link href='{!! cdn('/css/theme.css') !!}' rel='stylesheet' />
 
 		@yield('css')
@@ -97,6 +97,7 @@
 					{!! menu_item('/stats',		'Stats',		'stats'		) !!}
 					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
 
+					{{--
 					<li>
 						<hr>
 					</li>
@@ -109,6 +110,7 @@
 						</a>
 					</li>
 					@endforeach
+					--}}
 				</ul>
 
 			</div>
@@ -126,6 +128,7 @@
 								</a>
 							</li>
 							@endif
+							{{--
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 									<img src="/img/icons/flags/{!! $lang !!}.png">
@@ -142,6 +145,7 @@
 									@endforeach
 								</ul>
 							</li>
+							--}}
 							{{--
 							<li>
 								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
@@ -256,8 +260,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/4.1.png" class="img-responsive">
-								<p>This site has been optimized for Patch 4.1</p>
+								<img src="/img/patch/4.3.png" class="img-responsive">
+								<p>This site has been optimized for Patch 4.3</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Donations</p>
@@ -348,7 +352,7 @@
 					seturlicon: false
 				}
 		</script>
-		<script src="http://xivdb.com/tooltips.min.js"></script>
+		<script src="https://xivdb.com/tooltips.js"></script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
