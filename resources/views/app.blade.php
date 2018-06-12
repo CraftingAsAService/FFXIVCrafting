@@ -97,7 +97,6 @@
 					{!! menu_item('/stats',		'Stats',		'stats'		) !!}
 					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
 
-					{{--
 					<li>
 						<hr>
 					</li>
@@ -110,7 +109,6 @@
 						</a>
 					</li>
 					@endforeach
-					--}}
 				</ul>
 
 			</div>
@@ -128,7 +126,6 @@
 								</a>
 							</li>
 							@endif
-							{{--
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 									<img src="/img/icons/flags/{!! $lang !!}.png">
@@ -145,7 +142,6 @@
 									@endforeach
 								</ul>
 							</li>
-							--}}
 							{{--
 							<li>
 								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
