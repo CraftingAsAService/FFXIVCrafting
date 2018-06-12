@@ -35,8 +35,10 @@ class DatabaseSeeder extends Seeder
 			$this->data = Cache::get('garland-seed');
 		else
 		{
-			// Manually obtain: https://www.garlandtools.org/db/doc/core/en/2/data.json
-			$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
+			// // Manually obtain: https://www.garlandtools.org/db/doc/core/en/2/data.json
+			// $core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
+
+			$core = $this->get_cleaned_json(base_path() . '/../garlandtools/db/data/en/core/data.json');
 
 			$this->node_bonuses($core->nodeBonusIndex);
 			$this->node();
@@ -90,10 +92,10 @@ class DatabaseSeeder extends Seeder
 		$this->data['item_node'] = [];
 
 		// Loop through nodes
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/node'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/node'), ['.', '..']) as $file)
 		{
 			// Get /db/data/node/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/node/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/node/' . $file;
 			$n = $this->get_cleaned_json($json_file);
 			$n = $n->node;
 
@@ -133,10 +135,10 @@ class DatabaseSeeder extends Seeder
 		$this->data['fishing_item'] = [];
 
 		// Loop through fishing
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/fishing'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/fishing'), ['.', '..']) as $file)
 		{
 			// Get /db/data/fishing/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/fishing/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/fishing/' . $file;
 			$f = $this->get_cleaned_json($json_file);
 			$f = $f->fishing;
 
@@ -179,10 +181,10 @@ class DatabaseSeeder extends Seeder
 		$this->data['item_mob'] = [];
 
 		// Loop through mob
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/mob'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/mob'), ['.', '..']) as $file)
 		{
 			// Get /db/data/mob/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/mob/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/mob/' . $file;
 			$m = $this->get_cleaned_json($json_file);
 			$m = $m->mob;
 
@@ -249,10 +251,10 @@ class DatabaseSeeder extends Seeder
 		$used_shop = [];
 
 		// Loop through npcs
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/npc'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/npc'), ['.', '..']) as $file)
 		{
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/npc/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/npc/' . $file;
 			if ( ! is_file($json_file))
 				continue;
 
@@ -445,17 +447,20 @@ class DatabaseSeeder extends Seeder
 		$this->data['instance_mob'] = [];
 
 		// Loop through instance
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/instance'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/instance'), ['.', '..']) as $file)
 		{
 			// Get /db/data/instance/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/instance/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/instance/' . $file;
 			$i = $this->get_cleaned_json($json_file);
 			$i = $i->instance;
+
+			// if ( ! isset($i->type))
+			// 	dd($i);
 
 			$row = [
 				'id' => $i->id,
 				'name' => isset($i->en) ? $i->en->name : $i->name,
-				'type' => $i->type,
+				'type' => $i->type ?? null,
 				'zone_id' => isset($i->zoneid) ? $i->zoneid : null,
 				'icon' => $i->fullIcon,
 			];
@@ -525,10 +530,10 @@ class DatabaseSeeder extends Seeder
 		$this->data['quest_required'] = [];
 
 		// Loop through quest
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/quest'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/quest'), ['.', '..']) as $file)
 		{
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/quest/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/quest/' . $file;
 			$q = $this->get_cleaned_json($json_file);
 			$q = $q->quest;
 
@@ -586,7 +591,7 @@ class DatabaseSeeder extends Seeder
 	// 	foreach ($achievement as $a)
 	// 	{
 	// 		// Get /db/data/quest/#.json
-	// 		$json_file = base_path() . '/../garlandtools/db/data/achievement/' . $a->i . '.json';
+	// 		$json_file = base_path() . '/../garlandtools/db/data/en/achievement/' . $a->i . '.json';
 	// 		$a = $this->get_cleaned_json($json_file, TRUE);
 	// 		$a = $a->achievement;
 
@@ -613,7 +618,7 @@ class DatabaseSeeder extends Seeder
 		foreach ($fate as $f)
 		{
 			// Get /db/data/quest/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/fate/' . $f->i . '.json';
+			$json_file = base_path() . '/../garlandtools/db/data/en/fate/' . $f->i . '.json';
 			$f = $this->get_cleaned_json($json_file, TRUE);
 			$f = $f->fate;
 
@@ -770,10 +775,10 @@ class DatabaseSeeder extends Seeder
 		}
 
 		// Loop through leves
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/leve'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/leve'), ['.', '..']) as $file)
 		{
 			// Get /db/data/leve/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/leve/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/leve/' . $file;
 			$l = $this->get_cleaned_json($json_file);
 
 			$rewards = isset($l->rewards) && isset($l->rewards->entries) ? $l->rewards->entries : [];
@@ -863,12 +868,16 @@ class DatabaseSeeder extends Seeder
 		$translations = (array) json_decode(file_get_contents(storage_path() . '/app/osmose/i18n_names.json'));
 
 		// Loop through items
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/item'), ['.', '..']) as $file)
+		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/item'), ['.', '..']) as $file)
 		{
 			// Get /db/data/item/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/item/' . $file;
+			$json_file = base_path() . '/../garlandtools/db/data/en/item/' . $file;
 			$i = $this->get_cleaned_json($json_file);
 			$i = $i->item;
+
+			$frI = $this->get_cleaned_json(base_path() . '/../garlandtools/db/data/fr/item/' . $file)->item;
+			$jaI = $this->get_cleaned_json(base_path() . '/../garlandtools/db/data/ja/item/' . $file)->item;
+			$deI = $this->get_cleaned_json(base_path() . '/../garlandtools/db/data/de/item/' . $file)->item;
 
 			// TMP handler
 			// $whitelist = [
@@ -885,9 +894,9 @@ class DatabaseSeeder extends Seeder
 				'id' => $i->id,
 				'eorzea_id' => null,//isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
 				'name' => $i->name, //$i->en->name,
-				'de_name' => null, //isset($i->de->name) ? $i->de->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
-				'fr_name' => null, //isset($i->fr->name) ? $i->fr->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
-				'jp_name' => null, //isset($i->ja->name) ? $i->ja->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
+				'de_name' => $deI->name ?? null, //isset($i->de->name) ? $i->de->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
+				'fr_name' => $frI->name ?? null, //isset($i->fr->name) ? $i->fr->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
+				'jp_name' => $jaI->name ?? null, //isset($i->ja->name) ? $i->ja->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
 				'help' => isset($i->help) ? $i->help : null,
 				'price' => isset($i->price) ? $i->price : null,
 				'sell_price' => isset($i->sell_price) ? $i->sell_price : null,

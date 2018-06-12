@@ -7,12 +7,12 @@ return array(
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
 
-	'available_languages' => ['en'/*, 'ja', 'de', 'fr'*/],
+	'available_languages' => ['en', 'ja', 'de', 'fr'],
 	'full_languages' => [
 		'en' => 'English',
-		/*'fr' => 'Français',
+		'fr' => 'Français',
 		'de' => 'Deutsch',
-		'ja' => '日本語',*/
+		'ja' => '日本語',
 	],
 	'default_language' => 'en',
 	// 'donation_slogans' => array(
