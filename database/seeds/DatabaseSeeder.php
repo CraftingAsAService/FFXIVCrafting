@@ -893,10 +893,10 @@ class DatabaseSeeder extends Seeder
 			$row = [
 				'id' => $i->id,
 				'eorzea_id' => null,//isset($translations[$i->en->name]) ? $translations[$i->en->name]->eid : null,
-				'name' => $i->name, //$i->en->name,
-				'de_name' => $deI->name ?? null, //isset($i->de->name) ? $i->de->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
-				'fr_name' => $frI->name ?? null, //isset($i->fr->name) ? $i->fr->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
-				'jp_name' => $jaI->name ?? null, //isset($i->ja->name) ? $i->ja->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
+				'name' => $this->cleanName($i->name), //$i->en->name,
+				'de_name' => $this->cleanName($deI->name ?? null), //isset($i->de->name) ? $i->de->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->de : $i->name,
+				'fr_name' => $this->cleanName($frI->name ?? null), //isset($i->fr->name) ? $i->fr->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->fr : $i->name,
+				'jp_name' => $this->cleanName($jaI->name ?? null), //isset($i->ja->name) ? $i->ja->name : $i->id, //isset($translations[$i->name]) ? $translations[$i->name]->jp : $i->name,
 				'help' => isset($i->help) ? $i->help : null,
 				'price' => isset($i->price) ? $i->price : null,
 				'sell_price' => isset($i->sell_price) ? $i->sell_price : null,
@@ -1261,5 +1261,10 @@ class DatabaseSeeder extends Seeder
 		// }
 
 		return $string;
+	}
+
+	private function cleanName($string)
+	{
+		return preg_replace('/\<SoftHyphen\/\>/', '', $string);
 	}
 }
