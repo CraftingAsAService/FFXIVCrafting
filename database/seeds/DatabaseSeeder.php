@@ -454,7 +454,7 @@ class DatabaseSeeder extends Seeder
 			$i = $this->get_cleaned_json($json_file);
 			$i = $i->instance;
 
-			// if ( ! isset($i->type))
+			// if ( ! isset($i->fullIcon))
 			// 	dd($i);
 
 			$row = [
@@ -462,7 +462,7 @@ class DatabaseSeeder extends Seeder
 				'name' => isset($i->en) ? $i->en->name : $i->name,
 				'type' => $i->type ?? null,
 				'zone_id' => isset($i->zoneid) ? $i->zoneid : null,
-				'icon' => $i->fullIcon,
+				'icon' => $i->fullIcon ?? '',
 			];
 
 			$this->set_data('instance', $row);
