@@ -1,3 +1,6 @@
+RewriteCond %{HTTP_USER_AGENT} !(^GoogleHC) [OR]
+RewriteRule ^/(healthz) - [L]
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
@@ -6,7 +9,7 @@
     RewriteEngine On
 
     # Images not found?
-    RewriteCond %{REQUEST_FILENAME} !-f 
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_URI} \.(gif|jpg|jpeg|png)$
     RewriteRule .* /img/noitemicon.png [L]
 
