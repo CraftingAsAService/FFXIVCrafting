@@ -128,6 +128,10 @@ return [
 			'password' => env('REDIS_PASSWORD', null),
 		],
 
+		'options' => [
+            'parameters' => ['password' => env('REDIS_PASSWORD', null)],
+        ],
+
 	],
 
 ];
