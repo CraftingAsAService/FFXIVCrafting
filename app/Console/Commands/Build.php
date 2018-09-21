@@ -55,6 +55,8 @@ class Build extends Command {
 		// $this->info('Suggested tag is ' . $new_tag);
 		// $tag = $this->ask('Name this branch: (`enter` to use default)', $new_tag);
 
+		\DB::table('sessions')->truncate();
+		\DB::table('cache')->truncate();
 
 		$this->info('Exporting MySQL Database');
 		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-config/caas-db/caas.sql');
