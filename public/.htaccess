@@ -1,12 +1,11 @@
-RewriteCond %{HTTP_USER_AGENT} !(^GoogleHC) [OR]
-RewriteRule ^/(healthz) - [L]
-
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
     </IfModule>
 
     RewriteEngine On
+
+    RewriteRule "^/healthz/" - [END]
 
     # Images not found?
     RewriteCond %{REQUEST_FILENAME} !-f
@@ -19,7 +18,7 @@ RewriteRule ^/(healthz) - [L]
     RewriteRule ^(.*)$ - [F,L]
 
     # Redirect Trailing Slashes...
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    #RewriteRule ^(.*)/$ /$1 [L,R=301]
 
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
