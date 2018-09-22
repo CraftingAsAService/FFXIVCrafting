@@ -49,7 +49,7 @@
 		<img src='/img/jobs/{{ $jobs[0]->abbr }}-inactive.png' width='32' height='32' style='position: relative; top: -3px;'>
 		{{ $jobs[0]->name }} Crafting
 		@else
-		Crafting for {{ implode(', ', $jobs->lists('name')->all()) }}
+		Crafting for {{ implode(', ', $jobs->pluck('name')->all()) }}
 		@endif
 		@elseif(isset($item))
 		Crafting {{ $item->display_name }}
@@ -163,12 +163,12 @@
 					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
 					@endforeach
 
-					@if(count($reagent['item']->shops))
+					@if($reagent['item']->shops->count())
 					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $reagent['item']->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					<span class='hidden vendors'>{{ $reagent['item']->price }}</span>
 					@endif
 
-					@if(count($reagent['item']->mobs))
+					@if($reagent['item']->mobs->count())
 					<img src='/img/mob-inactive.png' class='click-to-view' data-type='mobs' width='24' height='24' rel='tooltip' title='Click to load Beasts'>
 					@endif
 
@@ -223,7 +223,7 @@
 						<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
 						@endif
 
-						@if(count($recipe->item->leve_required))
+						@if($recipe->item->leve_required->count())
 							@foreach ($recipe->item->leve_required as $leve)
 							@if($leve->repeats)
 							<img src='/img/leve_icon_red.png' rel='tooltip' title='{{ $leve->name }}. Repeatable Leve!' style='margin-left: 5px;' width='16'>
@@ -258,7 +258,7 @@
 					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
 					@endif
 
-					@if(count($recipe->item->shops))
+					@if($recipe->item->shops->count())
 					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					@endif
 				</td>

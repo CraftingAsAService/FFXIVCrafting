@@ -32,7 +32,7 @@
 	@endif
 </p>
 
-@if(count($leve->requirements[0]->recipes))
+@if($leve->requirements[0]->recipes->count())
 <h3>Recipe</h3>
 
 <div class='panel-group' id='accordion{{ $leve->id }}' style='margin-bottom: 0;'>

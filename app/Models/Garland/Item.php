@@ -158,7 +158,7 @@ class Item extends Model {
 		// craftable only?
 		// rewardable?
 
-		$job_category_ids = $job->categories->lists('id')->all();
+		$job_category_ids = $job->categories->pluck('id')->all();
 
 		$two_handed_weapon_ids = self::two_handed_weapon_ids();
 

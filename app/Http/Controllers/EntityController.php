@@ -31,7 +31,7 @@ class EntityController extends Controller {
 		foreach ($item->leve_rewards as $leve)
 			$leves[$leve->pivot->rate * 100][$leve->pivot->amount ?: 1][$leve->level][] = [
 				'name' => $leve->name,
-				'job_count' => count($leve->job_category->jobs),
+				'job_count' => $leve->job_category->jobs->count(),
 				'job_category_name' => $leve->job_category->name,
 				'job' => $leve->job_category->jobs[0],
 			];

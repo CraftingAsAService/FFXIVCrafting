@@ -36,7 +36,7 @@
 			<?php $total = 0; ?>
 			@foreach($recipes as $recipe)
 			<?php if($amounts[$recipe->id] == 1) continue; ?>
-			<?php if(count($recipe->item->shops)) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
+			<?php if($recipe->item->shops->count()) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
 			<tr data-item-id='{{ $recipe->item_id }}'>
 				<td>
 					@if(isset($recipe->recipe_level))

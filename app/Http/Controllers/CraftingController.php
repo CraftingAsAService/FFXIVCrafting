@@ -88,14 +88,14 @@ class CraftingController extends Controller
 			return redirect()->back();
 		}
 
-		$job_ids = $jobs->lists('id')->all();
+		$job_ids = $jobs->pluck('id')->all();
 
 		// Check for quests
 		// We're only looking for proper crafting quests, so take out anything that's not between 9 and 16 (CRP to CUL)
 
 		$jc_ids = [];
 		foreach ($jobs as $job)
-			$jc_ids = array_merge($job->categories->lists('id')->all(), $jc_ids);
+			$jc_ids = array_merge($job->categories->pluck('id')->all(), $jc_ids);
 		array_unique($jc_ids);
 		$jc_ids = array_intersect($jc_ids, range(9,16));
 
@@ -191,7 +191,7 @@ class CraftingController extends Controller
 		unset($configuration);
 
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 
 		// Gather Recipes and Reagents
 		$query = Recipe::with(
@@ -295,7 +295,7 @@ class CraftingController extends Controller
 			'Crafting List' => [],
 		];
 
-		$gathering_class_abbreviations = Job::whereIn('id', Config::get('site.job_ids.gathering'))->lists('abbr')->all();
+		$gathering_class_abbreviations = Job::whereIn('id', Config::get('site.job_ids.gathering'))->pluck('abbr')->all();
 
 		foreach ($reagent_list as $reagent)
 		{
@@ -318,7 +318,7 @@ class CraftingController extends Controller
 				}
 				$level = $reagent['item']->recipes[0]->level;
 			}
-			elseif (count($reagent['item']->vendors))
+			elseif ($reagent['item']->vendors)
 			{
 				$section = 'Bought';
 				$level = $reagent['item']->min_price;
@@ -421,7 +421,7 @@ class CraftingController extends Controller
 
 				if ($self_sufficient)
 				{
-					if (count($reagent->nodes))
+					if ( ! $reagent->nodes->isEmpty())
 					{
 						// First, check here because we don't want to re-process the node data
 						if ($reagent_list[$reagent->id]['self_sufficient'])
@@ -450,7 +450,7 @@ class CraftingController extends Controller
 							continue;
 					}
 
-					if(count($reagent->recipes) > 0)
+					if( ! $reagent->recipes->isEmpty() > 0)
 					{
 						$reagent_list[$reagent->id]['yield'] = $reagent->recipes[0]->yield;
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbr;

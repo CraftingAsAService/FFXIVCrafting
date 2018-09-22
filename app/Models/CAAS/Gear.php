@@ -221,7 +221,7 @@ class Gear
 	 */
 	static private function items($job_id, $level_start, $level_end, $slot_ids, $stat_ids_to_focus, $options)
 	{
-		$job_category_ids = Job::with('categories')->find($job_id)->categories->lists('id')->all();
+		$job_category_ids = Job::with('categories')->find($job_id)->categories->pluck('id')->all();
 		// Get all items where:
 		// Slot isn't zero
 		// The class can use it

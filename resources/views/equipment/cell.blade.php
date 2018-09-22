@@ -5,7 +5,7 @@
 			@foreach($items as $ilvl => $gear)
 			@foreach($gear as $item)
 
-			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ count($item->recipes) ? ' craftable' : '' }}'
+			<div class='item nq cf {{ $i++ > 0 ? 'hidden' : 'active' }}{{ $item->recipes->count() ? ' craftable' : '' }}'
 				data-item-id='{{ $item->id }}' data-item-ilvl='{{ $item->ilvl }}' data-cannot-equip='{{{ $item->cannot_equip }}}' data-score='{{ $item->score }}'>
 
 				<div class='icons pull-left text-center'>
@@ -20,7 +20,7 @@
 						<div class='crafted_by'>
 							<img src='/img/jobs/{{ strtoupper($item->recipes[0]->job->abbr) }}.png' width='20' height='20' class='stat-crafted_by add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{{ $item->display_name }}}' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}, Click to Add to List' style='margin-top: 0; position: relative; top: -3px;'>
 						</div>
-						@elseif(count($item->instances) || count($item->achievement) || count($item->mobs) || count($item->ventures))
+						@elseif(count($item->instances) || count($item->achievements) || count($item->mobs) || count($item->ventures))
 						<div class='rewarded'>
 							<img src='/img/reward.png' class='rewarded' width='20' height='20' rel='tooltip' title='Reward from {{ $item->achievable ? 'an Achievement' : 'a Quest' }}'>
 						</div>

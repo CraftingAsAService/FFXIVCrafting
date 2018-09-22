@@ -35,11 +35,6 @@ class EquipmentController extends Controller
 		return view('equipment.index', compact('error', 'crafting_job_list', 'gathering_job_list', 'advanced_melee_job_list', 'advanced_magic_job_list', 'job_ids', 'previous'));
 	}
 
-	public function badUrl()
-	{
-		return redirect('/equipment');
-	}
-
 	public function postIndex(Request $request)
 	{
 		$inputs = $request->all();
@@ -74,7 +69,7 @@ class EquipmentController extends Controller
 		elseif ($level > config('site.max_level')) $level = config('site.max_level');
 
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 
 		// Jobs are capital
 		$desired_job = strtoupper($desired_job);
@@ -168,7 +163,7 @@ class EquipmentController extends Controller
 		$rewardable_too = $request['rewardable_too'];
 
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 
 		// Jobs are capital
 		$desired_job = strtoupper($job);

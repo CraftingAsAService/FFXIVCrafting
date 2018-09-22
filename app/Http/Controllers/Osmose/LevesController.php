@@ -171,7 +171,7 @@ class LevesController extends \App\Http\Controllers\Controller
 
 		// dd($gamerescapewiki_data);
 
-		$all_leves = \App\Models\Garland\Leve::lists('id', 'name')->all();
+		$all_leves = \App\Models\Garland\Leve::pluck('id', 'name')->all();
 		$all_leves = array_change_key_case($all_leves);
 		$leves = [];
 		foreach ($all_leves as $key => $value)

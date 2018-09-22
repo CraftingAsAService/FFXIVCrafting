@@ -25,7 +25,7 @@ class CareerController extends Controller
 		$job_ids = Config::get('site.job_ids');
 		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
 		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
-			
+
 		$previous_ccp = Cookie::get('previous_ccp');
 		$previous_ccr = Cookie::get('previous_ccr');
 		$previous_gc = Cookie::get('previous_gc');
@@ -61,7 +61,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = Job::lists('id', 'abbr')->all();
+		$all_classes = Job::pluck('id', 'abbr')->all();
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -74,7 +74,7 @@ class CareerController extends Controller
 		$jobs = Job::whereIn('id', $supported_classes)->get();
 		foreach ($jobs as $k => $v)
 			$jobs[$k] = $v->name;
-	
+
 		$job = Job::where('abbr', $my_class)->first();
 
 		if (empty($job))
@@ -128,7 +128,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = Job::lists('id', 'abbr')->all();
+		$all_classes = Job::pluck('id', 'abbr')->all();
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -141,7 +141,7 @@ class CareerController extends Controller
 		$jobs = Job::whereIn('id', $supported_classes)->get();
 		foreach ($jobs as $k => $v)
 			$jobs[$k] = $v->name;
-	
+
 		$job = Job::where('abbr', $my_class)->first();
 
 		if (empty($job))
@@ -197,7 +197,7 @@ class CareerController extends Controller
 		if (empty($supported_classes))
 			exit('No supported class selected... Todo: real error'); // TODO
 
-		$all_classes = Job::lists('id', 'abbr')->all();
+		$all_classes = Job::pluck('id', 'abbr')->all();
 		foreach ($supported_classes as $k => $v)
 			if (in_array($v, array_keys($all_classes)))
 				$supported_classes[$k] = $all_classes[$v];
@@ -210,7 +210,7 @@ class CareerController extends Controller
 		$jobs = Job::whereIn('id', $supported_classes)->get();
 		foreach ($jobs as $k => $v)
 			$jobs[$k] = $v->name;
-		
+
 		if ($my_class != 'BTL')
 			$job = Job::where('abbr', $my_class)->first();
 		else

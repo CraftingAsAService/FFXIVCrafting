@@ -21,13 +21,13 @@ class ListController extends Controller
 		{
 			// $l starts as the amount integer and we're transforming it to an array
 			$l = [
-				'amount' => $l, 
+				'amount' => $l,
 				'item' => Item::with(['recipes' => function($query) {
 					$query->limit(1);
 				}])->find($k)
 			];
 
-			if (count($l['item']->recipes) == 0)
+			if ($l['item']->recipes->count() == 0)
 				unset($list[$k]);
 		}
 		unset($l);
@@ -38,12 +38,12 @@ class ListController extends Controller
 				$saved_link[] = $id . ',' . $info['amount'];
 		$saved_link = implode(':', $saved_link);
 
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 		$active = 'list';
 
 		return view('pages.list', compact('active', 'list', 'saved_link', 'job_list'));
 	}
-			
+
 	public function postAdd(Request $request)
 	{
 		$input = $request->all();
@@ -70,7 +70,7 @@ class ListController extends Controller
 
 		// Get the list
 		$list = Session::get('list', []);
-		
+
 		// What do we want to remove?
 		$item_id = $input['item-id'];
 		$amount = $input['amount'];
@@ -87,10 +87,10 @@ class ListController extends Controller
 	public function postDelete(Request $request)
 	{
 		$input = $request->all();
-		
+
 		// Get the list
 		$list = Session::get('list', []);
-		
+
 		// What do we want to remove?
 		$item_id = $input['item-id'];
 

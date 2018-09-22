@@ -171,7 +171,7 @@ class LevequestsController extends Controller
 		// Parse the Job IDs
 		$selected_classes = $request->input('classes', []);
 		if (empty($selected_classes)) $selected_classes = ['CRP']; // CRP default
-		$jc_ids = JobCategory::whereIn('name', $selected_classes)->lists('id')->all();
+		$jc_ids = JobCategory::whereIn('name', $selected_classes)->pluck('id')->all();
 
 		// Level Range
 		$min = $request->input('min_level');
