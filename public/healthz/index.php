@@ -33,12 +33,12 @@ function env($key, $default = null)
     return $value;
 }
 
-// Use laravel's autoloader
-require __DIR__.'/../../vendor/autoload.php';
+// // Use laravel's autoloader
+// require __DIR__.'/../../vendor/autoload.php';
 
-// Laravel's ENV loader
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
-$dotenv->load();
+// // Laravel's ENV loader
+// $dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
+// $dotenv->load();
 
 // Connect to the database
 $pdo = new PDO('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
