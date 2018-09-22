@@ -1,14 +1,51 @@
 <?php
-	$envs = [];
-	foreach (explode("\n", file_get_contents('../../.env')) as $row)
-	{
-		list($key, $value) = explode('=', $row);
-		$envs[$key] = $value;
-	}
-	unset($row);
+// A copy of laravel's env() helper
+function env($key, $default = null)
+{
+    $value = getenv($key);
 
-	$pdo = new PDO('mysql:host=' . $envs['DB_HOST'] . ';dbname=' . $envs['DB_DATABASE'], $envs['DB_USERNAME'] ?? '', $envs['DB_PASSWORD'] ?? '');
-	$result = $pdo->query('SELECT DISTINCT `id` FROM `item` LIMIT 1')->fetch();
+    if ($value === false) {
+        return value($default);
+    }
 
-	if (isset($result['id']) && is_numeric($result['id']))
-		echo 'OK';
+    switch (strtolower($value)) {
+        case 'true':
+        case '(true)':
+            return true;
+
+        case 'false':
+        case '(false)':
+            return false;
+
+        case 'empty':
+        case '(empty)':
+            return '';
+
+        case 'null':
+        case '(null)':
+            return;
+    }
+
+    if (Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
+        return substr($value, 1, -1);
+    }
+
+    return $value;
+}
+
+// Use laravel's autoloader
+require __DIR__.'/../../vendor/autoload.php';
+
+// Laravel's ENV loader
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
+$dotenv->load();
+
+// Connect to the database
+$pdo = new PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'] ?? '', $_ENV['DB_PASSWORD'] ?? '');
+
+// Test the database with a query
+$result = $pdo->query('SELECT DISTINCT `id` FROM `item` LIMIT 1')->fetch();
+
+// Output "OK" if things are good
+if (isset($result['id']) && is_numeric($result['id']))
+	echo 'OK';
