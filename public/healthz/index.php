@@ -41,7 +41,7 @@ $dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
 $dotenv->load();
 
 // Connect to the database
-$pdo = new PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'] ?? '', $_ENV['DB_PASSWORD'] ?? '');
+$pdo = new PDO('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
 
 // Test the database with a query
 $result = $pdo->query('SELECT DISTINCT `id` FROM `item` LIMIT 1')->fetch();
