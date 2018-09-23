@@ -19,7 +19,7 @@ class LibraController extends \App\Http\Controllers\Controller
 	{
 		$this->all = true;
 
-		// Loop through the methods until it doesn't start with "get", 
+		// Loop through the methods until it doesn't start with "get",
 		// this will eliminate all the BaseController mojo
 		foreach (array_diff(get_class_methods($this), array('getAll')) as $method)
 		{
@@ -29,7 +29,7 @@ class LibraController extends \App\Http\Controllers\Controller
 			$this->$method();
 		}
 
-		flash()->message('All tables parsed');
+		flash('All tables parsed')->message();
 
 		return redirect('/osmose');
 	}
@@ -61,7 +61,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('ClassJob', $data);
 
-		flash()->message('ClassJob completed.');
+		flash('ClassJob completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -93,7 +93,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('ClassJobCategory', $data);
 
-		flash()->message('ClassJobCategory completed.');
+		flash('ClassJobCategory completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -119,7 +119,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('PlaceName', $data);
 
-		flash()->message('PlaceName completed.');
+		flash('PlaceName completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -151,7 +151,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('ItemUICategory', $data);
 
-		flash()->message('ItemUICategory completed.');
+		flash('ItemUICategory completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -280,7 +280,7 @@ class LibraController extends \App\Http\Controllers\Controller
 				// 	$extra['repair_with'] = $data->RepairItem;
 				// if (isset($data->RepairClassJob))
 				// 	$extra['repair_class'] = $data->Repair;
-				
+
 				// Basic Param I think indicates that it's not a piece of equipment
 				// And we don't care about quests, or who it drops/sells from (as we get that elsewhere)
 				// I don't know what MaterializeType is... They're all values 1-12 (sans 10), and nothing else matches that setup that makes sense.
@@ -357,7 +357,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('Item', $contents);
 
-		flash()->message('Item completed.');
+		flash('Item completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -388,7 +388,7 @@ class LibraController extends \App\Http\Controllers\Controller
 						foreach ($loc as $area => $levels)
 							$extra['location'][$region][$area . (isset($data->nonpop) && in_array($area, $data->nonpop) ? '*' : '')][] = implode(',', $levels);
 						// Warning, levels may be "??"
-				
+
 				// Testing for more
 				unset($data->item, $data->region, $data->nonpop);
 				// App v1.4
@@ -418,7 +418,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('BNpcName', $contents);
 
-		flash()->message('BNpcName completed.');
+		flash('BNpcName completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -460,7 +460,7 @@ class LibraController extends \App\Http\Controllers\Controller
 								foreach ($ignore as $item_id => $rgb)
 									$extra['shop'][$label][$item_id] = implode(',', $rgb);
 				}
-				
+
 				// We don't care about quests
 				unset($data->client_quest, $data->quest);
 				unset($data->coordinate, $data->shop);
@@ -496,7 +496,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('ENpcResident', $contents);
 
-		flash()->message('ENpcResident completed.');
+		flash('ENpcResident completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -532,7 +532,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('Shop', $data);
 
-		flash()->message('Shop completed.');
+		flash('Shop completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -615,7 +615,7 @@ class LibraController extends \App\Http\Controllers\Controller
 
 		FileHandler::save('Recipe', $content);
 
-		flash()->message('Recipe completed.');
+		flash('Recipe completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -630,7 +630,7 @@ class LibraController extends \App\Http\Controllers\Controller
 		$c = new Career();
 		$c->run();
 
-		flash()->message('Careers completed.');
+		flash('Careers completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}
@@ -640,7 +640,7 @@ class LibraController extends \App\Http\Controllers\Controller
 		$n = new Nodes();
 		$n->run();
 
-		flash()->message('Nodes completed.');
+		flash('Nodes completed.')->message();
 
 		if ( ! $this->all) return redirect('/osmose');
 	}

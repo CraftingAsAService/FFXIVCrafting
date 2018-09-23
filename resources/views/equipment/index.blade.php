@@ -28,7 +28,7 @@
 @stop
 
 @section('banner')
-	<a href='/gear' class='btn btn-primary pull-right'>Gear Tool <i class='glyphicon glyphicon-arrow-right'></i></a>
+	{{-- <a href='/gear' class='btn btn-primary pull-right'>Gear Tool <i class='glyphicon glyphicon-arrow-right'></i></a> --}}
 	<h1>Equipment Calculator</h1>
 	<h2>Display the gear available for a class at a certain level.</h2>
 @stop

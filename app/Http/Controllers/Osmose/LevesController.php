@@ -106,7 +106,7 @@ class LevesController extends \App\Http\Controllers\Controller
 
 			if ( ! is_array($amounts))
 			{
-				flash()->error($url . ' Failed');
+				flash($url . ' Failed')->error();
 				continue;
 			}
 
@@ -161,7 +161,7 @@ class LevesController extends \App\Http\Controllers\Controller
 
 		file_put_contents($html_base . 'leves.json', json_encode($leves));
 
-		flash()->message('Leves Crawler finished');
+		flash('Leves Crawler finished')->message();
 		return redirect('/osmose');
 	}
 
@@ -250,7 +250,7 @@ class LevesController extends \App\Http\Controllers\Controller
 
 		// echo 'Files built and placed in storage<br>';
 
-		flash()->message('Leves Compiler finished');
+		flash('Leves Compiler finished')->message();
 		return redirect('/osmose');
 	}
 

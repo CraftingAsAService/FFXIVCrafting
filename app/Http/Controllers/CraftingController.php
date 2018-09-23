@@ -35,7 +35,7 @@ class CraftingController extends Controller
 
 	public function getAdvanced()
 	{
-		flash()->info('The advanced page and the basic page are now one single page!');
+		flash('The advanced page and the basic page are now one single page!')->info();
 		return redirect('/crafting');
 	}
 
@@ -62,7 +62,7 @@ class CraftingController extends Controller
 	{
 		if (empty($classes) || empty($start) || empty($end))
 		{
-			flash()->error('Something isn\'t set right!  How am I supposed to show you any results?');
+			flash('Something isn\'t set right!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
@@ -84,7 +84,7 @@ class CraftingController extends Controller
 		// If the job isn't real, error out
 		if (count($jobs) == 0)
 		{
-			flash()->error('No valid classes!  How am I supposed to show you any results?');
+			flash('No valid classes!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
@@ -127,7 +127,7 @@ class CraftingController extends Controller
 	{
 		if (empty($item_id))
 		{
-			flash()->error('No item id!  How am I supposed to show you any results?');
+			flash('No item id!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
@@ -135,7 +135,7 @@ class CraftingController extends Controller
 
 		if (is_null($item))
 		{
-			flash()->error('That item doesn\'t exist!  How am I supposed to show you any results?');
+			flash('That item doesn\'t exist!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
@@ -166,7 +166,7 @@ class CraftingController extends Controller
 
 		if (empty($item_ids))
 		{
-			flash()->error('There\'s nothing in your list!  How am I supposed to show you any results?');
+			flash('There\'s nothing in your list!  How am I supposed to show you any results?')->error();
 			return redirect('/list');
 		}
 

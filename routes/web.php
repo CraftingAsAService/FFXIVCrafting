@@ -15,35 +15,35 @@ Route::get('/', 'HomeController@index');
 
 Route::get('entity/{item}/{type}', 'EntityController@show');
 
-Route::get('materia', 'MateriaController@getIndex');
-Route::get('food', 'FoodController@getIndex');
-Route::get('quests', 'QuestsController@getIndex');
+// Route::get('materia', 'MateriaController@getIndex');
+// Route::get('food', 'FoodController@getIndex');
+// Route::get('quests', 'QuestsController@getIndex');
 
-Route::get('map', 'MapController@getIndex');
-Route::post('map', 'MapController@postIndex');
+// Route::get('map', 'MapController@getIndex');
+// Route::post('map', 'MapController@postIndex');
 
-Route::get('account', 'AccountController@getIndex');
-Route::get('account/login', 'AccountController@getLogin');
-Route::post('account/login', 'AccountController@postLogin');
-Route::get('account/refresh', 'AccountController@getRefresh');
-Route::get('account/logout', 'AccountController@getLogout');
+// Route::get('account', 'AccountController@getIndex');
+// Route::get('account/login', 'AccountController@getLogin');
+// Route::post('account/login', 'AccountController@postLogin');
+// Route::get('account/refresh', 'AccountController@getRefresh');
+// Route::get('account/logout', 'AccountController@getLogout');
 
 Route::get('levequests', 'LevequestsController@getIndex');
 Route::get('levequests/breakdown/{leve_id}', 'LevequestsController@getBreakdown');
 Route::get('levequests/vs/{leveA}/{leveB}', 'LevequestsController@getVs');
-Route::get('levequests/advanced', 'LevequestsController@getAdvanced');
-Route::get('levequests/populate-advanced', 'LevequestsController@getPopulateAdvanced');
+// Route::get('levequests/advanced', 'LevequestsController@getAdvanced');
+// Route::get('levequests/populate-advanced', 'LevequestsController@getPopulateAdvanced');
 
-Route::get('gear', 'GearController@getIndex');
-Route::get('gear/profile/{job?}/{start_level?}', 'GearController@getProfile');
+// Route::get('gear', 'GearController@getIndex');
+// Route::get('gear/profile/{job?}/{start_level?}', 'GearController@getProfile');
 
-Route::get('career', 'CareerController@getIndex');
-Route::get('career/producer/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getProducer');
-Route::post('career/producer', 'CareerController@postProducer');
-Route::get('career/receiver/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getReceiver');
-Route::post('career/receiver', 'CareerController@postReceiver');
-Route::get('career/gathering/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getGathering');
-Route::post('career/gathering', 'CareerController@postGathering');
+// Route::get('career', 'CareerController@getIndex');
+// Route::get('career/producer/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getProducer');
+// Route::post('career/producer', 'CareerController@postProducer');
+// Route::get('career/receiver/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getReceiver');
+// Route::post('career/receiver', 'CareerController@postReceiver');
+// Route::get('career/gathering/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getGathering');
+// Route::post('career/gathering', 'CareerController@postGathering');
 
 Route::get('gathering', 'GatheringController@getIndex');
 Route::get('gathering/list', 'GatheringController@getList');
@@ -67,14 +67,14 @@ Route::post('equipment', 'EquipmentController@postIndex');
 Route::get('equipment/list', 'EquipmentController@getList');
 Route::post('equipment/load', 'EquipmentController@postLoad');
 
-Route::get('crafting/{advanced?}', 'CraftingController@getIndex');
-Route::post('crafting', 'CraftingController@postIndex');
 Route::get('crafting/advanced', 'CraftingController@getAdvanced');
 Route::get('crafting/list', 'CraftingController@getList');
 Route::post('crafting/list', 'CraftingController@postList');
 Route::get('crafting/by-class/{classes?}/{start?}/{end?}', 'CraftingController@getByClass');
 Route::get('crafting/item/{item_id}', 'CraftingController@getItem');
 Route::get('crafting/from-list', 'CraftingController@getFromList');
+Route::get('crafting/{advanced?}', 'CraftingController@getIndex');
+Route::post('crafting', 'CraftingController@postIndex');
 
 // Old/Redirect Controllers
 
