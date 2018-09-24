@@ -104,7 +104,7 @@
 					@foreach(Config::get('site.full_languages') as $slug => $language)
 					<?php if ($slug == $lang) continue; ?>
 					<li>
-						<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
+						<a tabindex='-1' href='https://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
 							<img src="/img/icons/flags/{{ $slug }}.png"> {!! $language !!}
 						</a>
 					</li>
@@ -135,7 +135,7 @@
 									@foreach(Config::get('site.full_languages') as $slug => $language)
 									<?php if ($slug == $lang) continue; ?>
 									<li>
-										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
+										<a tabindex='-1' href='https://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
 											<img src="/img/icons/flags/{!! $slug !!}.png"> {!! $language !!}
 										</a>
 									</li>
@@ -252,7 +252,7 @@
 								</div>
 								@endforeach
 
-								<p class="view-all"><a href="http://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
+								<p class="view-all"><a href="https://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
@@ -275,7 +275,7 @@
 
 								<div class='row'>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
+										<p><a href="https://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -283,7 +283,7 @@
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
+										<p><a href="https://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -291,11 +291,7 @@
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://garlandtools.org/">Garland Tools</a></p>
-										<hr>
-									</div>
-									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://ffxivclock.com/">FFXIV Clock</a></p>
+										<p><a href="https://garlandtools.org/">Garland Tools</a></p>
 										<hr>
 									</div>
 								</div>

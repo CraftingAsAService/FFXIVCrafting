@@ -35,13 +35,13 @@ class DatabaseExtract extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$this->info('Extracting Database');
 
 		$path = storage_path() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'generated-database' . DIRECTORY_SEPARATOR;
 		$file_base = $path . '%s.sql.7z';
-		
+
 		foreach (['schema', 'data'] as $file_name)
 			// 7z /path/to/filename.sql.7z -o/path/to -y
 			exec('sudo 7z e ' . sprintf($file_base, $file_name) . ' -o' . $path . ' -y');
@@ -61,7 +61,7 @@ class DatabaseExtract extends Command {
 	protected function getArguments()
 	{
 		return [
-			
+
 		];
 	}
 
@@ -73,7 +73,7 @@ class DatabaseExtract extends Command {
 	protected function getOptions()
 	{
 		return [
-			
+
 		];
 	}
 

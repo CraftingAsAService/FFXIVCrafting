@@ -16,7 +16,7 @@
 			return preg_replace('/\.([^\.]+)$/', $md5 . '.$1', $asset);
 		});
 
-		return '//' . $cdn . $md5_filename;
+		return 'https://' . $cdn . $md5_filename;
 	}
 
 	function assetcdn($asset)
@@ -27,7 +27,7 @@
 		if( ! $cdn)
 			return asset( $asset );
 
-		return '//' . $cdn . '/' . $asset;
+		return 'https://' . $cdn . '/' . $asset;
 	}
 
 	function random_guardian_name()
