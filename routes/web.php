@@ -16,7 +16,7 @@ Route::get('/', 'HomeController@index');
 Route::get('entity/{item}/{type}', 'EntityController@show');
 
 // Route::get('materia', 'MateriaController@getIndex');
-// Route::get('food', 'FoodController@getIndex');
+Route::get('food', 'FoodController@getIndex');
 // Route::get('quests', 'QuestsController@getIndex');
 
 // Route::get('map', 'MapController@getIndex');
@@ -34,8 +34,8 @@ Route::get('levequests/vs/{leveA}/{leveB}', 'LevequestsController@getVs');
 // Route::get('levequests/advanced', 'LevequestsController@getAdvanced');
 // Route::get('levequests/populate-advanced', 'LevequestsController@getPopulateAdvanced');
 
-// Route::get('gear', 'GearController@getIndex');
-// Route::get('gear/profile/{job?}/{start_level?}', 'GearController@getProfile');
+Route::get('gear', 'GearController@getIndex');
+Route::get('gear/profile/{job?}/{start_level?}', 'GearController@getProfile');
 
 // Route::get('career', 'CareerController@getIndex');
 // Route::get('career/producer/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getProducer');

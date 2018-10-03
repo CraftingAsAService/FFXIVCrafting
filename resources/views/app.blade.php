@@ -92,7 +92,7 @@
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 					{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
-					{{-- {!! menu_item('/food',		'Food',			'food'		) !!} --}}
+					{!! menu_item('/food',		'Food',			'food'		) !!}
 					{!! menu_item('/levequests','Leves',		'leves'		) !!}
 					{{-- {!! menu_item('/stats',		'Stats',		'stats'		) !!}
 					{!! menu_item('/materia',	'Materia',		'materia'	) !!} --}}
@@ -194,7 +194,7 @@
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 											{!! menu_item('/levequests','Leves',		'leves'		) !!}
 											{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
-											{{-- {!! menu_item('/food',		'Food',			'food'		) !!} --}}
+											{!! menu_item('/food',		'Food',			'food'		) !!}
 											{{-- <li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
 												<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 												<ul class='dropdown-menu dropdown-menu-right'>

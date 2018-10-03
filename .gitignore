@@ -1,6 +1,7 @@
 /vendor
 .env*
 /node_modules
+public/assets
 .DS_Store
 Thumbs.db
 composer.lock
