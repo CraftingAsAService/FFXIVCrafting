@@ -76,25 +76,10 @@ Route::get('crafting/from-list', 'CraftingController@getFromList');
 Route::get('crafting/{advanced?}', 'CraftingController@getIndex');
 Route::post('crafting', 'CraftingController@postIndex');
 
-// Old/Redirect Controllers
-
-Route::any('leve', function() {
-	return redirect('/levequests');
-});
-
-// Simpler Pages
-foreach (['stats', 'report', 'thanks', 'credits'] as $page)
-	Route::get($page, function() use ($page)
-	{
-		$active = $page;
-		return view('pages.' . $page, compact('active'));
-	});
-
-// Blog used to exist, but now it's just a subreddit
-Route::any('blog/{sluga?}/{slugb?}/{slugc?}/{slugd?}', function()
-{
-	return redirect('http://www.reddit.com/r/ffxivcrafting');
-});
+Route::get('stats', 'PagesController@stats');
+Route::get('report', 'PagesController@report');
+Route::get('thanks', 'PagesController@thanks');
+Route::get('credits', 'PagesController@credits');
 
 if (app()->environment('local'))
 	Route::group(['prefix' => 'osmose'], function()
