@@ -52,7 +52,7 @@ class IconsController extends \App\Http\Controllers\Controller
 			}
 		}
 
-		flash()->message('Icons downloader finished.  Saved ' . $downloaded . ' files');
+		flash('Icons downloader finished.  Saved ' . $downloaded . ' files')->message();
 		return redirect('/osmose');
 	}
 

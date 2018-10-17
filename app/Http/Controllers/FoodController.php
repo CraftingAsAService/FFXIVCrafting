@@ -75,10 +75,10 @@ class FoodController extends Controller
 						$food_groups[$names][$item->id] = [
 							'id' => $item->id,
 							'icon' => $item->icon,
-							'has_hq' => (boolean) (count($item->recipes) > 0 ? $item->recipes[0]->hq : false),
+							'has_hq' => (boolean) ($item->recipes->count() > 0 ? $item->recipes[0]->hq : false),
 							'name' => $item->display_name,
 							'price' => $item->price,
-							'shops_count' => count($item->shops),
+							'shops_count' => $item->shops->count(),
 							'stats' => [
 								$x => $stats[$x],
 								$y => $stats[$y],

@@ -1,1 +1,0 @@
-<img src='http://i.imgur.com/h1wCz.gif'>

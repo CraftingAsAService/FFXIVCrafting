@@ -90,12 +90,12 @@
 					{!! menu_item('/',			'Home',			'home'		) !!}
 					{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
-					{!! menu_item('/career',	'Career',		'career'	) !!}
+					{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 					{!! menu_item('/food',		'Food',			'food'		) !!}
 					{!! menu_item('/levequests','Leves',		'leves'		) !!}
-					{!! menu_item('/stats',		'Stats',		'stats'		) !!}
-					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
+					{{-- {!! menu_item('/stats',		'Stats',		'stats'		) !!}
+					{!! menu_item('/materia',	'Materia',		'materia'	) !!} --}}
 
 					<li>
 						<hr>
@@ -104,7 +104,7 @@
 					@foreach(Config::get('site.full_languages') as $slug => $language)
 					<?php if ($slug == $lang) continue; ?>
 					<li>
-						<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
+						<a tabindex='-1' href='https://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
 							<img src="/img/icons/flags/{{ $slug }}.png"> {!! $language !!}
 						</a>
 					</li>
@@ -135,7 +135,7 @@
 									@foreach(Config::get('site.full_languages') as $slug => $language)
 									<?php if ($slug == $lang) continue; ?>
 									<li>
-										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
+										<a tabindex='-1' href='https://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
 											<img src="/img/icons/flags/{!! $slug !!}.png"> {!! $language !!}
 										</a>
 									</li>
@@ -193,9 +193,9 @@
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 											{!! menu_item('/levequests','Leves',		'leves'		) !!}
-											{!! menu_item('/career',	'Career',		'career'	) !!}
+											{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 											{!! menu_item('/food',		'Food',			'food'		) !!}
-											<li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
+											{{-- <li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
 												<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 												<ul class='dropdown-menu dropdown-menu-right'>
 													<li{!! isset($active) && $active == 'stats' ? ' class="active"' : '' !!}><a href='/stats'>Stats</a></li>
@@ -204,7 +204,7 @@
 													<li class='divider'></li>
 													<li><a href='http://www.reddit.com/r/ffxivcrafting'>Subreddit</a></li>
 												</ul>
-											</li>
+											</li> --}}
 										</ul>
 									</div>
 								</div>
@@ -225,7 +225,7 @@
 
 					<div class='container'>
 
-						@include('partials.flash')
+						@include('flash::message')
 
 						@yield('content')
 
@@ -243,7 +243,7 @@
 								@foreach(recent_posts() as $post)
 								<div class="post">
 									<div class="title">
-										<a href="{{ $post['url'] }}">{{ $post['title'] }}</a>
+										<a href="{{ $post['url'] }}">{!! $post['title'] !!}</a>
 									</div>
 									<div class="date">
 										<img src="/img/icons/time.png"><span>{{ $post['created'] }}</span>
@@ -252,7 +252,7 @@
 								</div>
 								@endforeach
 
-								<p class="view-all"><a href="http://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
+								<p class="view-all"><a href="https://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
@@ -260,9 +260,11 @@
 								<p>This site has been optimized for Patch 4.4</p>
 							</div>
 							<div class="col-sm-3">
-								<p class="headline">Donations</p>
-								<p>I've spent more time building this site than actually playing.  Buy me a beer!</p>
-								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Donate Today!</a></p>
+								<p class="headline">Support</p>
+
+								<a href="https://www.patreon.com/bePatron?u=954057" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+
+								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Or donate with PayPal!</a></p>
 								<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
 									<input type='hidden' name='cmd' value='_s-xclick'>
 									<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
@@ -275,7 +277,7 @@
 
 								<div class='row'>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
+										<p><a href="https://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -283,7 +285,7 @@
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
+										<p><a href="https://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -291,11 +293,7 @@
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://garlandtools.org/">Garland Tools</a></p>
-										<hr>
-									</div>
-									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://ffxivclock.com/">FFXIV Clock</a></p>
+										<p><a href="https://garlandtools.org/">Garland Tools</a></p>
 										<hr>
 									</div>
 								</div>

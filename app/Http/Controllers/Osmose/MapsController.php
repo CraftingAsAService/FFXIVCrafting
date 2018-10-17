@@ -43,11 +43,11 @@ class MapsController extends \App\Http\Controllers\Controller
 
 		file_put_contents(FileHandler::path() . 'maps.json', json_encode($regions));
 
-		flash()->message('Map JSON Builder finished');
+		flash('Map JSON Builder finished')->message();
 		return redirect('/osmose');
 	}
 
-	private function get_map($json) 
+	private function get_map($json)
 	{
 		$map_id = $json->MAPID;
 
@@ -75,9 +75,9 @@ class MapsController extends \App\Http\Controllers\Controller
 				\Log::info($json->MAPID . '|' . $get);
 
 				$request = new \Jyggen\Curl\Request('http://xivdb.com/modules/maps/php/get-marker.php');
-				
+
 				$request->setOption(CURLOPT_HTTPHEADER, [
-					'User-Agent: php:ffxivcrafting:v0.0.1 (by /u/tickthokk)', 
+					'User-Agent: php:ffxivcrafting:v0.0.1 (by /u/tickthokk)',
 					'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
 					'X-Requested-With: XMLHttpRequest'
 				]);
@@ -96,7 +96,7 @@ class MapsController extends \App\Http\Controllers\Controller
 				}
 
 				$json->$get = json_decode($response->getContent())->message;
-				
+
 				// Create the folder if it doesn't exist
 				if ( ! is_dir($cached_folder))
 					exec('mkdir -p ' . $cached_folder);
@@ -108,7 +108,7 @@ class MapsController extends \App\Http\Controllers\Controller
 
 		// Let's get Images
 		// 1st level zoom, don't need that much detail
-		// Try to get all images.  
+		// Try to get all images.
 		//  At 4th level zoom 15 was highest (starting at 0), so we'll go with that and break out as appropriate
 		// http://xivdbimg.zamimg.com/modules/maps/Tiles/f1f3/00/4_0_0.png
 		// http://xivdbimg.zamimg.com/modules/maps/Tiles/f1f3/00/4_15_15.png
@@ -117,7 +117,7 @@ class MapsController extends \App\Http\Controllers\Controller
 		$zoom = '1';
 
 		if ( ! is_dir($map_path . $json->MAPID))
-		{	
+		{
 			@mkdir($map_path . explode('/', $json->MAPID)[0]);
 			mkdir($map_path . $json->MAPID);
 		}
@@ -146,7 +146,7 @@ class MapsController extends \App\Http\Controllers\Controller
 				// 	break;
 
 				$img = @file_get_contents($img_path);
-				
+
 				if ($img === false) // Alternative to 404 checking
 					break;
 
@@ -187,7 +187,7 @@ class MapsController extends \App\Http\Controllers\Controller
 
 				if (count($map->BPOINT) + count($map->MPOINT) != 0)
 					$compiled_name = '_' . $compiled_name;
-				
+
 				$x = $y = 0;
 
 				foreach (range(0,15) as $i)
@@ -220,7 +220,7 @@ class MapsController extends \App\Http\Controllers\Controller
 			}
 		}
 
-		flash()->message('Map Image Compiler finished');
+		flash('Map Image Compiler finished')->message();
 		return redirect('/osmose');
 	}
 

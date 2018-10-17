@@ -13,7 +13,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 	{
 		Garland::scrape();
 
-		flash()->success('Garland Core Scraped');
+		flash('Garland Core Scraped')->success();
 
 		return redirect()->back();
 	}

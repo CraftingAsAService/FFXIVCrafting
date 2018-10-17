@@ -18,7 +18,7 @@ class Build extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Export DB to K8S-Cluster repository';
+	protected $description = 'Export DB to Ultros Folder';
 
 	/**
 	 * Create a new command instance.
@@ -35,7 +35,7 @@ class Build extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		// $tag = $this->argument('tag');
 		// $env = $this->option('qa') ? 'qa' : 'production';
@@ -59,7 +59,7 @@ class Build extends Command {
 		\DB::table('cache')->truncate();
 
 		$this->info('Exporting MySQL Database');
-		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ffxiv-config/caas-db/caas.sql');
+		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../craftingasaservice/ultros/caas.sql');
 
 		// $this->info('Clearing caches');
 		// echo exec($php . ' artisan cache:clear') . PHP_EOL;

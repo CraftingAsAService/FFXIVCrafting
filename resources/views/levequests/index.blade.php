@@ -5,7 +5,7 @@
 @stop
 
 @section('banner')
-	<a href='/levequests/advanced' class='btn btn-primary pull-right'>Advanced Tool <i class='glyphicon glyphicon-arrow-right'></i></a>
+	{{-- <a href='/levequests/advanced' class='btn btn-primary pull-right'>Advanced Tool <i class='glyphicon glyphicon-arrow-right'></i></a> --}}
 	<h1>Levequests</h1>
 	<h2>Get the most out of your allowances</h2>
 @stop
@@ -109,7 +109,7 @@
 										<i class='glyphicon glyphicon-shopping-cart'></i>
 										<i class='glyphicon glyphicon-plus'></i>
 									</button>
-									@if(count($item->shops))
+									@if($item->shops->count())
 									<p class='margin-top'>
 										<a href='#' class='btn btn-default click-to-view' data-type='shops' rel='tooltip' title='Available for {{ $item->price }} gil, Click to load Vendors'>
 											<img src='/img/coin.png' width='20' height='20'>

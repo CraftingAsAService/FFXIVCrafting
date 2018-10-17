@@ -30,10 +30,10 @@ class MateriaController extends Controller
 		foreach ($results as $item)
 		{
 			preg_match('/^(.*)\sMateria\s(.*)$/', $item->name, $matches);
-			
+
 			list($ignore, $name, $power) = $matches;
 
-			if (count($item->attributes) == 0)
+			if ($item->attributes->count() == 0)
 				continue;
 
 			$attribute = $item->attributes[0];

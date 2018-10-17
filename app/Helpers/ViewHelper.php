@@ -16,7 +16,7 @@
 			return preg_replace('/\.([^\.]+)$/', $md5 . '.$1', $asset);
 		});
 
-		return '//' . $cdn . $md5_filename;
+		return 'https://' . $cdn . $md5_filename;
 	}
 
 	function assetcdn($asset)
@@ -27,7 +27,7 @@
 		if( ! $cdn)
 			return asset( $asset );
 
-		return '//' . $cdn . '/' . $asset;
+		return 'https://' . $cdn . '/' . $asset;
 	}
 
 	function random_guardian_name()
@@ -58,13 +58,18 @@
 			$posts = [];
 
 			try {
-				$request = new Jyggen\Curl\Request('https://api.reddit.com/user/tickthokk/submitted.json');
-				$request->setOption(CURLOPT_HTTPHEADER, [$user_agent]);
-				$request->execute();
+				$client = new \GuzzleHttp\Client();
+				$res = $client->request('GET', 'https://api.reddit.com/user/tickthokk/submitted.json', [
+					'headers' => [
+						'user-Agent' => $user_agent,
+					]
+				]);
 
-				if ($request->isSuccessful())
+
+				if ($res->getStatusCode() == '200')
 				{
-					$response = json_decode($request->getResponse()->getContent());
+					// string declaration necessary
+					$response = json_decode((string) $res->getBody());
 
 					foreach ($response->data->children as $child)
 					{

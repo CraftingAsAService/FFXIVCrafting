@@ -102,32 +102,32 @@
 				</td>
 				<td class='obtained'>
 					@if($quality != 'hq')
-						@if(count($item->shops))
+						@if( ! $item->shops->isEmpty())
 					<span class='gil'>
 						<img src='/img/shop.png' class='click-to-view' data-type='shops' width='24' height='24' rel='tooltip' title='Purchase for {{ number_format($item->price, 0, '.', ',') }} gil, Click to View'>
 					</span>
 						@endif
-						@if(count($item->quests))
+						@if($item->quests)
 					<span class='gil'>
 						<img src='/img/quest.png' class='click-to-view' data-type='quests' width='24' height='24' rel='tooltip' title='Quest Reward, Click to View'>
 					</span>
 						@endif
-						@if(count($item->leves))
+						@if($item->leves)
 					<span class='gil'>
 						<img src='/img/leve_icon.png' class='click-to-view' data-type='leves' width='24' height='24' rel='tooltip' title='Leve Reward, Click to View'>
 					</span>
 						@endif
-						@if(count($item->mobs))
+						@if($item->mobs)
 					<span class='gil'>
 						<img src='/img/mob.png' class='click-to-view' data-type='mobs' width='24' height='24' rel='tooltip' title='Drops from a Monster, Click to View'>
 					</span>
 						@endif
-						@if(count($item->instances))
+						@if( ! $item->instances->isEmpty())
 					<span class='gil'>
 						<img src='/img/dungeon.png' class='click-to-view' data-type='instances' width='24' height='24' rel='tooltip' title='Instance Coffer Loot, Click to View'>
 					</span>
 						@endif
-						@if(count($item->achievements))
+						@if( ! $item->achievements->isEmpty())
 					<span class='gil'>
 						<img src='{{ assetcdn('achievement/' . $item->achievements[0]->icon . '.png') }}' width='24' height='24' rel='tooltip' title='Achievement Reward: {{ $item->achievements[0]->name }}'>
 					</span>
@@ -135,7 +135,7 @@
 					@endif
 				</td>
 				<td class='cart'>
-					@if(count($item->recipes))
+					@if( ! $item->recipes->isEmpty())
 					<img src='/img/jobs/{{ $item->recipes[0]->job->abbr }}.png' width='24' height='24' rel='tooltip' title='Crafted By {{ $item->recipes[0]->job->name }}'></i>
 					<button class='btn btn-default btn-xs add-to-list success-after-add' data-item-id='{{ $item->id }}' data-item-name='{{ $item->display_name }}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>

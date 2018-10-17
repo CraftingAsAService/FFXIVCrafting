@@ -56,7 +56,7 @@ class AccountController extends Controller
 
 		if ( ! in_array($server, Config::get('site.servers')))
 		{
-			Session::flash('error', 'That is not a valid server.');
+			flash('That is not a valid server.')->error();
 			return redirect()->back()->withInput();
 		}
 
@@ -69,7 +69,7 @@ class AccountController extends Controller
 
 		if (empty($account))
 		{
-			Session::flash('error', 'That is not a valid character/server combination.');
+			flash('That is not a valid character/server combination.')->error();
 			return redirect()->back()->withInput();
 		}
 
@@ -78,7 +78,7 @@ class AccountController extends Controller
 		session(['character_name' => $character]);
 		session(['server' => $server]);
 
-		Session::flash('success', 'This character will now be used in the site formulas!');
+		flash('This character will now be used in the site formulas!')->success();
 
 		return redirect('/account');
 	}
@@ -140,7 +140,7 @@ class AccountController extends Controller
 
 		Session::put('account', $account);
 
-		Session::flash('success', 'Character data was refreshed.');
+		flash('Character data was refreshed.')->success();
 
 		return redirect('/account');
 	}
@@ -148,7 +148,8 @@ class AccountController extends Controller
 	public function getLogout()
 	{
 		Session::forget('account');
-		Session::flash('success', 'You have been logged out.');
+
+		flash('You have been logged out.')->success();
 		return redirect('/account/login');
 	}
 
