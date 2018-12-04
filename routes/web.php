@@ -31,8 +31,8 @@ Route::get('food', 'FoodController@getIndex');
 Route::get('levequests', 'LevequestsController@getIndex');
 Route::get('levequests/breakdown/{leve_id}', 'LevequestsController@getBreakdown');
 Route::get('levequests/vs/{leveA}/{leveB}', 'LevequestsController@getVs');
-// Route::get('levequests/advanced', 'LevequestsController@getAdvanced');
-// Route::get('levequests/populate-advanced', 'LevequestsController@getPopulateAdvanced');
+Route::get('levequests/advanced', 'LevequestsController@getAdvanced');
+Route::get('levequests/populate-advanced', 'LevequestsController@getPopulateAdvanced');
 
 Route::get('gear', 'GearController@getIndex');
 Route::get('gear/profile/{job?}/{start_level?}', 'GearController@getProfile');
