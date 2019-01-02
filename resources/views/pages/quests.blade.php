@@ -88,7 +88,7 @@
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $quest->level }}</span>
-					<a href='{{ xivdb_item_link() . $item['id'] }}' class='item-name' target='_blank'>
+					<a href='{{ item_link() . $item['id'] }}' class='item-name' target='_blank'>
 						<img src='{{ assetcdn('item/' . $item['icon'] . '.png') }}' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $item['name'] }}</span>
 					</a>
 				</td>

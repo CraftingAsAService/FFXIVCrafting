@@ -8,7 +8,7 @@
 			<div class="modal-body">
 				@if(empty($clusters))
 				<h4>Sorry, no data yet.</h4>
-				<p><a href="{{ xivdb_item_link() . $item->icon }}" target="_blank" title="">XIVDB comments</a> are generally helpful in these situations!</p>
+				<p><a href="{{ item_link() . $item->icon }}" target="_blank" title="">XIVDB comments</a> are generally helpful in these situations!</p>
 				@else
 				@foreach ($clusters as $location => $levels)
 				<div>

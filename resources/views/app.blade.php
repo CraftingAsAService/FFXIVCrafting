@@ -337,17 +337,6 @@
 
 		@yield('javascript')
 
-		<script type='text/javascript'>
-			if (typeof xivdb_tooltips === 'undefined')
-				var xivdb_tooltips = {
-					language: "{!! strtoupper($lang == 'ja' ? 'jp' : $lang) !!}",
-					jqueryEmbed: false,
-					seturlname: false,
-					seturlicon: false
-				}
-		</script>
-		<script src="https://xivdb.com/tooltips.js"></script>
-
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

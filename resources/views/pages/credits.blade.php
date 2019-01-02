@@ -40,21 +40,6 @@
 	</div>
 
 	<div class='media'>
-		<a href='http://xivdb.com/' class='pull-left' target='_blank'>
-			<img src='/img/credits/kokoroon_cut.png' class='media-object' width='64'>
-		</a>
-		<div class='media-body'>
-			<h4 class='media-heading'>
-				<a href='http://xivdb.com/' target='_blank'>XIVDB</a>
-				<small><em>&copy; ZAM</em></small>
-			</h4>
-			<p>
-				Their tooltip API is everywhere.  The first itteration of my site could have never happend without these guys.
-			</p>
-		</div>
-	</div>
-
-	<div class='media'>
 		<a href='http://game-icons.net/' class='pull-left' target='_blank'>
 			<img src='/img/credits/gameicons.png' class='media-object' width='64' height='64' style='border-radius: 5px;'>
 		</a>
@@ -188,5 +173,5 @@
 			</p>
 		</div>
 	</div>
-	
+
 @stop

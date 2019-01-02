@@ -114,7 +114,7 @@
 			<?php
 				$requires = []; $yields = 1;
 				$item_level = $reagent['item']->level;
-				$link = xivdb_item_link() . $reagent['item']->id;
+				$link = item_link() . $reagent['item']->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
 					$item_level = $reagent['item']->recipes[0]->level;
@@ -197,8 +197,7 @@
 					<a class='close ilvl' rel='tooltip' title='Level'>
 						{{ $recipe->recipe_level }}
 					</a>
-					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'> --}}
-					<a href='{{ xivdb_item_link() . $recipe->item->id }}' target='_blank'>
+					<a href='{{ item_link() . $recipe->item->id }}' target='_blank'>
 						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
 					</a>
 					@if ($recipe->req_craftsmanship)

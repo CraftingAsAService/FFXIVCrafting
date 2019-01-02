@@ -119,7 +119,7 @@
 											</a>
 											@endif
 
-											<a href='{{ xivdb_item_link() . $item['id'] }}' target='_blank'>
+											<a href='{{ item_link() . $item['id'] }}' target='_blank'>
 												<span class='overlay-container'>
 												@if($quality == 'hq')
 												<img src='/img/hq-overlay.png' width='36' height='36' class='hq-overlay' style='top: inherit;'>

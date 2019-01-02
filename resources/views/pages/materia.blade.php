@@ -47,7 +47,7 @@
 				@foreach(array('I', 'II', 'III', 'IV', 'V', 'VI') as $power)
 				<?php if ( ! isset($materia['power'][$power])) continue; ?>
 				<td class='valign text-center materia-value'>
-					<a href='{{ xivdb_item_link() . $materia['power'][$power]['item']->id }}' target='_blank' data-replacename="0" data-colorname="0" data-showicon="0">
+					<a href='{{ item_link() . $materia['power'][$power]['item']->id }}' target='_blank' data-replacename="0" data-colorname="0" data-showicon="0">
 						{{ number_format($materia['power'][$power]['amount']) }}
 						<img src='{{ assetcdn('item/' . $materia['power'][$power]['item']->icon . '.png') }}'>
 					</a>

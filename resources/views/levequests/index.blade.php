@@ -71,7 +71,7 @@
 									</h4>
 
 									<p>
-										<a href='{{ xivdb_item_link() . $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->display_name }}</a>
+										<a href='{{ item_link() . $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->display_name }}</a>
 
 										@if ($item->pivot->amount > 1)
 										<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -129,7 +129,7 @@
 					<div class='row'>
 						@foreach($rewards[$job->id][$level] as $item_id => $reward)
 						<div class='col-sm-6 col-md-4 margin-bottom'>
-							<a href='{{ xivdb_item_link() . $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $reward['item']->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->display_name }}</a>
+							<a href='{{ item_link() . $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $reward['item']->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->display_name }}</a>
 
 							@foreach ($reward['amounts'] as $amount)
 							<span class='label label-primary'>{{ $amount }}</span>

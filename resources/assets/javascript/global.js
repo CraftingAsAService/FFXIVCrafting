@@ -67,10 +67,6 @@ var global = {
 				return;
 			});
 	},
-	trigger_xivdb_tooltips:function() {
-		if (typeof(XIVDBTooltips) != 'undefined')
-			XIVDBTooltips.setOptions("undefined" != typeof xivdb_tooltips ? xivdb_tooltips : xivdb_tooltips_default).init();
-	},
 	hide_me:function() {
 		$('.hide-me').each(function() {
 			var el = $(this);

@@ -121,6 +121,6 @@
 		return implode('?', $uri);
 	}
 
-	function xivdb_item_link() {
-		return 'http://xivdb.com/item/';
+	function item_link() {
+		return 'https://www.garlandtools.org/db/#item/';
 	}
