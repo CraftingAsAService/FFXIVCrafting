@@ -39,6 +39,7 @@ class Stat
 			'SCH' => $magic_set,
 			'AST' => $magic_set,
 			'RDM' => $magic_set,
+			'BLU' => $magic_set,
 		];
 
 		return isset($avoid[$job]) ? $avoid[$job] : [];
@@ -65,7 +66,7 @@ class Stat
 			'Vitality' => ['GLA', 'MRD', 'PLD', 'WAR', 'DRK'],
 			'Strength' => ['LNC', 'PGL', 'DRG', 'MNK', 'SAM'],
 			'Dexterity' => ['BRD', 'ARC', 'ROG', 'NIN', 'MCH'],
-			'Intelligence' => ['THM', 'BLM', 'ACN', 'SMN', 'RDM'],
+			'Intelligence' => ['THM', 'BLM', 'ACN', 'SMN', 'RDM', 'BLU'],
 			'Mind' => ['CNJ', 'SCH', 'WHM', 'AST'],
 		];
 
@@ -85,10 +86,10 @@ class Stat
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
 			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK,SAM',
-			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST,RDM',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST,RDM,BLU',
 			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN,SAM', // Melee DPS
 			'RDPS' => 'BRD,ARC,MCH', // Ranged DPS
-			'MDPS' => 'THM,BLM,ACN,SMN,RDM', // Magical DPS
+			'MDPS' => 'THM,BLM,ACN,SMN,RDM,BLU', // Magical DPS
 			'Heals' => 'CNJ,SCH,WHM,AST',
 			'Tanks' => 'GLA,MRD,PLD,WAR,DRK',
 		];
@@ -170,12 +171,12 @@ class Stat
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
 			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK,SAM',
-			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST,RDM',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST,RDM,BLU',
 			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN,SAM', // Melee DPS
 			'RDPS' => 'BRD,ARC,MCH', // Ranged DPS
 			'STR-DPS' => 'LNC,PGL,DRG,MNK,SAM',
 			'DEX-DPS' => 'BRD,ARC,ROG,NIN,MCH',
-			'MDPS' => 'THM,BLM,ACN,SMN,RDM', // Magical DPS
+			'MDPS' => 'THM,BLM,ACN,SMN,RDM,BLU', // Magical DPS
 			'Heals' => 'CNJ,SCH,WHM,AST',
 			'Tanks' => 'GLA,MRD,PLD,WAR,DRK',
 		];

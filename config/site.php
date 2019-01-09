@@ -42,7 +42,7 @@ return array(
 			'Skill Speed',
 			'Tenacity',
 		),
-		'THM,BLM,ACN,SMN,RDM' => array(
+		'THM,BLM,ACN,SMN,RDM,BLU' => array(
 			'Intelligence',
 			'Spell Speed',
 		),
@@ -121,7 +121,7 @@ return array(
 			'Block Strength'	=> 0.05,
 			'Block Rate'		=> 0.05,
 		],
-		'THM,BLM,RDM' => [
+		'THM,BLM,RDM,BLU' => [ // Guess on BLU
 			'Physical Damage'	=> 6.726,
 			'Intelligence'		=> 1,
 			'Direct Hit Rate'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
@@ -194,6 +194,7 @@ return array(
 			28, // SCH
 			33, // AST
 			35, // RDM
+			// 36, // BLU
 		),
 	),
 	'defined_slots' => array(
