@@ -194,7 +194,7 @@ return array(
 			28, // SCH
 			33, // AST
 			35, // RDM
-			// 36, // BLU
+			36, // BLU
 		),
 	),
 	'defined_slots' => array(
