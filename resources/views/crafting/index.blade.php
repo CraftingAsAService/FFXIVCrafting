@@ -21,7 +21,7 @@
 	@endif
 	<h1>Crafting Calculator</h1>
 	<h2>Display all the materials needed to craft one of each item between two levels.</h2>
-	<p>In general this will not level you to your desired level.  Visit the <a href='/leve'>Leves</a> page when you're done crafting!</p>
+	<p>In general this will not level you to your desired level.  Visit the <a href='/levequests'>Leves</a> page when you're done crafting!</p>
 @stop
 
 @section('content')

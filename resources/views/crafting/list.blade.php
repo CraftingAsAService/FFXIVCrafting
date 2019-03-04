@@ -316,7 +316,7 @@
 					@endforeach
 				</ul>
 
-				<p><em>Want to level faster?  Visit the <a href='/leve'>Leves</a> page.</em></p>
+				<p><em>Want to level faster?  Visit the <a href='/levequests'>Leves</a> page.</em></p>
 			</div>
 		</div>
 	</div>
