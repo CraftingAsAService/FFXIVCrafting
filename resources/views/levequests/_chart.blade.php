@@ -69,7 +69,12 @@
 
 @if ( ! empty($leve->location))
 <h3>Location</h3>
-<p>{{ $leve->location->name }}</p>
+<p>
+	@if (in_array($leve->simple_type, ['Courier', 'Reverse Courier']))
+	<i class='glyphicon glyphicon-envelope' rel='tooltip' title='{{ $leve->simple_type }}'></i>
+	@endif
+	{{ $leve->location->name }}
+</p>
 @endif
 
 <h3>Leveling Up</h3>

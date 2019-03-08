@@ -34,6 +34,9 @@
 		{{ number_format($leve->gil) }}
 	</td>
 	<td class='text-center location {{ preg_replace('/\W/', '', strtolower($leve->location->name)) }}'>
+		@if (in_array($leve->simple_type, ['Courier', 'Reverse Courier']))
+		<i class='glyphicon glyphicon-envelope' rel='tooltip' title='{{ $leve->simple_type }}'></i>
+		@endif
 		{{ $leve->location->name }}
 	</td>
 	<td class='text-center valign'>
