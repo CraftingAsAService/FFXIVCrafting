@@ -1388,3 +1388,13 @@ table.table-curved {
 	right: 0;
 	border-radius: 5px 0 0 0;
 }
+
+.isearch {
+	color: $theme_color_medium_gray;
+	opacity: .5;
+	cursor: pointer;
+	position: relative;
+	top: 4px;
+	font-size: 16px;
+	margin-left: 2px;
+}

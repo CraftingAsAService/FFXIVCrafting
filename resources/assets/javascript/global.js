@@ -46,6 +46,8 @@ var global = {
 
 		$(document).on('click', '.click-to-view', global.click_to_view);
 
+		$(document).on('click', '.isearch', global.isearch);
+
 		$('.toggle-mobile-nav').click(function() {
 			$('body').toggleClass('mobile-nav-enabled');
 		});
@@ -280,6 +282,26 @@ var global = {
 			$('body').addClass('msie11');
 
 		return;
+	},
+	isearch:function(event) {
+		event.preventDefault();
+
+		var el = $(this),
+			clipboard = el.data('clipboard');
+
+		console.log(clipboard);
+
+		navigator.clipboard.writeText(clipboard).then(function() {
+			global.noty({
+				type: 'success',
+				text: 'Item name copied to clipboard!'
+			});
+		}, function() {
+			global.noty({
+				type: 'error',
+				text: 'Could not access clipboard :('
+			});
+		});
 	},
 	click_to_view:function(event) {
 		event.preventDefault();
