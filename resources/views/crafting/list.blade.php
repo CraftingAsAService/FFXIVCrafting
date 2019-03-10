@@ -172,7 +172,7 @@
 					<img src='/img/mob-inactive.png' class='click-to-view' data-type='mobs' width='24' height='24' rel='tooltip' title='Click to load Beasts'>
 					@endif
 
-					<i class='glyphicon glyphicon-magnet isearch' rel='tooltip' title='Click to copy /isearch command' data-clipboard='/isearch {{ $reagent['item']->display_name }}'></i>
+					<i class='glyphicon glyphicon-magnet isearch' rel='tooltip' title='Click to copy /isearch command' data-clipboard='/isearch "{{ $reagent['item']->display_name }}"'></i>
 				</td>
 				<?php continue; ?>
 			</tr>
@@ -262,7 +262,7 @@
 					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					@endif
 
-					<i class='glyphicon glyphicon-magnet isearch' rel='tooltip' title='Click to copy /isearch command' data-clipboard='/isearch {{ $recipe->item->display_name }}'></i>
+					<i class='glyphicon glyphicon-magnet isearch' rel='tooltip' title='Click to copy /isearch command' data-clipboard='/isearch "{{ $recipe->item->display_name }}"'></i>
 				</td>
 			</tr>
 			@endforeach
