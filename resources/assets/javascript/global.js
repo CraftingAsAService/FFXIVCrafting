@@ -308,6 +308,7 @@ var global = {
 
 		var el = $(this),
 			type = el.data('type'),
+			notice = el.data('notice') || (type.substring( 0, 1 ).toUpperCase() + type.substring(1)),
 			id = el.closest('[data-item-id]').data('itemId');
 
 		if (el.hasClass('loading'))
@@ -328,7 +329,7 @@ var global = {
 
 				global.noty({
 					type: 'warning',
-					text: 'Loading ' + type.substring( 0, 1 ).toUpperCase() + type.substring(1)
+					text: 'Loading ' + notice
 				});
 
 			},

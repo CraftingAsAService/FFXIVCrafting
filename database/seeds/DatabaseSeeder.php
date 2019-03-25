@@ -40,11 +40,11 @@ class DatabaseSeeder extends Seeder
 
 			$core = $this->get_cleaned_json(base_path() . '/../garlandtools/db/data/en/core/data.json');
 
+			$this->location($core->locationIndex);
 			$this->node_bonuses($core->nodeBonusIndex);
 			$this->node();
 			$this->fishing();
 			$this->mob();
-			$this->location($core->locationIndex);
 			$this->npc();
 			// $this->npc_base($core->npc->baseIndex);
 			// $this->shop_name($core->npc->shopNames);
@@ -91,6 +91,27 @@ class DatabaseSeeder extends Seeder
 		$this->data['node'] = [];
 		$this->data['item_node'] = [];
 
+		// Coordinates file is manually built
+		$coordinateFile = storage_path('app/osmose/nodeCoordinates.tsv');
+		$tsv = array_map(function($l) { return str_getcsv($l, '	'); }, file($coordinateFile));
+		array_walk($tsv, function(&$a) use ($tsv) {
+			$a = array_combine($tsv[0], $a);
+		});
+		array_shift($tsv);
+		$coordinates = collect($tsv);
+		unset($coordinateFile, $tsv);
+
+		// Locations
+		$locations = collect($this->data['location'])->pluck('name', 'id');
+
+		$typeList = [
+			// Type => Matching Text
+			0 => 'Mineral Deposit',
+			1 => 'Rocky Outcrop',
+			2 => 'Mature Tree',
+			3 => 'Lush Vegetation Patch',
+		];
+
 		// Loop through nodes
 		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/node'), ['.', '..']) as $file)
 		{
@@ -107,6 +128,13 @@ class DatabaseSeeder extends Seeder
 				'bonus_id' => isset($n->bonus) ? (is_array($n->bonus) ? $n->bonus[0] : $n->bonus) : null,
 				'zone_id' => $n->zoneid,
 				'area_id' => isset($n->areaid) ? $n->areaid : null,
+				'coordinates' => isset($locations[$n->zoneid]) && isset($typeList[$n->type])
+					? $coordinates
+						->where('location', $locations[$n->zoneid])
+						->where('level', $n->lvl)
+						->where('type', $typeList[$n->type])
+						->pluck('coordinates')->join(', ', ' or ')
+					: null,
 			];
 
 			$this->set_data('node', $row);

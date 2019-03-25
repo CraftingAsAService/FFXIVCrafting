@@ -63,7 +63,7 @@ class AccountController extends Controller
 		$cache_key = $character . '|' . $server;
 
 		if ( ! Cache::has($cache_key))
-			Cache::put($cache_key, $this->api_register($character, $server), 30);
+			Cache::put($cache_key, $this->api_register($character, $server), now()->addMinutes(30));
 
 		$account = Cache::get($cache_key);
 
@@ -134,7 +134,7 @@ class AccountController extends Controller
 
 		$cache_key = $character . '|' . $server;
 
-		Cache::put($cache_key, $this->api_register($character, $server), 30);
+		Cache::put($cache_key, $this->api_register($character, $server), now()->addMinutes(30));
 
 		$account = Cache::get($cache_key);
 

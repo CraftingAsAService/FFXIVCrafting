@@ -124,7 +124,7 @@ class EntityController extends Controller {
 			if ( ! isset($node->zone->name) || ! isset($node->area->name))
 				continue;
 
-			$nodes[$node->zone->name][$node->area->name][$type_translation[$node->type]] = true;
+			$nodes[$node->zone->name][$node->area->name][$type_translation[$node->type]] = $node['coordinates'];
 		}
 
 		return view('entity.nodes', compact('item', 'job', 'nodes'));

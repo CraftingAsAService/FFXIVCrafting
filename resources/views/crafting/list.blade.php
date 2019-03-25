@@ -156,7 +156,7 @@
 				<td class='valign total'>0</td>
 				<td class='valign'>
 					@foreach(array_keys(array_reverse($reagent['cluster_jobs'])) as $cluster_job)
-					<img src='/img/jobs/{{ $cluster_job }}-inactive.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
+					<img src='/img/jobs/{{ $cluster_job }}-inactive.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' data-notice='{{ ucwords(strtolower($cluster_job)) }} Nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
 					@endforeach
 
 					@foreach($reagent['item']->recipes as $recipe)

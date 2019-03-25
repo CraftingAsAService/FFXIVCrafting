@@ -51,7 +51,7 @@
 
 	function recent_posts($limit = 3)
 	{
-		return Cache::remember('reddit-posts', 30, function() use($limit)
+		return Cache::remember('reddit-posts', now()->addMinutes(30), function() use($limit)
 		{
 			$user_agent = 'User-Agent: php:ffxivcrafting:v0.0.2 (by /u/tickthokk)';
 

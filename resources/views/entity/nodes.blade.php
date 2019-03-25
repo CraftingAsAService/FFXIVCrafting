@@ -12,16 +12,18 @@
 							<th>Zone</th>
 							<th>Area</th>
 							<th>Type</th>
+							<th>Coordinates</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach ($nodes as $zone => $areas)
 						@foreach ($areas as $area => $types)
-						@foreach ($types as $type => $ignore)
+						@foreach ($types as $type => $coordinates)
 						<tr>
 							<td>{{ $zone }}</td>
 							<td>{{ $area }}</td>
 							<td>{{ $type }}</td>
+							<td>{{ $coordinates }}</td>
 						</tr>
 						@endforeach
 						@endforeach
