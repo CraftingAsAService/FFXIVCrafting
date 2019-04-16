@@ -209,6 +209,8 @@ class CraftingController extends Controller
 					'reagents.shops',
 					'reagents.mobs',
 					'reagents.nodes',
+						'reagents.nodes.zone',
+						'reagents.nodes.area',
 					'reagents.recipes',
 						'reagents.recipes.item',
 							'reagents.recipes.item.category',
@@ -288,7 +290,9 @@ class CraftingController extends Controller
 		// Bought, by price
 
 		$sorted_reagent_list = [
-			'Gathered' => [],
+			'Gathered' => [
+				'' => [],
+			],
 			'Bought' => [],
 			'Other' => [],
 			'Pre-Requisite Crafting' => [],
@@ -306,7 +310,10 @@ class CraftingController extends Controller
 			if (in_array($reagent['self_sufficient'], $gathering_class_abbreviations))
 			{
 				$section = 'Gathered';
-				$level = $reagent['item']->level;
+				if ($reagent['item']->category->name == 'Crystal')
+					$level = '';
+				else
+					$level = $reagent['item']->nodes->first()->zone->name . ' - ' . $reagent['item']->nodes->first()->area->name;
 			}
 			elseif ($reagent['self_sufficient'])
 			{

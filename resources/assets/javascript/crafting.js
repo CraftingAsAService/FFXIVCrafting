@@ -445,6 +445,14 @@ var crafting = {
 			return;
 		});
 
+		// Move any completed entries to the end of the list
+		$('tr.reagent.success').each(function() {
+			var trEl = $(this),
+				tbodyEl = trEl.closest('tbody');
+
+			trEl.appendTo(tbodyEl);
+		});
+
 		return;
 	},
 	oven:function(recipe, parent_bake, root_engaged) {
