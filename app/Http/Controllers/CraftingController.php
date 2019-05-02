@@ -313,7 +313,11 @@ class CraftingController extends Controller
 				if ($reagent['item']->category->name == 'Crystal')
 					$level = '';
 				else
-					$level = $reagent['item']->nodes->first()->zone->name . ' - ' . $reagent['item']->nodes->first()->area->name;
+				{
+					$zoneName = $reagent['item']->nodes->first()->zone->name ?? '';
+					$areaName = $reagent['item']->nodes->first()->area->name ?? '';
+					$level = $zoneName . ($areaName ? ' - ' . $areaName : '');
+				}
 			}
 			elseif ($reagent['self_sufficient'])
 			{
