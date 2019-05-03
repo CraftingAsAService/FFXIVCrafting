@@ -13,7 +13,8 @@
 		"laravel/framework": "5.8.*",
 		"laravelcollective/html": "5.8.*",
 		"nesbot/carbon": "1.*",
-		"predis/predis": "^1.1"
+		"predis/predis": "^1.1",
+		"xivapi/xivapi-php": "^1.6"
 	},
 	"require-dev": {
         "filp/whoops": "^2.0",

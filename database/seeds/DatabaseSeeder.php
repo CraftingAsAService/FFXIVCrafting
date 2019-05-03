@@ -1,6 +1,7 @@
 <?php
 
 // php artisan migrate:refresh --seed
+// php artisan db:seed
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -8,21 +9,117 @@ use Illuminate\Database\Eloquent\Model;
 class DatabaseSeeder extends Seeder
 {
 
+	private $api;
+
 	public function run()
 	{
 		set_time_limit(0);
+		Model::unguard();
+		\DB::connection()->disableQueryLog();
 
-		$start = new DateTime('now');
+		$this->api = new \XIVAPI\XIVAPI();
+		$this->api->environment->key(config('services.xivapi.key'));
 
-		if (app()->environment('local'))
-			$this->local();
-		else
-			echo "\n" . 'Run locally instead!' . "\n";
+		$this->locations();
 
-		echo "\n" . 'Time Elapsed: ' . $start->diff(new DateTime('now'))->format('%I:%S') . "\n";
+		// $maps = $this->listRequest('map', ['columns' => ['ID', 'Name']]);
+		// dd($maps);
 
-		return;
+		// $map = $this->request('map/112', ['columns' => ['PlaceNameRegionTargetID']]);
+		// dd($map);
+
+		// columns=ID,Name,ClassJobCategory.Name
+		// columns=Items.*.Name
+
+
+
+
+
 	}
+
+	private function locations()
+	{
+		$this->data['location'] = []; // Table is singular
+
+		$locations = $this->listRequest('placename', ['columns' => ['ID']]);
+		foreach ($locations->chunk(100) as $chunk)
+		{
+			$ids = $chunk->map(function($item) {
+				return $item->ID;
+			})->join(',');
+
+			$chunk = $this->request('placename', ['ids' => $ids, 'columns' => ['ID', 'Name', 'Maps.0.PlaceNameRegionTargetID']]);
+
+			foreach ($chunk->Results as $data)
+			{
+				// Skip empty names
+				if ($data->Name == '')
+					continue;
+
+				$this->set_data('location', [
+					'id'          => $data->ID,
+					'name'        => $data->Name,
+					'location_id' => $data->Maps[0]->PlaceNameRegionTargetID ?? null,
+				]);
+			}
+		}
+
+		echo __FUNCTION__ . ', ' . count($this->data['location']) . ' rows' . PHP_EOL;
+		$this->output_memory();
+	}
+
+
+
+	public function listRequest($content, $queries = [])
+	{
+		$queries['limit'] = 3000; // Maximum allowed per https://xivapi.com/docs/Game-Data#lists
+		$queries['page'] = 1;
+
+		$results = [];
+
+		while (true)
+		{
+			// $response now contains ->Pagination and ->Results
+			$response = $this->request($content, $queries);
+
+			$results = array_merge($results, $response->Results);
+
+			if ($response->Pagination->PageTotal == $response->Pagination->Page)
+				break;
+
+			$queries['page'] = $response->Pagination->PageNext;
+		}
+
+		return collect($results);
+	}
+
+	public function request($content, $queries = [])
+	{
+		return Cache::rememberForever($content . serialize($queries), function() use ($content, $queries)
+		{
+			$this->command->info(
+				'Querying: ' . $content .
+				(isset($queries['ids']) ? ' ' . preg_replace('/,.+,/', '-', $queries['ids']) : '')
+			);
+			return $this->api->queries($queries)->content->{$content}()->list();
+		});
+	}
+
+	// public function run()
+	// {
+	// 	set_time_limit(0);
+
+	// 	$start = new DateTime('now');
+
+	// 	if (app()->environment('local'))
+	// 		$this->local();
+	// 	else
+	// 		echo "\n" . 'Run locally instead!' . "\n";
+
+	// 	echo "\n" . 'Time Elapsed: ' . $start->diff(new DateTime('now'))->format('%I:%S') . "\n";
+
+	// 	return;
+	// }
 
 	private function local()
 	{
@@ -242,29 +339,6 @@ class DatabaseSeeder extends Seeder
 		echo 'item_mob, ' . count($this->data['item_mob']) . ' rows' . PHP_EOL;
 		$this->output_memory();
 	}
-
-	private function location($location)
-	{
-		// Setup Data Var
-		$this->data['location'] = [];
-
-		// Loop through given data
-		foreach ($location as $l)
-		{
-			$row = [
-				'id' => $l->id,
-				'name' => $l->name,
-				'location_id' => isset($l->parentId) ? $l->parentId : null,
-				'size' => isset($l->size) ? $l->size : null,
-			];
-
-			$this->set_data('location', $row);
-		}
-
-		echo __FUNCTION__ . ', ' . count($this->data['location']) . ' rows' . PHP_EOL;
-		$this->output_memory();
-	}
-
 	private function npc()
 	{
 		// Setup Data Var
