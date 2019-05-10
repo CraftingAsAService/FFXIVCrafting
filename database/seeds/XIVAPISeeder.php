@@ -28,6 +28,8 @@ class XIVAPISeeder extends Seeder
 		// If you're interested in more translation, it can take quite a bit of processing to get all the useful data out.  All my stuff is open source here, https://github.com/ufx/GarlandTools/blob/master/Garland.Data/Modules/Nodes.cs.  For the most part the s prefix stands for "SaintCoinach" and generally represents what you'll find on xivapi.
 
 		$runList = [
+
+
 			'location',
 			'node',
 			'fishing',
@@ -35,8 +37,11 @@ class XIVAPISeeder extends Seeder
 			// ...How do I connect a BNPC to a zone and their level?
 			// 'mob',
 
+			// ...How do I connect an ENPC to a zone and their coordinates?
 			// 'npc',
-			// 'instance',
+			// Items in an instance?
+
+			'instance',
 			// 'quest',
 			// 'job_category',
 			// 'job',
@@ -276,7 +281,6 @@ class XIVAPISeeder extends Seeder
 						]);
 			}
 		}
-
 	}
 
 	private function mob()
@@ -452,130 +456,49 @@ class XIVAPISeeder extends Seeder
 		echo 'item_shop, ' . count($this->data['item_shop']) . ' rows' . PHP_EOL;
 	}
 
-	// private function npc_base($npc_base)
-	// {
-	// 	$this->data['npc_base'] = [];
-	// 	$this->data['npc_npc_base'] = [];
-
-	// 	// Loop through bases
-	// 	foreach ($npc_base as $name => $list)
-	// 	{
-	// 		$row = [
-	// 			'name' => $name, // id is actually the name
-	// 			// 'title' => isset($nb->title) ? $nb->title : null,
-	// 		];
-
-	// 		$given_id = $this->setData('npc_base', $row);
-
-	// 		if (isset($list->x))
-	// 			foreach ($list->x as $npc_id)
-	// 			{
-	// 				$row = [
-	// 					'npc_id' => $npc_id,
-	// 					'npc_base_id' => $given_id,
-	// 				];
-
-	// 				$this->setData('npc_npc_base', $row);
-	// 			}
-	// 	}
-
-	// 	echo __FUNCTION__ . ', ' . count($this->data['npc_base']) . ' rows' . PHP_EOL;
-	// 	echo 'npc_npc_base, ' . count($this->data['npc_npc_base']) . ' rows' . PHP_EOL;
-		// $this->outputMemory();
-	// }
-
-	// private function shop_name($shop_name)
-	// {
-	// 	$this->data['shop_name'] = [];
-
-	// 	// Loop through nodes
-	// 	foreach ($shop_name as $id => $name)
-	// 	{
-	// 		$row = compact('id', 'name');
-
-	// 		$this->setData('shop_name', $row);
-	// 	}
-
-	// 	echo __FUNCTION__ . ', ' . count($this->data['shop_name']) . ' rows' . PHP_EOL;
-		// $this->outputMemory();
-	// }
-
-	// private function shop($shop)
-	// {
-	// 	$this->data['shop'] = [];
-	// 	$this->data['item_shop'] = [];
-
-	// 	// Loop through nodes
-	// 	foreach ($shop as $s)
-	// 	{
-	// 		// Don't count trade shops
-	// 		if (isset($s->trade) && $s->trade == 1)
-	// 			continue;
-
-	// 		$row = [
-	// 			'id' => $s->id,
-	// 			'name_id' => $s->nameId,
-	// 		];
-
-	// 		$this->setData('shop', $row);
-
-	// 		foreach ($s->entries as $item_id)
-	// 		{
-	// 			if (gettype($item_id) == 'object')
-	// 			{
-	// 				foreach ($item_id->item as $iii)
-	// 				{
-	// 					$row = [
-	// 						'item_id' => $iii->id,
-	// 						'shop_id' => $s->id,
-	// 					];
-
-	// 					$this->setData('item_shop', $row);
-	// 				}
-	// 			}
-	// 			else
-	// 			{
-	// 				$row = [
-	// 					'item_id' => $item_id,
-	// 					'shop_id' => $s->id,
-	// 				];
-
-	// 				$this->setData('item_shop', $row);
-	// 			}
-	// 		}
-	// 	}
-
-	// 	echo __FUNCTION__ . ', ' . count($this->data['shop']) . ' rows' . PHP_EOL;
-	// 	echo 'item_shop, ' . count($this->data['item_shop']) . ' rows' . PHP_EOL;
-		// $this->outputMemory();
-	// }
-
 	private function instance()
 	{
+		$endpoint = 'instancecontent';
+
 		$this->data['instance'] = [];
 		$this->data['instance_item'] = [];
 		$this->data['instance_mob'] = [];
 
-		// Loop through instance
-		foreach (array_diff(scandir(base_path() . '/../garlandtools/db/data/en/instance'), ['.', '..']) as $file)
+		$request = $this->listRequest($endpoint, ['columns' => ['ID']]);
+		foreach ($request->chunk(100) as $chunk)
 		{
-			// Get /db/data/instance/#.json
-			$json_file = base_path() . '/../garlandtools/db/data/en/instance/' . $file;
-			$i = $this->getCleanedJson($json_file);
-			$i = $i->instance;
+			$ids = $chunk->map(function($item) {
+				return $item->ID;
+			})->join(',');
 
-			// if ( ! isset($i->fullIcon))
-			// 	dd($i);
+			$chunk = $this->request($endpoint, ['ids' => $ids, 'columns' => [
+				'ID',
+				'Name',
+				'ContentType.ID',
+				'ContentFinderCondition.TerritoryType.PlaceName.ID',
+				'ContentFinderCondition.ImageID',
+			]]);
 
-			$row = [
-				'id' => $i->id,
-				'name' => isset($i->en) ? $i->en->name : $i->name,
-				'type' => $i->type ?? null,
-				'zone_id' => isset($i->zoneid) ? $i->zoneid : null,
-				'icon' => $i->fullIcon ?? '',
-			];
+			foreach ($chunk->Results as $data)
+			{
+				$this->setData('instance', [
+					'id'      => $data->ID,
+					'name'    => $data->Name,
+					'type'    => $data->ContentType->ID,
+					'zone_id' => $data->ContentFinderCondition->TerritoryType->PlaceName->ID,
+					'icon'    => $data->ContentFinderCondition->ImageID,
+				]);
 
-			$this->setData('instance', $row);
+				// ...
+
+			}
+
+		}
+
+	}
+
+	private function instancex()
+	{
 
 			if (isset($i->fights))
 				foreach ($i->fights as $f)
