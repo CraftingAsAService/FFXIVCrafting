@@ -17,18 +17,12 @@ class AspirSeeder extends Seeder
 		\DB::connection()->disableQueryLog();
 		\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-		$runList = [
-			'achievement',
-			'location',
-			'node',
-			'item_node',
-			'fishing',
-			'fishing_item',
-		];
+		// Run List is the same as what exists in the Aspir model's $data variable as keys
+		$aspir = new \App\Models\Aspir\Aspir;
+		$runList = array_keys($aspir->data);
 
 		foreach ($runList as $table)
 		{
-			// dd(file_get_contents(storage_path('app/aspir/' . $table . '.json')));
 			$data = json_decode(file_get_contents(storage_path('app/aspir/' . $table . '.json')), true);
 			$this->batchInsert($table, $data);
 		}

@@ -325,7 +325,6 @@ class XIVAPISeeder extends Seeder
 						]);
 			}
 		}
-
 	}
 
 	private function npc()

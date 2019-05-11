@@ -13,21 +13,25 @@ use App\Models\Aspir\XIVAPI;
 class Aspir
 {
 
-	protected $storage;
-	protected $xivapi;
-
+	// The AspirSeeder also depends on this list
 	public $data = [
-		'achievement' => [],
-		'location' => [],
-		'node' => [],
-		'item_node' => [],
-		'fishing' => [],
+		'achievement'  => [],
+		'location'     => [],
+		'node'         => [],
+		'item_node'    => [],
+		'fishing'      => [],
 		'fishing_item' => [],
+		'mob'          => [],
+		'item_mob'     => [],
 	];
+
+	protected $xivapi;
+	protected $garlandtools;
 
 	public function __construct()
 	{
-		$this->xivapi = new XIVAPI($this->data);
+		$this->xivapi = new XIVAPI($this);
+		$this->garlandtools = new GarlandTools($this);
 	}
 
 	public function run()
@@ -55,7 +59,21 @@ class Aspir
 
 		$this->xivapi->fishing();
 
+		$this->xivapi->mob(); // Missing Level, Zone ID and Items
+		$this->garlandtools->mob();
 
+			// $this->npc();
+			// $this->instance();
+			// $this->quest();
+			// $this->job_category($core->jobCategories);
+			// $this->job(); // No provided data, hard coded
+			// $this->venture($core->ventureIndex);
+			// $this->leve();
+			// $this->item_category($core->item->categoryIndex);
+			// $this->item();
+
+			// // Custom Data Manipulation, careers section
+			// $this->career();
 
 
 		foreach ($this->data as $filename => $data)
@@ -65,14 +83,7 @@ class Aspir
 	private function nodeCoordinates()
 	{
 		// Coordinates file is manually built
-		$coordinateFile = storage_path('app/osmose/nodeCoordinates.tsv');
-		$tsv = array_map(function($l) { return str_getcsv($l, '	'); }, file($coordinateFile));
-		array_walk($tsv, function(&$a) use ($tsv) {
-			$a = array_combine($tsv[0], $a);
-		});
-		array_shift($tsv);
-
-		$coordinates = collect($tsv);
+		$coordinates = $this->readTSV(storage_path('app/osmose/nodeCoordinates.tsv'));
 
 		// Gather all locations, ID => LocationID for the parental relationship
 		$areaFinder = collect($this->data['location'])->pluck('name', 'id');
@@ -96,14 +107,44 @@ class Aspir
 				: null;
 	}
 
+	private function mobLevelZone()
+	{
+
+	}
+
 	private function writeToJSON($filename, $list)
 	{
 		file_put_contents(storage_path('app/aspir/' . $filename . '.json'), json_encode($list, JSON_PRETTY_PRINT));
+	}
+
+	private function readTSV($filename)
+	{
+		$tsv = array_map(function($l) { return str_getcsv($l, '	'); }, file($filename));
+
+		array_walk($tsv, function(&$a) use ($tsv) {
+			$a = array_combine($tsv[0], $a);
+		});
+		array_shift($tsv);
+
+		return collect($tsv);
 	}
 
 	// private function getColumnNames($table)
 	// {
 	// 	return \Schema::getColumnListing($table);
 	// }
+
+	private function setData($table, $row, $id = null)
+	{
+		// If id is null, use the length of the existing data, or check in the $row for it
+		$id = $id ?: (isset($row['id']) ? $row['id'] : count($this->data[$table]) + 1);
+
+		if (isset($this->data[$table][$id]))
+			$this->data[$table][$id] = array_merge($this->data[$table][$id], $row);
+		else
+			$this->data[$table][$id] = $row;
+
+		return $id;
+	}
 
 }

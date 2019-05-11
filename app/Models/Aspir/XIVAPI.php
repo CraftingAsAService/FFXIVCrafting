@@ -12,16 +12,16 @@ use Cache;
 class XIVAPI
 {
 
-	public $data;
+	public $aspir;
 
 	private $api;
 
-	public function __construct(&$data)
+	public function __construct(&$aspir)
 	{
 		$this->api = new \XIVAPI\XIVAPI();
 		$this->api->environment->key(config('services.xivapi.key'));
 
-		$this->data =& $data;
+		$this->aspir =& $aspir;
 	}
 
 	public function achievements()
@@ -36,7 +36,7 @@ class XIVAPI
 			if ( ! $data->ItemTargetID)
 				return;
 
-			$this->setData('achievement', [
+			$this->aspir->setData('achievement', [
 				'id'      => $data->ID,
 				'name'    => $data->Name,
 				'item_id' => $data->ItemTargetID,
@@ -56,7 +56,7 @@ class XIVAPI
 			if ($data->Name == '')
 				return;
 
-			$this->setData('location', [
+			$this->aspir->setData('location', [
 				'id'          => $data->ID,
 				'name'        => $data->Name,
 				'location_id' => $data->Maps[0]->PlaceNameRegionTargetID ?? null,
@@ -92,7 +92,7 @@ class XIVAPI
 				if ($data->{'Item' . $i})
 				{
 					$hasItems = true;
-					$this->setData('item_node', [
+					$this->aspir->setData('item_node', [
 						'item_id' => $data->{'Item' . $i},
 						'node_id' => $data->ID,
 					]);
@@ -109,15 +109,15 @@ class XIVAPI
 				'TerritoryType.PlaceName.Name',
 			]]);
 
-			$this->setData('node', [
+			$this->aspir->setData('node', [
 				'id'          => $data->ID,
 				'name'        => $gp->PlaceName->Name,
 				'type'        => $data->GatheringType->ID,
 				'level'       => $data->GatheringLevel,
 				'zone_id'     => $gp->TerritoryType->PlaceName->ID,
 				'area_id'     => $gp->PlaceName->ID,
-				'coordinates' => null
-			]);
+				'coordinates' => null, // Filled in later
+			], $data->ID);
 		});
 	}
 
@@ -165,7 +165,7 @@ class XIVAPI
 				if ($data->{'Item' . $i}->ID)
 				{
 					$hasItems = true;
-					$this->setData('fishing_item', [
+					$this->aspir->setData('fishing_item', [
 						'item_id'    => $data->{'Item' . $i}->ID,
 						'fishing_id' => $data->ID,
 						'level'      => $data->{'Item' . $i}->LevelItem,
@@ -176,7 +176,7 @@ class XIVAPI
 			if ( ! $hasItems)
 				return;
 
-			$this->setData('fishing', [
+			$this->aspir->setData('fishing', [
 				'id'          => $data->ID,
 				'name'        => $data->PlaceName->Name,
 				'category_id' => $data->FishingSpotCategory,
@@ -186,9 +186,41 @@ class XIVAPI
 				'y'           => 1 + ($data->Z / 50),
 				'zone_id'     => $data->TerritoryType->PlaceName->ID,
 				'area_id'     => $data->PlaceName->ID,
-			]);
+			], $data->ID);
 		});
 	}
+
+	public function mob()
+	{
+		$this->loopEndpoint('bnpcname', [
+			'ID',
+			'Name',
+		], function($data) {
+			// Skip empty names
+			if ($data->Name == '')
+				return;
+
+			$this->aspir->setData('mob', [
+				'id'      => $data->ID,
+				'name'    => $data->Name,
+				'quest'   => null, // Filled in later
+				'level'   => null, // Filled in later
+				'zone_id' => null, // Filled in later
+			], $data->ID);
+		});
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	private function loopEndpoint($endpoint, $columns, $callback)
 	{
@@ -236,16 +268,6 @@ class XIVAPI
 		{
 			return $api->queries($queries)->content->{$content}()->list();
 		});
-	}
-
-	private function setData($table, $row, $id = null)
-	{
-		// If id is null, use the length of the existing data, or check in the $row for it
-		$id = $id ?: (isset($row['id']) ? $row['id'] : count($this->data[$table]) + 1);
-
-		$this->data[$table][$id] = $row;
-
-		return $id;
 	}
 
 }
