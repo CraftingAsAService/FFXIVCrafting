@@ -16,6 +16,8 @@ class XIVAPI
 
 	private $api;
 
+	public $limit = null;
+
 	public function __construct(&$aspir)
 	{
 		$this->api = new \XIVAPI\XIVAPI();
@@ -210,12 +212,79 @@ class XIVAPI
 		});
 	}
 
+	public function npc()
+	{
+		// 3000 enpcresident calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
+		$this->limit = 1000;
+
+		$this->loopEndpoint('enpcresident', [
+			'ID',
+			'Name',
+		], function($data) {
+			// Skip empty names
+			if ($data->Name == '')
+				return;
+
+			$this->aspir->setData('npc', [
+				'id'      => $data->ID,
+				'name'    => $data->Name,
+				'zone_id' => null, // Filled in later
+				'approx'  => null, // Filled in later
+				'x'       => null, // Filled in later
+				'y'       => null, // Filled in later
+			], $data->ID);
+		});
+
+		$limit = null;
+	}
+
+	public function shops()
+	{
+		// GilShop
+		// GilShopItem
+	    // "SpecialShop",
+	    // "SpecialShopItemCategory",
+	    //
+	    //
+			// I want to be more specific, however after ID 1028800, Quests, GilShop and SpecialShop all disappear, causing errors
+			// 'GilShop',//.*.ID',
+			// // 'GilShop.*.Name',
+			// 'SpecialShop',//.*.ID',
+			// 'SpecialShop.*.Name',
+			//
+
+			// foreach (['GilShop', 'SpecialShop'] as $shopType)
+			// 	if ($data->$shopType)
+			// 		foreach ($data->$shopType as $shop)
+			// 			if ($shop->ID)
+			// 			{
+			// 				$this->aspir->setData('shop', [
+			// 					'id'   => $shop->ID,
+			// 					'name' => $shop->Name,
+			// 				], $shop->ID);
+
+			// 				$this->aspir->setData('npc_shop', [
+			// 					'shop_id' => $shop->ID,
+			// 					'npc_id' => $data->ID,
+			// 				]);
+			// 			}
+	}
 
 
 
 
+	public function quests()
+	{
+		// 'Quests',//.*.ID',
+		// if ($data->Quests[0]->ID)
+		// 	foreach ($data->Quests as $quest)
+		// 		if ($quest->ID)
+		// 			$this->aspir->setData('npc_quest', [
+		// 				'quest_id' => $quest->ID,
+		// 				'npc_id' => $data->ID,
+		// 			]);
 
-
+	}
 
 
 
@@ -240,7 +309,7 @@ class XIVAPI
 
 	private function listRequest($content, $queries = [])
 	{
-		$queries['limit'] = 3000; // Maximum allowed per https://xivapi.com/docs/Game-Data#lists
+		$queries['limit'] = $this->limit !== null ? $this->limit : 3000; // Maximum allowed per https://xivapi.com/docs/Game-Data#lists
 		$queries['page'] = 1;
 
 		$results = [];
@@ -258,6 +327,8 @@ class XIVAPI
 			$queries['page'] = $response->Pagination->PageNext;
 		}
 
+		echo PHP_EOL;
+
 		return collect($results);
 	}
 
@@ -266,6 +337,7 @@ class XIVAPI
 		$api =& $this->api;
 		return Cache::rememberForever($content . serialize($queries), function() use ($content, $queries, $api)
 		{
+			echo '.';
 			return $api->queries($queries)->content->{$content}()->list();
 		});
 	}

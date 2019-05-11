@@ -44,6 +44,17 @@ class GarlandTools
 		});
 	}
 
+	public function npc()
+	{
+
+
+
+				// 'zone_id' => null, // Filled in later
+				// 'approx'  => null, // Filled in later
+				// 'x'       => null, // Filled in later
+				// 'y'       => null, // Filled in later
+	}
+
 
 
 

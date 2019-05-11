@@ -165,7 +165,7 @@ class GarlandTables extends Migration
 		Schema::create('shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
-			$table->integer('name')->unsigned();
+			$table->integer('name')->unsigned()->nullable();
 		});
 
 		if ( ! Schema::hasTable('item_shop'))

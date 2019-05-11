@@ -23,6 +23,11 @@ class Aspir
 		'fishing_item' => [],
 		'mob'          => [],
 		'item_mob'     => [],
+		'npc'          => [],
+		'npc_shop'     => [],
+		'shop'         => [],
+		// 'item_shop'    => [],
+		// 'npc_quest'    => [],
 	];
 
 	protected $xivapi;
@@ -50,27 +55,42 @@ class Aspir
 		// Those also mostly come from Libra and won't be updated anymore. Best alternative is scraping the lodestone HTML, but I haven't had time for this.
 		// To be honest, crafters rely on lots of disparate data sources that I put a lot of work into bringing together. The raw game data is just one piece of the puzzle - there's manual input sources (https://docs.google.com/spreadsheets/d/1hEj9KCDv0TT1NiGJ0S7afS4hfGMPb6tetqXQetYETUE/edit#gid=953424709), reverse-engineered algorithms acting on the data, a few piles of hacks for weird stuff, that defunct Libra Eorzea database, and some web scraping to bring it all together. You may have better luck picking up my data imports via my open source Garland code. There's a setup & contribution guide if you're interested: https://github.com/ufx/GarlandTools/blob/master/CONTRIBUTING.md. Happy to help with any questions you've got for it.
 
-		$this->xivapi->achievements();
+		// $this->xivapi->achievements();
 
-		$this->xivapi->locations();
+		// $this->xivapi->locations();
 
-		$this->xivapi->nodes();
-		$this->nodeCoordinates();
+		// $this->xivapi->nodes();
+		// $this->nodeCoordinates();
 
-		$this->xivapi->fishing();
+		// $this->xivapi->fishing();
 
-		$this->xivapi->mob(); // Missing Level, Zone ID and Items
-		$this->garlandtools->mob();
+		// $this->xivapi->mob();
+		// $this->garlandtools->mob();
 
-			// $this->npc();
+		$this->xivapi->npc();
+		$this->garlandtools->npc();
+
+		// $this->xivapi->shops();
+
 			// $this->instance();
 			// $this->quest();
+		// "Object": 1000100,
+		// ^ Object might be the NPC, check against the NPC List to confirm and fill up npc_quest
 			// $this->job_category($core->jobCategories);
 			// $this->job(); // No provided data, hard coded
 			// $this->venture($core->ventureIndex);
 			// $this->leve();
 			// $this->item_category($core->item->categoryIndex);
 			// $this->item();
+		// TODO - Shop Items ^ Here
+		    // "GameContentLinks": {
+      //   "GilShopItem": {
+      //       "Item": [
+      //           "262157.0", // <-- TAKE OFF THE . and anything after
+		//     "GameContentLinks": {
+        // "SpecialShop": {
+        //     "ItemCost***": [
+                // 1769514,
 
 			// // Custom Data Manipulation, careers section
 			// $this->career();
@@ -78,6 +98,19 @@ class Aspir
 
 		foreach ($this->data as $filename => $data)
 			$this->writeToJSON($filename, $data);
+	}
+
+	public function setData($table, $row, $id = null)
+	{
+		// If id is null, use the length of the existing data, or check in the $row for it
+		$id = $id ?: (isset($row['id']) ? $row['id'] : count($this->data[$table]) + 1);
+
+		if (isset($this->data[$table][$id]))
+			$this->data[$table][$id] = array_merge($this->data[$table][$id], $row);
+		else
+			$this->data[$table][$id] = $row;
+
+		return $id;
 	}
 
 	private function nodeCoordinates()
@@ -107,11 +140,6 @@ class Aspir
 				: null;
 	}
 
-	private function mobLevelZone()
-	{
-
-	}
-
 	private function writeToJSON($filename, $list)
 	{
 		file_put_contents(storage_path('app/aspir/' . $filename . '.json'), json_encode($list, JSON_PRETTY_PRINT));
@@ -133,18 +161,5 @@ class Aspir
 	// {
 	// 	return \Schema::getColumnListing($table);
 	// }
-
-	private function setData($table, $row, $id = null)
-	{
-		// If id is null, use the length of the existing data, or check in the $row for it
-		$id = $id ?: (isset($row['id']) ? $row['id'] : count($this->data[$table]) + 1);
-
-		if (isset($this->data[$table][$id]))
-			$this->data[$table][$id] = array_merge($this->data[$table][$id], $row);
-		else
-			$this->data[$table][$id] = $row;
-
-		return $id;
-	}
 
 }
