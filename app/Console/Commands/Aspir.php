@@ -37,7 +37,7 @@ class Aspir extends Command
      */
     public function handle()
     {
-        $aspir = new \App\Models\Aspir\Aspir;
+        $aspir = new \App\Models\Aspir\Aspir($this);
         $aspir->run();
     }
 }

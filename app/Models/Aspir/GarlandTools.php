@@ -24,7 +24,7 @@ class GarlandTools
 		$this->aspir =& $aspir;
 	}
 
-	public function mob()
+	public function mobs()
 	{
 		$this->loopEndpoint('mob', function($data) {
 			$id = (int) $data->mob->id % 10000000000;
@@ -44,15 +44,20 @@ class GarlandTools
 		});
 	}
 
-	public function npc()
+	public function npcs()
 	{
+		$this->loopEndpoint('npc', function($data) {
+			$this->aspir->setData('npc', [
+				'zone_id' => $data->npc->zoneid ?? null,
+				'approx'  => $data->npc->approx ?? null,
+			], $data->npc->id);
 
-
-
-				// 'zone_id' => null, // Filled in later
-				// 'approx'  => null, // Filled in later
-				// 'x'       => null, // Filled in later
-				// 'y'       => null, // Filled in later
+			if (isset($data->npc->coords))
+				$this->aspir->setData('npc', [
+					'x' => $data->npc->coords[0],
+					'y' => $data->npc->coords[1],
+				], $data->npc->id);
+		});
 	}
 
 

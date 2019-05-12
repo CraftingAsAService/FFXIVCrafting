@@ -123,7 +123,7 @@ class XIVAPI
 		});
 	}
 
-	public function fishing()
+	public function fishingSpots()
 	{
 		$this->loopEndpoint('fishingspot', [
 			'ID',
@@ -192,7 +192,7 @@ class XIVAPI
 		});
 	}
 
-	public function mob()
+	public function mobs()
 	{
 		$this->loopEndpoint('bnpcname', [
 			'ID',
@@ -212,14 +212,19 @@ class XIVAPI
 		});
 	}
 
-	public function npc()
+	public function npcs()
 	{
-		// 3000 enpcresident calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
+		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
 		$this->limit = 1000;
 
 		$this->loopEndpoint('enpcresident', [
 			'ID',
 			'Name',
+			'Quests.*.ID',
+			'GilShop.*.ID',
+			'GilShop.*.Name',
+			'SpecialShop.*.ID',
+			'SpecialShop.*.Name',
 		], function($data) {
 			// Skip empty names
 			if ($data->Name == '')
@@ -233,74 +238,202 @@ class XIVAPI
 				'x'       => null, // Filled in later
 				'y'       => null, // Filled in later
 			], $data->ID);
+
+			if ($data->Quests[0]->ID)
+				foreach ($data->Quests as $quest)
+					if ($quest->ID)
+						$this->aspir->setData('npc_quest', [
+							'quest_id' => $quest->ID,
+							'npc_id' => $data->ID,
+						]);
+
+			foreach (['GilShop', 'SpecialShop'] as $shopType)
+				if ($data->$shopType)
+					foreach ($data->$shopType as $shop)
+						if ($shop->ID)
+						{
+							$this->aspir->setData('shop', [
+								'id'   => $shop->ID,
+								'name' => $shop->Name,
+							], $shop->ID);
+
+							$this->aspir->setData('npc_shop', [
+								'shop_id' => $shop->ID,
+								'npc_id' => $data->ID,
+							]);
+						}
+		}, [
+			'ids' => function($value, $key) {
+				// After ID 1028800, Quests, GilShop and SpecialShop all disappear, causing errors
+				return $value < 1028800;
+			}
+		]);
+
+		$limit = null;
+	}
+
+	public function quests()
+	{
+		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
+		$this->limit = 500;
+
+		$this->loopEndpoint('quest', [
+			'ID',
+			'Name',
+			'ClassJobCategory0TargetID',
+			'ClassJobLevel0',
+			'SortKey',
+			'PlaceNameTargetID',
+			'IconID',
+			'IssuerStart',
+			'TargetEnd',
+			'JournalGenreTargetID',
+			// Rewards; 00-05 are guaranteed. 10-14 are choices. Catalysts are likely guaranteed as well.
+			// 	Make sure the Target's are "Item"
+			'ItemReward00',
+			'ItemCountReward00',
+			'ItemReward01',
+			'ItemCountReward01',
+			'ItemReward02',
+			'ItemCountReward02',
+			'ItemReward03',
+			'ItemCountReward03',
+			'ItemReward04',
+			'ItemCountReward04',
+			'ItemReward05',
+			'ItemCountReward05',
+			'ItemReward10Target',
+			'ItemReward10TargetID',
+			'ItemCountReward10',
+			'ItemReward11Target',
+			'ItemReward11TargetID',
+			'ItemCountReward11',
+			'ItemReward12Target',
+			'ItemReward12TargetID',
+			'ItemCountReward12',
+			'ItemReward13Target',
+			'ItemReward13TargetID',
+			'ItemCountReward13',
+			'ItemReward14Target',
+			'ItemReward14TargetID',
+			'ItemCountReward14',
+			'ItemCatalyst0Target',
+			'ItemCatalyst0TargetID',
+			'ItemCountCatalyst0',
+			'ItemCatalyst1Target',
+			'ItemCatalyst1TargetID',
+			'ItemCountCatalyst1',
+			'ItemCatalyst2Target',
+			'ItemCatalyst2TargetID',
+			'ItemCountCatalyst2',
+			// Required; There's like 40 of these, but I'm only going to go for 10
+			'ScriptInstruction0',
+			'ScriptArg0',
+			'ScriptInstruction1',
+			'ScriptArg1',
+			'ScriptInstruction2',
+			'ScriptArg2',
+			'ScriptInstruction3',
+			'ScriptArg3',
+			'ScriptInstruction4',
+			'ScriptArg4',
+			'ScriptInstruction5',
+			'ScriptArg5',
+			'ScriptInstruction6',
+			'ScriptArg6',
+			'ScriptInstruction7',
+			'ScriptArg7',
+			'ScriptInstruction8',
+			'ScriptArg8',
+			'ScriptInstruction9',
+			'ScriptArg9',
+		], function($data) {
+			// Skip empty names
+			if ($data->Name == '')
+				return;
+
+			$this->aspir->setData('quest', [
+				'id'              => $data->ID,
+				'name'            => $data->Name,
+				'job_category_id' => $data->ClassJobCategory0TargetID,
+				'level'           => $data->ClassJobLevel0,
+				'sort'            => $data->SortKey,
+				'zone_id'         => $data->PlaceNameTargetID,
+				'icon'            => $data->IconID,
+				'issuer_id'       => $data->IssuerStart,
+				'target_id'       => $data->TargetEnd,
+				'genre'           => $data->JournalGenreTargetID,
+			], $data->ID);
+
+			// Required Items
+			foreach (range(0, 9) as $slot)
+				if (substr($data->{'ScriptInstruction' . $slot}, 0, 5) == 'RITEM')
+					$this->aspir->setData('quest_required', [
+						'item_id'  => $data->{'ScriptArg' . $slot},
+						'quest_id' => $data->ID,
+					]);
+
+			// Reward Items, Guaranteed, 00-05
+			foreach (range(0, 5) as $slot)
+				if ($data->{'ItemReward0' . $slot})
+					$this->aspir->setData('quest_reward', [
+						'item_id'  => $data->{'ItemReward0' . $slot},
+						'quest_id' => $data->ID,
+						'amount'   => $data->{'ItemCountReward0' . $slot},
+					]);
+
+			// Reward Items, Optional, 10-14
+			foreach (range(10, 14) as $slot)
+				if ($data->{'ItemReward' . $slot . 'TargetID'} && $data->{'ItemReward' . $slot . 'Target'} == 'Item')
+					$this->aspir->setData('quest_reward', [
+						'item_id'  => $data->{'ItemReward' . $slot . 'TargetID'},
+						'quest_id' => $data->ID,
+						'amount'   => $data->{'ItemCountReward' . $slot},
+					]);
+
+			// Reward Items/Catalyst Items
+			foreach (range(0, 2) as $slot)
+				if ($data->{'ItemCatalyst' . $slot . 'TargetID'} && $data->{'ItemCatalyst' . $slot . 'Target'} == 'Item')
+					$this->aspir->setData('quest_reward', [
+						'item_id'  => $data->{'ItemCatalyst' . $slot . 'TargetID'},
+						'quest_id' => $data->ID,
+						'amount'   => $data->{'ItemCountCatalyst' . $slot},
+					]);
 		});
 
 		$limit = null;
 	}
 
-	public function shops()
-	{
-		// GilShop
-		// GilShopItem
-	    // "SpecialShop",
-	    // "SpecialShopItemCategory",
-	    //
-	    //
-			// I want to be more specific, however after ID 1028800, Quests, GilShop and SpecialShop all disappear, causing errors
-			// 'GilShop',//.*.ID',
-			// // 'GilShop.*.Name',
-			// 'SpecialShop',//.*.ID',
-			// 'SpecialShop.*.Name',
-			//
-
-			// foreach (['GilShop', 'SpecialShop'] as $shopType)
-			// 	if ($data->$shopType)
-			// 		foreach ($data->$shopType as $shop)
-			// 			if ($shop->ID)
-			// 			{
-			// 				$this->aspir->setData('shop', [
-			// 					'id'   => $shop->ID,
-			// 					'name' => $shop->Name,
-			// 				], $shop->ID);
-
-			// 				$this->aspir->setData('npc_shop', [
-			// 					'shop_id' => $shop->ID,
-			// 					'npc_id' => $data->ID,
-			// 				]);
-			// 			}
-	}
-
-
-
-
-	public function quests()
-	{
-		// 'Quests',//.*.ID',
-		// if ($data->Quests[0]->ID)
-		// 	foreach ($data->Quests as $quest)
-		// 		if ($quest->ID)
-		// 			$this->aspir->setData('npc_quest', [
-		// 				'quest_id' => $quest->ID,
-		// 				'npc_id' => $data->ID,
-		// 			]);
-
-	}
 
 
 
 
 
 
-	private function loopEndpoint($endpoint, $columns, $callback)
+
+	/**
+	 * loopEndpoint - Loop around an XIVAPI Endpoint
+	 * @param  string   $endpoint Any type of `/content`
+	 * @param  array    $columns  Specific columns to reduce XIVAPI Load
+	 * @param  function $callback $data is passed into here
+	 * @param  array    $filters  An array of callback functions; A way to reduce identifiers even more
+	 */
+	private function loopEndpoint($endpoint, $columns, $callback, $filters = [])
 	{
 		$request = $this->listRequest($endpoint, ['columns' => ['ID']]);
 		foreach ($request->chunk(100) as $chunk)
 		{
 			$ids = $chunk->map(function($item) {
 				return $item->ID;
-			})->join(',');
+			});
 
-			$chunk = $this->request($endpoint, ['ids' => $ids, 'columns' => $columns]);
+			if (isset($filters['ids']))
+				$ids = $ids->filter($filters['ids']);
+
+			if (empty($ids))
+				continue;
+
+			$chunk = $this->request($endpoint, ['ids' => $ids->join(','), 'columns' => $columns]);
 
 			foreach ($chunk->Results as $data)
 				$callback($data);
@@ -327,17 +460,19 @@ class XIVAPI
 			$queries['page'] = $response->Pagination->PageNext;
 		}
 
-		echo PHP_EOL;
-
 		return collect($results);
 	}
 
 	private function request($content, $queries = [])
 	{
+		$command =& $this->aspir->command;
 		$api =& $this->api;
-		return Cache::rememberForever($content . serialize($queries), function() use ($content, $queries, $api)
-		{
-			echo '.';
+
+		return Cache::rememberForever($content . serialize($queries), function() use ($content, $queries, $api, $command) {
+			$command->info(
+				'Querying: ' . $content .
+				(isset($queries['ids']) ? ' ' . preg_replace('/,.+,/', '-', $queries['ids']) : '')
+			);
 			return $api->queries($queries)->content->{$content}()->list();
 		});
 	}

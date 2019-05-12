@@ -15,28 +15,37 @@ class Aspir
 
 	// The AspirSeeder also depends on this list
 	public $data = [
-		'achievement'  => [],
-		'location'     => [],
-		'node'         => [],
-		'item_node'    => [],
-		'fishing'      => [],
-		'fishing_item' => [],
-		'mob'          => [],
-		'item_mob'     => [],
-		'npc'          => [],
-		'npc_shop'     => [],
-		'shop'         => [],
-		// 'item_shop'    => [],
-		// 'npc_quest'    => [],
+		'achievement'    => [],
+		'location'       => [],
+		'node'           => [],
+		'item_node'      => [],
+		'fishing'        => [],
+		'fishing_item'   => [],
+		'mob'            => [],
+		'item_mob'       => [],
+		'npc'            => [],
+		'npc_quest'      => [],
+		'shop'           => [],
+		'npc_shop'       => [],
+		'quest'          => [],
+		'quest_reward'   => [],
+		'quest_required' => [],
+		// 'item_shop'      => [],
 	];
 
 	protected $xivapi;
 	protected $garlandtools;
+	protected $manual;
 
-	public function __construct()
+	public $command;
+
+	public function __construct(&$command)
 	{
-		$this->xivapi = new XIVAPI($this);
+		$this->command =& $command;
+
+		$this->xivapi       = new XIVAPI($this);
 		$this->garlandtools = new GarlandTools($this);
+		$this->manual       = new Manual($this);
 	}
 
 	public function run()
@@ -55,25 +64,48 @@ class Aspir
 		// Those also mostly come from Libra and won't be updated anymore. Best alternative is scraping the lodestone HTML, but I haven't had time for this.
 		// To be honest, crafters rely on lots of disparate data sources that I put a lot of work into bringing together. The raw game data is just one piece of the puzzle - there's manual input sources (https://docs.google.com/spreadsheets/d/1hEj9KCDv0TT1NiGJ0S7afS4hfGMPb6tetqXQetYETUE/edit#gid=953424709), reverse-engineered algorithms acting on the data, a few piles of hacks for weird stuff, that defunct Libra Eorzea database, and some web scraping to bring it all together. You may have better luck picking up my data imports via my open source Garland code. There's a setup & contribution guide if you're interested: https://github.com/ufx/GarlandTools/blob/master/CONTRIBUTING.md. Happy to help with any questions you've got for it.
 
-		// $this->xivapi->achievements();
+		$xivapiCalls = [
+			'achievements',
+			'locations',
+			'nodes',
+			'fishingSpots',
+			'mobs',
+			'npcs',
+			'quests',
+		];
 
-		// $this->xivapi->locations();
+		$garlandtoolsCalls = [
+			'mobs',
+			'npcs',
+		];
 
-		// $this->xivapi->nodes();
-		// $this->nodeCoordinates();
+		$manualCalls = [
+			'nodeCoordinates',
+		];
 
-		// $this->xivapi->fishing();
+		$rowCounts = [];
+		foreach (['xivapi', 'garlandtools', 'manual'] as $type)
+		{
+			$this->command->comment('Beginning ' . $type . ' Calls');
+			foreach (${$type . 'Calls'} as $function)
+			{
+				$prevRowCounts = $rowCounts;
 
-		// $this->xivapi->mob();
-		// $this->garlandtools->mob();
+				$this->$type->$function();
 
-		$this->xivapi->npc();
-		$this->garlandtools->npc();
+				$rowCounts = array_filter(array_map(function($values) {
+					return count($values);
+				}, $this->data), function($amount) {
+					return $amount > 0;
+				});
 
-		// $this->xivapi->shops();
+				foreach (array_diff($rowCounts, $prevRowCounts) as $k => $count)
+					$this->command->info($k . ' now has ' . $count . ' rows');
+			}
+		}
 
 			// $this->instance();
-			// $this->quest();
+			//
 		// "Object": 1000100,
 		// ^ Object might be the NPC, check against the NPC List to confirm and fill up npc_quest
 			// $this->job_category($core->jobCategories);
@@ -95,9 +127,7 @@ class Aspir
 			// // Custom Data Manipulation, careers section
 			// $this->career();
 
-
-		foreach ($this->data as $filename => $data)
-			$this->writeToJSON($filename, $data);
+		$this->saveData();
 	}
 
 	public function setData($table, $row, $id = null)
@@ -113,48 +143,19 @@ class Aspir
 		return $id;
 	}
 
-	private function nodeCoordinates()
+	private function saveData()
 	{
-		// Coordinates file is manually built
-		$coordinates = $this->readTSV(storage_path('app/osmose/nodeCoordinates.tsv'));
+		$this->command->comment('Saving Data');
 
-		// Gather all locations, ID => LocationID for the parental relationship
-		$areaFinder = collect($this->data['location'])->pluck('name', 'id');
-
-		// GatheringPointName Conversions, for coordinate matching
-		$typeConverter = [
-			// Type => Matching Text
-			0 => 'Mineral Deposit', // via Mining
-			1 => 'Rocky Outcrop', // via Quarrying
-			2 => 'Mature Tree', // via Logging
-			3 => 'Lush Vegetation Patch', // via Harvesting
-		];
-
-		foreach ($this->data['node'] as &$node)
-			$node['coordinates'] = isset($areaFinder[$node['zone_id']]) && isset($typeConverter[$node['type']])
-				? $coordinates
-					->where('location', $areaFinder[$node['zone_id']])
-					->where('level', $node['level'])
-					->where('type', $typeConverter[$node['type']])
-					->pluck('coordinates')->join(', ', ' or ')
-				: null;
+		foreach ($this->data as $filename => $data)
+			$this->writeToJSON($filename, $data);
 	}
 
 	private function writeToJSON($filename, $list)
 	{
+		$this->command->info('Saving ' . $filename . '.json');
+
 		file_put_contents(storage_path('app/aspir/' . $filename . '.json'), json_encode($list, JSON_PRETTY_PRINT));
-	}
-
-	private function readTSV($filename)
-	{
-		$tsv = array_map(function($l) { return str_getcsv($l, '	'); }, file($filename));
-
-		array_walk($tsv, function(&$a) use ($tsv) {
-			$a = array_combine($tsv[0], $a);
-		});
-		array_shift($tsv);
-
-		return collect($tsv);
 	}
 
 	// private function getColumnNames($table)
