@@ -36,6 +36,7 @@ class Aspir
 		'job_category'     => [],
 		'job_job_category' => [],
 		'venture'          => [],
+		'item_venture'     => [],
 		// 'item_shop'      => [],
 	];
 
@@ -81,7 +82,7 @@ class Aspir
 			// 'instances',
 			// 'jobs',
 			// 'job_categories',
-			'ventures',
+			// 'ventures',
 		];
 
 		$garlandtoolsCalls = [
@@ -92,6 +93,7 @@ class Aspir
 
 		$manualCalls = [
 			// 'nodeCoordinates',
+			// 'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
 		];
 
 		$rowCounts = [];

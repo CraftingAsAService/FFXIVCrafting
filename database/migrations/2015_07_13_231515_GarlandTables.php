@@ -313,6 +313,7 @@ class GarlandTables extends Migration
 		Schema::create('venture', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
+			$table->string('name')->nullable();
 			$table->string('amounts')->nullable();
 			$table->integer('job_category_id')->unsigned();
 			$table->smallInteger('level')->unsigned();

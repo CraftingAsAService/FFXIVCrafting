@@ -23,7 +23,7 @@ class Manual
 
 	public function nodeCoordinates()
 	{
-		// Coordinates file is manually built
+		// Node Coordinates file is manually built
 		$coordinates = $this->readTSV($this->path . 'nodeCoordinates.tsv');
 
 		// Gather all locations, ID => LocationID for the parental relationship
@@ -46,6 +46,30 @@ class Manual
 					->where('type', $typeConverter[$node['type']])
 					->pluck('coordinates')->join(', ', ' or ')
 				: null;
+	}
+
+	public function randomVentureItems()
+	{
+		// Random Venture Items file is manually built
+		$randomVentureItems = $this->readTSV($this->path . 'randomVentureItems.tsv')
+			->pluck('items', 'venture');
+
+		// The `venture` column should match against a `venture.name`
+		//  Likewise, exploding the `items` column on a comma, then looping those against the `item.name` should produce a match
+		//  And voila, populate `item_venture`
+		foreach ($randomVentureItems as $venture => $items)
+		{
+			$items = explode(',', str_replace(', ', ',', $items));
+			dd($venture, $items);
+
+
+
+			// $this->aspir->setData('item_venture', [
+			// 	'venture_id' => $venture->id,
+			// 	'item_id'    => $item->id,
+			// ]);
+		}
+
 	}
 
 	private function readTSV($filename)

@@ -481,22 +481,38 @@ class XIVAPI
 		], function($data) {
 			// The Quantities are only applicable for "Normal" Ventures
 			$quantities = [];
-			if ( ! $data->IsRandom)
+			$name = null;
+			if ($data->IsRandom)
 			{
-				$quantities = [];
-				// An entry for retainertasknormal exists per retainertask; they share IDs
+				$q = $this->request('retainertaskrandom/' . $data->Task, ['columns' => [
+					'Name',
+				]]);
+
+				$name = $q->Name;
+			}
+			else
+			{
 				$q = $this->request('retainertasknormal/' . $data->Task, ['columns' => [
 					'Quantity0',
 					'Quantity1',
 					'Quantity2',
+					'ItemTarget',
+					'ItemTargetID',
 				]]);
 
 				foreach (range(0, 2) as $slot)
 					$quantities[] = $q->{'Quantity' . $slot};
+
+				if ($q->ItemTarget == 'Item' && $q->ItemTargetID)
+					$this->aspir->setData('item_venture', [
+						'item_id'    => $q->ItemTargetID,
+						'venture_id' => $data->ID,
+					]);
 			}
 
 			$this->aspir->setData('venture', [
 				'id'              => $data->ID,
+				'name'            => $name,
 				'amounts'         => empty($quantities) ? null : implode(',', $quantities),
 				'job_category_id' => $data->ClassJobCategory->ID,
 				'level'           => $data->RetainerLevel,
