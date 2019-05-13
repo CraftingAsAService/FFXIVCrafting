@@ -27,19 +27,19 @@ class GarlandTools
 	public function mobs()
 	{
 		$this->loopEndpoint('mob', function($data) {
-			$id = (int) $data->mob->id % 10000000000;
+			$mobId = $this->translateMobID($data->mob->id);
 
 			$this->aspir->setData('mob', [
 				'quest'   => $data->mob->quest ?? null,
 				'level'   => $data->mob->lvl,
 				'zone_id' => $data->mob->zoneid,
-			], $id);
+			], $mobId);
 
 			// And now for dropped items
-			foreach ($data->mob->drops as $item_id)
+			foreach ($data->mob->drops as $itemId)
 				$this->aspir->setData('item_mob', [
-					'item_id' => $item_id,
-					'mob_id' => $data->mob->id,
+					'item_id' => $itemId,
+					'mob_id'  => $mobId,
 				]);
 		});
 	}
@@ -60,6 +60,42 @@ class GarlandTools
 		});
 	}
 
+	public function instances()
+	{
+		$this->loopEndpoint('instance', function($data) {
+			if (isset($data->instance->fights))
+				foreach ($data->instance->fights as $f)
+				{
+					if (isset($f->coffer))
+						foreach ($f->coffer->items as $itemId)
+							$this->aspir->setData('instance_item', [
+								'item_id'     => $itemId,
+								'instance_id' => $data->instance->id,
+							]);
+
+					foreach ($f->mobs as $mobID)
+						$this->aspir->setData('instance_mob', [
+							'mob_id'      => $this->translateMobID($mobID),
+							'instance_id' => $data->instance->id,
+						]);
+				}
+
+			if (isset($data->instance->rewards))
+				foreach ($data->instance->rewards as $itemId)
+					$this->aspir->setData('instance_item', [
+						'item_id'     => $itemId,
+						'instance_id' => $data->instance->id,
+					]);
+
+			if (isset($data->instance->coffers))
+				foreach ($data->instance->coffers as $coffer)
+					foreach ($coffer->items as $itemId)
+						$this->aspir->setData('instance_item', [
+							'item_id'     => $itemId,
+							'instance_id' => $data->instance->id,
+						]);
+		});
+	}
 
 
 
@@ -68,6 +104,13 @@ class GarlandTools
 
 
 
+	private function translateMobID($mobId, $base = false)
+	{
+		// The mob id can be split between base and name
+		if ($base)
+			return (int) ($mobId / 10000000000);
+		return (int) ($mobId % 10000000000);
+	}
 
 	private function loopEndpoint($endpoint, $callback)
 	{

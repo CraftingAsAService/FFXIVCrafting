@@ -15,21 +15,27 @@ class Aspir
 
 	// The AspirSeeder also depends on this list
 	public $data = [
-		'achievement'    => [],
-		'location'       => [],
-		'node'           => [],
-		'item_node'      => [],
-		'fishing'        => [],
-		'fishing_item'   => [],
-		'mob'            => [],
-		'item_mob'       => [],
-		'npc'            => [],
-		'npc_quest'      => [],
-		'shop'           => [],
-		'npc_shop'       => [],
-		'quest'          => [],
-		'quest_reward'   => [],
-		'quest_required' => [],
+		'achievement'      => [],
+		'location'         => [],
+		'node'             => [],
+		'item_node'        => [],
+		'fishing'          => [],
+		'fishing_item'     => [],
+		'mob'              => [],
+		'item_mob'         => [],
+		'npc'              => [],
+		'npc_quest'        => [],
+		'shop'             => [],
+		'npc_shop'         => [],
+		'quest'            => [],
+		'quest_reward'     => [],
+		'quest_required'   => [],
+		'instance'         => [],
+		'instance_item'    => [],
+		'instance_mob'     => [],
+		'job_category'     => [],
+		'job_job_category' => [],
+		'venture'          => [],
 		// 'item_shop'      => [],
 	];
 
@@ -65,22 +71,27 @@ class Aspir
 		// To be honest, crafters rely on lots of disparate data sources that I put a lot of work into bringing together. The raw game data is just one piece of the puzzle - there's manual input sources (https://docs.google.com/spreadsheets/d/1hEj9KCDv0TT1NiGJ0S7afS4hfGMPb6tetqXQetYETUE/edit#gid=953424709), reverse-engineered algorithms acting on the data, a few piles of hacks for weird stuff, that defunct Libra Eorzea database, and some web scraping to bring it all together. You may have better luck picking up my data imports via my open source Garland code. There's a setup & contribution guide if you're interested: https://github.com/ufx/GarlandTools/blob/master/CONTRIBUTING.md. Happy to help with any questions you've got for it.
 
 		$xivapiCalls = [
-			'achievements',
-			'locations',
-			'nodes',
-			'fishingSpots',
-			'mobs',
-			'npcs',
-			'quests',
+			// 'achievements',
+			// 'locations',
+			// 'nodes',
+			// 'fishingSpots',
+			// 'mobs',
+			// 'npcs',
+			// 'quests',
+			// 'instances',
+			// 'jobs',
+			// 'job_categories',
+			'ventures',
 		];
 
 		$garlandtoolsCalls = [
-			'mobs',
-			'npcs',
+			// 'mobs',
+			// 'npcs',
+			// 'instances',
 		];
 
 		$manualCalls = [
-			'nodeCoordinates',
+			// 'nodeCoordinates',
 		];
 
 		$rowCounts = [];
@@ -104,12 +115,6 @@ class Aspir
 			}
 		}
 
-			// $this->instance();
-			//
-		// "Object": 1000100,
-		// ^ Object might be the NPC, check against the NPC List to confirm and fill up npc_quest
-			// $this->job_category($core->jobCategories);
-			// $this->job(); // No provided data, hard coded
 			// $this->venture($core->ventureIndex);
 			// $this->leve();
 			// $this->item_category($core->item->categoryIndex);
@@ -153,7 +158,10 @@ class Aspir
 
 	private function writeToJSON($filename, $list)
 	{
-		$this->command->info('Saving ' . $filename . '.json');
+		if (empty($list))
+			$this->command->comment('No data for ' . $filename);
+		else
+			$this->command->info('Saving ' . $filename . '.json');
 
 		file_put_contents(storage_path('app/aspir/' . $filename . '.json'), json_encode($list, JSON_PRETTY_PRINT));
 	}

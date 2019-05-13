@@ -404,11 +404,123 @@ class XIVAPI
 		$limit = null;
 	}
 
+	public function instances()
+	{
+		$this->loopEndpoint('instancecontent', [
+			'ID',
+			'Name',
+			'ContentType.ID',
+			'ContentFinderCondition.TerritoryType.PlaceName.ID',
+			'ContentFinderCondition.ImageID',
+		], function($data) {
+			// Skip empty names
+			if ($data->Name == '')
+				return;
+
+			$this->aspir->setData('instance', [
+				'id'      => $data->ID,
+				'name'    => $data->Name,
+				'type'    => $data->ContentType->ID,
+				'zone_id' => $data->ContentFinderCondition->TerritoryType->PlaceName->ID,
+				'icon'    => $data->ContentFinderCondition->ImageID,
+			], $data->ID);
+		});
+	}
+
+	public function jobs()
+	{
+		$this->loopEndpoint('classjob', [
+			'ID',
+			'NameEnglish', // `NameEnglish` is capitalized; `Name` is not
+			'Abbreviation',
+		], function($data) {
+			$this->aspir->setData('job', [
+				'id'   => $data->ID,
+				'name' => $data->NameEnglish,
+				'abbr' => $data->Abbreviation,
+			], $data->ID);
+		});
+	}
+
+	public function job_categories()
+	{
+		// classjobcategory has a datapoint for every job abbreviation
+		//  Dynamically collect them. The key's will stay as the ID, which will be helpful
+		$abbreviations = collect($this->aspir->data['job'])->map(function($job) {
+			return $job['abbr'];
+		});
+
+		$this->loopEndpoint('classjobcategory', array_merge([
+			'ID',
+			'Name',
+		], $abbreviations->toArray()), function($data) use ($abbreviations) {
+			$this->aspir->setData('job_category', [
+				'id'   => $data->ID,
+				'name' => $data->Name,
+			]);
+
+			foreach ($abbreviations as $jobId => $abbr)
+				if ($data->$abbr == 1)
+					$this->aspir->setData('job_job_category', [
+						'job_id'          => $jobId,
+						'job_category_id' => $data->ID,
+					]);
+		});
+	}
+
+	public function ventures()
+	{
+		$this->loopEndpoint('retainertask', [
+			'ID',
+			'ClassJobCategory.ID',
+			'RetainerLevel',
+			'MaxTimeMin',
+			'VentureCost',
+			'IsRandom',
+			'Task',
+		], function($data) {
+			// The Quantities are only applicable for "Normal" Ventures
+			$quantities = [];
+			if ( ! $data->IsRandom)
+			{
+				$quantities = [];
+				// An entry for retainertasknormal exists per retainertask; they share IDs
+				$q = $this->request('retainertasknormal/' . $data->Task, ['columns' => [
+					'Quantity0',
+					'Quantity1',
+					'Quantity2',
+				]]);
+
+				foreach (range(0, 2) as $slot)
+					$quantities[] = $q->{'Quantity' . $slot};
+			}
+
+			$this->aspir->setData('venture', [
+				'id'              => $data->ID,
+				'amounts'         => empty($quantities) ? null : implode(',', $quantities),
+				'job_category_id' => $data->ClassJobCategory->ID,
+				'level'           => $data->RetainerLevel,
+				'cost'            => $data->VentureCost,
+				'minutes'         => $data->MaxTimeMin,
+			]);
+		});
+	}
 
 
 
 
 
+
+
+
+
+
+
+		// $this->loopEndpoint('ENDPOINT', [
+
+		// ], function($data) {
+
+		// });
 
 
 	/**
