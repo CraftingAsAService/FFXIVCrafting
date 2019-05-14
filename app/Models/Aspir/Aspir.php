@@ -37,7 +37,13 @@ class Aspir
 		'job_job_category' => [],
 		'venture'          => [],
 		'item_venture'     => [],
-		// 'item_shop'      => [],
+		'leve'             => [],
+		'leve_reward'      => [],
+		'leve_required'    => [],
+		'item_category'    => [],
+		'item'             => [],
+		'item_attribute'   => [],
+		'item_shop'      => [],
 	];
 
 	protected $xivapi;
@@ -81,8 +87,11 @@ class Aspir
 			// 'quests',
 			// 'instances',
 			// 'jobs',
-			// 'job_categories',
+			// 'jobCategories',
 			// 'ventures',
+			// 'leves',
+			// 'itemCategories',
+			'items',
 		];
 
 		$garlandtoolsCalls = [
@@ -94,6 +103,7 @@ class Aspir
 		$manualCalls = [
 			// 'nodeCoordinates',
 			// 'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
+			// 'leveTypes',
 		];
 
 		$rowCounts = [];
@@ -117,19 +127,7 @@ class Aspir
 			}
 		}
 
-			// $this->venture($core->ventureIndex);
-			// $this->leve();
-			// $this->item_category($core->item->categoryIndex);
-			// $this->item();
-		// TODO - Shop Items ^ Here
-		    // "GameContentLinks": {
-      //   "GilShopItem": {
-      //       "Item": [
-      //           "262157.0", // <-- TAKE OFF THE . and anything after
-		//     "GameContentLinks": {
-        // "SpecialShop": {
-        //     "ItemCost***": [
-                // 1769514,
+
 
 			// // Custom Data Manipulation, careers section
 			// $this->career();

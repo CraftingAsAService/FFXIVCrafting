@@ -439,7 +439,7 @@ class GarlandTables extends Migration
 			$table->enum('quality', ['nq', 'hq', 'max']);
 			// $table->integer('attribute_id')->unsigned();
 			$table->string('attribute');
-			$table->integer('amount')->unsigned();
+			$table->decimal('amount', 8, 2)->unsigned();
 			$table->integer('limit')->unsigned()->nullable();
 
 			$table->index('item_id');

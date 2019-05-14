@@ -72,6 +72,16 @@ class Manual
 
 	}
 
+	public function leveTypes()
+	{
+		$leveTypes = $this->readTSV($this->path . 'leveTypes.tsv')
+			->pluck('type', 'plate');
+
+		foreach ($this->aspir->data['leve'] as &$leve)
+			if (isset($leveTypes[$leve['plate']]))
+				$leve['type'] = $leveTypes[$leve['plate']];
+	}
+
 	private function readTSV($filename)
 	{
 		$tsv = array_map(function($l) { return str_getcsv($l, '	'); }, file($filename));
