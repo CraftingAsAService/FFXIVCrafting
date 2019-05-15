@@ -92,6 +92,7 @@ class Aspir
 			// 'leves',
 			// 'itemCategories',
 			'items',
+			// 'recipes',
 		];
 
 		$garlandtoolsCalls = [

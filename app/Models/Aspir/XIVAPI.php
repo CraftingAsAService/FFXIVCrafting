@@ -615,6 +615,16 @@ class XIVAPI
 
 	public function items()
 	{
+		$rootParamConversion = [
+			'Block' => 'Block Strength',
+			'BlockRate' => 'Block Rate',
+			'DefenseMag' => 'Magic Defense',
+			'DefensePhys' => 'Defense',
+			'DamageMag' => 'Magic Damage',
+			'DamagePhys' => 'Physical Damage',
+			'DelayMs' => 'Delay',
+		];
+
 		$this->loopEndpoint('item', [
 			'ID',
 			'Name',
@@ -634,9 +644,51 @@ class XIVAPI
 			'Rarity',
 			'IconID',
 			'MateriaSlotCount',
-		], function($data) {
-
-			$this->setData('item', [
+			// Attribute Hunting
+			'BaseParam0.Name',
+			'BaseParamValue0',
+			'BaseParam1.Name',
+			'BaseParamValue1',
+			'BaseParam2.Name',
+			'BaseParamValue2',
+			'BaseParam3.Name',
+			'BaseParamValue3',
+			'BaseParam4.Name',
+			'BaseParamValue4',
+			'BaseParam5.Name',
+			'BaseParamValue5',
+			// Special X != Normal X
+			'CanBeHq', // AKA Special
+			'BaseParamSpecial0.Name',
+			'BaseParamValueSpecial0',
+			'BaseParamSpecial1.Name',
+			'BaseParamValueSpecial1',
+			'BaseParamSpecial2.Name',
+			'BaseParamValueSpecial2',
+			'BaseParamSpecial3.Name',
+			'BaseParamValueSpecial3',
+			'BaseParamSpecial4.Name',
+			'BaseParamValueSpecial4',
+			'BaseParamSpecial5.Name',
+			'BaseParamValueSpecial5',
+			// Base Attributes
+			// HQs of these exist as Special, will need to match on names
+			'Block', // As "Block Strength"
+			'BlockRate', // As "Block Rate"
+			'DefenseMag', // As "Magic Defense"
+			'DefensePhys', // As "Defense"
+			'DamageMag', // As "Magic Damage"
+			'DamagePhys', // As "Physical Damage"
+			'DelayMs', // As "Delay"
+			// Materia Values might always be 0, TODO double check and Manual if needed
+			'Materia.BaseParam.Name',
+			'Materia.Value',
+			// Shop Data
+			'GameContentLinks.GilShopItem.Item',
+			// Special Shop contains all Beast Traders, ItemCurrency for Item trades
+			// 'GameContentLinks.SpecialShop',
+		], function($data) use ($rootParamConversion) {
+			$this->aspir->setData('item', [
 				'id'               => $data->ID,
 				'name'             => $data->Name,
 				'de_name'          => $data->Name_de,
@@ -663,144 +715,82 @@ class XIVAPI
 				// 'repair'           => $data->TODO,
 			]);
 
+			// Attribute Data
+			$nqParams = [];
 
-			// item_attribute
-	"DefenseMag": 1,
-    "DefensePhys": 1,
-1	10000	nq	Defense	1	NULL
-2	10000	nq	Magic Defense	1	NULL
+			foreach ($rootParamConversion as $key => $name)
+				if ($data->$key)
+					$nqParams[$rootParamConversion[$key]] = $data->$key;
 
-3	10000	nq	Mind	16	NULL
-4	10000	nq	Determination	12	NULL
-5	10000	nq	Critical Hit	12	NULL
-6	10000	nq	Direct Hit Rate	3	NULL
+			// Delay comes through as "2000", but we want it as "2.00"
+			if (isset($nqParams['Delay']))
+				$nqParams['Delay'] /= 1000;
 
-'BaseParam0.Name',
-'BaseParamValue0',
-'BaseParam1.Name',
-'BaseParamValue1',
-'BaseParam2.Name',
-'BaseParamValue2',
-'BaseParam3.Name',
-'BaseParamValue3',
-'BaseParam4.Name',
-'BaseParamValue4',
-'BaseParam5.Name',
-'BaseParamValue5',
-// Special X != Normal X
-'CanBeHq', // AKA Special
-'BaseParamSpecial0.Name',
-'BaseParamValueSpecial0',
-'BaseParamSpecial1.Name',
-'BaseParamValueSpecial1',
-'BaseParamSpecial2.Name',
-'BaseParamValueSpecial2',
-'BaseParamSpecial3.Name',
-'BaseParamValueSpecial3',
-'BaseParamSpecial4.Name',
-'BaseParamValueSpecial4',
-'BaseParamSpecial5.Name',
-'BaseParamValueSpecial5',
-// Base Attributes
-// HQs of these exist as Special, will need to match on names
-'Block',
-'BlockRate',
+			if ($data->Materia->BaseParam->Name && $data->Materia->Value)
+				$nqParams[$data->Materia->BaseParam->Name] = $data->Materia->Value;
+
+			foreach (range(0, 5) as $slot)
+				if ($data->{'BaseParam' . $slot}->Name)
+					$nqParams[$data->{'BaseParam' . $slot}->Name] = $data->{'BaseParamValue' . $slot};
+
+			$hqParams = [];
+
+			if ($data->CanBeHq)
+				foreach (range(0, 5) as $slot)
+					if ($data->{'BaseParamSpecial' . $slot}->Name && isset($nqParams[$data->{'BaseParamSpecial' . $slot}->Name]))
+						$hqParams[$data->{'BaseParamSpecial' . $slot}->Name] = $nqParams[$data->{'BaseParamSpecial' . $slot}->Name] + $data->{'BaseParamValueSpecial' . $slot};
+
+			foreach (['nq', 'hq'] as $quality)
+				foreach (${$quality . 'Params'} as $attribute => $amount)
+					$this->aspir->setData('item_attribute', [
+						'item_id'   => $data->ID,
+						'attribute' => $attribute,
+						'quality'   => $quality,
+						'amount'    => $amount,
+						'limit'     => null,
+					]);
+
+			// Shopping Data
+			if ($data->GameContentLinks->GilShopItem->Item)
+				foreach ($data->GameContentLinks->GilShopItem->Item as $item)
+					$this->aspir->setData('item_shop', [
+						'item_id' => $data->ID,
+						// Shops come through as "262175.11", we only need what's before the dot
+						'shop_id' => explode('.', $item)[0],
+					]);
 
 
-333	10063	nq	Block Rate	234	NULL
-7856	10664	hq	Block Rate	135	NULL
-332	10063	nq	Block Strength	234	NULL
-7855	10664	hq	Block Strength	325	NULL
-270710	2908	nq	Blunt Resistance	2	NULL
-385	10086	nq	Careful Desynthesis	0	NULL
-386	10086	hq	Careful Desynthesis	0	NULL
-216	10047	nq	Control	35	NULL
-244	10052	hq	Control	33	NULL
-217	10047	nq	CP	2	NULL
-34984	12011	hq	CP	38	NULL
-218	10047	nq	Craftsmanship	4	NULL
-243	10052	hq	Craftsmanship	101	NULL
-5	10000	nq	Critical Hit	12	NULL
-1330	10402	hq	Critical Hit	13	NULL
-1	10000	nq	Defense	1	NULL
-29	10005	hq	Defense	8	NULL
-105	10024	nq	Delay	2	NULL
-4	10000	nq	Determination	12	NULL
-1373	10403	hq	Determination	10	NULL
-126	10028	nq	Dexterity	13	NULL
-2306	10463	hq	Dexterity	8	NULL
-6	10000	nq	Direct Hit Rate	3	NULL
-1202	10332	hq	Direct Hit Rate	0	NULL
-113506	18015	nq	Earth Resistance	0	NULL
-113503	18012	nq	Fire Resistance	0	NULL
-436	10140	nq	Gathering	179	NULL
-464	10146	hq	Gathering	7	30
-960	10271	nq	GP	4	NULL
-35380	12023	hq	GP	47	NULL
-301192	6140	nq	Heavy Resistance	3	NULL
-308231	6953	hq	Heavy Resistance	0	NULL
-355	10071	nq	HP	455	NULL
-45834	13637	hq	HP	30	2400
-113504	18013	nq	Ice Resistance	0	NULL
-463	10146	nq	Increased Spiritbond Gain	0	NULL
-176820	19885	hq	Increased Spiritbond Gain	0	NULL
-9	10001	nq	Intelligence	16	NULL
-6778	10640	hq	Intelligence	45	NULL
-113507	18016	nq	Lightning Resistance	0	NULL
-104	10024	nq	Magic Damage	29	NULL
-1273	10400	hq	Magic Damage	18	NULL
-2	10000	nq	Magic Defense	1	NULL
-30	10005	hq	Magic Defense	16	NULL
-258431	24589	nq	Main Attribute	95	NULL
-3	10000	nq	Mind	16	NULL
-3327	10525	hq	Mind	8	NULL
-45835	13638	nq	MP	16	1360
-45836	13638	hq	MP	20	1700
-266608	2718	nq	Paralysis Resistance	2	NULL
-437	10140	nq	Perception	102	NULL
-31182	11903	hq	Perception	98	NULL
-301043	6115	nq	Petrification Resistance	1	NULL
-103	10024	nq	Physical Damage	37	NULL
-1272	10400	hq	Physical Damage	19	NULL
-270709	2908	nq	Piercing Resistance	2	NULL
-180	10039	nq	Piety	7	NULL
-3318	10524	hq	Piety	3	NULL
-270704	2907	nq	Poison Resistance	5	NULL
-308223	6949	hq	Poison Resistance	0	NULL
-231477	2326	nq	Reduced Durability Loss	10	NULL
-328680	9335	hq	Reduced Durability Loss	0	NULL
-258432	24589	nq	Secondary Attribute	104	NULL
-270702	2907	nq	Silence Resistance	5	NULL
-308219	6947	hq	Silence Resistance	0	NULL
-356	10071	nq	Skill Cost	20	NULL
-501	10182	nq	Skill Speed	37	NULL
-1287	10401	hq	Skill Speed	11	NULL
-270708	2908	nq	Slashing Resistance	2	NULL
-270705	2907	nq	Sleep Resistance	5	NULL
-308227	6951	hq	Sleep Resistance	0	NULL
-308209	6937	nq	Slow Resistance	0	NULL
-308217	6946	hq	Slow Resistance	0	NULL
-359	10071	nq	Speed	2	NULL
-20	10003	nq	Spell Speed	17	NULL
-3329	10525	hq	Spell Speed	11	NULL
-106	10024	nq	Strength	10	NULL
-1285	10401	hq	Strength	8	NULL
-308212	6941	nq	Stun Resistance	0	NULL
-308225	6950	hq	Stun Resistance	0	NULL
-495	10181	nq	Tenacity	60	NULL
-1275	10400	hq	Tenacity	8	NULL
-308232	6954	nq	TP	0	NULL
-107	10024	nq	Vitality	10	NULL
-1274	10400	hq	Vitality	7	NULL
-113508	18017	nq	Water Resistance	0	NULL
-113505	18014	nq	Wind Resistance	0	NULL
+
+
+			// item_shop
+			// TODO - Shop Items ^ Here
+			// "GameContentLinks": {
+			//   "GilShopItem": {
+			//       "Item": [
+			//           "262157.0", // <-- TAKE OFF THE . and anything after
+			//     "GameContentLinks": {
+			// "SpecialShop": {
+			//     "ItemCost***": [
+			// 1769514,
 
 			// Ignoring "Attack" attribute, it's all minions
+			// Same with "Skill Cost", and "Speed"
 			// 357	10071	nq	Attack	50	NULL
+			// 356	10071	nq	Skill Cost	20	NULL
+			// 359	10071	nq	Speed	2	NULL
+			// "HP", "MP",
+			//  But it might be medicine, again, how to get Medicine amounts?
+			// 355	10071	nq	HP	455	NULL
+			// 45836	13638	hq	MP	20	1700
+			// 308232	6954	nq	TP	0	NULL
+			// "Name": "Medicines & Meals",
+			// 463	10146	nq	Increased Spiritbond Gain	0	NULL
 			// if $data->ItemUICategory->ID == 44
 			// 	It's medicine, How to get medicine amounts?
 			// 308229	6952	hq	Bind Resistance	0	NULL
 			// 308221	6948	hq	Blind Resistance	0	NULL
+			// 385	10086	nq	Careful Desynthesis	0	NULL
+			// 386	10086	hq	Careful Desynthesis	0	NULL
 			// Garland...
 			    // "attr": {
 			    //   "action": {
@@ -856,96 +846,56 @@ class XIVAPI
 			// 261	10052	max	Water Resistance	9	NULL
 			// 258	10052	max	Wind Resistance	9	NULL
 
-			if (isset($i->attr))
-				foreach ((array) $i->attr as $attr => $amount)
-				{
-					if ($attr == 'action')
-					{
-						foreach ($amount as $attr => $data)
-						{
-							$this->setData('item_attribute', [
-								'item_id' => $i->id,
-								'attribute' => $attr,
-								'quality' => 'nq',
-								'amount' => isset($data->rate) ? $data->rate : null,
-								'limit' => isset($data->limit) ? $data->limit : null,
-							]);
-						}
+			// if (isset($i->attr))
+			// 	foreach ((array) $i->attr as $attr => $amount)
+			// 	{
+			// 		if ($attr == 'action')
+			// 		{
+			// 			foreach ($amount as $attr => $data)
+			// 			{
+			// 				$this->setData('item_attribute', [
+			// 					'item_id' => $i->id,
+			// 					'attribute' => $attr,
+			// 					'quality' => 'nq',
+			// 					'amount' => isset($data->rate) ? $data->rate : null,
+			// 					'limit' => isset($data->limit) ? $data->limit : null,
+			// 				]);
+			// 			}
 
-						continue;
-					}
+			// 			continue;
+			// 		}
+			// 	}
 
-					$this->setData('item_attribute', [
-						'item_id' => $i->id,
-						'attribute' => $attr,
-						'quality' => 'nq',
-						'amount' => $amount,
-						'limit' => null,
-					]);
-				}
+			// if (isset($i->attr_hq))
+			// 	foreach ((array) $i->attr_hq as $attr => $amount)
+			// 	{
+			// 		if ($attr == 'action')
+			// 		{
+			// 			foreach ($amount as $attr => $data)
+			// 			{
+			// 				$this->setData('item_attribute', [
+			// 					'item_id' => $i->id,
+			// 					'attribute' => $attr,
+			// 					'quality' => 'hq',
+			// 					'amount' => isset($data->rate) ? $data->rate : null,
+			// 					'limit' => isset($data->limit) ? $data->limit : null,
+			// 				]);
+			// 			}
+			// 			continue;
+			// 		}
+			// 	}
 
-			if (isset($i->attr_hq))
-				foreach ((array) $i->attr_hq as $attr => $amount)
-				{
-					if ($attr == 'action')
-					{
-						foreach ($amount as $attr => $data)
-						{
-							$this->setData('item_attribute', [
-								'item_id' => $i->id,
-								'attribute' => $attr,
-								'quality' => 'hq',
-								'amount' => isset($data->rate) ? $data->rate : null,
-								'limit' => isset($data->limit) ? $data->limit : null,
-							]);
-						}
-
-						continue;
-					}
-
-					$this->setData('item_attribute', [
-						'item_id' => $i->id,
-						'attribute' => $attr,
-						'quality' => 'hq',
-						'amount' => $amount,
-						'limit' => null,
-					]);
-				}
-
-			if (isset($i->attr_max))
-				foreach ((array) $i->attr_max as $attr => $amount)
-				{
-					$this->setData('item_attribute', [
-						'item_id' => $i->id,
-						'attribute' => $attr,
-						'quality' => 'max',
-						'amount' => $amount,
-						'limit' => null,
-					]);
-				}
-
-			if (isset($i->materia))
-			{
-				$this->setData('item_attribute', [
-					'item_id' => $i->id,
-					'attribute' => $i->materia->attr,
-					'quality' => 'nq',
-					'amount' => $i->materia->value,
-					'limit' => null,
-				]);
-			}
-
-
-			// item_shop
-		// TODO - Shop Items ^ Here
-		    // "GameContentLinks": {
-      //   "GilShopItem": {
-      //       "Item": [
-      //           "262157.0", // <-- TAKE OFF THE . and anything after
-		//     "GameContentLinks": {
-        // "SpecialShop": {
-        //     "ItemCost***": [
-                // 1769514,
+			// if (isset($i->attr_max))
+			// 	foreach ((array) $i->attr_max as $attr => $amount)
+			// 	{
+			// 		$this->setData('item_attribute', [
+			// 			'item_id' => $i->id,
+			// 			'attribute' => $attr,
+			// 			'quality' => 'max',
+			// 			'amount' => $amount,
+			// 			'limit' => null,
+			// 		]);
+			// 	}
 
 		});
 	}
