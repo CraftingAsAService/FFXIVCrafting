@@ -54,22 +54,23 @@ class Manual
 		$randomVentureItems = $this->readTSV($this->path . 'randomVentureItems.tsv')
 			->pluck('items', 'venture');
 
+		$ventures = collect($this->aspir->data['venture'])->pluck('id', 'name')->toArray();
+		$items = collect($this->aspir->data['item'])->pluck('id', 'name')->toArray();
+
 		// The `venture` column should match against a `venture.name`
 		//  Likewise, exploding the `items` column on a comma, then looping those against the `item.name` should produce a match
 		//  And voila, populate `item_venture`
-		foreach ($randomVentureItems as $venture => $items)
+		foreach ($randomVentureItems as $venture => $ventureItems)
 		{
-			$items = explode(',', str_replace(', ', ',', $items));
-			dd($venture, $items);
+			$ventureItems = explode(',', str_replace(', ', ',', $ventureItems));
 
-
-
-			// $this->aspir->setData('item_venture', [
-			// 	'venture_id' => $venture->id,
-			// 	'item_id'    => $item->id,
-			// ]);
+			foreach ($ventureItems as $itemName)
+				if (isset($items[$itemName]) && isset($ventures[$venture]))
+					$this->aspir->setData('item_venture', [
+						'venture_id' => $ventures[$venture],
+						'item_id'    => $items[$itemName],
+					]);
 		}
-
 	}
 
 	public function leveTypes()

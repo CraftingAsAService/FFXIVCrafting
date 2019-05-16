@@ -43,7 +43,9 @@ class Aspir
 		'item_category'    => [],
 		'item'             => [],
 		'item_attribute'   => [],
-		'item_shop'      => [],
+		'item_shop'        => [],
+		'recipe'           => [],
+		'recipe_reagents'  => [],
 	];
 
 	protected $xivapi;
@@ -78,33 +80,34 @@ class Aspir
 		// To be honest, crafters rely on lots of disparate data sources that I put a lot of work into bringing together. The raw game data is just one piece of the puzzle - there's manual input sources (https://docs.google.com/spreadsheets/d/1hEj9KCDv0TT1NiGJ0S7afS4hfGMPb6tetqXQetYETUE/edit#gid=953424709), reverse-engineered algorithms acting on the data, a few piles of hacks for weird stuff, that defunct Libra Eorzea database, and some web scraping to bring it all together. You may have better luck picking up my data imports via my open source Garland code. There's a setup & contribution guide if you're interested: https://github.com/ufx/GarlandTools/blob/master/CONTRIBUTING.md. Happy to help with any questions you've got for it.
 
 		$xivapiCalls = [
-			// 'achievements',
-			// 'locations',
-			// 'nodes',
-			// 'fishingSpots',
-			// 'mobs',
-			// 'npcs',
-			// 'quests',
-			// 'instances',
-			// 'jobs',
-			// 'jobCategories',
-			// 'ventures',
-			// 'leves',
-			// 'itemCategories',
+			'achievements',
+			'locations',
+			'nodes',
+			'fishingSpots',
+			'mobs',
+			'npcs',
+			'quests',
+			'instances',
+			'jobs',
+			'jobCategories',
+			'ventures',
+			'leves',
+			'itemCategories',
 			'items',
-			// 'recipes',
+			'recipes',
+			'companyCrafts',
 		];
 
 		$garlandtoolsCalls = [
-			// 'mobs',
-			// 'npcs',
-			// 'instances',
+			'mobs',
+			'npcs',
+			'instances',
 		];
 
 		$manualCalls = [
-			// 'nodeCoordinates',
-			// 'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
-			// 'leveTypes',
+			'nodeCoordinates',
+			'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
+			'leveTypes',
 		];
 
 		$rowCounts = [];
@@ -162,7 +165,7 @@ class Aspir
 		if (empty($list))
 			$this->command->comment('No data for ' . $filename);
 		else
-			$this->command->info('Saving ' . $filename . '.json');
+			$this->command->info('Saving ' . count($list) . ' records to ' . $filename . '.json');
 
 		file_put_contents(storage_path('app/aspir/' . $filename . '.json'), json_encode($list, JSON_PRETTY_PRINT));
 	}

@@ -18,7 +18,7 @@ class AspirSeeder extends Seeder
 		\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 		// Run List is the same as what exists in the Aspir model's $data variable as keys
-		$aspir = new \App\Models\Aspir\Aspir;
+		$aspir = new \App\Models\Aspir\Aspir($this);
 		$runList = array_keys($aspir->data);
 
 		foreach ($runList as $table)

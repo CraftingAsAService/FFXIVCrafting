@@ -457,7 +457,7 @@ class XIVAPI
 			$this->aspir->setData('job_category', [
 				'id'   => $data->ID,
 				'name' => $data->Name,
-			]);
+			], $data->ID);
 
 			foreach ($abbreviations as $jobId => $abbr)
 				if ($data->$abbr == 1)
@@ -518,7 +518,7 @@ class XIVAPI
 				'level'           => $data->RetainerLevel,
 				'cost'            => $data->VentureCost,
 				'minutes'         => $data->MaxTimeMin,
-			]);
+			], $data->ID);
 		});
 	}
 
@@ -560,7 +560,7 @@ class XIVAPI
 				// This never was the "Area" icon, but the Issuer's image
 				//  I don't think I'm using this datapoint, but it's not nullable
 				'area_icon'       => $data->IconIssuerID,
-			]);
+			], $data->ID);
 
 			// Rewards come in 8 total "Groups"
 			foreach (range(0, 7) as $slot)
@@ -609,7 +609,7 @@ class XIVAPI
 				//  I'm not using this datapoint, and it would require a Manual function to figure it
 				//  See Garland's "GetCategoryDamageAttribute" function within "Hacks.cs"
 				// 'attribute' => null,
-			]);
+			], $data->ID);
 		});
 	}
 
@@ -687,6 +687,12 @@ class XIVAPI
 			'GameContentLinks.GilShopItem.Item',
 			// Special Shop contains all Beast Traders, ItemCurrency for Item trades
 			// 'GameContentLinks.SpecialShop',
+			// ItemAction contains a myriad of things
+			// https://github.com/viion/ffxiv-datamining/blob/master/docs/ItemActions.md
+			//  max attribute values
+			//  potion values
+			//  item food connections
+			'ItemAction',
 		], function($data) use ($rootParamConversion) {
 			$this->aspir->setData('item', [
 				'id'               => $data->ID,
@@ -713,10 +719,19 @@ class XIVAPI
 				// 'crestworthy'      => $data->TODO,
 				// 'delivery'         => $data->TODO,
 				// 'repair'           => $data->TODO,
-			]);
+			], $data->ID);
+
+			// Shopping Data
+			if ($data->GameContentLinks->GilShopItem->Item)
+				foreach ($data->GameContentLinks->GilShopItem->Item as $item)
+					$this->aspir->setData('item_shop', [
+						'item_id' => $data->ID,
+						// Shops come through as "262175.11", we only need what's before the dot
+						'shop_id' => explode('.', $item)[0],
+					]);
 
 			// Attribute Data
-			$nqParams = [];
+			$nqParams = $hqParams = $maxParams = [];
 
 			foreach ($rootParamConversion as $key => $name)
 				if ($data->$key)
@@ -733,12 +748,129 @@ class XIVAPI
 				if ($data->{'BaseParam' . $slot}->Name)
 					$nqParams[$data->{'BaseParam' . $slot}->Name] = $data->{'BaseParamValue' . $slot};
 
-			$hqParams = [];
-
 			if ($data->CanBeHq)
 				foreach (range(0, 5) as $slot)
 					if ($data->{'BaseParamSpecial' . $slot}->Name && isset($nqParams[$data->{'BaseParamSpecial' . $slot}->Name]))
 						$hqParams[$data->{'BaseParamSpecial' . $slot}->Name] = $nqParams[$data->{'BaseParamSpecial' . $slot}->Name] + $data->{'BaseParamValueSpecial' . $slot};
+
+			// Item Actions provide Attribute Data
+			if ($data->ItemAction)
+			{
+				$dataQualitySlots = [ '' => 'nq' ];
+				if ($data->CanBeHq)
+					$dataQualitySlots['HQ'] = 'hq';
+
+				switch ($data->ItemAction->Type)
+				{
+					// Health potions, eg: X-Potion
+					case 847:
+						foreach ($dataQualitySlots as $qualitySlot => $quality)
+							$this->aspir->setData('item_attribute', [
+								'item_id'   => $data->ID,
+								'attribute' => 'HP',
+								'quality'   => $quality,
+								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '0'}, // data_0 = %
+								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '1'}, // data_1 = max
+							]);
+						break;
+					// Ether MP potions, eg: X-Ether
+					case 848:
+						foreach ($dataQualitySlots as $qualitySlot => $quality)
+							$this->aspir->setData('item_attribute', [
+								'item_id'   => $data->ID,
+								'attribute' => 'MP',
+								'quality'   => $quality,
+								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '0'}, // data_0 = %
+								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '1'}, // data_1 = max
+							]);
+						break;
+					// Elixir potions,
+					case 849:
+						foreach ($dataQualitySlots as $qualitySlot => $quality)
+							$this->aspir->setData('item_attribute', [
+								'item_id'   => $data->ID,
+								'attribute' => 'HP',
+								'quality'   => $quality,
+								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '0'}, // data_0 = %
+								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '1'}, // data_1 = max
+							]);
+
+						foreach ($dataQualitySlots as $qualitySlot => $quality)
+							$this->aspir->setData('item_attribute', [
+								'item_id'   => $data->ID,
+								'attribute' => 'MP',
+								'quality'   => $quality,
+								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '2'}, // data_3 = %
+								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '3'}, // data_4 = max
+							]);
+						break;
+					// Wings, eg: Icarus Wing, restores TP
+					case 1767:
+						foreach ($dataQualitySlots as $qualitySlot => $quality)
+							$this->aspir->setData('item_attribute', [
+								'item_id'   => $data->ID,
+								'attribute' => 'TP',
+								'quality'   => $quality,
+								'amount'    => '100', // Assumed %
+								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '3'}, // data_0 = max TP to restore
+							]);
+						break;
+					// Crafting + Gathering Food
+					// Battle Food
+					// Attribute Potions, eg: X-Potion of Dexterity
+					// data_1 = `ItemFood`
+					// data_2 = Duration in seconds
+					case 844:
+					case 845:
+					case 846:
+						$food = $this->request('itemfood/' . $data->ItemAction->Data1, ['columns' => [
+							'BaseParam0.Name',
+							'BaseParam1.Name',
+							'BaseParam2.Name',
+							'Value0',
+							'Value1',
+							'Value2',
+							'ValueHQ0',
+							'ValueHQ1',
+							'ValueHQ2',
+							'IsRelative0',
+							'IsRelative1',
+							'IsRelative2',
+							'Max0',
+							'Max1',
+							'Max2',
+							'MaxHQ0',
+							'MaxHQ1',
+							'MaxHQ2',
+						]]);
+
+						foreach (range(0, 2) as $slot)
+							if ($food->{'BaseParam' . $slot}->Name)
+							{
+								// nq and hq
+								foreach ($dataQualitySlots as $qualitySlot => $quality)
+									$this->aspir->setData('item_attribute', [
+										'item_id'   => $data->ID,
+										'attribute' => $food->{'BaseParam' . $slot}->Name,
+										'quality'   => $quality,
+										'amount'    => $food->{'Value' . $qualitySlot . $slot},
+										'limit'     => null,
+									]);
+
+								// max
+								if ($food->{'IsRelative' . $slot})
+									$this->aspir->setData('item_attribute', [
+										'item_id'   => $data->ID,
+										'attribute' => $food->{'BaseParam' . $slot}->Name,
+										'quality'   => 'max',
+										'amount'    => $food->{'Max' . ($data->CanBeHq ? 'HQ' : '') . $slot},
+										'limit'     => null,
+									]);
+							}
+
+						break;
+				}
+			}
 
 			foreach (['nq', 'hq'] as $quality)
 				foreach (${$quality . 'Params'} as $attribute => $amount)
@@ -749,168 +881,119 @@ class XIVAPI
 						'amount'    => $amount,
 						'limit'     => null,
 					]);
-
-			// Shopping Data
-			if ($data->GameContentLinks->GilShopItem->Item)
-				foreach ($data->GameContentLinks->GilShopItem->Item as $item)
-					$this->aspir->setData('item_shop', [
-						'item_id' => $data->ID,
-						// Shops come through as "262175.11", we only need what's before the dot
-						'shop_id' => explode('.', $item)[0],
-					]);
-
-
-
-
-			// item_shop
-			// TODO - Shop Items ^ Here
-			// "GameContentLinks": {
-			//   "GilShopItem": {
-			//       "Item": [
-			//           "262157.0", // <-- TAKE OFF THE . and anything after
-			//     "GameContentLinks": {
-			// "SpecialShop": {
-			//     "ItemCost***": [
-			// 1769514,
-
-			// Ignoring "Attack" attribute, it's all minions
-			// Same with "Skill Cost", and "Speed"
-			// 357	10071	nq	Attack	50	NULL
-			// 356	10071	nq	Skill Cost	20	NULL
-			// 359	10071	nq	Speed	2	NULL
-			// "HP", "MP",
-			//  But it might be medicine, again, how to get Medicine amounts?
-			// 355	10071	nq	HP	455	NULL
-			// 45836	13638	hq	MP	20	1700
-			// 308232	6954	nq	TP	0	NULL
-			// "Name": "Medicines & Meals",
-			// 463	10146	nq	Increased Spiritbond Gain	0	NULL
-			// if $data->ItemUICategory->ID == 44
-			// 	It's medicine, How to get medicine amounts?
-			// 308229	6952	hq	Bind Resistance	0	NULL
-			// 308221	6948	hq	Blind Resistance	0	NULL
-			// 385	10086	nq	Careful Desynthesis	0	NULL
-			// 386	10086	hq	Careful Desynthesis	0	NULL
-			// Garland...
-			    // "attr": {
-			    //   "action": {
-			    //     "Bind Resistance": 15
-			    //   }
-			    // },
-			    // "attr_hq": {
-			    //   "action": {
-			    //     "Bind Resistance": 20
-			    //   }
-			    // },
-			// NOT SURE HOW TO GET `max`
-			// 269	10052	max	Blind Resistance	4	NULL
-			// 7867	10664	max	Block Rate	211	NULL
-			// 7901	10665	max	Block Strength	222	NULL
-			// 21018	10964	max	Blunt Resistance	3	NULL
-			// 277	10052	max	Control	39	NULL
-			// 252	10052	max	CP	3	NULL
-			// 276	10052	max	Craftsmanship	119	NULL
-			// 255	10052	max	Critical Hit	24	NULL
-			// 17442	10883	max	Defense	58	NULL
-			// 262	10052	max	Determination	17	NULL
-			// 246	10052	max	Dexterity	16	NULL
-			// 254	10052	max	Direct Hit Rate	24	NULL
-			// 275	10052	max	Doom Resistance	4	NULL
-			// 259	10052	max	Earth Resistance	9	NULL
-			// 144646	18813	max	Elemental Bonus	300	NULL
-			// 256	10052	max	Fire Resistance	9	NULL
-			// 278	10052	max	Gathering	82	NULL
-			// 251	10052	max	GP	4	NULL
-			// 274	10052	max	Heavy Resistance	4	NULL
-			// 257	10052	max	Ice Resistance	9	NULL
-			// 248	10052	max	Intelligence	16	NULL
-			// 260	10052	max	Lightning Resistance	9	NULL
-			// 47284	13809	max	Magic Defense	56	NULL
-			// 249	10052	max	Mind	16	NULL
-			// 267	10052	max	Paralysis Resistance	4	NULL
-			// 279	10052	max	Perception	41	NULL
-			// 266	10052	max	Petrification Resistance	4	NULL
-			// 21017	10964	max	Piercing Resistance	3	NULL
-			// 250	10052	max	Piety	15	NULL
-			// 270	10052	max	Poison Resistance	4	NULL
-			// 268	10052	max	Silence Resistance	4	NULL
-			// 263	10052	max	Skill Speed	24	NULL
-			// 21016	10964	max	Slashing Resistance	3	NULL
-			// 272	10052	max	Sleep Resistance	4	NULL
-			// 265	10052	max	Slow Resistance	4	NULL
-			// 264	10052	max	Spell Speed	24	NULL
-			// 245	10052	max	Strength	16	NULL
-			// 271	10052	max	Stun Resistance	4	NULL
-			// 253	10052	max	Tenacity	24	NULL
-			// 247	10052	max	Vitality	18	NULL
-			// 261	10052	max	Water Resistance	9	NULL
-			// 258	10052	max	Wind Resistance	9	NULL
-
-			// if (isset($i->attr))
-			// 	foreach ((array) $i->attr as $attr => $amount)
-			// 	{
-			// 		if ($attr == 'action')
-			// 		{
-			// 			foreach ($amount as $attr => $data)
-			// 			{
-			// 				$this->setData('item_attribute', [
-			// 					'item_id' => $i->id,
-			// 					'attribute' => $attr,
-			// 					'quality' => 'nq',
-			// 					'amount' => isset($data->rate) ? $data->rate : null,
-			// 					'limit' => isset($data->limit) ? $data->limit : null,
-			// 				]);
-			// 			}
-
-			// 			continue;
-			// 		}
-			// 	}
-
-			// if (isset($i->attr_hq))
-			// 	foreach ((array) $i->attr_hq as $attr => $amount)
-			// 	{
-			// 		if ($attr == 'action')
-			// 		{
-			// 			foreach ($amount as $attr => $data)
-			// 			{
-			// 				$this->setData('item_attribute', [
-			// 					'item_id' => $i->id,
-			// 					'attribute' => $attr,
-			// 					'quality' => 'hq',
-			// 					'amount' => isset($data->rate) ? $data->rate : null,
-			// 					'limit' => isset($data->limit) ? $data->limit : null,
-			// 				]);
-			// 			}
-			// 			continue;
-			// 		}
-			// 	}
-
-			// if (isset($i->attr_max))
-			// 	foreach ((array) $i->attr_max as $attr => $amount)
-			// 	{
-			// 		$this->setData('item_attribute', [
-			// 			'item_id' => $i->id,
-			// 			'attribute' => $attr,
-			// 			'quality' => 'max',
-			// 			'amount' => $amount,
-			// 			'limit' => null,
-			// 		]);
-			// 	}
-
 		});
 	}
 
 	public function recipes()
 	{
+		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
+		$this->limit = 500;
 
+		$this->loopEndpoint('recipe', [
+			'ID',
+			'ItemResultTargetID',
+			'ClassJob.ID',
+			'ItemResult.LevelItem',
+			'RecipeLevelTable.ClassJobLevel',
+			'AmountResult',
+			'CanHq',
+			// Reagents
+			'ItemIngredient0TargetID',
+			'ItemIngredient1TargetID',
+			'ItemIngredient2TargetID',
+			'ItemIngredient3TargetID',
+			'ItemIngredient4TargetID',
+			'ItemIngredient5TargetID',
+			'ItemIngredient6TargetID',
+			'ItemIngredient7TargetID',
+			'ItemIngredient8TargetID',
+			'ItemIngredient9TargetID',
+			'AmountIngredient0',
+			'AmountIngredient1',
+			'AmountIngredient2',
+			'AmountIngredient3',
+			'AmountIngredient4',
+			'AmountIngredient5',
+			'AmountIngredient6',
+			'AmountIngredient7',
+			'AmountIngredient8',
+			'AmountIngredient9',
+		], function($data) {
+			$this->aspir->setData('recipe', [
+				'id'           => $data->ID,
+				'item_id'      => $data->ItemResultTargetID,
+				'job_id'       => $data->ClassJob->ID,
+				'recipe_level' => $data->ItemResult->LevelItem,
+				'level'        => $data->RecipeLevelTable->ClassJobLevel,
+				'yield'        => $data->AmountResult,
+				'hq'           => $data->CanHq ? 1 : null,
+				'fc'           => null,
+				// I don't use these datapoints, setting aside
+				// 'durability'   => $data->TODO,
+				// 'quality'      => $data->TODO,
+				// 'progress'     => $data->TODO,
+				// 'quick_synth'  => $data->TODO,
+			], $data->ID);
+
+			foreach (range(0, 9) as $slot)
+				if ($data->{'ItemIngredient' . $slot . 'TargetID'} && $data->{'AmountIngredient' . $slot})
+					$this->aspir->setData('recipe_reagents', [
+						'item_id'   => $data->{'ItemIngredient' . $slot . 'TargetID'},
+						'recipe_id' => $data->ID,
+						'amount'    => $data->{'AmountIngredient' . $slot},
+					]);
+		});
+
+		$limit = null;
 	}
 
+	public function companyCrafts()
+	{
+		// Recipes and Company Crafts can overlap on IDs. Give them some space.
+		$idBase = max(array_keys($this->aspir->data['recipe']));
 
+		$this->loopEndpoint('companycraftsequence', [
+			'ID',
+			'ResultItemTargetID',
+			'CompanyCraftPart0',
+			'CompanyCraftPart1',
+			'CompanyCraftPart2',
+			'CompanyCraftPart3',
+			'CompanyCraftPart4',
+			'CompanyCraftPart5',
+			'CompanyCraftPart6',
+			'CompanyCraftPart7',
+		], function($data) use ($idBase) {
 
+			$recipeId = $idBase + $data->ID;
 
+			$this->aspir->setData('recipe', [
+				'id'           => $recipeId,
+				'item_id'      => $data->ResultItemTargetID,
+				'job_id'       => 0,
+				'recipe_level' => 1,
+				'level'        => 1,
+				'yield'        => 1,
+				'hq'           => null,
+				'fc'           => 1,
+			], $recipeId);
 
-
-
+			foreach (range(0, 7) as $partSlot)
+				if ($data->{'CompanyCraftPart' . $partSlot})
+					foreach (range(0, 2) as $processSlot)
+					{
+						$process =& $data->{'CompanyCraftPart' . $partSlot}->{'CompanyCraftProcess' . $processSlot};
+						if ($process)
+							foreach (range(0, 11) as $setSlot)
+								if ($process->{'SetQuantity' . $setSlot})
+									$this->aspir->setData('recipe_reagents', [
+										'item_id'   => $process->{'SupplyItem' . $setSlot}->Item,
+										'recipe_id' => $recipeId,
+										'amount'    => $process->{'SetQuantity' . $setSlot} * $process->{'SetsRequired' . $setSlot},
+									]);
+					}
+		});
+	}
 
 	/**
 	 * loopEndpoint - Loop around an XIVAPI Endpoint
