@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class Aspir extends Command
+class AspirMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'aspir';
+    protected $signature = 'aspir:migrate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Build CSV Data';
+    protected $description = 'Migrate and Import built CSV Data';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,7 @@ class Aspir extends Command
      */
     public function handle()
     {
-        $aspir = new \App\Models\Aspir\Aspir($this);
-        $aspir->run();
+        $this->call('migrate:refresh');
+        $this->call('db:seed', ['--class' => 'AspirSeeder']);
     }
 }

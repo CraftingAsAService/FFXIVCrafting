@@ -124,7 +124,7 @@
 												@if($quality == 'hq')
 												<img src='/img/hq-overlay.png' width='36' height='36' class='hq-overlay' style='top: inherit;'>
 												@endif
-												<img src='{{ assetcdn('item/' . $item['icon'] . '.png') }}' width='36' height='36'>
+												<img src='{{ icon($item['icon']) }}' width='36' height='36'>
 												</span>
 												{{ $item['name'] }}
 											</a>

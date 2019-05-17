@@ -26,7 +26,7 @@
 						@foreach ($recipe->reagents as $reagent)
 						<tr>
 							<td>
-								<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name }}</span>
+								<img src='{{ icon($reagent->icon) }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->name }}</span>
 							</td>
 							<td class='text-center'>
 								{{ $reagent->pivot->amount }}

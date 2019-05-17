@@ -33,6 +33,7 @@ class Aspir
 		'instance'         => [],
 		'instance_item'    => [],
 		'instance_mob'     => [],
+		'job'              => [],
 		'job_category'     => [],
 		'job_job_category' => [],
 		'venture'          => [],
@@ -60,10 +61,10 @@ class Aspir
 
 		$this->xivapi       = new XIVAPI($this);
 		$this->garlandtools = new GarlandTools($this);
-		$this->manual       = new Manual($this);
+		$this->manualdata   = new ManualData($this);
 	}
 
-	public function run()
+	public function collectData()
 	{
 		set_time_limit(0);
 
@@ -111,7 +112,7 @@ class Aspir
 		];
 
 		$rowCounts = [];
-		foreach (['xivapi', 'garlandtools', 'manual'] as $type)
+		foreach (['xivapi', 'garlandtools', 'manualdata'] as $type)
 		{
 			$this->command->comment('Beginning ' . $type . ' Calls');
 			foreach (${$type . 'Calls'} as $function)
@@ -174,5 +175,13 @@ class Aspir
 	// {
 	// 	return \Schema::getColumnListing($table);
 	// }
+
+	public function collectAssets()
+	{
+		// Only need to run once, keeping around just in case
+		// $this->manualdata->iconTransition();
+
+		$this->manualdata->getIcons();
+	}
 
 }

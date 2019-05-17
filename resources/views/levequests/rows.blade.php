@@ -9,7 +9,7 @@
 		<img src='/img/leve_icon_red.png' rel='tooltip' title='Repeatable Leve!' width='16' class='pull-right' style='clear: right;'>
 		@endif
 		<a href='{{ item_link() . $leve->requirements[0]->id }}' class='item-name' target='_blank'>
-			<img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}
+			<img src='{{ icon($leve->requirements[0]->icon) }}' width='36' height='36' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}
 		</a>
 		@if ($leve->requirements[0]->pivot->amount > 1)
 		<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -48,7 +48,7 @@
 			@foreach($leve_rewards[$leve->id] as $reward)
 			<div class='margin-bottom'>
 				@if($reward->item_id)
-				<img src='{{ assetcdn('item/' . $reward->item->icon . '.png') }}' width='36' height='36' style='margin-right: 10px;'>
+				<img src='{{ icon($reward->item->icon) }}' width='36' height='36' style='margin-right: 10px;'>
 				{{ $reward->item->display_name }}
 				@else
 				<img src='/img/noitemicon.png' style='margin-right: 10px;'>

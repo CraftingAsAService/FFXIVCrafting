@@ -70,7 +70,7 @@
 
 					<div class='region-nodes'>
 					@foreach ($section['regions'] as $region_slug => $data)
-						<?php 
+						<?php
 							$ids = array($data['id']);
 							if (isset($data['id_also']))
 								$ids = array_merge($ids, explode(',', $data['id_also']));
@@ -82,7 +82,7 @@
 							<!-- Clusters -->
 							<?php $i = -2; ?>
 							@foreach ($map_data[$map_id]['clusters'] as $cid => $cluster)
-							<?php 
+							<?php
 								$top = $map_size - ($cluster['x'] != 0 ? ($map_size / 2) + round($cluster_quotient * ($cluster['x'] / 100)) - ($icon_size / 2) : 256 - $icon_size) + $data['top'];
 								$left = ($cluster['y'] != 0 ? ($map_size / 2) + round($cluster_quotient * ($cluster['y'] / 100)) - ($icon_size / 2) : 256 + ($icon_size * $i++)) + $data['left'];
 								// $opaque = $cluster['x'] == 0 || $cluster['y'] == 0 ? ' opaque' : '';
@@ -95,7 +95,7 @@
 							@if (isset($map_data[$map_id]['vendors']))
 							<!-- Vendors -->
 							@foreach ($map_data[$map_id]['vendors'] as $vid => $vendor)
-							<?php 
+							<?php
 								$left = ($vendor['x'] ? ($vendor['x'] / 20) * $map_size - $icon_size : 256 - $icon_size) + $data['left'];
 								$top = ($vendor['y'] ? ($vendor['y'] / 20) * $map_size - $icon_size : 256 - $icon_size) + $data['top'];
 							?>
@@ -134,11 +134,11 @@
 						<div>
 							{{-- <span class='pull-right'>{!! Form::checkbox('', '', true) !!}</span> --}}
 							<span class='pull-right opaque'>x {{ $item_list[$item->id] }}</span>
-							<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' class='item-icon' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
+							<img src='{{ icon($item->icon) }}' class='item-icon' width='18' height='18' style='margin-right: 5px;'>{{ $item->name->term }}
 						</div>
 						<ul class='list-group'>
 						@foreach ($section['regions'] as $region_slug => $data)
-							<?php 
+							<?php
 								$ids = array($data['id']);
 								if (isset($data['id_also']))
 									$ids = array_merge($ids, explode(',', $data['id_also']));
@@ -222,7 +222,7 @@
 					</li>
 				@endforeach
 
-				
+
 			</div>
 		</div>
 	</div>
@@ -240,7 +240,7 @@
 				<h4 class="modal-title">Map Legend</h4>
 			</div>
 			<div class="modal-body">
-				
+
 				<div class='row'>
 					<div class='col-sm-2 text-center'>
 						<div>
@@ -258,7 +258,7 @@
 				</div>
 
 				<hr>
-				
+
 				<div class='row'>
 					<div class='col-sm-2 text-center'>
 						<img src='/img/maps/node_icons/unknown.png' width='20' height='20'>
@@ -269,7 +269,7 @@
 				</div>
 
 				<hr>
-				
+
 				<div class='row'>
 					<div class='col-sm-2 text-center'>
 						<img src='/img/vendor.png' width='20' height='20'>
@@ -280,7 +280,7 @@
 				</div>
 
 				<hr>
-				
+
 				<div class='row'>
 					<div class='col-sm-2 text-center'>
 						<img src='/img/fight.png' width='20' height='20'>

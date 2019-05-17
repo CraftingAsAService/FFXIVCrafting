@@ -23,7 +23,7 @@
 	<i class='glyphicon glyphicon-plus'></i>
 </button>
 <p>
-	<a href='{{ item_link() . $leve->requirements[0]->id }}' class='item-name' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
+	<a href='{{ item_link() . $leve->requirements[0]->id }}' class='item-name' target='_blank'><img src='{{ icon($leve->requirements[0]->icon) }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
 
 	@if($leve->requirements[0]->pivot->amount > 1)
 	<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -51,7 +51,7 @@
 		@foreach($leve->requirements[0]->recipes[0]->reagents as $reagent)
 		<li class='list-group-item'>
 			<a href='{{ item_link() . $reagent->id }}' target='_blank'>
-				<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->display_name }}</span>
+				<img src='{{ icon($reagent->icon) }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->display_name }}</span>
 			</a>
 			x {{ $reagent->pivot->amount * $leve->requirements[0]->pivot->amount }}
 			@if($leve->requirements[0]->pivot->amount > 1)

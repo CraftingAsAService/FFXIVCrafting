@@ -10,9 +10,9 @@
 
 				<div class='icons pull-left text-center'>
 					<a href='{{ item_link() . $item->id }}' data-replacename="0" data-colorname="0" data-showicon="0" target='_blank'>
-						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='40' height='40' class='main-icon nq'>
+						<img src='{{ icon($item->icon) }}' width='40' height='40' class='main-icon nq'>
 						@if ($item->can_hq)
-						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='40' height='40' class='main-icon hq hidden'>
+						<img src='{{ icon($item->icon) }}' width='40' height='40' class='main-icon hq hidden'>
 						@endif
 					</a>
 					<div>

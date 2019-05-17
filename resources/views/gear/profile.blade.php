@@ -77,7 +77,7 @@
 						@if($quality == 'hq')
 						<img src='/img/hq-overlay.png' width='20' height='20' class='hq-overlay'>
 						@endif
-						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='20' height='20' class='item-icon'>
+						<img src='{{ icon($item->icon) }}' width='20' height='20' class='item-icon'>
 						</span>{{ $item->display_name }}
 					</a>
 					{{--
@@ -129,7 +129,7 @@
 						@endif
 						@if( ! $item->achievements->isEmpty())
 					<span class='gil'>
-						<img src='{{ assetcdn('achievement/' . $item->achievements[0]->icon . '.png') }}' width='24' height='24' rel='tooltip' title='Achievement Reward: {{ $item->achievements[0]->name }}'>
+						<img src='{{ icon($item->achievements[0]->icon) }}' width='24' height='24' rel='tooltip' title='Achievement Reward: {{ $item->achievements[0]->name }}'>
 					</span>
 						@endif
 					@endif

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Manual
+ * ManualData
  * 	Manually parsed data; by hand
  */
 
 namespace App\Models\Aspir;
 
-class Manual
+class ManualData
 {
 
 	public $aspir;
@@ -81,6 +81,86 @@ class Manual
 		foreach ($this->aspir->data['leve'] as &$leve)
 			if (isset($leveTypes[$leve['plate']]))
 				$leve['type'] = $leveTypes[$leve['plate']];
+	}
+
+	public function iconTransition()
+	{
+		// Runonce
+		// Converts Garland IDs to raw icons
+		$iconTransition = $this->readTSV($this->path . 'iconTransition.tsv')
+			->pluck('new', 'original');
+
+		$basePath = '/srv/personal/craftingasaservice/assets/ffxiv/';
+
+		foreach ($iconTransition as $original => $new)
+		{
+			$original = $basePath . 'item/' . $original . '.png';
+
+			// All icons are five digits, otherwise we'd have different rules.
+			//  See https://xivapi.com/docs/Icons
+			$new = '0' . $new;
+			$folder = substr($new, 0, 3) . "000";
+			$newBase = $basePath . 'i/' . $folder . '/';
+			$new = $newBase . $new . '.png';
+
+			if ( ! is_dir($newBase))
+				exec('mkdir "' . $newBase . '"');
+
+			exec('ln "' . $original . '" "' . $new . '" 2>/dev/null &');
+		}
+	}
+
+	public function getIcons()
+	{
+		$domain = 'https://xivapi.com/i/';
+		$basePath = '/srv/personal/craftingasaservice/assets/ffxiv/i/';
+
+		// A stream context to ignore http warnings
+		$streamContext = stream_context_create([
+			'http' => ['ignore_errors' => true],
+		]);
+
+		$iconSets = [
+			'item'        => \App\Models\Garland\Item::select('icon')->pluck('icon'),
+			'instance'    => \App\Models\Garland\Instance::select('icon')->pluck('icon'),
+			'quest'       => \App\Models\Garland\Quest::select('icon')->pluck('icon'),
+			'achievement' => \App\Models\Garland\Achievement::select('icon')->pluck('icon'),
+			'levePlates'  => \App\Models\Garland\Leve::select('plate')->pluck('plate'),
+			'leveFrames'  => \App\Models\Garland\Leve::select('frame')->pluck('frame'),
+		];
+
+		exec('find "' . $basePath . '" -name *.png', $existingImages);
+		$existingImages = array_map(function($value) use ($basePath) {
+			return str_replace($basePath, '', $value);
+		}, $existingImages);
+
+		foreach ($iconSets as $set)
+			foreach ($set as $icon)
+			{
+				// All icons are five digits, otherwise we'd have different rules.
+				//  See https://xivapi.com/docs/Icons
+				$icon = (strlen($icon) == 6 ? '' : '0') . $icon;
+				$folder = substr($icon, 0, 3) . "000";
+				$iconBase = $basePath . $folder . '/';
+				$icon = $icon . '.png';
+
+				if (in_array($folder . '/' . $icon, $existingImages))
+					continue;
+
+				$image = file_get_contents($domain . $folder . '/' . $icon, false, $streamContext);
+				$this->aspir->command->info('Downloading ' . $icon);
+
+				if (str_contains($image, '"Code":404'))
+				{
+					$this->aspir->command->error('Download failed, 404');
+					continue;
+				}
+
+				if ( ! is_dir($iconBase))
+					exec('mkdir "' . $iconBase . '"');
+
+				file_put_contents($iconBase . $icon, $image);
+			}
 	}
 
 	private function readTSV($filename)

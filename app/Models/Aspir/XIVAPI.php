@@ -275,7 +275,7 @@ class XIVAPI
 	public function quests()
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 500;
+		$this->limit = 400;
 
 		$this->loopEndpoint('quest', [
 			'ID',
@@ -694,6 +694,10 @@ class XIVAPI
 			//  item food connections
 			'ItemAction',
 		], function($data) use ($rootParamConversion) {
+
+			if ($data->Name == '' || substr($data->Name, 0, 6) == 'Dated ')
+				return;
+
 			$this->aspir->setData('item', [
 				'id'               => $data->ID,
 				'name'             => $data->Name,

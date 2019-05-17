@@ -4,7 +4,7 @@
 <tr>
 	<td class='text-left valign'>
 		<a href='{{ item_link() . $recipe->item->id }}' target='_blank'>
-			<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
+			<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
 		</a>
 	</td>
 	<td class='text-center valign'>

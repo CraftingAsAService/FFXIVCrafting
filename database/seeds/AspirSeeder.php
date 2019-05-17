@@ -1,5 +1,7 @@
 <?php
 
+// php artisan aspir:migrate
+//  OR
 // php artisan migrate:refresh
 // php artisan db:seed --class=AspirSeeder
 

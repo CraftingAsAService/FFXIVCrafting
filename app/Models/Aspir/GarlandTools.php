@@ -97,13 +97,6 @@ class GarlandTools
 		});
 	}
 
-
-
-
-
-
-
-
 	private function translateMobID($mobId, $base = false)
 	{
 		// The mob id can be split between base and name

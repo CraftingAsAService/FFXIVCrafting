@@ -48,7 +48,7 @@
 					<span class='close' rel='tooltip' title='Item Level'>{{ $item->ilvl }}</span>
 					@endif
 					<a href='{{ item_link() . $item->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $item->display_name }}
+						<img src='{{ icon($item->icon) }}' width='36' height='36' style='margin-right: 5px;'>{{ $item->display_name }}
 					</a>
 				</td>
 				<td class='valign text-center'>

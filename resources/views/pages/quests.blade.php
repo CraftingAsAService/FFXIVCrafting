@@ -89,7 +89,7 @@
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $quest->level }}</span>
 					<a href='{{ item_link() . $item['id'] }}' class='item-name' target='_blank'>
-						<img src='{{ assetcdn('item/' . $item['icon'] . '.png') }}' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $item['name'] }}</span>
+						<img src='{{ icon($item['icon']) }}' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $item['name'] }}</span>
 					</a>
 				</td>
 				{{-- <td class='text-center amount'>{{ $quest->amount }}</td> --}}

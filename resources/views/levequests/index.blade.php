@@ -60,8 +60,8 @@
 							<tr data-item-id='{{ $item->id }}'>
 								<td width='57' class='valign text-center'>
 									<div style='position: relative; overflow: hidden; width: 47px; opacity: 1;'>
-										<img src='' data-src='{{ assetcdn('leve/frame/' . $leve->frame . '.png') }}' width='47' height='75' style='position: absolute;'>
-										<img src='' data-src='{{ assetcdn('leve/plate/' . $leve->plate . '.png') }}' width='47' height='75'>
+										<img src='' data-src='{{ icon($leve->frame) }}' width='47' height='75' style='position: absolute;'>
+										<img src='' data-src='{{ icon($leve->plate) }}' width='47' height='75'>
 									</div>
 								</td>
 								<td class='valign details'>
@@ -71,7 +71,7 @@
 									</h4>
 
 									<p>
-										<a href='{{ item_link() . $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->display_name }}</a>
+										<a href='{{ item_link() . $item->id }}' class='item-name' target='_blank'><img src='' data-src='{{ icon($item->icon) }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->display_name }}</a>
 
 										@if ($item->pivot->amount > 1)
 										<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -129,7 +129,7 @@
 					<div class='row'>
 						@foreach($rewards[$job->id][$level] as $item_id => $reward)
 						<div class='col-sm-6 col-md-4 margin-bottom'>
-							<a href='{{ item_link() . $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ assetcdn('item/' . $reward['item']->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->display_name }}</a>
+							<a href='{{ item_link() . $item_id }}' class='item-name' target='_blank'><img src='' data-src='{{ icon($reward['item']->icon) }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->display_name }}</a>
 
 							@foreach ($reward['amounts'] as $amount)
 							<span class='label label-primary'>{{ $amount }}</span>

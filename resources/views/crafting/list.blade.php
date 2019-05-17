@@ -136,7 +136,7 @@
 					</a>
 					@endif
 					<a href='{{ $link }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $reagent['item']->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->display_name }}</span>
+						<img src='{{ icon($reagent['item']->icon) }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->display_name }}</span>
 					</a>
 					@if ($yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
@@ -203,7 +203,7 @@
 						{{ $recipe->recipe_level }}
 					</a>
 					<a href='{{ item_link() . $recipe->item->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
+						<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
 					</a>
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
