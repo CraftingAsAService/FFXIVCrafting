@@ -89,20 +89,28 @@ class XIVAPI
 				return;
 
 			// Loop through Item#
-			$hasItems = false;
+			$gatheringItemIds = [];
 			foreach (range(0,7) as $i)
 				if ($data->{'Item' . $i})
-				{
-					$hasItems = true;
-					$this->aspir->setData('item_node', [
-						'item_id' => $data->{'Item' . $i},
-						'node_id' => $data->ID,
-					]);
-				}
+					$gatheringItemIds[] = $data->{'Item' . $i};
 
-			// Don't include the node if there aren't any items attached
-			if ( ! $hasItems)
+			if (empty($gatheringItemIds))
 				return;
+
+			sort($gatheringItemIds);
+
+			$gi = $this->request('gatheringitem', [
+				'ids' => implode(',', $gatheringItemIds),
+				'columns' => [
+					'Item',
+				],
+			])->Results;
+
+			foreach ($gi as $gatheringItem)
+				$this->aspir->setData('item_node', [
+					'item_id' => $gatheringItem->Item,
+					'node_id' => $data->ID,
+				]);
 
 			$gp = $this->request('gatheringpoint/' . $data->GameContentLinks->GatheringPoint->GatheringPointBase['0'], ['columns' => [
 				'PlaceName.ID',

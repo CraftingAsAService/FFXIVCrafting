@@ -105,7 +105,7 @@ class Aspir
 			'instances',
 		];
 
-		$manualCalls = [
+		$manualdataCalls = [
 			'nodeCoordinates',
 			'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
 			'leveTypes',
@@ -170,11 +170,6 @@ class Aspir
 
 		file_put_contents(storage_path('app/aspir/' . $filename . '.json'), json_encode($list, JSON_PRETTY_PRINT));
 	}
-
-	// private function getColumnNames($table)
-	// {
-	// 	return \Schema::getColumnListing($table);
-	// }
 
 	public function collectAssets()
 	{

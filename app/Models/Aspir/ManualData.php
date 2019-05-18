@@ -140,6 +140,10 @@ class ManualData
 				// All icons are five digits, otherwise we'd have different rules.
 				//  See https://xivapi.com/docs/Icons
 				$icon = (strlen($icon) == 6 ? '' : '0') . $icon;
+
+				if (strlen($icon) != 6)
+					continue;
+
 				$folder = substr($icon, 0, 3) . "000";
 				$iconBase = $basePath . $folder . '/';
 				$icon = $icon . '.png';
@@ -160,6 +164,8 @@ class ManualData
 					exec('mkdir "' . $iconBase . '"');
 
 				file_put_contents($iconBase . $icon, $image);
+
+				$existingImages[] = $folder . '/' . $icon;
 			}
 	}
 

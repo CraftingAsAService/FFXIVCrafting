@@ -127,7 +127,7 @@
 			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}'>
 				<td class='text-left'>
 					@if (is_string($level))
-					<a class='close ilvl small text-right' rel='tooltip' data-html='true' title='Location Hint<br>{!! $reagent['item']->nodes->first()->coordinates !!}{{ $reagent['item']->nodes->count() > 1 ? '<br>' . ($reagent['item']->nodes->count() - 1) . ' other locations available.' : '' }}'>
+					<a class='close ilvl small text-right' rel='tooltip' data-html='true' title='Location Hint<br>{!! empty($reagent['item']->nodes->first()->coordinates) ? 'N/A' : $reagent['item']->nodes->first()->coordinates !!}{{ $reagent['item']->nodes->count() > 1 ? '<br>' . ($reagent['item']->nodes->count() - 1) . ' other locations available.' : '' }}'>
 						{!! implode('<br>', explode(' - ', $level)) !!}
 					</a>
 					@elseif ($level != 0)
