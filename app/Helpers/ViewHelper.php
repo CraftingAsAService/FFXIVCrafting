@@ -88,7 +88,7 @@
 						{
 							$posts[] = [
 								'title' => $child->data->title,
-								'url' => 'http://reddit.com' . $child->data->permalink,
+								'url' => 'https://reddit.com' . $child->data->permalink,
 								'created' => Carbon\Carbon::createFromTimeStamp($child->data->created)->format('M d, Y')
 							];
 						}

@@ -277,7 +277,7 @@
 
 								<div class='row'>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="https://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
+										<p><a href="https://www.reddit.com/r/ffxivcrafting">/r/ffxivcrafting</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -294,6 +294,10 @@
 									</div>
 									<div class='col-xs-12 col-md-6'>
 										<p><a href="https://garlandtools.org/">Garland Tools</a></p>
+										<hr>
+									</div>
+									<div class='col-xs-12 col-md-6'>
+										<p><a href="https://xivapi.com/">XIVAPI</a></p>
 										<hr>
 									</div>
 								</div>

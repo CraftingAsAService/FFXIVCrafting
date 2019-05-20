@@ -858,27 +858,18 @@ class XIVAPI
 
 						foreach (range(0, 2) as $slot)
 							if ($food->{'BaseParam' . $slot}->Name)
-							{
-								// nq and hq
 								foreach ($dataQualitySlots as $qualitySlot => $quality)
 									$this->aspir->setData('item_attribute', [
 										'item_id'   => $data->ID,
 										'attribute' => $food->{'BaseParam' . $slot}->Name,
 										'quality'   => $quality,
-										'amount'    => $food->{'Value' . $qualitySlot . $slot},
-										'limit'     => null,
+										'amount'    => $food->{'IsRelative' . $slot}
+														? $food->{'Value' . $qualitySlot . $slot}
+														: null,
+										'limit'     => $food->{'IsRelative' . $slot}
+														? $food->{'Max' . ($data->CanBeHq ? 'HQ' : '') . $slot}
+														: $food->{'Value' . $qualitySlot . $slot},
 									]);
-
-								// max
-								if ($food->{'IsRelative' . $slot})
-									$this->aspir->setData('item_attribute', [
-										'item_id'   => $data->ID,
-										'attribute' => $food->{'BaseParam' . $slot}->Name,
-										'quality'   => 'max',
-										'amount'    => $food->{'Max' . ($data->CanBeHq ? 'HQ' : '') . $slot},
-										'limit'     => null,
-									]);
-							}
 
 						break;
 				}
@@ -931,12 +922,15 @@ class XIVAPI
 			'AmountIngredient8',
 			'AmountIngredient9',
 		], function($data) {
+			if ( ! $data->ItemResultTargetID)
+				return;
+
 			$this->aspir->setData('recipe', [
 				'id'           => $data->ID,
 				'item_id'      => $data->ItemResultTargetID,
 				'job_id'       => $data->ClassJob->ID,
-				'recipe_level' => $data->ItemResult->LevelItem,
-				'level'        => $data->RecipeLevelTable->ClassJobLevel,
+				'recipe_level' => $data->RecipeLevelTable->ClassJobLevel,
+				'level'        => $data->ItemResult->LevelItem,
 				'yield'        => $data->AmountResult,
 				'hq'           => $data->CanHq ? 1 : null,
 				'fc'           => null,

@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('javascript')
-	<script type='text/javascript' src='http://code.highcharts.com/highcharts.js'></script>
+	<script type='text/javascript' src='https://code.highcharts.com/highcharts.js'></script>
 	<script type='text/javascript' src='{{ cdn('/js/food.js') }}'></script>
 @stop
 
@@ -131,7 +131,7 @@
 										</td>
 										@foreach(explode('|', $stat_names) as $stat_name)
 										@if(isset($item['stats'][$stat_name][$quality]))
-										<td class='text-center valign' data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $stat_name }}' rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $stat_name }}'>
+										<td class='text-center valign' data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $stat_name }}'@if ($item['stats'][$stat_name][$quality]['amount'] != 0) rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $stat_name }}'@endif>
 											+{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}
 											<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
 										</td>

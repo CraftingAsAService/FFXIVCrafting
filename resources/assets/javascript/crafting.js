@@ -422,6 +422,7 @@ var crafting = {
 			recipe.elements.needed.html(needed);
 			recipe.elements.obtained.attr('max', max);
 
+			console.log(recipe.name, needed, max, recipe.total < 0 ? 0 : (Math.ceil(recipe.total / recipe.yields) * recipe.yields));
 			recipe.elements.total.html(recipe.total < 0 ? 0 : (Math.ceil(recipe.total / recipe.yields) * recipe.yields));
 
 			recipe.elements.row[(recipe.needed == 0 ? 'add' : 'remove') + 'Class']('success');
@@ -474,7 +475,7 @@ var crafting = {
 				// If both match, bake it!
 				if (new_recipe.item_id == reagent.item_id)
 				{
-					// if (new_recipe.name.match(/Glass Fiber/))
+					// if (new_recipe.name.match(/Bear Fat/))
 					// 	console.log('---');
 
 					// Ex. Parent recipe is being baked 6 times.  The reagent indicates 2 are required.
@@ -487,7 +488,7 @@ var crafting = {
 					// Remove any previous remainder from this round's needed amount
 					if (new_recipe.remainder > 0) {
 						var usedRemainder = Math.min(needed, new_recipe.remainder);
-						// if (new_recipe.name.match(/Glass Fiber/)) {
+						// if (new_recipe.name.match(/Bear Fat/)) {
 						// 	console.log('Has ', new_recipe.remainder, ' remaining ', new_recipe.name);
 						// 	console.log('Need ', needed, ' more ', new_recipe.name);
 						// 	console.log('Using ', usedRemainder, ' remainder of ', new_recipe.name);
@@ -504,10 +505,12 @@ var crafting = {
 
 					new_recipe.remainder += (bake * new_recipe.yields) - needed;
 
-					// if (new_recipe.name.match(/Glass Fiber/)) {
+					// if (new_recipe.name.match(/Bear Fat/)) {
 					// 	console.log('Need ', needed, ' more ', new_recipe.name);
-					// 	console.log('Making ', bake * new_recipe.yields, ' more ', new_recipe.name);
-					// 	console.log('Leaves remainder of ', new_recipe.remainder, ' ', new_recipe.name);
+					// 	console.log('Requesting ', bake * new_recipe.yields, ' more ', new_recipe.name);
+					// 	console.log('Would leave a remainder of ', new_recipe.remainder, ' ', new_recipe.name);
+
+					// 	console.log(new_recipe.name, bake, root_engaged);
 					// }
 
 					// Put it in the oven!

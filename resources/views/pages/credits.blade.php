@@ -103,7 +103,7 @@
 		</div>
 	</div>
 
-	<div class='media'>
+{{-- 	<div class='media'>
 		<a href='http://home.comcast.net/~nakomaru/ffmaps/' class='pull-left' target='_blank'>
 			<img src='/img/credits/nakomaru.png' class='media-object' width='64' height='64' style='border-radius: 5px;'>
 		</a>
@@ -116,7 +116,7 @@
 				Wonderful maps.  Great resource when gathering.
 			</p>
 		</div>
-	</div>
+	</div> --}}
 
 	<div class='media'>
 		<a href='http://dimensionaldeath.com/index.php?page=huntinglogs' class='pull-left' target='_blank'>
