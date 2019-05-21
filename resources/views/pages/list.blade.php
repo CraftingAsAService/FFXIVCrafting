@@ -73,17 +73,12 @@
 	</table>
 </div>
 <a href='/list/flush' class='btn btn-danger pull-right'>Delete All</a>
-@php
-	$teamcraftString = base64_encode(
-		implode(';',
-			array_map(function($listItem) {
-		return $listItem['item']->id . ',null,' . $listItem['amount'];
-	}, $list
-)
-)
-);
-@endphp
 <button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Shareable Link</button>
+@php
+	$teamcraftString = base64_encode(implode(';', array_map(function($listItem) {
+		return $listItem['item']->id . ',null,' . $listItem['amount'];
+	}, $list)));
+@endphp
 <a href='https://ffxivteamcraft.com/import/{!! $teamcraftString !!}' class='btn btn-default pull-right margin-right' target='_blank'>Export to Teamcraft <small><i class='glyphicon glyphicon-new-window'></i></small></a>
 <a href='/crafting/from-list?self_sufficient=1' class='btn btn-success fix-self-sufficient'>Craft These Items &raquo;</a>
 

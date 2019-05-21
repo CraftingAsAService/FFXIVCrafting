@@ -1,10 +1,5 @@
 var crafting = {
 	init:function() {
-		crafting.events();
-		crafting_tour.init();
-	},
-	events:function() {
-
 		$('#toggle-crystals').click(crafting.toggle_crystals);
 
 		if (localStorage.getItem('config:toggle-crystals') == 'off')
@@ -23,21 +18,17 @@ var crafting = {
 		});
 
 		// If they change needed or obtained
-
 		$('.needed input').change(function() {
-			var el = $(this),
-				// Why is this a thing?  It's always `true`... right?
-				root_engaged = el.closest('#CraftingList-section').length > 0;
+			var el = $(this);
 
-			crafting.recalculate_all(root_engaged);
+			crafting.recalculateAll();
 
 			// Fix #CraftingList totals
 			el.closest('tr').find('.total').html(el.val());
 		});
 
 		$('input.obtained').change(function() {
-			var root_engaged = $(this).closest('#CraftingList-section').length > 0;
-			return crafting.recalculate_all(root_engaged);
+			return crafting.recalculateAll();
 		});
 
 		$('.obtained-ok').click(function() {
@@ -55,7 +46,7 @@ var crafting = {
 
 		crafting.init_reagents();
 
-		crafting.recalculate_all(true);
+		crafting.recalculateAll();
 
 		$('#map_all, #map_remaining').click(function(event) {
 			event.preventDefault();
@@ -210,8 +201,6 @@ var crafting = {
 
 		// Refresh the page
 		location.reload();
-
-		return;
 	},
 	restore_localstorage:function() {
 		var page_items = JSON.parse(localStorage.getItem(crafting.localstorage_id));
@@ -228,8 +217,6 @@ var crafting = {
 			if (typeof page_items.progress.hasOwnProperty('item' + itemId) !== 'undefined')
 				if (page_items.progress['item' + itemId] > 0)
 					obtainedEl.val(page_items.progress['item' + itemId]);
-
-			return;
 		});
 
 		// Fill in reciepts from the the contents bucket
@@ -246,11 +233,7 @@ var crafting = {
 			if (typeof page_items.contents.hasOwnProperty('item' + itemId) !== 'undefined')
 				if (page_items.contents['item' + itemId] > 0)
 					obtainedEl.val(page_items.contents['item' + itemId]);
-
-			return;
 		});
-
-		return;
 	},
 	store_localstorage:function() {
 		var page_items = {
@@ -292,7 +275,7 @@ var crafting = {
 
 		return;
 	},
-	reagents:[],
+	reagents: [],
 	init_reagents:function() {
 		$('.reagent').each(function() {
 			var tr = $(this),
@@ -339,15 +322,12 @@ var crafting = {
 				}
 
 			crafting.reagents[crafting.reagents.length] = data;
-
-			return;
 		});
-
-		return;
 	},
-	recalculate_all:function(root_engaged) {
+	recalculateAll:function() {
 		// Update "obtained" for each item
 		// If it's Exempt, that means use it as a starting point
+		recalcalpha:
 		for (var i = 0; i < crafting.reagents.length; i++)
 		{
 			var recipe = crafting.reagents[i];
@@ -356,28 +336,32 @@ var crafting = {
 			recipe.total = 0;
 			recipe.remainder = 0;
 
-			if (recipe.exempt == true)
+			if (recipe.exempt != true)
 			{
-				recipe.needed = parseInt(recipe.elements.needed.val());
-				recipe.elements.obtained.attr('max', recipe.needed);
-
-				// Highlight the exempt row if needed
-				recipe.elements.row[(recipe.needed - recipe.obtained == 0 ? 'add' : 'remove') + 'Class']('success');
-
-				// Ex. I need 20 of these, but already have 3.  The recipe yields 3
-				// Ex. So 17 / 3 = 5.6, rounded up is 6.  We need to bake this recipe at least 6 times
-				var bake = Math.ceil(Math.max(recipe.needed - recipe.obtained, 0) / recipe.yields);
-
-				// Loop through all of it's children
-				crafting.oven(recipe, bake, root_engaged);
-			}
-			else
 				recipe.needed = 0; // Non exempt?  Reset needed.
 				// This only works because of the natural order of things: exempt rows last.
+				continue;
+			}
+
+			recipe.needed = parseInt(recipe.elements.needed.val());
+			recipe.elements.obtained.attr('max', recipe.needed);
+
+			// Highlight the exempt row if needed
+			recipe.elements.row[(recipe.needed - recipe.obtained == 0 ? 'add' : 'remove') + 'Class']('success');
+
+			// Ex. I need 20 of these, but already have 3.  The recipe yields 3
+			// Ex. So 17 / 3 = 5.6, rounded up is 6.  We need to bake this recipe at least 6 times
+			var bake = Math.ceil(Math.max(recipe.needed - recipe.obtained, 0) / recipe.yields);
+
+			// Loop through all of it's children
+			crafting.oven(recipe, bake);
+
+			continue recalcalpha;
 		}
 
 		// Now we have to take the obtained into account.
 		// This means looking at each recipe with reagent that isn't exempt, and re-doing it
+		recalcbeta:
 		for (var i = 0; i < crafting.reagents.length; i++)
 		{
 			var recipe = crafting.reagents[i];
@@ -389,10 +373,13 @@ var crafting = {
 			var bake = Math.ceil(Math.min(0 - recipe.obtained, 0) / recipe.yields);
 
 			// Loop through all of it's children
-			crafting.oven(recipe, bake, root_engaged);
+			crafting.oven(recipe, bake);
+
+			continue recalcbeta;
 		}
 
 		// Update fields
+		var changes = 0;
 		for (var i = 0; i < crafting.reagents.length; i++)
 		{
 			var recipe = crafting.reagents[i];
@@ -422,29 +409,28 @@ var crafting = {
 			recipe.elements.needed.html(needed);
 			recipe.elements.obtained.attr('max', max);
 
-			// console.log(recipe.name, needed, max, recipe.total < 0 ? 0 : (Math.ceil(recipe.total / recipe.yields) * recipe.yields));
 			recipe.elements.total.html(recipe.total < 0 ? 0 : (Math.ceil(recipe.total / recipe.yields) * recipe.yields));
 
-			recipe.elements.row[(recipe.needed == 0 ? 'add' : 'remove') + 'Class']('success');
+			recipe.elements.row.toggleClass('success', recipe.needed == 0);
 		}
 
 		crafting.store_localstorage();
 
 		// Transfer the numbers to the crystals
 		if ($('tr.crystals').length > 0)
-		$('[data-item-category=Crystal]').each(function() {
-			var el = $(this),
-				item_id = el.data('itemId'),
-				total = parseInt(el.find('.total').html()),
-				label = $('#crystal-' + item_id).find('.label');
+			$('[data-item-category=Crystal]').each(function() {
+				var el = $(this),
+					item_id = el.data('itemId'),
+					total = parseInt(el.find('.total').html()),
+					label = $('#crystal-' + item_id).find('.label');
 
-			label.html(total);
+				label.html(total);
 
-			label.toggleClass('label-primary', total != 0);
-			label.toggleClass('label-success', total == 0);
+				label.toggleClass('label-primary', total != 0);
+				label.toggleClass('label-success', total == 0);
 
-			return;
-		});
+				return;
+			});
 
 		// Move any completed entries to the end of the list
 		$('tr.reagent.success').each(function() {
@@ -456,10 +442,12 @@ var crafting = {
 
 		return;
 	},
-	oven:function(recipe, parent_bake, root_engaged) {
-
+	oven:function(recipe, parentBake)
+	{
 		if (recipe.reagents == null)
 			return;
+
+		// console.log('baking', recipe.name, 'x', parentBake);
 
 		// Loop through all our reagents
 		top: // Label for loop
@@ -470,140 +458,46 @@ var crafting = {
 			// Loop through all known reagents
 			for (var j = 0; j < crafting.reagents.length; j++)
 			{
-				var new_recipe = crafting.reagents[j];
+				var newRecipe = crafting.reagents[j];
 
-				// If both match, bake it!
-				if (new_recipe.item_id == reagent.item_id)
-				{
-					// if (new_recipe.name.match(/Bear Fat/))
-					// 	console.log('---');
+				if (newRecipe.item_id != reagent.item_id)
+					continue;
 
-					// Ex. Parent recipe is being baked 6 times.  The reagent indicates 2 are required.
-					// Ex. 6 * 2 = 12; That's our immediate need, so add it to the total and needed
-					var needed = parent_bake * reagent.quantity;
+				// Ex. Parent recipe is being baked 6 times.  The reagent indicates 2 are required.
+				// Ex. 6 * 2 = 12; That's our immediate need, so add it to the total and needed
+				var needed = parentBake * reagent.quantity;
 
-					new_recipe.needed += needed;
-					new_recipe.total += needed;
+				// console.log(' ', newRecipe.name, parentBake * reagent.quantity, needed);
 
-					// Remove any previous remainder from this round's needed amount
-					if (new_recipe.remainder > 0) {
-						var usedRemainder = Math.min(needed, new_recipe.remainder);
-						// if (new_recipe.name.match(/Bear Fat/)) {
-						// 	console.log('Has ', new_recipe.remainder, ' remaining ', new_recipe.name);
-						// 	console.log('Need ', needed, ' more ', new_recipe.name);
-						// 	console.log('Using ', usedRemainder, ' remainder of ', new_recipe.name);
-						// }
-						needed -= usedRemainder;
-						new_recipe.remainder -= usedRemainder;
-					}
+				newRecipe.needed += needed;
+				newRecipe.total += needed;
 
-					// Ex. Our needed now says 12.  How many times do we need to bake?
-					// The recipe says it yields 3.
-					// Well, we already have 2, so (12 - 2) / 3 = 3.33; 4 bakes, rounded up
-
-					var bake = Math.ceil(needed / new_recipe.yields);
-
-					new_recipe.remainder += (bake * new_recipe.yields) - needed;
-
-					// if (new_recipe.name.match(/Bear Fat/)) {
-					// 	console.log('Need ', needed, ' more ', new_recipe.name);
-					// 	console.log('Requesting ', bake * new_recipe.yields, ' more ', new_recipe.name);
-					// 	console.log('Would leave a remainder of ', new_recipe.remainder, ' ', new_recipe.name);
-
-					// 	console.log(new_recipe.name, bake, root_engaged);
+				// Remove any previous remainder from this round's needed amount
+				if (newRecipe.remainder > 0) {
+					var usedRemainder = Math.max(0, Math.min(needed, newRecipe.remainder));
+					// if (newRecipe.name.match(/Astral Oil/)) {
+					// 	console.log('Has ', newRecipe.remainder, ' remaining ', newRecipe.name);
+					// 	console.log('Need ', needed, ' more ', newRecipe.name);
+					// 	console.log('Using ', usedRemainder, ' remainder of ', newRecipe.name);
 					// }
-
-					// Put it in the oven!
-					crafting.oven(new_recipe, bake, root_engaged);
-
-					continue top; // Jump to the next recipe's reagent
+					needed -= usedRemainder;
+					newRecipe.remainder -= usedRemainder;
 				}
+
+				// Ex. Our needed now says 12.  How many times do we need to bake?
+				// The recipe says it yields 3.
+				// Well, we already have 2, so (12 - 2) / 3 = 3.33; 4 bakes, rounded up
+
+				var bake = Math.ceil(needed / newRecipe.yields);
+
+				newRecipe.remainder += (bake * newRecipe.yields) - needed;
+
+				// Put it in the oven!
+				crafting.oven(newRecipe, bake);
+
+				continue top; // Jump to the next recipe's reagent
 			}
 		}
-
-		return;
-	}
-}
-
-var crafting_tour = {
-	tour: null,
-	first_run: true,
-	init:function() {
-		var startEl = $('#start_tour');
-
-		crafting_tour.tour = new Tour({
-			orphan: true,
-			onStart:function() {
-				return startEl.addClass('disabled', true);
-			},
-			onEnd:function() {
-				return startEl.removeClass('disabled', true);
-			}
-		});
-
-		startEl.click(function(e) {
-			e.preventDefault();
-
-			if ($('#toggle-slim').bootstrapSwitch('status'))
-				$('#toggle-slim').bootstrapSwitch('setState', false);
-
-			if (crafting_tour.first_run == true)
-				crafting_tour.build();
-
-			if ($(this).hasClass('disabled'))
-				return;
-
-			crafting_tour.tour.restart();
-		});
-	},
-	build:function() {
-
-		crafting_tour.tour.addSteps([
-			{
-				element: '#CraftingList-section',
-				title: 'Recipe List',
-				content: 'The list at the bottom is your official Recipe List.  You will be making these items.',
-				placement: 'top'
-			},
-			{
-				element: '#Gathered-section tr:first-child',
-				title: 'Gathered Section',
-				content: 'Items you can gather with MIN, BTN or FSH will appear in the Gathered Section.',
-				placement: 'bottom'
-			},
-			{
-				element: '#Bought-section tr:first-child',
-				title: 'Bought Section',
-				content: 'Items you cannot gather will be thrown into the Bought Section.',
-				placement: 'bottom'
-			},
-			{
-				element: '#Other-section tr:first-child',
-				title: 'Other Section',
-				content: 'Items that cannot be bought or gathered show up in the Other Section.  Most likely these will involve monster drops.',
-				placement: 'bottom'
-			},
-			{
-				element: '#PreRequisiteCrafting-section tr:first-child',
-				title: 'Pre-Requisite Crafting',
-				content: 'Why buy what you can craft?  The Crafted Section contains items necessary for your main recipes to finish.  The previous sections will already contain the sub items required.',
-				placement: 'bottom'
-			},
-			{
-				element: '#self-sufficient-form',
-				title: 'Self Sufficient',
-				content: 'By default it assumes you want to be Self Sufficient.  Turning this option off will eliminate the Gathering and Crafting aspect and appropriately force the items into either Bought or Other.',
-				placement: 'top'
-			},
-			{
-				element: '#leveling-information',
-				title: 'Leveling Information',
-				content: 'Pay attention to the Leveling Information box as it will give you a heads up as to what your next quest turn ins will require.',
-				placement: 'top'
-			}
-		]);
-
-		crafting_tour.first_run = false;
 	}
 }
 
