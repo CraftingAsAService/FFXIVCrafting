@@ -61,12 +61,14 @@ class EntityController extends Controller {
 		$shops = [];
 		foreach ($item->shops as $shop)
 			foreach ($shop->npcs as $npc)
-				$shops[isset($shop->name) ? $shop->name : ''][] = [
+				$shops[$npc->name] = [
 					'name' => $npc->name,
 					'location' => is_null($npc->location) ? '' : $npc->location->name,
 					'x' => (int) $npc->x,
 					'y' => (int) $npc->y,
 				];
+
+		$shops = collect($shops)->sortBy('name')->sortBy('location');
 
 		return view('entity.shops', compact('item', 'shops'));
 	}

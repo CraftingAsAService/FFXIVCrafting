@@ -17,6 +17,7 @@ class XIVAPI
 	private $api;
 
 	public $limit = null;
+	public $chunkLimit = null;
 
 	public function __construct(&$aspir)
 	{
@@ -223,16 +224,21 @@ class XIVAPI
 	public function npcs()
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 1000;
+		$this->limit = 500;
 
 		$this->loopEndpoint('enpcresident', [
 			'ID',
 			'Name',
+			// There's a bug related *'s when grouping
+			//  It limits the amount of results that can come back if another in the pack don't also have results
 			'Quests.*.ID',
 			'GilShop.*.ID',
 			'GilShop.*.Name',
 			'SpecialShop.*.ID',
 			'SpecialShop.*.Name',
+			// 'Quests',
+			// 'GilShop',
+			// 'SpecialShop',
 		], function($data) {
 			// Skip empty names
 			if ($data->Name == '')
@@ -247,7 +253,7 @@ class XIVAPI
 				'y'       => null, // Filled in later
 			], $data->ID);
 
-			if ($data->Quests[0]->ID)
+			if ($data->Quests)
 				foreach ($data->Quests as $quest)
 					if ($quest->ID)
 						$this->aspir->setData('npc_quest', [
@@ -277,7 +283,7 @@ class XIVAPI
 			}
 		]);
 
-		$limit = null;
+		$this->limit = null;
 	}
 
 	public function quests()
@@ -409,7 +415,7 @@ class XIVAPI
 					]);
 		});
 
-		$limit = null;
+		$this->limit = null;
 	}
 
 	public function instances()
@@ -532,6 +538,9 @@ class XIVAPI
 
 	public function leves()
 	{
+		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
+		$this->limit = 1000;
+
 		$this->loopEndpoint('leve', [
 			'ID',
 			'Name',
@@ -602,6 +611,8 @@ class XIVAPI
 					'amount'  => $data->CraftLeve->ItemCount0,
 				]);
 		});
+
+		$this->limit = null;
 	}
 
 	public function itemCategories()
@@ -623,14 +634,17 @@ class XIVAPI
 
 	public function items()
 	{
+		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
+		$this->limit = 1000;
+
 		$rootParamConversion = [
-			'Block' => 'Block Strength',
-			'BlockRate' => 'Block Rate',
-			'DefenseMag' => 'Magic Defense',
+			'Block'       => 'Block Strength',
+			'BlockRate'   => 'Block Rate',
+			'DefenseMag'  => 'Magic Defense',
 			'DefensePhys' => 'Defense',
-			'DamageMag' => 'Magic Damage',
-			'DamagePhys' => 'Physical Damage',
-			'DelayMs' => 'Delay',
+			'DamageMag'   => 'Magic Damage',
+			'DamagePhys'  => 'Physical Damage',
+			'DelayMs'     => 'Delay',
 		];
 
 		$this->loopEndpoint('item', [
@@ -885,6 +899,8 @@ class XIVAPI
 						'limit'     => null,
 					]);
 		});
+
+		$this->limit = null;
 	}
 
 	public function recipes()
@@ -950,7 +966,7 @@ class XIVAPI
 					]);
 		});
 
-		$limit = null;
+		$this->limit = null;
 	}
 
 	public function companyCrafts()
@@ -1011,7 +1027,7 @@ class XIVAPI
 	private function loopEndpoint($endpoint, $columns, $callback, $filters = [])
 	{
 		$request = $this->listRequest($endpoint, ['columns' => ['ID']]);
-		foreach ($request->chunk(100) as $chunk)
+		foreach ($request->chunk($this->chunkLimit !== null ? $this->chunkLimit : 100) as $chunk)
 		{
 			$ids = $chunk->map(function($item) {
 				return $item->ID;
@@ -1058,7 +1074,7 @@ class XIVAPI
 		$command =& $this->aspir->command;
 		$api =& $this->api;
 
-		return Cache::rememberForever($content . serialize($queries), function() use ($content, $queries, $api, $command) {
+		return Cache::store('file')->rememberForever($content . serialize($queries), function() use ($content, $queries, $api, $command) {
 			$command->info(
 				'Querying: ' . $content .
 				(isset($queries['ids']) ? ' ' . preg_replace('/,.+,/', '-', $queries['ids']) : '')

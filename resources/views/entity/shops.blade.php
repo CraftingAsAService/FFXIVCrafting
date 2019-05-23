@@ -6,13 +6,7 @@
 				<h4 class="modal-title"><img src="/img/shop.png" width="24" height="24"> {{ $item->name }} Shops - {{ number_format($item->price, 0, '.', ',') }} <img src="/img/coin.png" width="24" height="24"></h4>
 			</div>
 			<div class="modal-body">
-				@foreach ($shops as $shop_name => $shop)
 				<table class='table table-bordered table-striped'>
-					@if($shop_name)
-					<caption>
-						{{ $shop_name }}
-					</caption>
-					@endif
 					<thead>
 						<tr>
 							<th>Vendor</th>
@@ -21,10 +15,10 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($shop as $npc)
+						@foreach ($shops as $npc)
 						<tr>
 							<td>
-								{{ $npc['name'] }}
+								{{ ucwords($npc['name']) }}
 							</td>
 							<td>
 								{{ $npc['location'] }}
@@ -38,7 +32,6 @@
 						@endforeach
 					</tbody>
 				</table>
-				@endforeach
 			</div>
 		</div>
 	</div>
