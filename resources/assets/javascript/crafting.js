@@ -323,11 +323,25 @@ var crafting = {
 
 			crafting.reagents[crafting.reagents.length] = data;
 		});
+
+		// order pre-requisite so that it follows an order of operation
+		$.each($('#PreRequisiteCrafting-section .reagent').get().reverse(), function() {
+			var el = $(this),
+				requires = el.data('requires').split('&');
+
+				for (var i = 0; i < requires.length; i++)
+				{
+					var t = requires[i].split('x'),
+						moveMeEl = $('#PreRequisiteCrafting-section .reagent[data-item-id=' + t[1] + ']');
+
+					if (moveMeEl.length > 0)
+						moveMeEl.insertBefore(el);
+				}
+		});
 	},
 	recalculateAll:function() {
 		// Update "obtained" for each item
 		// If it's Exempt, that means use it as a starting point
-		recalcalpha:
 		for (var i = 0; i < crafting.reagents.length; i++)
 		{
 			var recipe = crafting.reagents[i];
@@ -355,13 +369,10 @@ var crafting = {
 
 			// Loop through all of it's children
 			crafting.oven(recipe, bake);
-
-			continue recalcalpha;
 		}
 
 		// Now we have to take the obtained into account.
 		// This means looking at each recipe with reagent that isn't exempt, and re-doing it
-		recalcbeta:
 		for (var i = 0; i < crafting.reagents.length; i++)
 		{
 			var recipe = crafting.reagents[i];
@@ -374,12 +385,9 @@ var crafting = {
 
 			// Loop through all of it's children
 			crafting.oven(recipe, bake);
-
-			continue recalcbeta;
 		}
 
 		// Update fields
-		var changes = 0;
 		for (var i = 0; i < crafting.reagents.length; i++)
 		{
 			var recipe = crafting.reagents[i];
@@ -475,20 +483,20 @@ var crafting = {
 				// Remove any previous remainder from this round's needed amount
 				if (newRecipe.remainder > 0) {
 					var usedRemainder = Math.max(0, Math.min(needed, newRecipe.remainder));
+					needed -= usedRemainder;
+					newRecipe.remainder -= usedRemainder;
 					// if (newRecipe.name.match(/Astral Oil/)) {
 					// 	console.log('Has ', newRecipe.remainder, ' remaining ', newRecipe.name);
 					// 	console.log('Need ', needed, ' more ', newRecipe.name);
 					// 	console.log('Using ', usedRemainder, ' remainder of ', newRecipe.name);
 					// }
-					needed -= usedRemainder;
-					newRecipe.remainder -= usedRemainder;
 				}
 
 				// Ex. Our needed now says 12.  How many times do we need to bake?
 				// The recipe says it yields 3.
 				// Well, we already have 2, so (12 - 2) / 3 = 3.33; 4 bakes, rounded up
-
-				var bake = Math.ceil(needed / newRecipe.yields);
+				// If needed is negative, "floor" the recipe instead of ceil'ing it
+				var bake = Math[needed < 0 ? 'floor' : 'ceil'](needed / newRecipe.yields);
 
 				newRecipe.remainder += (bake * newRecipe.yields) - needed;
 
