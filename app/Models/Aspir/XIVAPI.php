@@ -878,11 +878,11 @@ class XIVAPI
 										'attribute' => $food->{'BaseParam' . $slot}->Name,
 										'quality'   => $quality,
 										'amount'    => $food->{'IsRelative' . $slot}
-														? $food->{'Value' . $qualitySlot . $slot}
+														? $food->{'Value' . strtoupper($qualitySlot) . $slot}
 														: null,
 										'limit'     => $food->{'IsRelative' . $slot}
-														? $food->{'Max' . ($data->CanBeHq ? 'HQ' : '') . $slot}
-														: $food->{'Value' . $qualitySlot . $slot},
+														? $food->{'Max' . strtoupper($qualitySlot) . $slot}
+														: $food->{'Value' . strtoupper($qualitySlot) . $slot},
 									]);
 
 						break;

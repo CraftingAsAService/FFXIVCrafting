@@ -44,47 +44,4 @@ class Build extends Command {
 		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ultros/caas.sql');
 	}
 
-	/**
-	 * Run commands to reset the instance back to normal
-	 */
-	public function reset($php)
-	{
-		$this->info('Resetting back to normal, clearing caches again');
-		echo exec($php . ' artisan route:clear') . PHP_EOL;
-		echo exec($php . ' artisan config:clear') . PHP_EOL;
-		echo exec($php . ' artisan cache:clear') . PHP_EOL;
-
-		$this->info('Switching Environment to Local');
-		echo exec('cp .env.local  .env') . PHP_EOL;
-
-		$this->info('Updating Composer for Development');
-		echo exec('composer update') . PHP_EOL;
-	}
-
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return [
-			// ['tag', InputArgument::REQUIRED, 'What to tag, like 3.0.1'],
-		];
-	}
-
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return [
-			['php', null, InputOption::VALUE_NONE, 'Use PHP instead of HHVM', null],
-			['qa', null, InputOption::VALUE_NONE, 'Run for a QA build over Production', null],
-			['reset', null, InputOption::VALUE_NONE, 'Jump to the reset and exit', null],
-		];
-	}
-
 }

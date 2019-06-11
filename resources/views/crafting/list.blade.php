@@ -7,6 +7,18 @@
 @section('vendor-css')
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-tour.css') }}' rel='stylesheet'>
+	<style type='text/css'>
+		.reagent .category {
+			position: absolute;
+			bottom: 8px;
+			left: 8px;
+			width: 36px;
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: .65em;
+		}
+	</style>
 @stop
 
 @section('javascript')
@@ -135,9 +147,15 @@
 						{{ $item_level }}
 					</a>
 					@endif
-					<a href='{{ $link }}' target='_blank'>
-						<img src='{{ icon($reagent['item']->icon) }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->display_name }}</span>
-					</a>
+					<img src='{{ icon($reagent['item']->icon) }}' width='36' height='36' class='margin-right pull-left'>
+					<div>
+						<a href='{{ $link }}' target='_blank' class='name'>
+							{{ $reagent['item']->display_name }}
+						</a>
+						<div>
+							<small class='text-muted'>{{ $reagent['item']->category->name }}</small>
+						</div>
+					</div>
 					@if ($yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
 						x {{ $yields }}
@@ -199,12 +217,35 @@
 			?>
 			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yield }}'>
 				<td class='text-left'>
-					<a class='close ilvl' rel='tooltip' title='Level'>
-						{{ $recipe->recipe_level }}
-					</a>
-					<a href='{{ item_link() . $recipe->item->id }}' target='_blank'>
-						<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
-					</a>
+					<div class='pull-right'>
+						<a class='close ilvl' rel='tooltip' title='Level'>
+							{{ $recipe->recipe_level }}
+						</a>
+						<div>
+							@if($include_quests && isset($recipe->item->quest[0]))
+							<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
+							@endif
+
+							@if($recipe->item->leve_required->count())
+								@foreach ($recipe->item->leve_required as $leve)
+								@if($leve->repeats)
+								<img src='/img/leve_icon_red.png' rel='tooltip' title='{{ $leve->name }}. Repeatable Leve!' width='16'>
+								@else
+								<img src='/img/leve_icon.png' rel='tooltip' title='{{ $leve->name }}' width='16'>
+								@endif
+								@endforeach
+							@endif
+						</div>
+					</div>
+					<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' class='margin-right pull-left'>
+					<div>
+						<a href='{{ item_link() . $recipe->item->id }}' target='_blank' class='name'>
+							{{ $recipe->item->display_name }}
+						</a>
+						<div>
+							<small class='text-muted'>{{ $recipe->item->category->name }}</small>
+						</div>
+					</div>
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
 						<img src="/img/stats/Craftsmanship.png" class="stat-icon">
@@ -222,21 +263,6 @@
 						x {{ $recipe->yield }}
 					</span>
 					@endif
-					<div class='pull-right' style='clear: right;'>
-						@if($include_quests && isset($recipe->item->quest[0]))
-						<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
-						@endif
-
-						@if($recipe->item->leve_required->count())
-							@foreach ($recipe->item->leve_required as $leve)
-							@if($leve->repeats)
-							<img src='/img/leve_icon_red.png' rel='tooltip' title='{{ $leve->name }}. Repeatable Leve!' style='margin-left: 5px;' width='16'>
-							@else
-							<img src='/img/leve_icon.png' rel='tooltip' title='{{ $leve->name }}' style='margin-left: 5px;' width='16'>
-							@endif
-							@endforeach
-						@endif
-					</div>
 				</td>
 				<td class='needed valign hidden-print'>
 					<?php
