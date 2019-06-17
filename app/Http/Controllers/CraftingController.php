@@ -220,7 +220,7 @@ class CraftingController extends Controller
 						'reagents.recipes.job'
 			)
 			->groupBy('item_id')
-			->orderBy('recipe_level')
+			->orderBy('level')
 			->orderBy('id')
 			// ->orderBy('rank')
 			;
@@ -230,7 +230,7 @@ class CraftingController extends Controller
 		else
 			$query
 				->whereIn('job_id', $job_ids)
-				->whereBetween('recipe_level', [$start, $end]);
+				->whereBetween('level', [$start, $end]);
 
 		$recipes = $query->get();
 
