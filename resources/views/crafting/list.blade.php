@@ -219,7 +219,7 @@
 				<td class='text-left'>
 					<div class='pull-right'>
 						<a class='close ilvl' rel='tooltip' title='Level'>
-							{{ $recipe->recipe_level }}
+							{{ $recipe->level }}
 						</a>
 						<div>
 							@if($include_quests && isset($recipe->item->quest[0]))
