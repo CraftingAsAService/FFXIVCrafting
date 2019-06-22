@@ -107,6 +107,7 @@ class Aspir
 
 		$manualdataCalls = [
 			'nodeCoordinates',
+			'nodeTimers',
 			'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
 			'leveTypes',
 		];
@@ -131,11 +132,6 @@ class Aspir
 					$this->command->info($k . ' now has ' . $count . ' rows');
 			}
 		}
-
-
-
-			// // Custom Data Manipulation, careers section
-			// $this->career();
 
 		$this->saveData();
 	}

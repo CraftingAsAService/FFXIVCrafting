@@ -128,6 +128,7 @@ class XIVAPI
 				'zone_id'     => $gp->TerritoryType->PlaceName->ID,
 				'area_id'     => $gp->PlaceName->ID,
 				'coordinates' => null, // Filled in later
+				'timer'       => null, // Filled in later
 			], $data->ID);
 		});
 	}

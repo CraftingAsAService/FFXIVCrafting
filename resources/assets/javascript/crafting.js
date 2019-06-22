@@ -100,7 +100,7 @@ var crafting = {
 				var row = [],
 					el = $(this);
 
-				row.push(el.find('span.name').text());
+				row.push(el.find('a.name').text());
 				row.push(el.data('ilvl') || el.find('.ilvl').text().replace(/\s|\n/ig, '') || '-');
 				row.push(el.data('yields'));
 
