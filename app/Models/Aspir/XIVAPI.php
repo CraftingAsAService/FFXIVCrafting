@@ -108,10 +108,11 @@ class XIVAPI
 			])->Results;
 
 			foreach ($gi as $gatheringItem)
-				$this->aspir->setData('item_node', [
-					'item_id' => $gatheringItem->Item,
-					'node_id' => $data->ID,
-				]);
+				if ($gatheringItem)
+					$this->aspir->setData('item_node', [
+						'item_id' => $gatheringItem->Item,
+						'node_id' => $data->ID,
+					]);
 
 			$gp = $this->request('gatheringpoint/' . $data->GameContentLinks->GatheringPoint->GatheringPointBase['0'], ['columns' => [
 				'PlaceName.ID',
