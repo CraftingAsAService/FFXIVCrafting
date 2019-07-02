@@ -98,7 +98,7 @@ class EquipmentController extends Controller
 
 		// The limit may need to take one off.
 		// If this is a DOW or DOM class, there's too many items at level 50 to produce good results
-		$fifty_warning = false;
+		$maxLevelWarning = false;
 		if ($limit == config('site.max_level') - 2 || ($slim_mode && $limit == config('site.max_level') - 3))
 		{
 			// Get the "DOW/M" classes
@@ -109,7 +109,7 @@ class EquipmentController extends Controller
 
 			if (in_array($job->id, $dowm_class_ids))
 			{
-				$fifty_warning = true;
+				$maxLevelWarning = true;
 				$limit--;
 			}
 		}
@@ -119,7 +119,7 @@ class EquipmentController extends Controller
 
 		$original_level = $level;
 
-		view()->share(compact('original_level', 'slim_mode', 'fifty_warning'));
+		view()->share(compact('original_level', 'slim_mode', 'maxLevelWarning'));
 
 		#$starting_equipment = [];
 
