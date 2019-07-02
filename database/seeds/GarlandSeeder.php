@@ -725,6 +725,8 @@ class GarlandSeeder extends Seeder
 			['34', 'Samurai', 'SAM'],
 			['35', 'Red Mage', 'RDM'],
 			['36', 'Blue Mage', 'BLU'],
+			['37', 'Gunbreaker', 'GNB'],
+			['38', 'Dancer', 'DNC'],
 		];
 
 		// Loop through nodes

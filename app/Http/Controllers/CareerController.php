@@ -41,7 +41,7 @@ class CareerController extends Controller
 		$my_class = $input['supporter-producer-class'];
 		$supported_classes = implode(',', $input['supporter-supported-classes']);
 		$min_level = (int) $input['supporter-min-level'] ?: 1;
-		$max_level = (int) $input['supporter-max-level'] ?: 70;
+		$max_level = (int) $input['supporter-max-level'] ?: config('site.max_level');
 
 		$url = '/career/producer/' . implode('/', [$my_class, $supported_classes, $min_level, $max_level]);
 
@@ -108,7 +108,7 @@ class CareerController extends Controller
 		$my_class = $input['receiver-recipient-class'];
 		$supported_classes = implode(',', $input['receiver-producer-classes']);
 		$min_level = (int) $input['receiver-min-level'] ?: 1;
-		$max_level = (int) $input['receiver-max-level'] ?: 70;
+		$max_level = (int) $input['receiver-max-level'] ?: config('site.max_level');
 
 		$url ='/career/receiver/' . implode('/', [$my_class, $supported_classes, $min_level, $max_level]);
 
@@ -175,7 +175,7 @@ class CareerController extends Controller
 		$my_class = $input['gatherer-class'];
 		$supported_classes = implode(',', $input['gathering-supported-classes']);
 		$min_level = (int) $input['gathering-min-level'] ?: 1;
-		$max_level = (int) $input['gathering-max-level'] ?: 70;
+		$max_level = (int) $input['gathering-max-level'] ?: config('site.max_level');
 
 		// previous_gc or previous_bc
 		$cookie_name = 'previous_' . ($my_class == 'BTL' ? 'b' : 'g') . 'c';

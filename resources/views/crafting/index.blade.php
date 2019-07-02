@@ -239,6 +239,20 @@
 										<input type='radio' name='end' id='end70' data-end='375' checked='checked'>
 									</td>
 								</tr>
+								<tr>
+									<td>
+										71 - 80
+									</td>
+									<td>
+										<a href='#' class='select-range'>376+</a>
+									</td>
+									<td class='text-center'>
+										<input type='radio' name='start' id='start61' data-start='376' checked='checked'>
+									</td>
+									<td class='text-center'>
+										<input type='radio' name='end' id='end70' data-end='999' checked='checked'>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>

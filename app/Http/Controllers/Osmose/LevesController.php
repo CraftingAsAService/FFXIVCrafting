@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Osmose;
+<?php
+
+namespace App\Http\Controllers\Osmose;
 
 // use App\Models\Osmose\AppData;
 // use App\Models\Osmose\FileHandler;

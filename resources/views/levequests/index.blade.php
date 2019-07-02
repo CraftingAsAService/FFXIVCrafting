@@ -55,6 +55,7 @@
 							</tr>
 						</thead>
 						<tbody>
+							@if (isset($leves[$job->abbr][$level]))
 							@foreach($leves[$job->abbr][$level] as $leve)
 							<?php $item = $leve->requirements[0]; ?>
 							<tr data-item-id='{{ $item->id }}'>
@@ -120,6 +121,7 @@
 								</td>
 							</tr>
 							@endforeach
+							@endif
 						</tbody>
 					</table>
 

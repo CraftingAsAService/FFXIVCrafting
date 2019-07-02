@@ -1,8 +1,8 @@
 <?php
 
-return array(
+return [
 
-	'max_level' => 70,
+	'max_level' => 80,
 
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
@@ -32,12 +32,12 @@ return array(
 			'Critical Hit',
 			'Skill Speed',
 		),
-		'LNC,DRG,BRD,ARC,ROG,NIN,MCH' => array(
+		'LNC,DRG,BRD,ARC,ROG,NIN,MCH,DNC' => array(
 			'Dexterity',
 			'Critical Hit',
 			'Skill Speed',
 		),
-		'GLA,MRD,PLD,WAR,DRK' => array(
+		'GLA,MRD,PLD,WAR,DRK,GNB' => array(
 			'Strength',
 			'Skill Speed',
 			'Tenacity',
@@ -75,7 +75,7 @@ return array(
 			'GP'				=> 1,
 			'Perception'		=> 1,
 		],
-		'ARC,BRD,MCH' => [
+		'ARC,BRD,MCH,DNC' => [
 			'Physical Damage'	=> 11.602,
 			'Dexterity'			=> 1,
 			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
@@ -91,7 +91,7 @@ return array(
 			'Determination'		=> 0.141,
 			'Skill Speed'		=> 0.074,
 		],
-		'PGL,MNK,SAM' => [
+		'PGL,MNK,SAM,GNB' => [
 			'Physical Damage'	=> 10.714,
 			'Strength'			=> 1,
 			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
@@ -186,6 +186,8 @@ return array(
 			31, // MCH
 			32, // DRK
 			34, // SAM
+			37, // GNB
+			38, // DNC
 		),
 		'advanced_magic' => array(
 			24, // WHM
@@ -488,4 +490,4 @@ return array(
 		'Zeromus',
 		'Zodiark',
 	),
-);
+];
