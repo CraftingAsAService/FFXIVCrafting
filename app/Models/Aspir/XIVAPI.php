@@ -554,9 +554,9 @@ class XIVAPI
 			'ClassJobLevel',
 			'PlaceNameIssued.ID',
 			'IconIssuerID',
-			'CraftLeve.Repeats',
 			'CraftLeve.Item0TargetID',
 			'CraftLeve.ItemCount0',
+			'CraftLeve.Repeats',
 			// Inefficient catchall, but there are a large number of datapoints in there I need to sift through
 			'LeveRewardItem',
 		], function($data) {
