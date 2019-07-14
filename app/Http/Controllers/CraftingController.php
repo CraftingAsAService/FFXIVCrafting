@@ -71,6 +71,9 @@ class CraftingController extends Controller
 		if (isset($options['inclusions']) && $options['inclusions'] == '')
 			unset($options['inclusions']);
 
+		$lvlType = $options['lvlType'] ?? 'i';
+		$difficulty = $lvlType == 'r' ? ($options['difficulty'] ?? false) : false;
+
 		// Fix the level numbers if needed
 		if ($start < 0) $start = 1; // Starting maximum of 1
 		if ($start > $end) $end = $start; // End can't be less than Start
@@ -119,7 +122,7 @@ class CraftingController extends Controller
 		return $this->listing(compact(
 			'start', 'end', 'options', 'bad_item_category_ids',
 			'jobs', 'quest_items', 'job_ids',
-			'include_quests', 'top_level'
+			'include_quests', 'top_level', 'lvlType', 'difficulty'
 		));
 	}
 
@@ -220,17 +223,27 @@ class CraftingController extends Controller
 						'reagents.recipes.job'
 			)
 			->groupBy('item_id')
-			->orderBy('level')
+			->orderBy($lvlType == 'i' ? 'level' : 'recipe_level')
 			->orderBy('id')
-			// ->orderBy('rank')
 			;
 
 		if (isset($item_ids))
 			$query->whereIn('item_id', $item_ids);
 		else
-			$query
-				->whereIn('job_id', $job_ids)
-				->whereBetween('level', [$start, $end]);
+		{
+			$query->whereIn('job_id', $job_ids);
+
+			if ($lvlType == 'i')
+				$query->whereBetween('level', [$start, $end]);
+			elseif ($lvlType == 'r')
+			{
+				$query->whereBetween('recipe_level', [$start, $end]);
+				// Difficulty is strictly an ilvl
+				//  rlvl 50, * == 55, ** == 70, etc
+				if ($difficulty)
+					$query->whereLevel($difficulty);
+			}
+		}
 
 		$recipes = $query->get();
 
@@ -369,10 +382,16 @@ class CraftingController extends Controller
 
 		$reagent_list = $sorted_reagent_list;
 
-		return view('crafting.list', compact(
-			'recipes', 'reagent_list', 'job_list', 'options',
-			'self_sufficient', 'misc_items', 'component_items', 'include_quests'
-		));
+		$varsToInclude = [
+			'recipes', 'reagent_list', 'job_list', 'options', 'lvlType',
+			'self_sufficient', 'misc_items', 'component_items', 'include_quests',
+		];
+
+		foreach ($varsToInclude as $var)
+			if (isset($$var))
+				view()->share(compact($var));
+
+		return view('crafting.list');
 	}
 
 	private function _reagents($recipes = [], $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE, $top_level = FALSE)

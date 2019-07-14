@@ -58,7 +58,7 @@ host('ultros')
 		// Default to master, but allow overrides by using --branch
 		return input()->getOption('branch') ?: 'master';
 	})
-	->set('deploy_path', '/srv/test/{{application}}');
+	->set('deploy_path', '/srv/www/{{application}}');
 
 // Tasks
 

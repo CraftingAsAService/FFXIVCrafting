@@ -13,10 +13,12 @@ php artisan cache:clear file (optionally necessary)
 php artisan aspir:data
 php artisan aspir:migrate
 
-php artisan build
-dep ultros:db
+php artisan aspir:build-db
 
 php artisan aspir:assets
+
+dep ultros:db
+
 dep ultros:assets
 
 dep deploy

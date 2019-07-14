@@ -9,8 +9,6 @@ var craftingIndex = {
 		craftingIndex.class_selection_events();
 
 		craftingIndex.inclusions();
-
-		return;
 	},
 	options_events:function() {
 
@@ -24,7 +22,13 @@ var craftingIndex = {
 				localStorage.setItem('config:self_sufficient', 0);
 		});
 
-		return;
+		$('#lvlType').on('change', function() {
+			var el = $(this),
+				lvlType = el.val();
+
+			$('.ilvl-helper').toggleClass('hidden', lvlType != 'i');
+			$('.rlvl-helper').toggleClass('hidden', lvlType != 'r');
+		});
 	},
 	inclusions:function() {
 
@@ -90,7 +94,7 @@ var craftingIndex = {
 		});
 
 		// Modal Events
-		
+
 		$('#ilvl-modal .select-range').click(function(event) {
 			event.preventDefault();
 
@@ -110,7 +114,7 @@ var craftingIndex = {
 
 		$('#ilvl-modal input[type=radio]').change(function() {
 			// Make sure that end doesn't overlap the start (we don't want to select 10 - 5)
-			
+
 			var el = $(this),
 				type = el.attr('name'),
 				otherType = type == 'start' ? 'end' : 'start',
@@ -153,7 +157,7 @@ var craftingIndex = {
 		//  CTRL Clicking the only one highlighted: nothing
 		//  CTRL Clicking another one: both highlight, everything goes yellow (warning)
 		//  CTRL Clicking one off (1 left): goes back to blue (primary)
-		
+
 		$('.class-selector').click(function(event) {
 			event.stopPropagation();
 			event.preventDefault();
@@ -208,7 +212,7 @@ var craftingIndex = {
 
 			return;
 		});
-		
+
 		// Save the original src on each of these for ease of use later
 		$('.jobs-list img').each(function() {
 			$(this).data('originalSrc', $(this).attr('src'));
