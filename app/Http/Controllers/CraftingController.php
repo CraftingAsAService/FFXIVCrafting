@@ -192,6 +192,10 @@ class CraftingController extends Controller
 	{
 		extract($configuration); // $item_ids, etc, now all exist individually
 		unset($configuration);
+		if ( ! isset($lvlType))
+			$lvlType = 'i';
+		if ( ! isset($difficulty))
+			$difficulty = false;
 
 		// All Jobs
 		$job_list = Job::pluck('name', 'abbr')->all();
