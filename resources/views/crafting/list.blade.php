@@ -222,11 +222,30 @@
 			?>
 			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yield }}'>
 				<td class='text-left'>
-					<div class='pull-right'>
+					<div class='pull-right text-right'>
+						@spaceless
 						<a class='close ilvl' rel='tooltip' title='Level'>
-							{{ $lvlType == 'r' ? $recipe->recipe_level : $recipe->level }}
+							<div class='text-right'>
+								{{ $lvlType == 'r' ? $recipe->recipe_level : $recipe->level }}
+								@if ($lvlType == 'r' && $recipe->recipe_level == 50)
+								<br>
+								<span style='font-size: .7em;'>
+									@if ($recipe->level >= 55)<i class='glyphicon glyphicon-star'></i>@endif
+									@if ($recipe->level >= 70)<i class='glyphicon glyphicon-star'></i>@endif
+									@if ($recipe->level >= 90)<i class='glyphicon glyphicon-star'></i>@endif
+									@if ($recipe->level >= 110)<i class='glyphicon glyphicon-star'></i>@endif
+								</span>
+								@endif
+							</div>
 						</a>
+						@endspaceless
 						<div>
+							@if ($recipe->yield > 1)
+							<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
+								x {{ $recipe->yield }}
+							</span>
+							@endif
+
 							@if($include_quests && isset($recipe->item->quest[0]))
 							<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
 							@endif
@@ -261,11 +280,6 @@
 					<span class='control pull-right margin-right' rel='tooltip' title='Required Control'>
 						<img src="/img/stats/Control.png" class="stat-icon">
 						{{ $recipe->req_control }}
-					</span>
-					@endif
-					@if ($recipe->yield > 1)
-					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
-						x {{ $recipe->yield }}
 					</span>
 					@endif
 				</td>

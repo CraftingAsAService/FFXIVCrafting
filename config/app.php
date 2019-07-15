@@ -156,6 +156,7 @@ return [
 		'App\Providers\HelperServiceProvider',
 		'Laracasts\Flash\FlashServiceProvider',
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
+		'hedronium\SpacelessBlade\SpacelessBladeProvider'
 
 	],
 
