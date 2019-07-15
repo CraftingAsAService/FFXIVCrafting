@@ -15,11 +15,17 @@ set('allow_anonymous_stats', true);
 set('repository', 'git@github.com:CraftingAsAService/FFXIVCrafting.git');
 
 set('default_stage', 'production');
+set('deploy_path', '/srv/www/{{application}}');
+
+// Overrides branch by using --branch
+//  Production will only use the `production` branch
+set('branch', function() {
+	return input()->getOption('branch') ?: 'master';
+});
 
 set('git_tty', true);
 set('git_cache', false); // Seems to be faster without it
 
-set('writable_mode', 'chgrp');
 set('http_user', 'www-data');
 set('http_group', 'www-data');
 
@@ -46,6 +52,7 @@ set('writable_dirs', [
 	'storage/framework/sessions',
 	'storage/framework/views',
 	'storage/logs',
+	'vendor',
 ]);
 
 // Hosts
@@ -53,12 +60,7 @@ set('writable_dirs', [
 host('ultros')
 	->user($user)
 	->forwardAgent() // Use local ssh credentials for git
-	->stage('production')
-	->set('branch', function () {
-		// Default to master, but allow overrides by using --branch
-		return input()->getOption('branch') ?: 'master';
-	})
-	->set('deploy_path', '/srv/www/{{application}}');
+	->stage('production');
 
 // Tasks
 
