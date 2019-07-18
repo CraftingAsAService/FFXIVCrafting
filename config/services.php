@@ -34,4 +34,9 @@ return [
 		'secret' => '',
 	],
 
+	'xivapi' => [
+		'domain' => 'https://xivapi.com/',
+		'key' => env('XIVAPI_KEY'),
+	],
+
 ];

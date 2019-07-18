@@ -1384,20 +1384,17 @@ table.table-curved {
 	opacity: .5;
 }
 
-img[src^="http://xivdb.com"] {
-	width: 36px !important;
-	height: 36px !important;
-}
-.leve-section, .xivdb-24-icon {
-	img[src^="http://xivdb.com"] {
-		width: 24px !important;
-		height: 24px !important;
-	}
+#doorbell-button {
+	right: 0;
+	border-radius: 5px 0 0 0;
 }
 
-a[data-xivdb-key] {
-	line-height: 36px;
-	img {
-		border-radius: 0 !important;
-	}
+.isearch {
+	color: $theme_color_medium_gray;
+	opacity: .5;
+	cursor: pointer;
+	position: relative;
+	top: 4px;
+	font-size: 16px;
+	margin-left: 2px;
 }

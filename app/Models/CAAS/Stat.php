@@ -9,7 +9,7 @@ class Stat
 	{
 		$hand_land = ['Control', 'CP', 'Craftsmanship', 'Gathering', 'GP', 'Perception'];
 		$melee_set = array_merge(array('Intelligence', 'Mind', 'Spell Speed'), $hand_land);
-		$magic_set = array_merge(array('Strength', 'Dexterity', 'Skill Speed', 'Parry'), $hand_land);
+		$magic_set = array_merge(array('Strength', 'Dexterity', 'Skill Speed', 'Tenacity'), $hand_land);
 
 		$avoid = [
 			'ARC' => $melee_set,
@@ -20,6 +20,7 @@ class Stat
 			'ROG' => $melee_set,
 			'MCH' => $melee_set,
 			'DRK' => $melee_set,
+			'SAM' => $melee_set,
 
 			'BRD' => $melee_set,
 			'PLD' => $melee_set,
@@ -27,6 +28,8 @@ class Stat
 			'DRG' => $melee_set,
 			'MNK' => $melee_set,
 			'NIN' => $melee_set,
+			'GNB' => $melee_set,
+			'DNC' => $melee_set,
 
 			'CNJ' => $magic_set, // array_merge(array('Intelligence w/o Mind'), $magic_set),
 			'SCH' => $magic_set, // array_merge(array('Mind'), $magic_set),
@@ -37,6 +40,8 @@ class Stat
 			'SMN' => $magic_set,
 			'SCH' => $magic_set,
 			'AST' => $magic_set,
+			'RDM' => $magic_set,
+			'BLU' => $magic_set,
 		];
 
 		return isset($avoid[$job]) ? $avoid[$job] : [];
@@ -60,10 +65,10 @@ class Stat
 			// Giving DOH/DOL classes "Materia" as a skapegoat
 			// because we don't want to give Control over Craftsmanship
 			'Materia' => ['CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'WVR', 'ALC', 'CUL', 'MIN', 'BTN', 'FSH'],
-			'Vitality' => ['GLA', 'MRD', 'PLD', 'WAR', 'DRK'],
-			'Strength' => ['LNC', 'PGL', 'DRG', 'MNK'],
-			'Dexterity' => ['BRD', 'ARC', 'ROG', 'NIN', 'MCH'],
-			'Intelligence' => ['THM', 'BLM', 'ACN', 'SMN'],
+			'Vitality' => ['GLA', 'MRD', 'PLD', 'WAR', 'DRK', 'GNB'],
+			'Strength' => ['LNC', 'PGL', 'DRG', 'MNK', 'SAM'],
+			'Dexterity' => ['BRD', 'ARC', 'ROG', 'NIN', 'MCH', 'DNC'],
+			'Intelligence' => ['THM', 'BLM', 'ACN', 'SMN', 'RDM', 'BLU'],
 			'Mind' => ['CNJ', 'SCH', 'WHM', 'AST'],
 		];
 
@@ -82,13 +87,13 @@ class Stat
 		$shortcuts = [
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
-			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK',
-			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST',
-			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN', // Melee DPS
-			'RDPS' => 'BRD,ARC,MCH', // Ranged DPS
-			'MDPS' => 'THM,BLM,ACN,SMN', // Magical DPS
+			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK,SAM,GNB,DNC',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST,RDM,BLU',
+			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN,SAM', // Melee DPS
+			'RDPS' => 'BRD,ARC,MCH,DNC', // Ranged DPS
+			'MDPS' => 'THM,BLM,ACN,SMN,RDM,BLU', // Magical DPS
 			'Heals' => 'CNJ,SCH,WHM,AST',
-			'Tanks' => 'GLA,MRD,PLD,WAR,DRK',
+			'Tanks' => 'GLA,MRD,PLD,WAR,DRK,GNB',
 		];
 
 		foreach ($shortcuts as $role => $classes)
@@ -113,8 +118,8 @@ class Stat
 
 			'Determination' => 'DOW,DOM',
 
-			'Accuracy' => 'DPS,RDPS,MDPS',
-			'Critical Hit Rate' => 'DPS,RDPS,MDPS',
+			'Direct Hit Rate' => 'DPS,RDPS,MDPS',
+			'Critical Hit' => 'DPS,RDPS,MDPS',
 
 			'Delay' => 'DPS,RDPS',
 
@@ -129,7 +134,7 @@ class Stat
 
 			'Block Rate' => 'Tanks',
 			'Block Strength' => 'Tanks',
-			'Parry' => 'Tanks',
+			'Tenacity' => 'Tanks',
 
 			'Strength' => 'Tanks,DPS',//,BSM,ARM,BTN',
 
@@ -139,7 +144,7 @@ class Stat
 			'Intelligence' => 'MDPS',//,ALC,GSM,LTW',
 			'Magic Damage' => 'MDPS',
 			'Mind' => 'Heals',//,CUL,BSM,WVR,MIN',
-			'Piety' => 'Heals,RDPS',//,ALC,CUL,FSH',
+			'Piety' => 'Heals',//,ALC,CUL,FSH',
 
 		];
 
@@ -167,15 +172,15 @@ class Stat
 		$shortcuts = [
 			'DOH' => 'CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL',
 			'DOL' => 'MIN,BTN,FSH',
-			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK',
-			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST',
-			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN', // Melee DPS
-			'RDPS' => 'BRD,ARC,MCH', // Ranged DPS
-			'STR-DPS' => 'LNC,PGL,DRG,MNK',
+			'DOW' => 'GLA,MRD,LNC,PGL,ARC,PLD,WAR,DRG,MNK,BRD,ROG,NIN,MCH,DRK,SAM,GNB,DNC',
+			'DOM' => 'CNJ,THM,ACN,SCH,SMN,BLM,WHM,AST,RDM,BLU',
+			'DPS' => 'LNC,PGL,DRG,MNK,ROG,NIN,SAM', // Melee DPS
+			'RDPS' => 'BRD,ARC,MCH,DNC', // Ranged DPS
+			'STR-DPS' => 'LNC,PGL,DRG,MNK,SAM',
 			'DEX-DPS' => 'BRD,ARC,ROG,NIN,MCH',
-			'MDPS' => 'THM,BLM,ACN,SMN', // Magical DPS
+			'MDPS' => 'THM,BLM,ACN,SMN,RDM,BLU', // Magical DPS
 			'Heals' => 'CNJ,SCH,WHM,AST',
-			'Tanks' => 'GLA,MRD,PLD,WAR,DRK',
+			'Tanks' => 'GLA,MRD,PLD,WAR,DRK,GNB',
 		];
 
 		$look_for = [$job];
@@ -203,15 +208,15 @@ class Stat
 			'Intelligence' => ['MDPS'],
 			'Mind' => ['Heals'],
 
-			'Accuracy' => ['DOW','DOM'],
-			'Critical Hit Rate' => ['DOW','DOM'],
+			'Direct Hit Rate' => ['DOW','DOM'],
+			'Critical Hit' => ['DOW','DOM'],
 			'Determination' => ['DOW','DOM'],
 			'Skill Speed' => ['DOW'],
 			'Spell Speed' => ['DOM'],
 
 			'Vitality' => ['DOW','DOM'],
 
-			'Parry' => ['Tanks'],
+			'Tenacity' => ['Tanks'],
 			'Piety' => ['DOM'],
 		];
 
@@ -251,7 +256,7 @@ class Stat
 	}
 
 	static public $stat_conversion = [
-			'Accuracy' => 'accuracy',
+			'Direct Hit Rate' => 'direct_hit_rate',
 			'Bind Resistance' => 'bind_res',
 			'Blind Resistance' => 'blind_res',
 			'Block Rate' => 'block_rate',
@@ -260,7 +265,7 @@ class Stat
 			'Control' => 'control',
 			'CP' => 'cp',
 			'Craftsmanship' => 'craftsmanship',
-			'Critical Hit Rate' => 'critical_rate',
+			'Critical Hit' => 'critical_rate',
 			'Defense' => 'def',
 			'Delay' => 'delay',
 			'Determination' => 'determination',
@@ -281,7 +286,7 @@ class Stat
 			'Mind' => 'mind',
 			'Morale' => 'morale',
 			'Paralysis Resistance' => 'paralysis_res',
-			'Parry' => 'parry',
+			'Tenacity' => 'tenacity',
 			'Perception' => 'perception',
 			'Petrification Resistance' => 'petrify_res',
 			'Piercing Resistance' => 'pierce_res',
@@ -315,7 +320,7 @@ class Stat
 		// 	->whereHas('en_name', function($q) use ($stats) {
 		// 		$q->whereIn('term', $stats);
 		// 	})
-		// 	->lists('id')->all();
+		// 	->pluck('id')->all();
 
 		// foreach ($stats as $stat)
 		// {
@@ -356,11 +361,12 @@ class Stat
 
 	static public function name($attribute)
 	{
-		$flip = array_flip(self::$stat_conversion);
-		// if ( ! isset($flip[$attribute]))
-		// 	dd($flip, $attribute);
-		// dd(array_flip(self::$stat_conversion));//, $attribute);
-		return $flip[$attribute];
+		return $attribute; // 4.0 changed to solid text, no funny business needed
+		// $flip = array_flip(self::$stat_conversion);
+		// // if ( ! isset($flip[$attribute]))
+		// // 	dd($flip, $attribute);
+		// // dd(array_flip(self::$stat_conversion));//, $attribute);
+		// return $flip[$attribute];
 	}
 
 }

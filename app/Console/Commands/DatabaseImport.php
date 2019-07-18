@@ -35,12 +35,12 @@ class DatabaseImport extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$this->info('Importing Database from SQL Files');
 
-		$base_command = 
-			'sudo mysql -u ' . getenv('DB_USERNAME') . ' -p' . getenv('DB_PASSWORD') . ' ' . getenv('DB_DATABASE') . ' < ' . 
+		$base_command =
+			'sudo mysql -u ' . getenv('DB_USERNAME') . ' -p' . getenv('DB_PASSWORD') . ' ' . getenv('DB_DATABASE') . ' < ' .
 			storage_path() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'generated-database' . DIRECTORY_SEPARATOR . '%s.sql'
 			. ' 2>/dev/null'; // We receive a warning that passwords in the command line are insecure.  Suppress it.
 
@@ -59,7 +59,7 @@ class DatabaseImport extends Command {
 	protected function getArguments()
 	{
 		return [
-			
+
 		];
 	}
 
@@ -71,7 +71,7 @@ class DatabaseImport extends Command {
 	protected function getOptions()
 	{
 		return [
-			
+
 		];
 	}
 

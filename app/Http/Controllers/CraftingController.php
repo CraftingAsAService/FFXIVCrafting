@@ -35,7 +35,7 @@ class CraftingController extends Controller
 
 	public function getAdvanced()
 	{
-		flash()->info('The advanced page and the basic page are now one single page!');
+		flash('The advanced page and the basic page are now one single page!')->info();
 		return redirect('/crafting');
 	}
 
@@ -62,7 +62,7 @@ class CraftingController extends Controller
 	{
 		if (empty($classes) || empty($start) || empty($end))
 		{
-			flash()->error('Something isn\'t set right!  How am I supposed to show you any results?');
+			flash('Something isn\'t set right!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
@@ -71,10 +71,13 @@ class CraftingController extends Controller
 		if (isset($options['inclusions']) && $options['inclusions'] == '')
 			unset($options['inclusions']);
 
+		$lvlType = $options['lvlType'] ?? 'i';
+		$difficulty = $lvlType == 'r' ? ($options['difficulty'] ?? false) : false;
+
 		// Fix the level numbers if needed
 		if ($start < 0) $start = 1; // Starting maximum of 1
 		if ($start > $end) $end = $start; // End can't be less than Start
-		
+
 		// Jobs are capital
 		$classes = explode(',', strtoupper($classes));
 
@@ -84,18 +87,18 @@ class CraftingController extends Controller
 		// If the job isn't real, error out
 		if (count($jobs) == 0)
 		{
-			flash()->error('No valid classes!  How am I supposed to show you any results?');
+			flash('No valid classes!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
-		$job_ids = $jobs->lists('id')->all();
+		$job_ids = $jobs->pluck('id')->all();
 
 		// Check for quests
 		// We're only looking for proper crafting quests, so take out anything that's not between 9 and 16 (CRP to CUL)
-		
+
 		$jc_ids = [];
 		foreach ($jobs as $job)
-			$jc_ids = array_merge($job->categories->lists('id')->all(), $jc_ids);
+			$jc_ids = array_merge($job->categories->pluck('id')->all(), $jc_ids);
 		array_unique($jc_ids);
 		$jc_ids = array_intersect($jc_ids, range(9,16));
 
@@ -119,7 +122,7 @@ class CraftingController extends Controller
 		return $this->listing(compact(
 			'start', 'end', 'options', 'bad_item_category_ids',
 			'jobs', 'quest_items', 'job_ids',
-			'include_quests', 'top_level'
+			'include_quests', 'top_level', 'lvlType', 'difficulty'
 		));
 	}
 
@@ -127,15 +130,15 @@ class CraftingController extends Controller
 	{
 		if (empty($item_id))
 		{
-			flash()->error('No item id!  How am I supposed to show you any results?');
+			flash('No item id!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
-		$item = Item::find($item_id); 
+		$item = Item::find($item_id);
 
 		if (is_null($item))
 		{
-			flash()->error('That item doesn\'t exist!  How am I supposed to show you any results?');
+			flash('That item doesn\'t exist!  How am I supposed to show you any results?')->error();
 			return redirect()->back();
 		}
 
@@ -153,7 +156,7 @@ class CraftingController extends Controller
 
 		return $this->listing(compact(
 			'item_ids', 'item_amounts',
-			'start', 'end', 'options', 
+			'start', 'end', 'options',
 			'include_quests', 'top_level'
 		));
 	}
@@ -166,7 +169,7 @@ class CraftingController extends Controller
 
 		if (empty($item_ids))
 		{
-			flash()->error('There\'s nothing in your list!  How am I supposed to show you any results?');
+			flash('There\'s nothing in your list!  How am I supposed to show you any results?')->error();
 			return redirect('/list');
 		}
 
@@ -180,7 +183,7 @@ class CraftingController extends Controller
 
 		return $this->listing(compact(
 			'item_ids', 'item_amounts',
-			'start', 'end', 'options', 
+			'start', 'end', 'options',
 			'include_quests', 'top_level'
 		));
 	}
@@ -189,9 +192,13 @@ class CraftingController extends Controller
 	{
 		extract($configuration); // $item_ids, etc, now all exist individually
 		unset($configuration);
+		if ( ! isset($lvlType))
+			$lvlType = 'i';
+		if ( ! isset($difficulty))
+			$difficulty = false;
 
 		// All Jobs
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 
 		// Gather Recipes and Reagents
 		$query = Recipe::with(
@@ -209,8 +216,10 @@ class CraftingController extends Controller
 					'reagents.shops',
 					'reagents.mobs',
 					'reagents.nodes',
+						'reagents.nodes.zone',
+						'reagents.nodes.area',
 					'reagents.recipes',
-						'reagents.recipes.item', 
+						'reagents.recipes.item',
 							'reagents.recipes.item.category',
 							'reagents.recipes.item.shops',
 							'reagents.recipes.item.mobs',
@@ -218,17 +227,29 @@ class CraftingController extends Controller
 						'reagents.recipes.job'
 			)
 			->groupBy('item_id')
-			->orderBy('recipe_level')
+			->orderBy($lvlType == 'i' ? 'level' : 'recipe_level')
 			->orderBy('id')
-			// ->orderBy('rank')
 			;
 
 		if (isset($item_ids))
 			$query->whereIn('item_id', $item_ids);
 		else
-			$query
-				->whereIn('job_id', $job_ids)
-				->whereBetween('recipe_level', [$start, $end]);
+		{
+			$query->whereIn('job_id', $job_ids);
+
+			if ($lvlType == 'i')
+				$query->whereBetween('level', [$start, $end]);
+			elseif ($lvlType == 'r')
+			{
+				$query->whereBetween('recipe_level', [$start, $end]);
+				// Difficulty is strictly an ilvl
+				//  rlvl 50, * == 55, ** == 70, etc
+				if ($difficulty)
+					$query->whereLevel($difficulty);
+				elseif ($end <= 50)
+					$query->where('level', '<', 55); // 55 is 1 star, "default" means we want no stars
+			}
+		}
 
 		$recipes = $query->get();
 
@@ -258,12 +279,12 @@ class CraftingController extends Controller
 		$self_sufficient = isset($options) && isset($options['self_sufficient']);
 
 		$reagent_list = $this->_reagents($recipes, $self_sufficient, 1, $include_quests, $top_level);
-		
+
 		// Look through the list.  Is there something we're already crafting?
 		// Subtract what's being made from needed reagents.
 		//  Example, culinary 11 to 15, you need olive oil for Parsnip Salad (lvl 13)
 		//   But you make 3 olive oil at level 11.  We don't want them crafting another olive oil.
-		
+
 		foreach ($recipes as $recipe)
 		{
 			if ( ! isset($reagent_list[$recipe->item_id]))
@@ -288,36 +309,46 @@ class CraftingController extends Controller
 		// Bought, by price
 
 		$sorted_reagent_list = [
-			'Gathered' => [],
+			'Gathered' => [
+				'' => [],
+			],
 			'Bought' => [],
 			'Other' => [],
 			'Pre-Requisite Crafting' => [],
 			'Crafting List' => [],
 		];
 
-		$gathering_class_abbreviations = Job::whereIn('id', Config::get('site.job_ids.gathering'))->lists('abbr')->all();
+		$gathering_class_abbreviations = Job::whereIn('id', Config::get('site.job_ids.gathering'))->pluck('abbr')->all();
 
 		foreach ($reagent_list as $reagent)
 		{
 			$section = 'Other';
 			$level = 0;
-			
+
 			// Section
 			if (in_array($reagent['self_sufficient'], $gathering_class_abbreviations))
 			{
 				$section = 'Gathered';
-				$level = $reagent['item']->level;
+				if ($reagent['item']->category->name == 'Crystal')
+					$level = '';
+				else
+				{
+					$zoneName = $reagent['item']->nodes->first()->zone->name ?? '';
+					$areaName = $reagent['item']->nodes->first()->area->name ?? '';
+					$level = $zoneName . ($areaName ? ' - ' . $areaName : '');
+				}
 			}
 			elseif ($reagent['self_sufficient'])
 			{
 				$section = 'Pre-Requisite Crafting';
 				if ( ! isset($reagent['item']->recipes[0]))
 				{
-					dd($reagent['item']);
+					exit('Crafting Error');
+					// dd($reagent['item']);
 				}
 				$level = $reagent['item']->recipes[0]->level;
 			}
-			elseif (count($reagent['item']->vendors))
+			elseif ($reagent['item']->vendors)
 			{
 				$section = 'Bought';
 				$level = $reagent['item']->min_price;
@@ -337,7 +368,7 @@ class CraftingController extends Controller
 		// We don't need to sort them by level, just make sure it's in the proper structure
 		// The keys don't matter either
 		$prc =& $sorted_reagent_list['Pre-Requisite Crafting'];
-		
+
 		$new_prc = ['1' => []];
 		foreach ($prc as $vals)
 			foreach ($vals as $v)
@@ -345,22 +376,28 @@ class CraftingController extends Controller
 
 		// Sort them by rank first
 		// TODO re-enable rank?  Currently no data
-		// usort($new_prc['1'], function($a, $b) { 
-		// 	return $a['item']->rank - $b['item']->rank; 
+		// usort($new_prc['1'], function($a, $b) {
+		// 	return $a['item']->rank - $b['item']->rank;
 		// });
 		// Then by classjob
 		usort($new_prc['1'], function($a, $b) {
-			return $a['item']->recipes[0]->job->id - $b['item']->recipes[0]->job->id; 
+			return $a['item']->recipes[0]->job->id - $b['item']->recipes[0]->job->id;
 		});
-		
+
 		$prc = $new_prc;
 
 		$reagent_list = $sorted_reagent_list;
 
-		return view('crafting.list', compact(
-			'recipes', 'reagent_list', 'job_list', 'options',
-			'self_sufficient', 'misc_items', 'component_items', 'include_quests'
-		));
+		$varsToInclude = [
+			'recipes', 'reagent_list', 'job_list', 'options', 'lvlType',
+			'self_sufficient', 'misc_items', 'component_items', 'include_quests',
+		];
+
+		foreach ($varsToInclude as $var)
+			if (isset($$var))
+				view()->share(compact($var));
+
+		return view('crafting.list');
 	}
 
 	private function _reagents($recipes = [], $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE, $top_level = FALSE)
@@ -377,14 +414,14 @@ class CraftingController extends Controller
 			// if ($include_quests == TRUE)
 			// {
 			// 	$run = 0;
-				
+
 			// 	if ($recipe->item)
 			// 		foreach ($recipe->item->quest_requirements as $quest)
 			// 			$run += ceil($quest->pivot->amount / $recipe->yield);
 
 			// 	// Run everything at least once
 			// 	$inner_multiplier *= $run ?: 1;
-			// } 
+			// }
 			// else
 				if (is_array($top_level))
 			{
@@ -420,7 +457,7 @@ class CraftingController extends Controller
 
 				if ($self_sufficient)
 				{
-					if (count($reagent->nodes))
+					if ( ! $reagent->nodes->isEmpty())
 					{
 						// First, check here because we don't want to re-process the node data
 						if ($reagent_list[$reagent->id]['self_sufficient'])
@@ -432,7 +469,7 @@ class CraftingController extends Controller
 						// '17','Botanist','BTN'
 						// 2 == BTN == Mature Tree
 						// 3 == BTN == Lush Vegetation
-						
+
 						// Compile cluster jobs
 						$cluster_jobs = [];
 						foreach ($reagent->nodes as $node)
@@ -449,7 +486,7 @@ class CraftingController extends Controller
 							continue;
 					}
 
-					if(count($reagent->recipes) > 0)
+					if( ! $reagent->recipes->isEmpty() > 0)
 					{
 						$reagent_list[$reagent->id]['yield'] = $reagent->recipes[0]->yield;
 						$reagent_list[$reagent->id]['self_sufficient'] = $reagent->recipes[0]->job->abbr;

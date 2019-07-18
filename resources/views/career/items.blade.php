@@ -47,8 +47,8 @@
 					@if($item->ilvl)
 					<span class='close' rel='tooltip' title='Item Level'>{{ $item->ilvl }}</span>
 					@endif
-					<a href='{{ xivdb_item_link() . $item->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $item->display_name }}
+					<a href='{{ item_link() . $item->id }}' target='_blank'>
+						<img src='{{ icon($item->icon) }}' width='36' height='36' style='margin-right: 5px;'>{{ $item->display_name }}
 					</a>
 				</td>
 				<td class='valign text-center'>
@@ -64,22 +64,22 @@
 				@endif --}}
 				@if($job == 'BTL')
 				<td class='text-center'>
-					@if(count($item->mobs))
+					@if($item->mobs->count())
 					<a href='#' class='btn btn-default click-to-view' data-type='mobs' rel='tooltip' title='Click to load Beasts'>
 						<img src='/img/mob.png' width='24' height='24'>
-						{{ number_format(count($item->mobs)) }}
+						{{ number_format($item->mobs->count()) }}
 					</a>
 					@endif
 				</td>
 				@elseif ($job->abbr != 'FSH')
 				<td class='text-center'>
-					@if (count($item->nodes))
+					@if ($item->nodes->count())
 					<img src='/img/jobs/{{ strtoupper($job->abbr) }}.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($job->abbr) }}nodes' data-item-id='{{ $item->id }}'>
 					@endif
 				</td>
 				@endif
 				<td class='valign text-center'>
-					@if(count($item->shops))
+					@if($item->shops->count())
 					<a href='#' class='btn btn-default click-to-view' data-type='shops' rel='tooltip' title='Available for {{ $item->price }} gil, Click to load Vendors'>
 						<img src='/img/coin.png' width='24' height='24'>
 						{{ number_format($item->price) }}

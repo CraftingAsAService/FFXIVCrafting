@@ -88,8 +88,8 @@
 				</td>
 				<td>
 					<span class='close level' rel='tooltip' title='Quest Level'>{{ $quest->level }}</span>
-					<a href='{{ xivdb_item_link() . $item['id'] }}' class='item-name' target='_blank'>
-						<img src='{{ assetcdn('item/' . $item['icon'] . '.png') }}' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $item['name'] }}</span>
+					<a href='{{ item_link() . $item['id'] }}' class='item-name' target='_blank'>
+						<img src='{{ icon($item['icon']) }}' width='36' height='36' style='margin-right: 10px;'><span class='name'>{{ $item['name'] }}</span>
 					</a>
 				</td>
 				{{-- <td class='text-center amount'>{{ $quest->amount }}</td> --}}
@@ -100,7 +100,7 @@
 				</td> --}}
 				{{-- <td>{{ $quest->notes }}</td> --}}
 				<td class='text-center valign'>
-					@if(count($quest->requirements[0]->recipes))
+					@if($quest->requirements[0]->recipes->count())
 					<button class='btn btn-default add-to-list' data-item-id='{{ $item['id'] }}' data-item-name='{{ $item['name'] }}'>
 						<i class='glyphicon glyphicon-shopping-cart'></i>
 						<i class='glyphicon glyphicon-plus'></i>

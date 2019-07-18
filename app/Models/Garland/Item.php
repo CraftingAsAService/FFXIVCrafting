@@ -137,7 +137,7 @@ class Item extends Model {
 
 		// Make sure the slot avoids pieces with certain stats
 		$stat_ids_to_avoid = Stat::get_ids(Stat::avoid($job->abbr));
-		$stat_ids_to_focus = Stat::get_ids(Stat::focus($job->abbr));
+		$stat_ids_to_focus = Stat::focus($job->abbr);
 		// $primary_stat = Stat::get_ids([Stat::primary($job->abbr)]);
 		$boring_stat_ids = Stat::get_ids(Stat::boring());
 		$advanced_stat_avoidance = Stat::advanced_avoidance($job->abbr);
@@ -158,7 +158,7 @@ class Item extends Model {
 		// craftable only?
 		// rewardable?
 
-		$job_category_ids = $job->categories->lists('id')->all();
+		$job_category_ids = $job->categories->pluck('id')->all();
 
 		$two_handed_weapon_ids = self::two_handed_weapon_ids();
 

@@ -13,7 +13,7 @@ class GarlandController extends \App\Http\Controllers\Controller
 	{
 		Garland::scrape();
 
-		flash()->success('Garland Core Scraped');
+		flash('Garland Core Scraped')->success();
 
 		return redirect()->back();
 	}
@@ -21,6 +21,8 @@ class GarlandController extends \App\Http\Controllers\Controller
 	public function getView()
 	{
 		$core = json_decode(file_get_contents(storage_path() . '/app/osmose/garland-data-core.json'));
+
+		dd($core->item);
 
 		// dd('node', $core->node->bonusIndex);
 		// $id = "3";
@@ -47,13 +49,14 @@ class GarlandController extends \App\Http\Controllers\Controller
 		// 		// dd($shop);
 		// 	exit;
 		// dd('npc, shops', $core->npc->shops);
-		dd('instance', $core->instance);
+		// dd('instance', $core->instance);
 		// $id = 30;
 		// dd('instance', $core->instance->index->$id);
 		// dd('quest', $core->quest);
-		// dd('achievement', $core->achievement->index);
+		// dd('achievement', $core->achievement->categoryIndex);
 		// dd('fate', $core->fate->index);
 		// dd('jobCategories', $core->jobCategories);
+
 		// dd('venture', $core->venture->index);
 		// dd('action', $core->action->categoryIndex);
 		// dd('action', $core->action->index);

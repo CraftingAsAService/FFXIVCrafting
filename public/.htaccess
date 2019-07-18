@@ -5,8 +5,10 @@
 
     RewriteEngine On
 
+    RewriteRule "^/healthz/" - [END]
+
     # Images not found?
-    RewriteCond %{REQUEST_FILENAME} !-f 
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_URI} \.(gif|jpg|jpeg|png)$
     RewriteRule .* /img/noitemicon.png [L]
 
@@ -16,7 +18,7 @@
     RewriteRule ^(.*)$ - [F,L]
 
     # Redirect Trailing Slashes...
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    #RewriteRule ^(.*)/$ /$1 [L,R=301]
 
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d

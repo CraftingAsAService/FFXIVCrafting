@@ -1,5 +1,0 @@
-.git/*
-.git*
-docker-compose.yml
-.dockerignore
-*.md

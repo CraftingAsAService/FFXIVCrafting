@@ -15,8 +15,7 @@
 		<thead>
 			<tr>
 				<th class='text-right' width='25%'>Materia Name</th>
-				<th>Stat</th>
-				<th colspan='4' class='text-center bold'>
+				<th colspan='6' class='text-center bold'>
 					Materia Power
 				</th>
 			</tr>
@@ -27,7 +26,7 @@
 				<th colspan='{{ Config::get('language') == 'na' ? 2 : 1 }}' class='text-center bold'>
 					{{ $section_name }} Materia
 				</th>
-				@foreach(array('I', 'II', 'III', 'IV') as $power)
+				@foreach(array('I', 'II', 'III', 'IV', 'V', 'VI') as $power)
 				<th class='text-center' width='10%'>{{ $power }}</th>
 				@endforeach
 			</tr>
@@ -45,10 +44,10 @@
 					<img src='/img/stats/{{ $materia['icon'] }}.png' class='stat-icon'>
 					{{ $materia['stat'] }}
 				</td>
-				@foreach(array('I', 'II', 'III', 'IV') as $power)
+				@foreach(array('I', 'II', 'III', 'IV', 'V', 'VI') as $power)
 				<?php if ( ! isset($materia['power'][$power])) continue; ?>
 				<td class='valign text-center materia-value'>
-					<a href='{{ xivdb_item_link() . $materia['power'][$power]['item']->id }}' target='_blank' data-replacename="0" data-colorname="0" data-showicon="0">
+					<a href='{{ item_link() . $materia['power'][$power]['item']->id }}' target='_blank' data-replacename="0" data-colorname="0" data-showicon="0">
 						{{ number_format($materia['power'][$power]['amount']) }}
 						<img src='{{ assetcdn('item/' . $materia['power'][$power]['item']->icon . '.png') }}'>
 					</a>

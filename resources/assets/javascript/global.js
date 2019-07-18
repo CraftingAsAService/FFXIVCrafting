@@ -46,6 +46,8 @@ var global = {
 
 		$(document).on('click', '.click-to-view', global.click_to_view);
 
+		$(document).on('click', '.isearch', global.isearch);
+
 		$('.toggle-mobile-nav').click(function() {
 			$('body').toggleClass('mobile-nav-enabled');
 		});
@@ -66,10 +68,6 @@ var global = {
 				el.attr('href', el.attr('href').replace(/(\?|\&)self_sufficient=1/, ''));
 				return;
 			});
-	},
-	trigger_xivdb_tooltips:function() {
-		if (typeof(XIVDBTooltips) != 'undefined')
-			XIVDBTooltips.setOptions("undefined" != typeof xivdb_tooltips ? xivdb_tooltips : xivdb_tooltips_default).init();
 	},
 	hide_me:function() {
 		$('.hide-me').each(function() {
@@ -285,11 +283,32 @@ var global = {
 
 		return;
 	},
+	isearch:function(event) {
+		event.preventDefault();
+
+		var el = $(this),
+			clipboard = el.data('clipboard');
+
+		console.log(clipboard);
+
+		navigator.clipboard.writeText(clipboard).then(function() {
+			global.noty({
+				type: 'success',
+				text: 'Item name copied to clipboard!'
+			});
+		}, function() {
+			global.noty({
+				type: 'error',
+				text: 'Could not access clipboard :('
+			});
+		});
+	},
 	click_to_view:function(event) {
 		event.preventDefault();
 
 		var el = $(this),
 			type = el.data('type'),
+			notice = el.data('notice') || (type.substring( 0, 1 ).toUpperCase() + type.substring(1)),
 			id = el.closest('[data-item-id]').data('itemId');
 
 		if (el.hasClass('loading'))
@@ -310,7 +329,7 @@ var global = {
 
 				global.noty({
 					type: 'warning',
-					text: 'Loading ' + type.substring( 0, 1 ).toUpperCase() + type.substring(1)
+					text: 'Loading ' + notice
 				});
 
 			},

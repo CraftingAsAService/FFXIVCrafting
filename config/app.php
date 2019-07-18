@@ -2,6 +2,9 @@
 
 return [
 
+	'env' => env('APP_ENV', 'production'),
+	'name' => 'FFXIVCrafting',
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode
@@ -26,7 +29,7 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => 'https://ffxivcrafting.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -39,7 +42,7 @@ return [
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'America/New_York',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -78,9 +81,9 @@ return [
 	|
 	*/
 
-	'key' => env('APP_KEY', 'SomeRandomString'),
+	'key' => env('APP_KEY', 'SomeRandomStringWith32Characters'),
 
-	'cipher' => MCRYPT_RIJNDAEL_128,
+	'cipher' => 'AES-256-CBC',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -118,7 +121,7 @@ return [
 		'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-		'Illuminate\Routing\ControllerServiceProvider',
+		// 'Illuminate\Routing\ControllerServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
 		'Illuminate\Database\DatabaseServiceProvider',
 		'Illuminate\Encryption\EncryptionServiceProvider',
@@ -135,25 +138,25 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
-		'Illuminate\Html\HtmlServiceProvider',
+		// 'Illuminate\Html\HtmlServiceProvider',
 		'Illuminate\Redis\RedisServiceProvider',
-		'Illuminate\Broadcasting\BroadcastServiceProvider',
+		// 'Illuminate\Broadcasting\BroadcastServiceProvider',
 
 		/*
 		 * Application Service Providers...
 		 */
-		'App\Providers\AppServiceProvider',
-		'App\Providers\BusServiceProvider',
-		'App\Providers\ConfigServiceProvider',
-		'App\Providers\EventServiceProvider',
-		'App\Providers\RouteServiceProvider',
+        App\Providers\AppServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
 
 		/*
-		 * Custom 
+		 * Custom
 		 */
 		'App\Providers\HelperServiceProvider',
 		'Laracasts\Flash\FlashServiceProvider',
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
+		'hedronium\SpacelessBlade\SpacelessBladeProvider'
 
 	],
 
@@ -207,7 +210,7 @@ return [
 		'HTML'		=> 'Illuminate\Html\HtmlFacade',
 
 		/*
-		 * Custom 
+		 * Custom
 		 */
 		'Flash' => 'Laracasts\Flash\Flash',
 		'Clockwork' => 'Clockwork\Support\Laravel\Facade',

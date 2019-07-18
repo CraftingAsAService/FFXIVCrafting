@@ -5,19 +5,22 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "5.1.*",
-        "laravelcollective/html": "5.1.*",
-		"laracasts/flash": "~1.3",
-		"jyggen/curl": "4.0.*@dev",
-		"nesbot/carbon": "~1.14",
-		"illuminate/html": "~5.0",
-        "predis/predis": "~1.0",
-        "itsgoingd/clockwork": "~1.9"
+		"php": "^7.1.3",
+		"appstract/laravel-opcache": "^2.0",
+		"guzzlehttp/guzzle": "6.3.*",
+		"hedronium/spaceless-blade": "^2.0",
+		"inspector-apm/inspector-laravel": "^2.3",
+		"itsgoingd/clockwork": "3.*",
+		"laracasts/flash": "3.*",
+		"laravel/framework": "5.8.*",
+		"laravelcollective/html": "5.8.*",
+		"nesbot/carbon": "1.*",
+		"predis/predis": "^1.1",
+		"xivapi/xivapi-php": "^1.6"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4.0",
-		"phpspec/phpspec": "~2.1",
-		"rackspace/php-opencloud": "v1.13.0"
+        "filp/whoops": "^2.0",
+        "barryvdh/laravel-debugbar": "^3.1"
 	},
 	"autoload": {
 		"classmap": [
@@ -34,14 +37,22 @@
 		]
 	},
 	"scripts": {
-		"post-update-cmd": [
-			"php artisan clear-compiled",
-			"php artisan optimize"
-		]
-	},
-	"config": {
-		"preferred-install": "dist"
+        "post-install-cmd": [
+            "php artisan clear-compiled"
+        ],
+        "pre-update-cmd": [
+            "php artisan clear-compiled"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
+        ]
 	},
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
 }

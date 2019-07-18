@@ -31,7 +31,7 @@ class EntityController extends Controller {
 		foreach ($item->leve_rewards as $leve)
 			$leves[$leve->pivot->rate * 100][$leve->pivot->amount ?: 1][$leve->level][] = [
 				'name' => $leve->name,
-				'job_count' => count($leve->job_category->jobs),
+				'job_count' => $leve->job_category->jobs->count(),
 				'job_category_name' => $leve->job_category->name,
 				'job' => $leve->job_category->jobs[0],
 			];
@@ -61,12 +61,14 @@ class EntityController extends Controller {
 		$shops = [];
 		foreach ($item->shops as $shop)
 			foreach ($shop->npcs as $npc)
-				$shops[isset($shop->name) ? $shop->name : ''][] = [
+				$shops[$npc->name] = [
 					'name' => $npc->name,
 					'location' => is_null($npc->location) ? '' : $npc->location->name,
 					'x' => (int) $npc->x,
 					'y' => (int) $npc->y,
 				];
+
+		$shops = collect($shops)->sortBy('name')->sortBy('location');
 
 		return view('entity.shops', compact('item', 'shops'));
 	}
@@ -124,7 +126,7 @@ class EntityController extends Controller {
 			if ( ! isset($node->zone->name) || ! isset($node->area->name))
 				continue;
 
-			$nodes[$node->zone->name][$node->area->name][$type_translation[$node->type]] = true;
+			$nodes[$node->zone->name][$node->area->name][$type_translation[$node->type]] = $node['coordinates'];
 		}
 
 		return view('entity.nodes', compact('item', 'job', 'nodes'));

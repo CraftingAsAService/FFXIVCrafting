@@ -33,7 +33,7 @@ class LevequestsController extends Controller
 		];
 
 		// All Leves
-		$all_leves = /*Cache::remember('leves_' . Config::get('language'), 60, function() {
+		$all_leves = /*Cache::remember('leves_' . Config::get('language'), now()->addMinutes(60), function() {
 			return */Leve::with('job_category', 'rewards', 'requirements', 'requirements.recipes', 'requirements.shops')
 				->has('requirements')
 				->whereIn('job_category_id', range(9,19)) // 9-19 are solo categories for DOL/H
@@ -48,7 +48,7 @@ class LevequestsController extends Controller
 		foreach ($all_leves as $leve)
 			$leves[$leve->job_category->jobs[0]->abbr][$leve->level][] = $leve;
 
-		/* $rewards = Cache::remember('rewards_' . Config::get('language'), 60, function() use ($all_leves) { */
+		/* $rewards = Cache::remember('rewards_' . Config::get('language'), now()->addMinutes(60), function() use ($all_leves) { */
 
 			$rewards = [];
 			foreach($all_leves as $leve)
@@ -171,7 +171,7 @@ class LevequestsController extends Controller
 		// Parse the Job IDs
 		$selected_classes = $request->input('classes', []);
 		if (empty($selected_classes)) $selected_classes = ['CRP']; // CRP default
-		$jc_ids = JobCategory::whereIn('name', $selected_classes)->lists('id')->all();
+		$jc_ids = JobCategory::whereIn('name', $selected_classes)->pluck('id')->all();
 
 		// Level Range
 		$min = $request->input('min_level');

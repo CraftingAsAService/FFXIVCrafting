@@ -165,7 +165,7 @@ class GarlandTables extends Migration
 		Schema::create('shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
-			$table->integer('name')->unsigned();
+			$table->integer('name')->unsigned()->nullable();
 		});
 
 		if ( ! Schema::hasTable('item_shop'))
@@ -313,6 +313,7 @@ class GarlandTables extends Migration
 		Schema::create('venture', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
+			$table->string('name')->nullable();
 			$table->string('amounts')->nullable();
 			$table->integer('job_category_id')->unsigned();
 			$table->smallInteger('level')->unsigned();
@@ -438,7 +439,7 @@ class GarlandTables extends Migration
 			$table->enum('quality', ['nq', 'hq', 'max']);
 			// $table->integer('attribute_id')->unsigned();
 			$table->string('attribute');
-			$table->integer('amount')->unsigned();
+			$table->decimal('amount', 8, 2)->unsigned();
 			$table->integer('limit')->unsigned()->nullable();
 
 			$table->index('item_id');

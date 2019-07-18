@@ -35,10 +35,10 @@ class CDNAssets extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$action = $this->argument('action');
-		
+
 		if ($action == '')
 			$action = 'publish';
 
@@ -46,8 +46,8 @@ class CDNAssets extends Command {
 		$preview = $action == 'preview';
 
 		$this->info('Starting Asset CDN ' . $action);
-		
-		
+
+
 		$client = new \OpenCloud\Rackspace('https://identity.api.rackspacecloud.com/v2.0/', [
 			'username' => env('RACKSPACE_USERNAME'),
 			'apiKey' => env('RACKSPACE_API_KEY')
@@ -66,7 +66,7 @@ class CDNAssets extends Command {
 			$this->info(count($existing_files) . ' files found');
 
 		// Recursively go through JS and CSS.
-		// Get the md5 of the contents.  
+		// Get the md5 of the contents.
 		// If it's already in the deleted block, remove it from that array, no action
 		// Otherwise, prepare the new filename
 		//   and upload that file as the new filename into the cdn

@@ -44,23 +44,26 @@ class StatWeight
 			if ( ! preg_match('/\b' . $job_abbr . '\b/', $jobs))
 				continue;
 
-			foreach ($weights as $key => $value)
-			{
-				if ( ! isset(self::$stat_conversion[$key]))
-					continue;
+			// 4.0 change, no more messing around here
+			break; // $weights is what we want, and now it's set
 
-				$weights[self::$stat_conversion[$key]] = $value;
-				unset($weights[$key]);
-			}
+			// foreach ($weights as $key => $value)
+			// {
+			// 	if ( ! isset(self::$stat_conversion[$key]))
+			// 		continue;
 
-			break;
+			// 	$weights[self::$stat_conversion[$key]] = $value;
+			// 	unset($weights[$key]);
+			// }
+
+			// break;
 		}
 
 		return $weights;
 	}
 
 	static public $stat_conversion = [
-			'Accuracy' => 'accuracy',
+			'Direct Hit Rate' => 'direct_hit',
 			'Bind Resistance' => 'bind_res',
 			'Blind Resistance' => 'blind_res',
 			'Block Rate' => 'block_rate',
@@ -69,7 +72,7 @@ class StatWeight
 			'Control' => 'control',
 			'CP' => 'cp',
 			'Craftsmanship' => 'craftsmanship',
-			'Critical Hit Rate' => 'critical_rate',
+			'Critical Hit' => 'critical_rate',
 			'Defense' => 'def',
 			'Delay' => 'delay',
 			'Determination' => 'determination',
@@ -90,7 +93,7 @@ class StatWeight
 			'Mind' => 'mind',
 			'Morale' => 'morale',
 			'Paralysis Resistance' => 'paralysis_res',
-			'Parry' => 'parry',
+			'Tenacity' => 'tenacity',
 			'Perception' => 'perception',
 			'Petrification Resistance' => 'petrify_res',
 			'Piercing Resistance' => 'pierce_res',

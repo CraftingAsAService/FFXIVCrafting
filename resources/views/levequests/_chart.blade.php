@@ -23,7 +23,7 @@
 	<i class='glyphicon glyphicon-plus'></i>
 </button>
 <p>
-	<a href='{{ xivdb_item_link() . $leve->requirements[0]->id }}' class='item-name xivdb-24-icon' target='_blank'><img src='{{ assetcdn('item/' . $leve->requirements[0]->icon . '.png') }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
+	<a href='{{ item_link() . $leve->requirements[0]->id }}' class='item-name' target='_blank'><img src='{{ icon($leve->requirements[0]->icon) }}' width='24' height='24' style='margin-right: 10px;'>{{ $leve->requirements[0]->display_name }}</a>
 
 	@if($leve->requirements[0]->pivot->amount > 1)
 	<span class='label label-primary' rel='tooltip' title='Amount Required'>
@@ -32,7 +32,7 @@
 	@endif
 </p>
 
-@if(count($leve->requirements[0]->recipes))
+@if($leve->requirements[0]->recipes->count())
 <h3>Recipe</h3>
 
 <div class='panel-group' id='accordion{{ $leve->id }}' style='margin-bottom: 0;'>
@@ -50,8 +50,8 @@
 	<ul class='list-group'>
 		@foreach($leve->requirements[0]->recipes[0]->reagents as $reagent)
 		<li class='list-group-item'>
-			<a href='{{ xivdb_item_link() . $reagent->id }}' target='_blank'>
-				<img src='{{ assetcdn('item/' . $reagent->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->display_name }}</span>
+			<a href='{{ item_link() . $reagent->id }}' target='_blank'>
+				<img src='{{ icon($reagent->icon) }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent->display_name }}</span>
 			</a>
 			x {{ $reagent->pivot->amount * $leve->requirements[0]->pivot->amount }}
 			@if($leve->requirements[0]->pivot->amount > 1)
@@ -69,7 +69,12 @@
 
 @if ( ! empty($leve->location))
 <h3>Location</h3>
-<p>{{ $leve->location->name }}</p>
+<p>
+	@if (in_array($leve->simple_type, ['Courier', 'Reverse Courier']))
+	<i class='glyphicon glyphicon-envelope' rel='tooltip' title='{{ $leve->simple_type }}'></i>
+	@endif
+	{{ $leve->location->name }}
+</p>
 @endif
 
 <h3>Leveling Up</h3>

@@ -11,13 +11,6 @@ class Kernel extends ConsoleKernel {
 	 * @var array
 	 */
 	protected $commands = [
-		'App\Console\Commands\Inspire',
-		'App\Console\Commands\DatabaseExport',
-		'App\Console\Commands\DatabaseExtract',
-		'App\Console\Commands\DatabaseImport',
-		'App\Console\Commands\CDNAssets',
-		'App\Console\Commands\CDNImages',
-		'App\Console\Commands\Build',
 	];
 
 	/**
@@ -28,8 +21,17 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('inspire')
-				 ->hourly();
 	}
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__.'/Commands');
+        require base_path('routes/console.php');
+    }
 
 }

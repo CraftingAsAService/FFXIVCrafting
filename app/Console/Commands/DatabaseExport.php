@@ -35,20 +35,20 @@ class DatabaseExport extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$this->info('Exporting Database into 7zip Files');
 
 		$file_path = storage_path() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'generated-database' . DIRECTORY_SEPARATOR;
 		$file_extension = '.sql.7z';
 
-		$rm_command = 
+		$rm_command =
 			'sudo rm ' . $file_path . '%s' . $file_extension . ' 2>/dev/null';
 
-		$export_command = 
-			'sudo mysqldump -u ' . getenv('DB_USERNAME') . ' -p' . getenv('DB_PASSWORD') . ' %s ' . getenv('DB_DATABASE') .  
+		$export_command =
+			'sudo mysqldump -u ' . getenv('DB_USERNAME') . ' -p' . getenv('DB_PASSWORD') . ' %s ' . getenv('DB_DATABASE') .
 			// We receive a warning that passwords in the command line are insecure.  Ignore it.
-			' 2>/dev/null' . 
+			' 2>/dev/null' .
 			// Pipe the dump straight into 7zip
 			' | 7z a -si -t7z ' . $file_path . '%s' . $file_extension . ' -mx9';
 
@@ -68,7 +68,7 @@ class DatabaseExport extends Command {
 	protected function getArguments()
 	{
 		return [
-			
+
 		];
 	}
 
@@ -80,7 +80,7 @@ class DatabaseExport extends Command {
 	protected function getOptions()
 	{
 		return [
-			
+
 		];
 	}
 

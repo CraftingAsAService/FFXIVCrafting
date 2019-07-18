@@ -37,7 +37,6 @@
 
 		<link href='{!! cdn('/css/global.css') !!}' rel='stylesheet' />
 
-		<!-- New Theme, woot woot! -->
 		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 		<link href='{!! cdn('/css/dark-theme.css') !!}' rel='stylesheet' />
 
@@ -80,7 +79,7 @@
 							@endif
 						</a>
 					</li>
- 					--}}
+					--}}
 
 					<li>
 						<hr>
@@ -90,12 +89,12 @@
 					{!! menu_item('/',			'Home',			'home'		) !!}
 					{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
-					{!! menu_item('/career',	'Career',		'career'	) !!}
+					{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 					{!! menu_item('/food',		'Food',			'food'		) !!}
 					{!! menu_item('/levequests','Leves',		'leves'		) !!}
-					{!! menu_item('/stats',		'Stats',		'stats'		) !!}
-					{!! menu_item('/materia',	'Materia',		'materia'	) !!}
+					{{-- {!! menu_item('/stats',		'Stats',		'stats'		) !!}
+					{!! menu_item('/materia',	'Materia',		'materia'	) !!} --}}
 
 					<li>
 						<hr>
@@ -104,7 +103,7 @@
 					@foreach(Config::get('site.full_languages') as $slug => $language)
 					<?php if ($slug == $lang) continue; ?>
 					<li>
-						<a tabindex='-1' href='http://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
+						<a tabindex='-1' href='https://{{ ($slug != 'en' ? $slug . '.' : '') . $lbu }}'>
 							<img src="/img/icons/flags/{{ $slug }}.png"> {!! $language !!}
 						</a>
 					</li>
@@ -135,7 +134,7 @@
 									@foreach(Config::get('site.full_languages') as $slug => $language)
 									<?php if ($slug == $lang) continue; ?>
 									<li>
-										<a tabindex='-1' href='http://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
+										<a tabindex='-1' href='https://{!! ($slug != 'en' ? $slug . '.' : '') . $lbu !!}'>
 											<img src="/img/icons/flags/{!! $slug !!}.png"> {!! $language !!}
 										</a>
 									</li>
@@ -193,9 +192,9 @@
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 											{!! menu_item('/levequests','Leves',		'leves'		) !!}
-											{!! menu_item('/career',	'Career',		'career'	) !!}
+											{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 											{!! menu_item('/food',		'Food',			'food'		) !!}
-											<li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
+											{{-- <li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>
 												<a href='#' class='dropdown-toggle' data-toggle="dropdown">Resources <b class='caret'></b></a>
 												<ul class='dropdown-menu dropdown-menu-right'>
 													<li{!! isset($active) && $active == 'stats' ? ' class="active"' : '' !!}><a href='/stats'>Stats</a></li>
@@ -204,7 +203,7 @@
 													<li class='divider'></li>
 													<li><a href='http://www.reddit.com/r/ffxivcrafting'>Subreddit</a></li>
 												</ul>
-											</li>
+											</li> --}}
 										</ul>
 									</div>
 								</div>
@@ -225,7 +224,7 @@
 
 					<div class='container'>
 
-						@include('partials.flash')
+						@include('flash::message')
 
 						@yield('content')
 
@@ -243,7 +242,7 @@
 								@foreach(recent_posts() as $post)
 								<div class="post">
 									<div class="title">
-										<a href="{{ $post['url'] }}">{{ $post['title'] }}</a>
+										<a href="{{ $post['url'] }}">{!! $post['title'] !!}</a>
 									</div>
 									<div class="date">
 										<img src="/img/icons/time.png"><span>{{ $post['created'] }}</span>
@@ -252,17 +251,19 @@
 								</div>
 								@endforeach
 
-								<p class="view-all"><a href="http://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
+								<p class="view-all"><a href="https://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/4.0.png" class="img-responsive">
-								<p>This site has been optimized for Patch 4.0</p>
+								<img src="/img/patch/5.0.png" class="img-responsive">
+								<p>This site has been optimized for Patch 5.0</p>
 							</div>
 							<div class="col-sm-3">
-								<p class="headline">Donations</p>
-								<p>I've spent more time building this site than actually playing.  Buy me a beer!</p>
-								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Donate Today!</a></p>
+								<p class="headline">Support</p>
+
+								<a href="https://www.patreon.com/bePatron?u=954057" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+
+								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Or donate with PayPal!</a></p>
 								<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
 									<input type='hidden' name='cmd' value='_s-xclick'>
 									<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
@@ -275,7 +276,7 @@
 
 								<div class='row'>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://www.reddit.com/r/ffxivcrafting">Subreddit</a></p>
+										<p><a href="https://www.reddit.com/r/ffxivcrafting">/r/ffxivcrafting</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -283,7 +284,7 @@
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
+										<p><a href="https://na.finalfantasyxiv.com/lodestone/character/2859264/">My Character</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
@@ -291,11 +292,11 @@
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://garlandtools.org/">Garland Tools</a></p>
+										<p><a href="https://garlandtools.org/">Garland Tools</a></p>
 										<hr>
 									</div>
 									<div class='col-xs-12 col-md-6'>
-										<p><a href="http://ffxivclock.com/">FFXIV Clock</a></p>
+										<p><a href="https://xivapi.com/">XIVAPI</a></p>
 										<hr>
 									</div>
 								</div>
@@ -339,17 +340,6 @@
 
 		@yield('javascript')
 
-		<script type='text/javascript'>
-			if (typeof xivdb_tooltips === 'undefined')
-				var xivdb_tooltips = {
-					language: "{!! strtoupper($lang == 'ja' ? 'jp' : $lang) !!}",
-					jqueryEmbed: false,
-					seturlname: false,
-					seturlicon: false
-				}
-		</script>
-		<script src="http://xivdb.com/tooltips.min.js"></script>
-
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -359,6 +349,18 @@
 			ga('create', 'UA-43830923-1', 'ffxivcrafting.com');
 			ga('require', 'displayfeatures');
 			ga('send', 'pageview');
+		</script>
+		<script type="text/javascript">
+			window.doorbellOptions = {
+				id: '10072',
+				appKey: 'Uo6vZct0HFNfaHpyvGHSZJIKftCCZG2nT0cbaeMq63KvkLCHauqWs3iS3AqKdVxh'
+			};
+			(function(w, d, t) {
+				var hasLoaded = false;
+				function l() { if (hasLoaded) { return; } hasLoaded = true; window.doorbellOptions.windowLoaded = true; var g = d.createElement(t);g.id = 'doorbellScript';g.type = 'text/javascript';g.async = true;g.src = 'https://embed.doorbell.io/button/'+window.doorbellOptions['id']+'?t='+(new Date().getTime());(d.getElementsByTagName('head')[0]||d.getElementsByTagName('body')[0]).appendChild(g); }
+				if (w.attachEvent) { w.attachEvent('onload', l); } else if (w.addEventListener) { w.addEventListener('load', l, false); } else { l(); }
+				if (d.readyState == 'complete') { l(); }
+			}(window, document, 'script'));
 		</script>
 	</body>
 </html>

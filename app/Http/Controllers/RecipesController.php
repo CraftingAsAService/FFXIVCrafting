@@ -27,7 +27,7 @@ class RecipesController extends Controller
 			->paginate(10);
 
 		$crafting_job_list = Job::whereIn('id', Config::get('site.job_ids.crafting'))->get();
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 
 		$crafting_list_ids = array_keys(session('list', []));
 
@@ -56,11 +56,11 @@ class RecipesController extends Controller
 		if ($min > $max)
 			list($max, $min) = [$min, $max];
 
-		$job_list = Job::lists('name', 'abbr')->all();
+		$job_list = Job::pluck('name', 'abbr')->all();
 
 		if ($class && $class != 'all')
 			$job = Job::where('abbr', $class)->first();
-			
+
 		$sorting = explode('.', $sorting);
 		$order_by = 'name'; $sort = 'asc';
 		if (count($sorting) == 2)
@@ -73,7 +73,7 @@ class RecipesController extends Controller
 			if ($sorting[1] == 'desc')
 				$sort = $sorting[1];
 		}
-		
+
 		$query = Recipe::with('item');
 
 		// We need this next bit for both an order by and a name search
@@ -87,7 +87,7 @@ class RecipesController extends Controller
 
 		if ($order_by != 'name')
 			$query->orderBy($order_by, $sort);
-		
+
 		if ($name)
 			$query->where('i.' . Item::localized_name_variable(), 'like', '%' . $name . '%');
 

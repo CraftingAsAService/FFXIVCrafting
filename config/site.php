@@ -1,8 +1,8 @@
 <?php
 
-return array(
+return [
 
-	'max_level' => 60,
+	'max_level' => 80,
 
 	'cdn' => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
@@ -24,23 +24,27 @@ return array(
 	// 	"At least you know I'm not a Nigerian Prince, <a href='#buymeabeer' id='buymeabeer'>Donate!</a>",
 	// 	#"Help the site out, <a href='#buymeabeer' id='buymeabeer'>Like it on Facebook!</a>",
 	// ),
-	'cache_length' => '10080', // Minutes - 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
+	'cache_length' => '604800', // in Seconds - 60 * 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Neck','Ears','Wrists','Left Ring','Right Ring'),
 	'gear_focus' => array(
-		'LNC,PGL,DRG,MNK,BRD,ARC,ROG,NIN,MCH' => array(
-			'Dexterity',
-			'Critical Hit Rate',
+		'PGL,MNK,SAM'  => array(
+			'Strength',
+			'Critical Hit',
 			'Skill Speed',
 		),
-		'GLA,MRD,PLD,WAR,DRK' => array(
+		'LNC,DRG,BRD,ARC,ROG,NIN,MCH,DNC' => array(
+			'Dexterity',
+			'Critical Hit',
+			'Skill Speed',
+		),
+		'GLA,MRD,PLD,WAR,DRK,GNB' => array(
 			'Strength',
 			'Skill Speed',
-			'Parry',
+			'Tenacity',
 		),
-		'THM,BLM,ACN,SMN' => array(
+		'THM,BLM,ACN,SMN,RDM,BLU' => array(
 			'Intelligence',
 			'Spell Speed',
-			'Piety',
 		),
 		'CNJ,SCH,WHM,AST' => array(
 			'Mind',
@@ -71,73 +75,73 @@ return array(
 			'GP'				=> 1,
 			'Perception'		=> 1,
 		],
-		'ARC,BRD,MCH' => [
+		'ARC,BRD,MCH,DNC' => [
 			'Physical Damage'	=> 11.602,
 			'Dexterity'			=> 1,
-			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.224,
+			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.224,
 			'Determination'		=> 0.14,
 			'Skill Speed'		=> 0.111,
 		],
 		'ROG,NIN' => [
 			'Physical Damage'	=> 10.775,
 			'Dexterity'			=> 1,
-			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.166,
+			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.166,
 			'Determination'		=> 0.141,
 			'Skill Speed'		=> 0.074,
 		],
-		'PGL,MNK' => [
+		'PGL,MNK,SAM,GNB' => [
 			'Physical Damage'	=> 10.714,
 			'Strength'			=> 1,
-			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.167,
+			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.167,
 			'Determination'		=> 0.139,
 			'Skill Speed'		=> 0.116,
 		],
 		'LNC,DRG' => [
 			'Physical Damage'	=> 10.625,
 			'Strength'			=> 1,
-			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.162,
+			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.162,
 			'Determination'		=> 0.139,
 			'Skill Speed'		=> 0.104,
 		],
 		'GLA,PLD,MRD,WAR,DRK' => [
 			'Physical Damage'	=> 8.732,
 			'Strength'			=> 1,
-			'Accuracy'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.204,
+			'Direct Hit Rate'			=> 0.0647, // Has a "Minimum" softcap (647); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.204,
 			'Determination'		=> 0.325,
 			'Skill Speed'		=> 0.178,
 			'Vitality'			=> 1,
-			'Parry'				=> 1,
+			'Tenacity'				=> 1,
 			// Defense matters, but it's not a stat focus
 			'Defense'			=> 0.1,
 			'Block Strength'	=> 0.05,
 			'Block Rate'		=> 0.05,
 		],
-		'THM,BLM' => [
+		'THM,BLM,RDM,BLU' => [ // Guess on BLU
 			'Physical Damage'	=> 6.726,
 			'Intelligence'		=> 1,
-			'Accuracy'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.234,
+			'Direct Hit Rate'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.234,
 			'Determination'		=> 0.246,
 			'Spell Speed'		=> 0.281,
 		],
 		'ACN,SMN' => [
 			'Physical Damage'	=> 11.602,
 			'Intelligence'		=> 1,
-			'Accuracy'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
-			'Critical Hit Rate'	=> 0.147,
+			'Direct Hit Rate'			=> 0.0540, // Has a "Minimum" softcap (540); giving it a low score so it's more than nothing
+			'Critical Hit'	=> 0.147,
 			'Determination'		=> 0.137,
 			'Spell Speed'		=> 0.119,
 		],
 		'CNJ,WHM,SCH,AST' => [
 			'Physical Damage'	=> 8.732,
 			'Mind'				=> 1,
-			'Accuracy'			=> 0, // Healers don't need Accuracy
-			'Critical Hit Rate'	=> 0.204,
+			'Direct Hit Rate'			=> 0, // Healers don't need Direct Hit Rate
+			'Critical Hit'	=> 0.204,
 			'Determination'		=> 0.325,
 			'Spell Speed'		=> 0.178,
 		],
@@ -181,6 +185,9 @@ return array(
 			30, // NIN
 			31, // MCH
 			32, // DRK
+			34, // SAM
+			37, // GNB
+			38, // DNC
 		),
 		'advanced_magic' => array(
 			24, // WHM
@@ -188,6 +195,8 @@ return array(
 			27, // SMN
 			28, // SCH
 			33, // AST
+			35, // RDM
+			36, // BLU
 		),
 	),
 	'defined_slots' => array(
@@ -481,4 +490,4 @@ return array(
 		'Zeromus',
 		'Zodiark',
 	),
-);
+];

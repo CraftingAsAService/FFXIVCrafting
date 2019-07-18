@@ -48,8 +48,7 @@
 	<hr>
 
 	<h3>
-		Artisan Commands<br>
-		<small>If you don't have hhvm installed, use <code>php artisan</code> instead of <code>hhvm artisan</code>.</small>
+		Artisan Commands
 	</h3>
 
 	<div class='row'>
@@ -57,20 +56,20 @@
 			<h4>Prepare Parsed Data <small>- Locally</small></h4>
 
 			<p>
-				<code>hhvm artisan migrate:refresh --seed</code>
+				<code>php artisan migrate:refresh --seed</code>
 			</p>
 			<p>
-				<code>hhvm artisan build</code>
+				<code>php artisan build</code>
 			</p>
 		</div>
 		<div class='col-sm-4'>
 			<h4>Publish Assets to CDN <small>- Anywhere</small></h4>
-			
+
 			<p>
-				<code>hhvm artisan osmose:cdn:assets</code>
+				<code>php artisan osmose:cdn:assets</code>
 			</p>
 			<p>
-				<code>hhvm artisan osmose:cdn:images</code>
+				<code>php artisan osmose:cdn:images</code>
 			</p>
 
 		</div>

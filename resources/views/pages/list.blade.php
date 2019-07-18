@@ -53,8 +53,8 @@
 		@else
 			<tr data-item-id='{{ $item_id }}' data-item-name='{{{ $list_item['item']->display_name }}}'>
 				<td class='text-left'>
-					<a href='{{ xivdb_item_link() . $list_item['item']->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $list_item['item']->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->display_name }}
+					<a href='{{ item_link() . $list_item['item']->id }}' target='_blank'>
+						<img src='{{ icon($list_item['item']->icon) }}' width='36' height='36' style='margin-right: 5px;'>{{ $list_item['item']->display_name }}
 					</a>
 				</td>
 				<td class='text-center valign'>
@@ -73,7 +73,13 @@
 	</table>
 </div>
 <a href='/list/flush' class='btn btn-danger pull-right'>Delete All</a>
-<button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Get Link</button>
+<button class='btn btn-info pull-right margin-right' data-toggle='modal' data-target='#savedList'>Shareable Link</button>
+@php
+	$teamcraftString = base64_encode(implode(';', array_map(function($listItem) {
+		return $listItem['item']->id . ',null,' . $listItem['amount'];
+	}, $list)));
+@endphp
+<a href='https://ffxivteamcraft.com/import/{!! $teamcraftString !!}' class='btn btn-default pull-right margin-right' target='_blank'>Export to Teamcraft <small><i class='glyphicon glyphicon-new-window'></i></small></a>
 <a href='/crafting/from-list?self_sufficient=1' class='btn btn-success fix-self-sufficient'>Craft These Items &raquo;</a>
 
 @endif

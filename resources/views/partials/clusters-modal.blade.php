@@ -3,12 +3,12 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><img src="{{ assetcdn('item/' . $item->icon . '.png') }}" width="24" height="24"> {{ $item->name->term }}, Gathering Locations</h4>
+				<h4 class="modal-title"><img src="{{ icon($item->icon) }}" width="24" height="24"> {{ $item->name->term }}, Gathering Locations</h4>
 			</div>
 			<div class="modal-body">
 				@if(empty($clusters))
 				<h4>Sorry, no data yet.</h4>
-				<p><a href="{{ xivdb_item_link() . $item->icon }}" target="_blank" title="">XIVDB comments</a> are generally helpful in these situations!</p>
+				<p><a href="{{ item_link() . $item->icon }}" target="_blank" title="">XIVDB comments</a> are generally helpful in these situations!</p>
 				@else
 				@foreach ($clusters as $location => $levels)
 				<div>

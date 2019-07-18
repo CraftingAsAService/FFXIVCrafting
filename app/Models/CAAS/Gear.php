@@ -29,7 +29,7 @@ class Gear
 		$slots = config('site.defined_slots');
 
 		// Stat data
-		$stat_ids_to_focus = Stat::get_ids(Stat::gear_focus($job->abbr));
+		$stat_ids_to_focus = Stat::gear_focus($job->abbr);
 
 		// Get all items
 		$items = self::items($job->id, $starting_level - 10, $starting_level + $level_range, array_keys($slots), $stat_ids_to_focus, $options);
@@ -60,7 +60,7 @@ class Gear
 		// 	foreach ($sce as &$ce)
 		// 		$ce = $slots[$ce];
 		// unset($sce, $ce);
-		// 
+		//
 
 		foreach ($items as $item)
 		{
@@ -157,7 +157,7 @@ class Gear
 
 			// Go through the sorted items, only go through levels lower than the lcd
 			// And of those, only keep one BIS item
-			
+
 			// Up first, it's entirely possible that something at level 22 is better than something at 23, for example.
 			// compare bis_worth's across those lower-than-lcd-levels
 			$level_hcd = $bis_hcd = 0;
@@ -221,7 +221,7 @@ class Gear
 	 */
 	static private function items($job_id, $level_start, $level_end, $slot_ids, $stat_ids_to_focus, $options)
 	{
-		$job_category_ids = Job::with('categories')->find($job_id)->categories->lists('id')->all();
+		$job_category_ids = Job::with('categories')->find($job_id)->categories->pluck('id')->all();
 		// Get all items where:
 		// Slot isn't zero
 		// The class can use it
@@ -255,7 +255,7 @@ class Gear
 					$query->where('item_id', \DB::raw('item.id'));
 				});
 		}
-		
+
 		return $query->get();
 	}
 

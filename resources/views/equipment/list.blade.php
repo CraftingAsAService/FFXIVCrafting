@@ -170,7 +170,7 @@
 	Remember, this tool is geared towards finding craftable equipment!  If you're looking for information on how to gear your level {{ config('site.max_level') }}, please visit the <a href='http://ffxiv.ariyala.com/' target='_blank'>FFXIV Gear Calculator</a>!
 </div>
 
-@if($fifty_warning)
+@if($maxLevelWarning)
 <div class='alert alert-warning'>
 	There are too many results for level {{ config('site.max_level') }} DOW/DOM classes.  It was excluded on initial load.  Feel free to hit that right arrow though.
 </div>

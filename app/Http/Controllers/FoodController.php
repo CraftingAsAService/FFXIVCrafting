@@ -25,7 +25,7 @@ class FoodController extends Controller
 
 			$core_crafting_headers = ['CP', 'Control', 'Craftsmanship', 'Careful Desynthesis'];
 			$core_gathering_headers = ['GP', 'Gathering', 'Perception'];
-			$core_battle_headers = ['Accuracy', 'Critical Hit Rate', 'Determination', 'Parry', 'Piety', 'Skill Speed', 'Spell Speed', 'Vitality'];
+			$core_battle_headers = ['Direct Hit Rate', 'Critical Hit', 'Determination', 'Tenacity', 'Piety', 'Skill Speed', 'Spell Speed', 'Vitality'];
 			$core_resistances_headers = ['Reduced Durability Loss'];
 			// Items that are Food
 			$results = Item::with('attributes', 'shops', 'recipes')
@@ -75,12 +75,12 @@ class FoodController extends Controller
 						$food_groups[$names][$item->id] = [
 							'id' => $item->id,
 							'icon' => $item->icon,
-							'has_hq' => (boolean) (count($item->recipes) > 0 ? $item->recipes[0]->hq : false),
+							'has_hq' => (boolean) ($item->recipes->count() > 0 ? $item->recipes[0]->hq : false),
 							'name' => $item->display_name,
 							'price' => $item->price,
-							'shops_count' => count($item->shops),
+							'shops_count' => $item->shops->count(),
 							'stats' => [
-								$x => $stats[$x], 
+								$x => $stats[$x],
 								$y => $stats[$y],
 							],
 						];
@@ -103,7 +103,7 @@ class FoodController extends Controller
 				$keys = explode('|', $key);
 
 				$belongs_to = 'Battle';
-				
+
 				// Core tenants of each section
 				if (count(array_intersect($core_crafting_headers, $keys)) > 0)
 					$belongs_to = 'Crafting';
@@ -111,10 +111,10 @@ class FoodController extends Controller
 					$belongs_to = 'Gathering';
 				elseif (preg_match('/Resistance|Durability/', $key))
 					$belongs_to = 'Resistances';
-				
+
 				$sections[$belongs_to]['data'][$key] = $value;
 			}
-			
+
 			foreach ($sections as $section_key => $section_array)
 			{
 				$single_keys = [];
@@ -132,7 +132,7 @@ class FoodController extends Controller
 				$intersections = [];
 				foreach ($single_keys as $i)
 				{
-					if ( ! isset($intersections[$i])) 
+					if ( ! isset($intersections[$i]))
 						$intersections[$i] = [];
 
 					foreach ($single_keys as $j)

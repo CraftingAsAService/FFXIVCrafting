@@ -16,7 +16,7 @@ class Garland
 
 	static private function get_core()
 	{
-		return Cache::remember('garland.core', 30, function()
+		return Cache::remember('garland.core', now()->addMinutes(30), function()
 		{
 			$core_url = 'http://www.garlandtools.org/db/js/gt.data.core.js';
 			$core_contents = preg_replace("/\\r/", '', Garland::curl($core_url));

@@ -1,7 +1,7 @@
 /vendor
-.env*
 /node_modules
+.env*
+public/assets
 .DS_Store
 Thumbs.db
-composer.lock
 gulp.stop

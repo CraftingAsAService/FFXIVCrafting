@@ -37,7 +37,7 @@
 			<?php $total = 0; ?>
 			@foreach($recipes as $recipe)
 			<?php if($amounts[$recipe->id] == 1) continue; ?>
-			<?php if(count($recipe->item->shops)) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
+			<?php if($recipe->item->shops->count()) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
 			<tr data-item-id='{{ $recipe->item_id }}'>
 				<td width='24' class='valign'>
 					<img src='/img/jobs/{{ strtoupper($recipe->job->abbr) }}.png' width='24' height='24'>
@@ -46,8 +46,8 @@
 					@if(isset($recipe->recipe_level))
 					<span class='close' rel='tooltip' title='Level'>{{ $recipe->recipe_level }}</span>
 					@endif
-					<a href='{{ xivdb_item_link() . $recipe->item_id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
+					<a href='{{ item_link() . $recipe->item_id }}' target='_blank'>
+						<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
 					</a>
 				</td>
 				<td class='valign text-center'>
@@ -62,7 +62,7 @@
 				</td>
 				@endif --}}
 				<td class='valign text-center'>
-					@if(count($recipe->item->shops))
+					@if($recipe->item->shops->count())
 					<a href='#' class='btn btn-default click-to-view' data-type='shops' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Vendors'>
 						<img src='/img/coin.png' width='24' height='24'>
 						{{ number_format($recipe->item->price) }}

@@ -21,7 +21,7 @@
 	@endif
 	<h1>Crafting Calculator</h1>
 	<h2>Display all the materials needed to craft one of each item between two levels.</h2>
-	<p>In general this will not level you to your desired level.  Visit the <a href='/leve'>Leves</a> page when you're done crafting!</p>
+	<p>In general this will not level you to your desired level.  Visit the <a href='/levequests'>Leves</a> page when you're done crafting!</p>
 @stop
 
 @section('content')
@@ -36,34 +36,67 @@
 		<div class='row'>
 			<div class='col-sm-3 col-lg-2'>
 				<fieldset>
-					<legend><img src='/img/ilvl.png' width='18' height='18' rel='tooltip' title='Item Level (ilvl)' style='position: relative; top: -2px;'> Range</legend>
+					<legend>Level Range</legend>
 
 					<div class='row'>
-						<div class='col-xs-4' style='line-height: 34px;'>
+						<div class='col-xs-4 col-lg-5' style='line-height: 34px;'>
+							Type <i class='glyphicon glyphicon-question-sign' rel='tooltip' title='"Recipe" Level will match your Crafting Log. "Item" will match ilvl.'></i>
+						</div>
+						<div class='col-xs-8 col-lg-7'>
+							<select name='lvlType' id='lvlType' class='form-control'>
+								<option value='r'>Recipe</option>
+								<option value='i'>Item</option>
+							</select>
+						</div>
+					</div>
+
+					<div class='row margin-top'>
+						<div class='col-xs-4 col-lg-5' style='line-height: 34px;'>
 							Start
 						</div>
-						<div class='col-xs-8'>
+						<div class='col-xs-8 col-lg-7'>
 							<input type='number' class='form-control' name='start' id='recipe-level-start' value='1'>
 						</div>
 					</div>
 
 					<div class='row margin-top'>
-						<div class='col-xs-4' style='line-height: 34px;'>
+						<div class='col-xs-4 col-lg-5' style='line-height: 34px;'>
 							End
 						</div>
-						<div class='col-xs-8'>
+						<div class='col-xs-8 col-lg-7'>
 							<input type='number' class='form-control' name='end' id='recipe-level-end' value='5'>
 						</div>
 					</div>
 				</fieldset>
 
-				<hr>
+				<div class='ilvl-helper hidden'>
+					<hr>
 
-				<span class='label label-info' style='display: block;'>
-					<i class='glyphicon glyphicon-question-sign'></i> Need help with your ilvl?
-				</span>
+					<span class='label label-info' style='display: block;'>
+						<i class='glyphicon glyphicon-question-sign'></i> Need help with your ilvl?
+					</span>
 
-				<a href='#' class='select-recipe-level btn btn-default btn-block margin-top' data-toggle='modal' data-target='#ilvl-modal'><img src='/img/ilvl.png' width='16' height='16' rel='tooltip' title='Item Level (ilvl)' style='position: relative; top: -2px;'> Finder</a>
+					<a href='#' class='select-recipe-level btn btn-default btn-block margin-top' data-toggle='modal' data-target='#ilvl-modal'>ilvl Finder</a>
+				</div>
+
+				<fieldset class='rlvl-helper'>
+
+					<div class='row margin-top'>
+						<div class='col-xs-4 col-lg-5' style='line-height: 34px;'>
+							Difficulty
+						</div>
+						<div class='col-xs-8 col-lg-7'>
+							<select name='difficulty' class='form-control'>
+								<option value=''>Default</option>
+								<option value='55'>★</option>
+								<option value='70'>★★</option>
+								<option value='90'>★★★</option>
+								<option value='110'>★★★★</option>
+							</select>
+						</div>
+					</div>
+
+				</fieldset>
 
 				{{-- @if(isset($account) && $account)
 
@@ -140,7 +173,7 @@
 				<h4 class="modal-title"><img src="/img/ilvl.png" width="24" height="24"> Recipe to Item Level Converter</h4>
 			</div>
 			<div class="modal-body">
-				<p>The item level range for Recipes below level 50 are the same as the recipe level.  At 50+, the levels separate.</p>
+				<p>Item levels do not always match the whats in the Crafting Log. This reference chart is pretty close to the available ilvl ranges when compared to crafting level ranges.</p>
 				<p>Use the radio buttons, or simply click on a level range for a shortcut!</p>
 				<div class='row'>
 					<div class='col-xs-12 col-sm-6'>
@@ -223,6 +256,34 @@
 									</td>
 									<td class='text-center'>
 										<input type='radio' name='end' id='end60' data-end='160' checked='checked'>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										61 - 70
+									</td>
+									<td>
+										<a href='#' class='select-range'>161 - 375</a>
+									</td>
+									<td class='text-center'>
+										<input type='radio' name='start' id='start61' data-start='161' checked='checked'>
+									</td>
+									<td class='text-center'>
+										<input type='radio' name='end' id='end70' data-end='375' checked='checked'>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										71 - 80
+									</td>
+									<td>
+										<a href='#' class='select-range'>376+</a>
+									</td>
+									<td class='text-center'>
+										<input type='radio' name='start' id='start61' data-start='376' checked='checked'>
+									</td>
+									<td class='text-center'>
+										<input type='radio' name='end' id='end70' data-end='999' checked='checked'>
 									</td>
 								</tr>
 							</tbody>

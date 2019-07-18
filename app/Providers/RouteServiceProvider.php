@@ -1,6 +1,8 @@
-<?php namespace App\Providers;
+<?php
 
-use Illuminate\Routing\Router;
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Config;
 use Request;
@@ -22,38 +24,69 @@ class RouteServiceProvider extends ServiceProvider {
 	 * @param  \Illuminate\Routing\Router  $router
 	 * @return void
 	 */
-	public function boot(Router $router)
+	public function boot()
 	{
-		preg_match("/^(..)(.*)$/", Request::getHost(), $parts);
+		preg_match("/^(\w\w\.)?(.*)$/", Request::getHost(), $parts);
+
+		$parts[1] = substr($parts[1], 0, 2);
 
 		$is_real = in_array($parts[1], Config::get('site.available_languages'));
 
 		Config::set('language', $is_real ? $parts[1] : Config::get('site.default_language'));
 
 		// English isn't "real", which helps us out here
-		Config::set('language_base_url', ($is_real ? substr($parts[2], 1) : $parts[0]) . '/' . Request::path());
+		Config::set('language_base_url', ($is_real ? $parts[2] : $parts[0]) . '/' . Request::path());
 
-		parent::boot($router);
+		parent::boot();
 
 		// Route Model Binding
-		$router->model('item', 'App\Models\Garland\Item');
-		$router->model('leve', 'App\Models\Garland\Leve');
+		// $router->model('item', 'App\Models\Garland\Item');
+		// $router->model('leve', 'App\Models\Garland\Leve');
 
 		//
 	}
 
-	/**
-	 * Define the routes for the application.
-	 *
-	 * @param  \Illuminate\Routing\Router  $router
-	 * @return void
-	 */
-	public function map(Router $router)
-	{
-		$router->group(['namespace' => $this->namespace], function($router)
-		{
-			require app_path('Http/routes.php');
-		});
-	}
+    /**
+     * Define the routes for the application.
+     *
+     * @return void
+     */
+    public function map()
+    {
+        $this->mapApiRoutes();
+
+        $this->mapWebRoutes();
+
+        //
+    }
+
+    /**
+     * Define the "web" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapWebRoutes()
+    {
+        Route::middleware('web')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiRoutes()
+    {
+        Route::prefix('api')
+             ->middleware('api')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/api.php'));
+    }
 
 }

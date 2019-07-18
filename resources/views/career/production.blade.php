@@ -36,14 +36,14 @@
 			<?php $total = 0; ?>
 			@foreach($recipes as $recipe)
 			<?php if($amounts[$recipe->id] == 1) continue; ?>
-			<?php if(count($recipe->item->shops)) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
+			<?php if($recipe->item->shops->count()) $total += round($amounts[$recipe->id] + .49) * $recipe->item->price; ?>
 			<tr data-item-id='{{ $recipe->item_id }}'>
 				<td>
 					@if(isset($recipe->recipe_level))
 					<span class='close' rel='tooltip' title='Level'>{{ $recipe->recipe_level }}</span>
 					@endif
-					<a href='{{ xivdb_item_link() . $recipe->item_id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
+					<a href='{{ item_link() . $recipe->item_id }}' target='_blank'>
+						<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' style='margin-right: 5px;'>{{ $recipe->item->display_name }}
 					</a>
 				</td>
 				<td class='valign text-center'>

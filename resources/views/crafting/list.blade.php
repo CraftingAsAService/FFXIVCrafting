@@ -7,6 +7,18 @@
 @section('vendor-css')
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-tour.css') }}' rel='stylesheet'>
+	<style type='text/css'>
+		.reagent .category {
+			position: absolute;
+			bottom: 8px;
+			left: 8px;
+			width: 36px;
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: .65em;
+		}
+	</style>
 @stop
 
 @section('javascript')
@@ -49,7 +61,7 @@
 		<img src='/img/jobs/{{ $jobs[0]->abbr }}-inactive.png' width='32' height='32' style='position: relative; top: -3px;'>
 		{{ $jobs[0]->name }} Crafting
 		@else
-		Crafting for {{ implode(', ', $jobs->lists('name')->all()) }}
+		Crafting for {{ implode(', ', $jobs->pluck('name')->all()) }}
 		@endif
 		@elseif(isset($item))
 		Crafting {{ $item->display_name }}
@@ -114,7 +126,7 @@
 			<?php
 				$requires = []; $yields = 1;
 				$item_level = $reagent['item']->level;
-				$link = xivdb_item_link() . $reagent['item']->id;
+				$link = item_link() . $reagent['item']->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
 					$item_level = $reagent['item']->recipes[0]->level;
@@ -126,14 +138,29 @@
 			?>
 			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}'>
 				<td class='text-left'>
-					@if($level != 0)
+					@if (is_string($level))
+					<a class='close ilvl small text-right'>
+						@if ($reagent['item']->nodes->where('timer', '!=', null)->count())
+						@foreach ($reagent['item']->nodes->where('timer', '!=', null) as $node)
+						<i class='glyphicon glyphicon-time' rel='tooltip' data-html='true' title='{{ $node->timer }}'></i>
+						@endforeach
+						@endif
+						<span rel='tooltip' data-html='true' title='Location Hint<br>{!! empty($reagent['item']->nodes->first()->coordinates) ? 'N/A' : $reagent['item']->nodes->first()->coordinates !!}{{ $reagent['item']->nodes->count() > 1 ? '<br>' . ($reagent['item']->nodes->count() - 1) . ' other locations available.' : '' }}'>{!! implode('<br>', explode(' - ', $level)) !!}</span>
+					</a>
+					@elseif ($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>
 						{{ $item_level }}
 					</a>
 					@endif
-					<a href='{{ $link }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $reagent['item']->icon . '.png') }}' width='36' height='36' class='margin-right'><span class='name'>{{ $reagent['item']->display_name }}</span>
-					</a>
+					<img src='{{ icon($reagent['item']->icon) }}' width='36' height='36' class='margin-right pull-left'>
+					<div>
+						<a href='{{ $link }}' target='_blank' class='name'>
+							{{ $reagent['item']->display_name }}
+						</a>
+						<div>
+							<small class='text-muted'>{{ $reagent['item']->category->name }}</small>
+						</div>
+					</div>
 					@if ($yields > 1)
 					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
 						x {{ $yields }}
@@ -156,22 +183,23 @@
 				<td class='valign total'>0</td>
 				<td class='valign'>
 					@foreach(array_keys(array_reverse($reagent['cluster_jobs'])) as $cluster_job)
-					<img src='/img/jobs/{{ $cluster_job }}-inactive.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
+					<img src='/img/jobs/{{ $cluster_job }}-inactive.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' data-notice='{{ ucwords(strtolower($cluster_job)) }} Nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
 					@endforeach
 
 					@foreach($reagent['item']->recipes as $recipe)
 					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
 					@endforeach
 
-					@if(count($reagent['item']->shops))
+					@if($reagent['item']->shops->count())
 					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $reagent['item']->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					<span class='hidden vendors'>{{ $reagent['item']->price }}</span>
 					@endif
 
-					@if(count($reagent['item']->mobs))
+					@if($reagent['item']->mobs->count())
 					<img src='/img/mob-inactive.png' class='click-to-view' data-type='mobs' width='24' height='24' rel='tooltip' title='Click to load Beasts'>
 					@endif
 
+					<i class='glyphicon glyphicon-magnet isearch' rel='tooltip' title='Click to copy /isearch command' data-clipboard='/isearch "{{ $reagent['item']->display_name }}"'></i>
 				</td>
 				<?php continue; ?>
 			</tr>
@@ -194,13 +222,54 @@
 			?>
 			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yield }}'>
 				<td class='text-left'>
-					<a class='close ilvl' rel='tooltip' title='Level'>
-						{{ $recipe->recipe_level }}
-					</a>
-					{{-- <a href='http://xivdb.com/?recipe/{{ $recipe->id }}' target='_blank'> --}}
-					<a href='{{ xivdb_item_link() . $recipe->item->id }}' target='_blank'>
-						<img src='{{ assetcdn('item/' . $recipe->item->icon . '.png') }}' width='36' height='36' style='margin-right: 5px;'><span class='name'>{{ $recipe->item->display_name }}</span>
-					</a>
+					<div class='pull-right text-right'>
+						@spaceless
+						<a class='close ilvl' rel='tooltip' title='Level'>
+							<div class='text-right'>
+								{{ $lvlType == 'r' ? $recipe->recipe_level : $recipe->level }}
+								@if ($lvlType == 'r' && $recipe->recipe_level == 50)
+								<br>
+								<span style='font-size: .7em;'>
+									@if ($recipe->level >= 55)<i class='glyphicon glyphicon-star'></i>@endif
+									@if ($recipe->level >= 70)<i class='glyphicon glyphicon-star'></i>@endif
+									@if ($recipe->level >= 90)<i class='glyphicon glyphicon-star'></i>@endif
+									@if ($recipe->level >= 110)<i class='glyphicon glyphicon-star'></i>@endif
+								</span>
+								@endif
+							</div>
+						</a>
+						@endspaceless
+						<div>
+							@if ($recipe->yield > 1)
+							<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
+								x {{ $recipe->yield }}
+							</span>
+							@endif
+
+							@if($include_quests && isset($recipe->item->quest[0]))
+							<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
+							@endif
+
+							@if($recipe->item->leve_required->count())
+								@foreach ($recipe->item->leve_required as $leve)
+								@if($leve->repeats)
+								<img src='/img/leve_icon_red.png' rel='tooltip' title='{{ $leve->name }}. Repeatable Leve!' width='16'>
+								@else
+								<img src='/img/leve_icon.png' rel='tooltip' title='{{ $leve->name }}' width='16'>
+								@endif
+								@endforeach
+							@endif
+						</div>
+					</div>
+					<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' class='margin-right pull-left'>
+					<div>
+						<a href='{{ item_link() . $recipe->item->id }}' target='_blank' class='name'>
+							{{ $recipe->item->display_name }}
+						</a>
+						<div>
+							<small class='text-muted'>{{ $recipe->item->category->name }}</small>
+						</div>
+					</div>
 					@if ($recipe->req_craftsmanship)
 					<span class='craftsmanship pull-right margin-right' rel='tooltip' title='Required Craftsmanship'>
 						<img src="/img/stats/Craftsmanship.png" class="stat-icon">
@@ -213,26 +282,6 @@
 						{{ $recipe->req_control }}
 					</span>
 					@endif
-					@if ($recipe->yield > 1)
-					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
-						x {{ $recipe->yield }}
-					</span>
-					@endif
-					<div class='pull-right' style='clear: right;'>
-						@if($include_quests && isset($recipe->item->quest[0]))
-						<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
-						@endif
-
-						@if(count($recipe->item->leve_required))
-							@foreach ($recipe->item->leve_required as $leve)
-							@if($leve->repeats)
-							<img src='/img/leve_icon_red.png' rel='tooltip' title='{{ $leve->name }}. Repeatable Leve!' style='margin-left: 5px;' width='16'>
-							@else
-							<img src='/img/leve_icon.png' rel='tooltip' title='{{ $leve->name }}' style='margin-left: 5px;' width='16'>
-							@endif
-							@endforeach
-						@endif
-					</div>
 				</td>
 				<td class='needed valign hidden-print'>
 					<?php
@@ -258,9 +307,11 @@
 					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
 					@endif
 
-					@if(count($recipe->item->shops))
+					@if($recipe->item->shops->count())
 					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $recipe->item->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					@endif
+
+					<i class='glyphicon glyphicon-magnet isearch' rel='tooltip' title='Click to copy /isearch command' data-clipboard='/isearch "{{ $recipe->item->display_name }}"'></i>
 				</td>
 			</tr>
 			@endforeach
@@ -317,7 +368,7 @@
 					@endforeach
 				</ul>
 
-				<p><em>Want to level faster?  Visit the <a href='/leve'>Leves</a> page.</em></p>
+				<p><em>Want to level faster?  Visit the <a href='/levequests'>Leves</a> page.</em></p>
 			</div>
 		</div>
 	</div>

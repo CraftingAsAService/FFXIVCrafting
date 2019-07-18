@@ -16,7 +16,18 @@
 			return preg_replace('/\.([^\.]+)$/', $md5 . '.$1', $asset);
 		});
 
-		return '//' . $cdn . $md5_filename;
+		return 'https://' . $cdn . $md5_filename;
+	}
+
+	function icon($icon)
+	{
+		// Going to assume for now that all icons that we're interested in are five digits, otherwise we'd have different rules.
+		//  See https://xivapi.com/docs/Icons
+		$icon = '0' . $icon;
+		$folder = substr($icon, 0, 3) . "000";
+		$iconBase = 'i/' . $folder . '/' . $icon . '.png';
+
+		return assetcdn($iconBase);
 	}
 
 	function assetcdn($asset)
@@ -27,7 +38,7 @@
 		if( ! $cdn)
 			return asset( $asset );
 
-		return '//' . $cdn . '/' . $asset;
+		return 'https://' . $cdn . '/' . $asset;
 	}
 
 	function random_guardian_name()
@@ -51,20 +62,24 @@
 
 	function recent_posts($limit = 3)
 	{
-		return Cache::remember('reddit-posts', 30, function() use($limit)
+		return Cache::remember('reddit-posts', now()->addMinutes(30), function() use($limit)
 		{
-			$user_agent = 'User-Agent: php:ffxivcrafting:v0.0.1 (by /u/tickthokk)';
+			$user_agent = 'User-Agent: php:ffxivcrafting:v0.0.2 (by /u/tickthokk)';
 
 			$posts = [];
 
 			try {
-				$request = new Jyggen\Curl\Request('https://api.reddit.com/user/tickthokk/submitted.json');
-				$request->setOption(CURLOPT_HTTPHEADER, [$user_agent]);
-				$request->execute();
+				$client = new \GuzzleHttp\Client();
+				$res = $client->request('GET', 'https://api.reddit.com/user/tickthokk/submitted.json', [
+					'headers' => [
+						'user-Agent' => $user_agent,
+					]
+				]);
 
-				if ($request->isSuccessful())
+				if ($res->getStatusCode() == '200')
 				{
-					$response = json_decode($request->getResponse()->getContent());
+					// string declaration necessary
+					$response = json_decode((string) $res->getBody());
 
 					foreach ($response->data->children as $child)
 					{
@@ -72,7 +87,7 @@
 						{
 							$posts[] = [
 								'title' => $child->data->title,
-								'url' => 'http://reddit.com' . $child->data->permalink,
+								'url' => 'https://reddit.com' . $child->data->permalink,
 								'created' => Carbon\Carbon::createFromTimeStamp($child->data->created)->format('M d, Y')
 							];
 						}
@@ -116,6 +131,6 @@
 		return implode('?', $uri);
 	}
 
-	function xivdb_item_link() {
-		return 'http://xivdb.com/item/';
+	function item_link() {
+		return 'https://www.garlandtools.org/db/#item/';
 	}
