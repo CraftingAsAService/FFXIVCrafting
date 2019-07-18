@@ -57,7 +57,15 @@ set('writable_dirs', [
 
 // Hosts
 
-host('ultros')
+host('qa')
+	->hostname('ultros')
+	->user($user)
+	->forwardAgent() // Use local ssh credentials for git
+	->stage('qa')
+	->set('deploy_path', '/srv/www/{{application}}-qa');
+
+host('production')
+	->hostname('ultros')
 	->user($user)
 	->forwardAgent() // Use local ssh credentials for git
 	->stage('production');
@@ -87,7 +95,7 @@ desc('Upload all env files');
 task('upload:envs', function() {
 	// upload('.env.local', '/srv/.envs/.env.local');
 	// upload('.env.dev', '/srv/.envs/.env.dev');
-	// upload('.env.qa', '/srv/.envs/.env.qa');
+	upload('.env.qa', '/srv/.envs/.env.qa');
 	upload('.env.production', '/srv/.envs/.env.production');
 });
 

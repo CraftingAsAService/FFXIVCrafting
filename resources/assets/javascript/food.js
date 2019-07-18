@@ -103,10 +103,19 @@ var food = {
 			$('.highchart', fs).highcharts({
 				chart: {
 					type: 'scatter',
-					zoomType: 'xy'
+					zoomType: 'xy',
+					backgroundColor: '#262626' // $color_nero
+				},
+				labels: {
+					style: {
+						color: "#d6d4cf" // $color_timberwolf
+					}
 				},
 				title: {
-					text: el.data('originalTitle')
+					text: el.data('originalTitle'),
+					style: {
+						color: "#d6d4cf" // $color_timberwolf
+					}
 				},
 				// subtitle: {
 				// 	text: 'Source: Heinz  2003'
@@ -158,7 +167,7 @@ var food = {
 
 			return;
 		});
-		
+
 		$('.items-table .sort').click(function() {
 			var el = $(this),
 				table = el.closest('table'),
@@ -200,7 +209,7 @@ var food = {
 	},
 	sort_using_data:function(parent, child, selector)
 	{
-		
+
 		return;
 	}
 }

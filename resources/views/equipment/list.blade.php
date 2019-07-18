@@ -167,7 +167,7 @@
 </div>
 
 <div class='well'>
-	Remember, this tool is geared towards finding craftable equipment!  If you're looking for information on how to gear your level {{ config('site.max_level') }}, please visit the <a href='http://ffxiv.ariyala.com/' target='_blank'>FFXIV Gear Calculator</a>!
+	Remember, this tool is geared towards finding craftable equipment!  If you're looking for information on how to gear your level {{ config('site.max_level') }}, please visit the <a href='https://ffxiv.ariyala.com/' target='_blank'>FFXIV Gear Calculator</a>!
 </div>
 
 @if($maxLevelWarning)

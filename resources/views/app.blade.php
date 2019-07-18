@@ -37,7 +37,7 @@
 
 		<link href='{!! cdn('/css/global.css') !!}' rel='stylesheet' />
 
-		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 		<link href='{!! cdn('/css/dark-theme.css') !!}' rel='stylesheet' />
 
 		@yield('css')

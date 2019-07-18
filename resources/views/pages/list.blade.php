@@ -34,7 +34,7 @@
 	<table class='table table-bordered table-striped text-center' id='list'>
 		<thead>
 			<tr>
-				<th class='invisible'>&nbsp;</th>
+				<th class='basically-invisible'>&nbsp;</th>
 				<th class='text-center' width='10%'>Yields</th>
 				<th class='text-center' width='10%'>Amount</th>
 				<th class='text-center' width='10%'>Delete</th>
@@ -87,7 +87,7 @@
 @stop
 
 @section('modals')
-<div class="modal fade" id='savedList' data-base-url='http://{{ $_SERVER['HTTP_HOST'] }}/list/saved/'>
+<div class="modal fade" id='savedList' data-base-url='https://{{ $_SERVER['HTTP_HOST'] }}/list/saved/'>
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">

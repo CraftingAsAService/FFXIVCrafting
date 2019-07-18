@@ -33,8 +33,8 @@ class LevequestsController extends Controller
 		];
 
 		// All Leves
-		$all_leves = /*Cache::remember('leves_' . Config::get('language'), now()->addMinutes(60), function() {
-			return */Leve::with('job_category', 'rewards', 'requirements', 'requirements.recipes', 'requirements.shops')
+		$all_leves = Cache::store('file')->remember('leves_' . Config::get('language'), now()->addMinutes(60), function() {
+			return Leve::with('job_category', 'rewards', 'requirements', 'requirements.recipes', 'requirements.shops')
 				->has('requirements')
 				->whereIn('job_category_id', range(9,19)) // 9-19 are solo categories for DOL/H
 				->orderBy('job_category_id')
@@ -42,13 +42,13 @@ class LevequestsController extends Controller
 				->orderBy('xp', 'desc')
 				->orderBy('gil', 'desc')
 				->get();
-		/* }); */
+		});
 
 		$leves = [];
 		foreach ($all_leves as $leve)
 			$leves[$leve->job_category->jobs[0]->abbr][$leve->level][] = $leve;
 
-		/* $rewards = Cache::remember('rewards_' . Config::get('language'), now()->addMinutes(60), function() use ($all_leves) { */
+		$rewards = Cache::remember('rewards_' . Config::get('language'), now()->addMinutes(60), function() use ($all_leves) {
 
 			$rewards = [];
 			foreach($all_leves as $leve)
@@ -69,8 +69,8 @@ class LevequestsController extends Controller
 						$rewards[$jid][$lid][$rid]['amounts'] = array_unique($rewards[$jid][$lid][$rid]['amounts']);
 					}
 
-		/*	return $rewards;
-		}); */
+			return $rewards;
+		});
 
 		$crafting_job_list = Job::whereIn('id', $crafting_job_ids)->get();
 		$opening_level = 1;

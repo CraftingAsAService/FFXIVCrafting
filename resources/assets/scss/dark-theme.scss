@@ -58,11 +58,17 @@ legend {
 	border-bottom-color: $color_abbey;
 }
 
+a {
+	color: lighten($color_astral, 10%);
+}
+
 /*
 	Tables
 */
 .table {
-	background: #424242;
+	&, & .table {
+		background: $color_cape_cod;
+	}
 }
 .table-bordered,
 .table-bordered>thead>tr>th,
@@ -90,6 +96,39 @@ legend {
 
 .table-striped>tbody>tr:nth-of-type(odd) {
 	background-color: $color_nero_light;
+}
+
+.panel, .modal-content {
+	border-color: $color_mine_shaft;
+	background-color: $color_timberwolf;
+}
+
+.modal-header {
+	border-bottom: 0;
+}
+
+.modal-content {
+	background-color: $color_nero;
+}
+
+.panel>.panel-heading, .modal-header {
+	background-color: $color_mine_shaft;
+	background-image: linear-gradient(to bottom, $color_abbey 0, $color_mine_shaft 100%);
+	color: $color_timberwolf;
+}
+
+.panel-body {
+	color: $color_mine_shaft;
+	label {
+		color: $color_mine_shaft;
+	}
+	button {
+		background-color: lighten($color_quill_gray, 10%);
+	}
+}
+
+.dropdown-menu {
+	background-color: lighten($color_quill_gray, 10%);
 }
 
 /*
@@ -151,7 +190,7 @@ legend {
 
 // background-image: linear-gradient(to bottom, #3274ae 0, #1c466b 100%);
 .btn-primary {
-	text-shadow: 0 1px 0 $theme_color_white;
+	// text-shadow: 0 1px 0 $theme_color_white;
 	background-image: -webkit-gradient(linear, left 0, left 100%, from($color_astral), to($color_biscay));
 	background-image: -webkit-linear-gradient(top, $color_astral, 0%, $color_biscay, 100%);
 	background-image: -moz-linear-gradient(top, $color_astral 0, $color_biscay 100%);
@@ -236,7 +275,7 @@ legend {
 	Forms
 */
 .form-control {
-	background-color: $color_timberwolf;
+	background-color: lighten($color_quill_gray, 10%);
 }
 
 /*
@@ -776,4 +815,46 @@ body.Android {
 .close {
 	color: $theme_color_white;
 	text-shadow: 0 1px 0 $theme_color_black;
+}
+
+.bootstrap-switch {
+	border-color: $theme_color_dark_gray;
+	.bootstrap-switch-label {
+		background: $theme_color_medium_gray;
+	}
+}
+
+.table>thead>tr>td.success, .table>thead>tr>th.success, .table>thead>tr.success>td, .table>thead>tr.success>th, .table>tbody>tr>td.success, .table>tbody>tr>th.success, .table>tbody>tr.success>td, .table>tbody>tr.success>th, .table>tfoot>tr>td.success, .table>tfoot>tr>th.success, .table>tfoot>tr.success>td, .table>tfoot>tr.success>th {
+	background-color: darken(#dff0d8, 65%);
+}
+
+.food-selection .highchart {
+	border: 0;
+}
+
+a.list-group-item:hover, a.list-group-item:focus, button.list-group-item:hover, button.list-group-item:focus {
+	color: $color_quill_gray;
+	background-color: $color_abbey;
+}
+
+a.list-group-item, button.list-group-item {
+	color: $color_quill_gray;
+}
+
+.input-group-btn {
+	button {
+		height: 34px;
+	}
+}
+
+th.basically-invisible {
+	background-color: $color_cape_cod;
+}
+
+.glyphicon.text-danger {
+	color: $theme_color_lobster;
+}
+
+.table>tbody+tbody {
+	border-top-color: $color_cod_gray;
 }
