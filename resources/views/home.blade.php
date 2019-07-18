@@ -15,6 +15,12 @@
 
 @section('content')
 
+@if (request()->has('darkmode'))
+<div class='alert alert-info'>
+	Welcome to the <strong>Dark Mode Beta</strong>! Please use the Feedback button or post on <a href='https://www.reddit.com/r/ffxivcrafting/comments/ceml44/shadowdarkmodebringers/'>reddit</a> to let me know your thoughts!
+</div>
+@endif
+
 <div class='row'>
 	<div class='col-sm-4 homepage-step'>
 		<div class='home-callout' data-href='/equipment'>
