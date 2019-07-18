@@ -48,7 +48,7 @@ class LevequestsController extends Controller
 		foreach ($all_leves as $leve)
 			$leves[$leve->job_category->jobs[0]->abbr][$leve->level][] = $leve;
 
-		$rewards = Cache::remember('rewards_' . Config::get('language'), now()->addMinutes(60), function() use ($all_leves) {
+		$rewards = Cache::store('file')->remember('rewards_' . Config::get('language'), now()->addMinutes(60), function() use ($all_leves) {
 
 			$rewards = [];
 			foreach($all_leves as $leve)
