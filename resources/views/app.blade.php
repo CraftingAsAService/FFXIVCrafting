@@ -118,6 +118,12 @@
 				<div id="account">
 					<div class="container">
 						<ul class='hidden-xs hidden-sm'>
+							<li>
+								<a href='https://qa.ffxivcrafting.com?darkmode'>
+									<img src='/img/crescent.png' width='12' height='12' style='margin-top: -2px;'>
+									Dark Mode
+								</a>
+							</li>
 							@if(app()->environment('local'))
 							<li>
 								<a href='/osmose'{!! isset($active) && $active == 'osmose' ? ' class="active"' : '' !!}>
