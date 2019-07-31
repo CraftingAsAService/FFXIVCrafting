@@ -59,7 +59,7 @@ legend {
 }
 
 a {
-	color: lighten($color_astral, 10%);
+	color: $color_quill_gray;//lighten($color_astral, 30%);
 }
 
 /*
@@ -857,4 +857,16 @@ th.basically-invisible {
 
 .table>tbody+tbody {
 	border-top-color: $color_cod_gray;
+}
+
+.close {
+	color: $color_quill_gray;
+	opacity: .9;
+	&:hover, &:focus {
+		color: darken($color_quill_gray, 10%);
+	}
+}
+
+.text-muted {
+	color: darken($color_quill_gray, 30%);
 }
