@@ -76,7 +76,6 @@
 					]
 				]);
 
-
 				if ($res->getStatusCode() == '200')
 				{
 					// string declaration necessary

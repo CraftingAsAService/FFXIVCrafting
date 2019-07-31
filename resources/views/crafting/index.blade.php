@@ -123,7 +123,7 @@
 						</label>
 						@endforeach
 					</div>
-					<div class='margin-top hidden-xs hidden' id='crafting-multiple-classes'><small><em>CTRL/CMD click to select multiple classes!</em> <a href='#' class='hide-me' data-storage='crafting-multiple-classes' data-target='#crafting-multiple-classes'>Got it, hide this message</a></small></div>
+					{{-- <div class='margin-top hidden-xs hidden' id='crafting-multiple-classes'><small><em>CTRL/CMD click to select multiple classes!</em> <a href='#' class='hide-me' data-storage='crafting-multiple-classes' data-target='#crafting-multiple-classes'>Got it, hide this message</a></small></div> --}}
 				</fieldset>
 
 				<fieldset style='margin-top: 28px;'>

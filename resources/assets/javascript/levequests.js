@@ -38,7 +38,7 @@ var levequests = {
 			}
 
 			levequests.load_leves();
-			
+
 			return;
 		});
 
@@ -69,7 +69,7 @@ var levequests = {
 		// section.removeClass('hidden');
 
 		// Hide/show leves
-		$('.leve-section .table-responsive').addClass('hidden');
+		$('.leve-section .table-responsive').parent().addClass('hidden');
 		subsection.removeClass('hidden');
 
 		// Reveal the images

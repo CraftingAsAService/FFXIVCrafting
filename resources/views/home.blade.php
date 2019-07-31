@@ -15,10 +15,6 @@
 
 @section('content')
 
-<div class='alert alert-warning'>
-	Want <strong>Dark Mode</strong>? Check it out! - Visit the <a href='https://qa.ffxivcrafting.com/'>beta site</a> - or read <a href='https://www.reddit.com/r/ffxivcrafting/comments/ceml44/shadowdarkmodebringers/'>the post</a>
-</div>
-
 <div class='row'>
 	<div class='col-sm-4 homepage-step'>
 		<div class='home-callout' data-href='/equipment'>
