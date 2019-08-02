@@ -38,7 +38,11 @@
 		<link href='{!! cdn('/css/global.css') !!}' rel='stylesheet' />
 
 		<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+		@if (session('theme') == 'light')
+		<link href='{!! cdn('/css/theme.css') !!}' rel='stylesheet' />
+		@else
 		<link href='{!! cdn('/css/dark-theme.css') !!}' rel='stylesheet' />
+		@endif
 
 		@yield('css')
 	</head>
@@ -125,6 +129,21 @@
 								</a>
 							</li>
 							@endif
+							@if (session('theme') == 'light')
+							<li>
+								<a href='{{ request()->fullUrlWithQuery(['theme' => 'dark' ])}}'>
+									<img src='/img/crescent.png' width='15' height='15' style='position: relative; top: -2px;'>
+									Dark Mode
+								</a>
+							</li>
+							@else
+							<li>
+								<a href='{{ request()->fullUrlWithQuery(['theme' => 'light' ])}}'>
+									<img src='/img/sun.png' width='15' height='15' style='position: relative; top: -2px;'>
+									Light Mode
+								</a>
+							</li>
+							@endif
 							<li class='language-selector dropdown'>
 								<a href="#" class='dropdown-toggle' data-toggle='dropdown'>
 									<img src="/img/icons/flags/{!! $lang !!}.png">
@@ -177,7 +196,7 @@
 							<div class="row">
 								<div class="col-xs-12 col-md-3 logo">
 									<a href='/'>
-										<img src="/themes/dark/images/logo.png" class="img-responsive" width='263' height='45' alt='FFXIV Crafting'>
+										<img src="/{{ session('theme') == 'light' ? 'img' : 'themes/dark/images' }}/logo.png" class="img-responsive" width='263' height='45' alt='FFXIV Crafting'>
 										<span class='tagline'>Crafting as a Service</span>
 									</a>
 								</div>
