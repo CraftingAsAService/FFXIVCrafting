@@ -542,6 +542,7 @@ class XIVAPI
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
 		$this->limit = 1000;
+		$this->chunkLimit = 10;
 
 		$this->loopEndpoint('leve', [
 			'ID',
@@ -614,6 +615,7 @@ class XIVAPI
 				]);
 		});
 
+		$this->chunkLimit = null;
 		$this->limit = null;
 	}
 
