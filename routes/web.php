@@ -98,8 +98,3 @@ if (app()->environment('local'))
 		Route::get('eorzea/view-names', 'Osmose\EorzeaController@getViewNames');
 
 	});
-
-// Route::get('test', function () {
-//     \Inspector\Laravel\Facades\Inspector::reportException(new Exception('Test'));
-//     return "Inspector works";
-// });
