@@ -26,7 +26,8 @@ class AspirSeeder extends Seeder
 		foreach ($runList as $table)
 		{
 			$data = json_decode(file_get_contents(storage_path('app/aspir/' . $table . '.json')), true);
-			$this->batchInsert($table, $data);
+			if ( ! empty($data))
+				$this->batchInsert($table, $data);
 		}
 
 		// Cleanup

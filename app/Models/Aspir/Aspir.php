@@ -136,14 +136,14 @@ class Aspir
 		$this->saveData();
 	}
 
-	public function setData($table, $row, $id = null)
+	public function setData($table, $row, $id = null, $mergeOnly = false)
 	{
 		// If id is null, use the length of the existing data, or check in the $row for it
 		$id = $id ?: (isset($row['id']) ? $row['id'] : count($this->data[$table]) + 1);
 
 		if (isset($this->data[$table][$id]))
 			$this->data[$table][$id] = array_merge($this->data[$table][$id], $row);
-		else
+		elseif ( ! $mergeOnly)
 			$this->data[$table][$id] = $row;
 
 		return $id;

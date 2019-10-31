@@ -19,7 +19,7 @@ class GarlandTools
 
 	public function __construct(&$aspir)
 	{
-		$this->path = base_path() . '/../garlandtools/db/data/';
+		$this->path = base_path() . '/../data/ffxiv/garlandTools/';
 
 		$this->aspir =& $aspir;
 	}
@@ -33,7 +33,7 @@ class GarlandTools
 				'quest'   => $data->mob->quest ?? null,
 				'level'   => $data->mob->lvl,
 				'zone_id' => $data->mob->zoneid,
-			], $mobId);
+			], $mobId, true);
 
 			// And now for dropped items
 			foreach ($data->mob->drops as $itemId)
@@ -50,7 +50,7 @@ class GarlandTools
 			$this->aspir->setData('npc', [
 				'zone_id' => $data->npc->zoneid ?? null,
 				'approx'  => $data->npc->approx ?? null,
-			], $data->npc->id);
+			], $data->npc->id, true);
 
 			if (isset($data->npc->coords))
 				$this->aspir->setData('npc', [
