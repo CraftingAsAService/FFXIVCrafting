@@ -53,8 +53,8 @@
 										<span class='glyphicon glyphicon-cutlery'></span>
 									</td>
 									@foreach($section['headers'] as $j)
-									<td class='{{ $section['intersections'][$j][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $j }}' data-b='{{ $j }}' rel='tooltip' title='{{ $j }} Foods'>
-										{{ $section['intersections'][$j][$j] }}
+									<td class='{{ isset($section['intersections'][$j][$j]) && $section['intersections'][$j][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $j }}' data-b='{{ $j }}' rel='tooltip' title='{{ $j }} Foods'>
+										{{ $section['intersections'][$j][$j] ?? 0 }}
 									</td>
 									@endforeach
 								</tr>
@@ -65,8 +65,9 @@
 										<img src='/img/stats/{{ $i }}.png' class='stat-icon' rel='tooltip' title='{{ $i }}'>
 									</td>
 									@foreach($section['headers'] as $j)
-									<td class='{{ $section['intersections'][$i][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $i }}' data-b='{{ $j }}' rel='tooltip' title='{{ $i }}@if($i != $j) &amp; {{ $j }}@endif Foods'>
-										{{ $section['intersections'][$i][$j] }}
+
+									<td class='{{ isset($section['intersections'][$i][$j]) && $section['intersections'][$i][$j] == 0 ? 'opaque' : 'reveal' }}' data-a='{{ $i }}' data-b='{{ $j }}' rel='tooltip' title='{{ $i }}@if($i != $j) &amp; {{ $j }}@endif Foods'>
+										{{ $section['intersections'][$i][$j] ?? 0 }}
 									</td>
 									@endforeach
 								</tr>
