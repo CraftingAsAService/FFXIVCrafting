@@ -24,7 +24,7 @@
 			<tr>
 				<th class='text-center valign'>Recipe</th>
 				<th class='text-center valign'>Class</th>
-				<th class='text-center valign'>Between<br>Levels</th>
+				<th class='text-center valign'>Recipe<br>Level</th>
 				<th class='text-center valign' rel='tooltip' title='Add to Crafting List'>
 					<i class='glyphicon glyphicon-shopping-cart'></i>
 					<i class='glyphicon glyphicon-plus'></i>
@@ -85,7 +85,7 @@
 			</tr>
 		</thead>
 		<tfoot>
-			
+
 		</tfoot>
 		<tbody>
 			@include('recipes.results')

@@ -13,7 +13,7 @@
 		@endif
 	</td>
 	<td class='text-center valign'>
-		{{ $recipe->item->ilvl }}
+		{{ $recipe->recipe_level }}
 	</td>
 	<td class='text-center valign'>
 		<button class='btn btn-{{ in_array($recipe->item_id, $crafting_list_ids) ? 'success' : 'default' }} add-to-list success-after-add' data-item-id='{{ $recipe->item_id }}' data-item-name='{{ $recipe->item->display_name }}' title='Already In Crafting List'>
