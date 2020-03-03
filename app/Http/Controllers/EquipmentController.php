@@ -25,14 +25,12 @@ class EquipmentController extends Controller
 	public function getIndex()
 	{
 		$job_ids = Config::get('site.job_ids');
-		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
-		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
-		$advanced_melee_job_list = Job::whereIn('id', $job_ids['advanced_melee'])->get();
-		$advanced_magic_job_list = Job::whereIn('id', $job_ids['advanced_magic'])->get();
 		$previous = Cookie::get('previous_equipment_load');
 		$error = false;
 
-		return view('equipment.index', compact('error', 'crafting_job_list', 'gathering_job_list', 'advanced_melee_job_list', 'advanced_magic_job_list', 'job_ids', 'previous'));
+		$this->shareJobLists();
+
+		return view('equipment.index', compact('error', 'job_ids', 'previous'));
 	}
 
 	public function postIndex(Request $request)
@@ -149,6 +147,9 @@ class EquipmentController extends Controller
 		// 	$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
 		// }
 
+
+		$this->shareJobLists();
+
 		// Reset view's level variable back to normal
 		return view('equipment.list', compact('craftable_only', 'rewardable_too', 'roles', 'level', 'equipment'));
 	}
@@ -199,6 +200,16 @@ class EquipmentController extends Controller
 		}
 
 		return $output;
+	}
+
+	private function shareJobLists()
+	{
+		$job_ids = Config::get('site.job_ids');
+		$crafting_job_list = Job::whereIn('id', $job_ids['crafting'])->get();
+		$gathering_job_list = Job::whereIn('id', $job_ids['gathering'])->get();
+		$advanced_melee_job_list = Job::whereIn('id', $job_ids['advanced_melee'])->get();
+		$advanced_magic_job_list = Job::whereIn('id', $job_ids['advanced_magic'])->get();
+		view()->share(compact('crafting_job_list', 'gathering_job_list', 'advanced_melee_job_list', 'advanced_magic_job_list'));
 	}
 
 }

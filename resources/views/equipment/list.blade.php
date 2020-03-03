@@ -111,26 +111,35 @@
 					Change Class <span class='caret'></span>
 					</button>
 					<ul class='dropdown-menu class-dropdown-menu' role='menu'>
-						@foreach(array('GLA', 'PGL', 'MRD', 'LNC', 'ARC', 'ROG') as $switch_job)
-						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-danger'>
-							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
-						</a></li>
+						@foreach ($crafting_job_list as $job)
+							<li>
+								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-primary'>
+								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								</a>
+							</li>
 						@endforeach
-						@foreach(array('CNJ', 'THM', 'ACN') as $switch_job)
-						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-warning'>
-							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
-						</a></li>
+						@foreach ($gathering_job_list as $job)
+							<li>
+								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-info'>
+								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								</a>
+							</li>
 						@endforeach
-						@foreach(array('CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL') as $switch_job)
-						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-primary'>
-							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
-						</a></li>
+						@foreach ($advanced_melee_job_list as $job)
+							<li>
+								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-danger'>
+									<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								</a>
+							</li>
 						@endforeach
-						@foreach(array('MIN','BTN','FSH') as $switch_job)
-						<li><a href='/equipment/list?{{ $switch_job }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-info'>
-							<img src='/img/jobs/{{ $switch_job }}-inactive.png' width='24' height='24'>
-						</a></li>
+						@foreach ($advanced_magic_job_list as $job)
+							<li>
+								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-warning'>
+								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								</a>
+							</li>
 						@endforeach
+
 					</ul>
 				</div>
 			</div>
