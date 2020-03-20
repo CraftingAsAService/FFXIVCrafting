@@ -111,31 +111,31 @@
 					Change Class <span class='caret'></span>
 					</button>
 					<ul class='dropdown-menu class-dropdown-menu' role='menu'>
-						@foreach ($crafting_job_list as $job)
+						@foreach ($crafting_job_list as $ccjob)
 							<li>
-								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-primary'>
-								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								<a href='/equipment/list?{{ $ccjob->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-primary'>
+								<img src='/img/jobs/{{ $ccjob->abbr }}-inactive.png' width='24' height='24'>
 								</a>
 							</li>
 						@endforeach
-						@foreach ($gathering_job_list as $job)
+						@foreach ($gathering_job_list as $ccjob)
 							<li>
-								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-info'>
-								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								<a href='/equipment/list?{{ $ccjob->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-info'>
+								<img src='/img/jobs/{{ $ccjob->abbr }}-inactive.png' width='24' height='24'>
 								</a>
 							</li>
 						@endforeach
-						@foreach ($advanced_melee_job_list as $job)
+						@foreach ($advanced_melee_job_list as $ccjob)
 							<li>
-								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-danger'>
-									<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								<a href='/equipment/list?{{ $ccjob->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-danger'>
+									<img src='/img/jobs/{{ $ccjob->abbr }}-inactive.png' width='24' height='24'>
 								</a>
 							</li>
 						@endforeach
-						@foreach ($advanced_magic_job_list as $job)
+						@foreach ($advanced_magic_job_list as $ccjob)
 							<li>
-								<a href='/equipment/list?{{ $job->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-warning'>
-								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' width='24' height='24'>
+								<a href='/equipment/list?{{ $ccjob->abbr }}:{{ $original_level }}:{{ $craftable_only ? 1 : 0 }}:{{ $slim_mode ? 1 : 0 }}:{{ $rewardable_too ? 1 : 0 }}' class='btn btn-warning'>
+								<img src='/img/jobs/{{ $ccjob->abbr }}-inactive.png' width='24' height='24'>
 								</a>
 							</li>
 						@endforeach
