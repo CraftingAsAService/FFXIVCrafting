@@ -247,7 +247,7 @@ class CraftingController extends Controller
 				if ($difficulty)
 					$query->whereLevel($difficulty);
 				elseif ($end <= 50)
-					$query->where('recipe_level', '<', 55); // 55 is 1 star, "default" means we want no stars
+					$query->where('level', '<', 55); // 55 is 1 star, "default" means we want no stars
 			}
 		}
 
