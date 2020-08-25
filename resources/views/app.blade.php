@@ -280,7 +280,7 @@
 							<div class="col-sm-3">
 								<p class="headline">Support</p>
 
-								<a href="https://www.patreon.com/bePatron?u=954057" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+								<p class="view-all"><a href="https://www.patreon.com/bePatron?u=954057" data-patreon-widget-type="become-patron-button">Become a Patron!</a></p>
 
 								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Or donate with PayPal!</a></p>
 								<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
