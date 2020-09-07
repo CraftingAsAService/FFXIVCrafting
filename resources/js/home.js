@@ -1,13 +1,9 @@
 var home = {
 	init:function() {
-		// $('.class-selector:not(.multi)').click(function() {
-		// 	$('.class-selector.active').removeClass('active');
-		// });
-
 		$('#slider-range-min').slider({
 			range: 'min',
 			value: $('#forecast').val(), // When pressing "back" the value is saved.  Preserve it
-			min: 0, 
+			min: 0,
 			max: 5,
 			slide:function(event, ui) {
 				$('#forecast').val(ui.value);

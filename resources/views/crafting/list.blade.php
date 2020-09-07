@@ -114,8 +114,10 @@
 			<tr>
 				<th colspan='6'>
 					<button class='btn btn-default btn-sm pull-right collapsible'><i class='glyphicon glyphicon-chevron-down'></i></button>
-					@if($section == 'Gathered')
-					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-crystals'>Toggle Crystals</button>
+					@if ($section == 'Gathered')
+					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-sort'>Category Sort</button>
+					@elseif ($section == 'Pre-Requisite Crafting')
+					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-pr-sort'>Natural Sort</button>
 					@endif
 					<div style='margin-top: 4px;'>Origin: {{ $section }}</div>
 				</th>
@@ -135,37 +137,41 @@
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
 					// $link = 'recipe/' . $reagent['item']->recipes[0]->id;
 				}
+				if ($section == 'Gathered' && $reagent['item']->category->name == 'Crystal')
+					continue;
 			?>
-			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}'>
+			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}' data-item-location='{{ is_string($level) && $level ? $level : '' }}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif' data-recipe-class='{{ $reagent['item']->recipes[0]->job->abbr ?? '' }}'>
 				<td class='text-left'>
-					@if (is_string($level))
-					<a class='close ilvl small text-right'>
-						@if ($reagent['item']->nodes->where('timer', '!=', null)->count())
-						@foreach ($reagent['item']->nodes->where('timer', '!=', null) as $node)
-						<i class='glyphicon glyphicon-time' rel='tooltip' data-html='true' title='{{ $node->timer }}'></i>
-						@endforeach
-						@endif
-						<span rel='tooltip' data-html='true' title='Location Hint<br>{!! empty($reagent['item']->nodes->first()->coordinates) ? 'N/A' : $reagent['item']->nodes->first()->coordinates !!}{{ $reagent['item']->nodes->count() > 1 ? '<br>' . ($reagent['item']->nodes->count() - 1) . ' other locations available.' : '' }}'>{!! implode('<br>', explode(' - ', $level)) !!}</span>
-					</a>
-					@elseif ($level != 0)
+					@if ($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>
 						{{ $item_level }}
 					</a>
 					@endif
 					<img src='{{ icon($reagent['item']->icon) }}' width='36' height='36' class='margin-right pull-left'>
 					<div>
+						@if ($yields > 1)
+						<span class='label label-primary pull-right margin-right' rel='tooltip' title='Amount Yielded'>
+							x {{ $yields }}
+						</span>
+						@endif
 						<a href='{{ $link }}' target='_blank' class='name'>
 							{{ $reagent['item']->display_name }}
 						</a>
-						<div>
+						<div class='bonus-info'>
 							<small class='text-muted'>{{ $reagent['item']->category->name }}</small>
+							@if (is_string($level) && $level)
+								<small class='text-muted hidden-xs pointer pull-right'>
+									{{-- &mdash; --}}
+									@if ($reagent['item']->nodes->where('timer', '!=', null)->count())
+									@foreach ($reagent['item']->nodes->where('timer', '!=', null) as $node)
+									<i class='glyphicon glyphicon-time' rel='tooltip' data-html='true' title='{{ $node->timer }}'></i>
+									@endforeach
+									@endif
+									<span rel='tooltip' data-html='true' title='{!! empty($reagent['item']->nodes->first()->coordinates) ? 'N/A' : $reagent['item']->nodes->first()->coordinates !!}{{ $reagent['item']->nodes->count() > 1 ? '<br>' . ($reagent['item']->nodes->count() - 1) . ' other locations available.' : '' }}'>{!! $level !!}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif</span>
+								</small>
+							@endif
 						</div>
 					</div>
-					@if ($yields > 1)
-					<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
-						x {{ $yields }}
-					</span>
-					@endif
 				</td>
 				<td class='needed valign hidden-print'>
 					<span>...<!--{{ $reagent['make_this_many'] }}--></span>@if(isset($reagent['both_list_warning']))
@@ -240,12 +246,6 @@
 						</a>
 						@endspaceless
 						<div>
-							@if ($recipe->yield > 1)
-							<span class='label label-primary' rel='tooltip' title='Amount Yielded'>
-								x {{ $recipe->yield }}
-							</span>
-							@endif
-
 							@if($include_quests && isset($recipe->item->quest[0]))
 							<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>
 							@endif
@@ -263,6 +263,11 @@
 					</div>
 					<img src='{{ icon($recipe->item->icon) }}' width='36' height='36' class='margin-right pull-left'>
 					<div>
+						@if ($recipe->yield > 1)
+						<span class='label label-primary pull-right margin-right' rel='tooltip' title='Amount Yielded'>
+							x {{ $recipe->yield }}
+						</span>
+						@endif
 						<a href='{{ item_link() . $recipe->item->id }}' target='_blank' class='name'>
 							{{ $recipe->item->display_name }}
 						</a>
@@ -348,7 +353,7 @@
 			</div>
 			<div class='panel-body'>
 				<p>Be efficient, make quest items in advance!</p>
-				<p>Materials needed already reflected in lists above.</p>
+				<p>Materials needed already reflected in lists above, but vital information is missing (quantity, HQ requirements). Click the names to add them to your crafting list.</p>
 
 				<ul>
 					@foreach($quest_items as $quest)
@@ -361,14 +366,12 @@
 							No data!
 						@else
 							@foreach ($quest->requirements as $req_item)
-							{{ $req_item->display_name }}
+								<a href='#' class='add-to-list' data-item-id='{{ $req_item->item_id }}' data-item-name='{{ $req_item->display_name }}'>{{ $req_item->display_name }}</a>{{ $loop->last ? '' : ',' }}
 							@endforeach
 						@endif
 					</li>
 					@endforeach
 				</ul>
-
-				<p><em>Want to level faster?  Visit the <a href='/levequests'>Leves</a> page.</em></p>
 			</div>
 		</div>
 	</div>
@@ -383,7 +386,7 @@
 
 				<p>Improve your chances for HQ items by using the <a href='/equipment'>gear profiler</a>.</p>
 
-				<p>Don't forget the <a href='/food'>food</a> or <a href='/materia'>materia</a>!</p>
+				<p>Don't forget the <a href='/food'>food</a> and <a href='/levequests'>leves</a> for faster leveling!</p>
 			</div>
 		</div>
 	</div>

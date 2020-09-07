@@ -21,3 +21,7 @@ Remove/don't copy any rows without items. The first two from Waterside were an i
 ## Leve Types
 
 Learned knowledge over the years. "Candor" levequests always use the 80030 plate image.
+
+## Other data
+
+https://docs.google.com/spreadsheets/d/1hEj9KCDv0TT1NiGJ0S7afS4hfGMPb6tetqXQetYETUE/edit#gid=953424709

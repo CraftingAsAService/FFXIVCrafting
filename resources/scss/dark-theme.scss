@@ -119,6 +119,9 @@ a {
 
 .panel-body {
 	color: $color_mine_shaft;
+	a:not(.btn) {
+		color: lighten($color_mine_shaft, 10%);
+	}
 	label {
 		color: $color_mine_shaft;
 	}
