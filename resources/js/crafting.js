@@ -1,9 +1,9 @@
 var crafting = {
 	init:function() {
-		$('#toggle-crystals').click(crafting.toggle_crystals);
+		crafting.toggle_crystals();
 
-		if (localStorage.getItem('config:toggle-crystals') == 'off')
-			$('#toggle-crystals').trigger('click');
+		$('#toggle-sort').on('click', crafting.toggle_sort);
+		$('#toggle-pr-sort').on('click', crafting.toggle_pr_sort);
 
 		$('#obtain-these-items .collapsible').click(function() {
 			var button = $(this);
@@ -118,6 +118,100 @@ var crafting = {
 			global.exportToCsv(filename + '.csv', data);
 
 			return;
+		});
+	},
+	toggle_pr_sort:function() {
+		var sortEl = $(this),
+			currentMode = sortEl.data('mode') || 'Natural',
+			// Cycle mode between Level, Class (Class+Level), Needed
+			mode = currentMode == 'Level' ? 'Class' : (currentMode == 'Class' ? 'Needed' : 'Level'),
+			sectionEl = $('tbody#PreRequisiteCrafting-section');
+
+		sortEl.data('mode', mode).html(mode + ' Sort');
+
+		if (mode == 'Level') {
+			sectionEl.find('tr.reagent').sort(function (a, b) {
+				return $(a).data('ilvl') > $(b).data('ilvl') ? 1 : -1;
+			}).appendTo(sectionEl);
+		} else if (mode == 'Class') {
+			sectionEl.find('tr.reagent').sort(function (a, b) {
+				return $(a).data('ilvl') < $(b).data('ilvl') ? 1 : -1;
+			}).sort(function (a, b) {
+				return $(a).data('recipe-class') > $(b).data('recipe-class') ? 1 : -1;
+			}).appendTo(sectionEl);
+		} else if (mode == 'Needed') {
+			sectionEl.find('tr.reagent').sort(function (a, b) {
+				return parseInt($(a).find('.needed').text()) < parseInt($(b).find('.needed').text()) ? 1 : -1;
+			}).appendTo(sectionEl);
+		}
+	},
+	toggle_sort:function() {
+		var sortEl = $(this),
+			currentMode = sortEl.data('mode') || 'Category',
+			mode = currentMode == 'Category' ? 'Location' : 'Category',
+			sectionEl = $('tbody#Gathered-section');
+
+		sortEl.data('mode', mode).html(mode + ' Sort');
+
+		if (mode == 'Category') {
+			sectionEl.find('tr.reagent').sort(function (a, b) {
+				return $(a).data('item-category') > $(b).data('item-category') ? 1 : -1;
+			}).appendTo(sectionEl);
+		} else if (mode == 'Location') {
+			var locations = {
+				'shroud': {},
+				'thanalan': {},
+				'lanoscea': {},
+				'misc': {
+					'none': []
+				}
+			};
+
+			sectionEl.find('tr.reagent').each(function() {
+				var trEl = $(this),
+					loc = trEl.data('item-location');
+
+				if (loc.match('Shroud - ')) {
+					locations.shroud[loc] = locations.shroud[loc] || [];
+					locations.shroud[loc].push(trEl);
+				} else if (loc.match('Thanalan - ')) {
+					locations.thanalan[loc] = locations.thanalan[loc] || [];
+					locations.thanalan[loc].push(trEl);
+				} else if (loc.match('La Noscea - ')) {
+					locations.lanoscea[loc] = locations.lanoscea[loc] || [];
+					locations.lanoscea[loc].push(trEl);
+				} else if (loc == '') {
+					locations.misc.none.push(trEl);
+				} else {
+					locations.misc[loc] = locations.misc[loc] || [];
+					locations.misc[loc].push(trEl);
+				}
+			});
+
+
+			$.each(['shroud', 'thanalan', 'lanoscea', 'misc'], function(index, piece) {
+				var obj = locations[piece],
+					keys = [];
+
+				for (k in obj)
+					if (obj.hasOwnProperty(k))
+						keys.push(k);
+
+				keys.sort();
+
+				$.each(keys, function(index, key) {
+					$.each(obj[key], function(index, trEls) {
+						$.each(trEls, function(index, trEl) {
+							$(trEl).appendTo(sectionEl);
+						});
+					});
+				});
+			});
+		}
+
+		// Move any completed entries to the end of the list
+		sectionEl.find('tr.reagent.success').each(function() {
+			$(this).appendTo(sectionEl);
 		});
 	},
 	toggle_crystals:function() {

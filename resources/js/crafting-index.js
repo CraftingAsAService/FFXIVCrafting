@@ -40,14 +40,11 @@ var craftingIndex = {
 			var ids = [];
 			$('.inclusions-list .label-primary').each(function() {
 				ids.push($(this).data('ids'));
-				return;
 			});
 
 			$('#inclusions').val(ids.join(','));
 
 			localStorage.setItem('config:' + 'crafting-index-inclusions', $('.inclusions-list .label-primary').map(function() { return $(this).index(); }).get().join());
-
-			return;
 		});
 
 		// Run the preloaded items after the function's been declared
@@ -62,8 +59,6 @@ var craftingIndex = {
 				$($('.inclusions-list span')[preloaded_inclusions[i]]).trigger('click');
 			}
 		}
-
-		return;
 	},
 	ilvl_events:function() {
 
@@ -81,16 +76,12 @@ var craftingIndex = {
 					min = elMin;
 				if (elMax > max || max == null)
 					max = elMax;
-
-				return;
 			});
 
 			// Translate these mins and maxes to the radio buttons in the modal
 			// Grab the ilvl from there, fill in the inputs
 			$('#recipe-level-start').val($('#start' + min).data('start'));
 			$('#recipe-level-end').val($('#end' + max).data('end'));
-
-			return;
 		});
 
 		// Modal Events
@@ -108,8 +99,6 @@ var craftingIndex = {
 
 			$('#recipe-level-start').val(start);
 			$('#recipe-level-end').val(end);
-
-			return;
 		});
 
 		$('#ilvl-modal input[type=radio]').change(function() {
@@ -125,8 +114,6 @@ var craftingIndex = {
 
 			if ((type == 'start' && typePosition > otherPosition) || (type == 'end' && typePosition < otherPosition))
 				$($(otherEls)[typePosition]).prop('checked', true);
-
-			return;
 		});
 
 		$('#ilvl-modal .choose').click(function(event) {
@@ -140,52 +127,21 @@ var craftingIndex = {
 
 			$('#recipe-level-start').val(start);
 			$('#recipe-level-end').val(end);
-
-			return;
 		});
-
-		return;
 	},
 	class_selection_events:function() {
-
-		// Bootstrap's `data-toggle='buttons'` wasn't powerful enough for what I wanted
-		// Normal Clicks: Only allow one class to be selected
-		// CTRL Clicks: Allow multiple classes to be selected
-		// Scenarios
-		//  One is highlighted, click another: first turns off, new turns on
-		//  Clicking the same one: nothing
-		//  CTRL Clicking the only one highlighted: nothing
-		//  CTRL Clicking another one: both highlight, everything goes yellow (warning)
-		//  CTRL Clicking one off (1 left): goes back to blue (primary)
-
 		$('.class-selector').click(function(event) {
-			event.stopPropagation();
 			event.preventDefault();
+			event.stopPropagation();
 
 			var multiple = event.metaKey || event.ctrlKey,
-				el = $(this),
-				checkboxEl = el.find('input:checkbox');
+				el = $(this);
 
-			// If this is not a multiple selection
-			if ( ! multiple)
-			{
-				// Reset all active states
-				$('.jobs-list .class-selector').removeClass('active');
-
-				// Make the clicked one active
+			if (multiple)
+				el.toggleClass('active', ! el.hasClass('active'));
+			else {
+				$('.class-selector').removeClass('active');
 				el.addClass('active');
-			}
-			else
-			{
-				// Are there already more than one?
-				var selected_count = $('.jobs-list input:checkbox:checked').length;
-
-				// If this one is already active, and there's at least two selected, go ahead and unselect it
-				if (el.hasClass('active') && selected_count > 1)
-					el.removeClass('active');
-				// If this one is already active, but it's the only selected one, just drop out
-				else if ( ! el.hasClass('active'))
-					el.addClass('active');
 			}
 
 			// Fix the checkboxes based on the .active class
@@ -194,38 +150,8 @@ var craftingIndex = {
 					active = checkboxEl.closest('.class-selector').hasClass('active');
 
 				checkboxEl.prop('checked', active);
-
-				return;
 			});
-
-			// Fix the active images based on the .active class
-			$('.jobs-list img').each(function() {
-				var imgEl = $(this),
-					active = imgEl.closest('.class-selector').hasClass('active');
-
-				imgEl
-					.toggleClass('selected', active)
-					.attr('src', imgEl.data((active ? 'active' : 'original') + 'Src'));
-
-				return;
-			});
-
-			return;
 		});
-
-		// Save the original src on each of these for ease of use later
-		$('.jobs-list img').each(function() {
-			$(this).data('originalSrc', $(this).attr('src'));
-			return;
-		});
-
-		// Start the page off with one selected
-		if ($('.class-selector.select-me').length == 1)
-			$('.class-selector.select-me').first().trigger('click');
-		else
-			$('.class-selector').first().trigger('click');
-
-		return;
 	}
 }
 

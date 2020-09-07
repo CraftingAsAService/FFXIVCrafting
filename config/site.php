@@ -199,6 +199,36 @@ return [
 			36, // BLU
 		),
 	),
+	'roles' => [
+		'tank' => [
+			'PLD',
+			'WAR',
+			'DRK',
+			'GNB',
+		],
+		'healer' => [
+			'WHM',
+			'SCH',
+			'AST',
+		],
+		'ranged' => [
+			'BRD',
+			'MCH',
+			'DNC',
+		],
+		'melee' => [
+			'MNK',
+			'DRG',
+			'NIN',
+			'SAM',
+		],
+		'magic' => [
+			'BLM',
+			'SMN',
+			'RDM',
+			'BLM',
+		],
+	],
 	'defined_slots' => array(
 		1	=> 'Main Hand',
 		2	=> 'Off Hand',

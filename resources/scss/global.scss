@@ -1397,3 +1397,10 @@ table.table-curved {
 	font-size: 16px;
 	margin-left: 2px;
 }
+
+.reagent.success {
+	opacity: .5;
+	.bonus-info {
+		visibility: hidden;
+	}
+}

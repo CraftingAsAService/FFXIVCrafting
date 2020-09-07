@@ -7,6 +7,20 @@
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
+	<style>
+		.class-selector input {
+			display: none;
+		}
+		.class-selector {
+			padding: 4px 8px;
+			margin-bottom: 4px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+		}
+		.class-selector.active {
+			border: 1px solid #5ab65a;
+		}
+	</style>
 @stop
 
 @section('javascript')
@@ -34,7 +48,7 @@
 
 	{!! Form::open(['url' => '/crafting', 'class' => 'form-horizontal crafting-form', 'autocomplete' => 'off']) !!}
 		<div class='row'>
-			<div class='col-sm-3 col-lg-2'>
+			<div class='col-sm-3'>
 				<fieldset>
 					<legend>Level Range</legend>
 
@@ -110,20 +124,22 @@
 
 				@endif --}}
 			</div>
-			<div class='col-sm-9 col-lg-10'>
+			<div class='col-sm-9'>
 				<fieldset class='margin-bottom mobile-margin-top'>
 					<legend>Class</legend>
-					<div class='btn-group jobs-list'>
+					<div class='jobs-list'>
 						@foreach($job_list as $job)
-						<?php $this_job = $job->id == reset($crafting_job_ids); ?>
-						<?php $this_level = $account ? $account['levels'][strtolower($job->name)] : 0; ?>
-						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-level='{{ $this_level }}'>
-							<input type='checkbox' name='classes[]' value='{{ $job->abbr }}' class='hidden'>
-							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
-						</label>
+							@php
+								$this_job = $job->id == reset($crafting_job_ids);
+								$this_level = $account ? $account['levels'][strtolower($job->name)] : 0;
+							@endphp
+							<label class='class-selector{{ $this_job ? ' active' : '' }}' data-level='{{ $this_level }}'>
+								<input type='checkbox' name='classes[]' value='{{ $job->abbr }}' class='hidden' {{ $this_job ? ' checked="checked"' : '' }}>
+								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
 						@endforeach
 					</div>
-					{{-- <div class='margin-top hidden-xs hidden' id='crafting-multiple-classes'><small><em>CTRL/CMD click to select multiple classes!</em> <a href='#' class='hide-me' data-storage='crafting-multiple-classes' data-target='#crafting-multiple-classes'>Got it, hide this message</a></small></div> --}}
+					<div class='margin-top hidden-xs' id='crafting-multiple-classes'><small><em>CTRL/CMD click to select multiple classes!</em></small></div>
 				</fieldset>
 
 				<fieldset style='margin-top: 28px;'>
@@ -133,7 +149,7 @@
 						<span>
 							<input type='checkbox' name='self_sufficient' id='self_sufficient_switch' value='1' checked='checked' class='bootswitch' data-on-text='YES' data-off-text='NO' data-size='small'>
 						</span>
-						<strong class='margin-left'>Self Sufficient</strong> <small class='visible-sm-inline visible-md-inline visible-lg-inline'> <i class='glyphicon glyphicon-question-sign pointer text-info' data-toggle='popover' data-title='Self Sufficient Defined' data-content='<em>"I want to gather things manually instead of buying them."</em><hr><small>Option is saved and used throughout the site.</small>'></i></small>
+						<strong class='margin-left'>Self Sufficient</strong> <small class='visible-sm-inline visible-md-inline visible-lg-inline'> <i class='glyphicon glyphicon-question-sign pointer text-info' data-toggle='popover' data-title='Self Sufficient Defined' data-content='<em>"I want to gather things manually instead of buying them."</em>'></i></small>
 					</div>
 				</fieldset>
 

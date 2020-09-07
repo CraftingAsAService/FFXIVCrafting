@@ -82,7 +82,7 @@ class ManualData
 				$hours = collect(explode(',', $record['times']))->map(function($entry) use ($timeConverter) {
 					return $timeConverter[trim($entry)] ?? $entry;
 				})->implode(', ');
-				return [ $record['node_id'] => $hours . ' for ' . $record['uptime'] . 'm' ];
+				return [ $record['node_id'] => $record['type'] . ' - ' . $hours . ' for ' . $record['uptime'] . 'm' ];
 			});
 
 		foreach ($nodeTimers as $nodeId => $timer)

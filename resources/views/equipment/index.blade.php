@@ -7,6 +7,23 @@
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
+	<style>
+		.class-selector input {
+			display: none;
+		}
+		/*.class-selector input:checked ~ .abbr {
+			color: #5ab65a;
+		}*/
+		.class-selector {
+			padding: 4px 8px;
+			margin-bottom: 4px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+		}
+		.class-selector.active {
+			border: 1px solid #5ab65a;
+		}
+	</style>
 @stop
 
 @section('javascript')
@@ -16,13 +33,10 @@
 		$(function() {
 			$('.bootswitch').bootstrapSwitch();
 
-			// On clicking a class icon, fill in the level
-			$('.class-selector').click(function() {
-				$('input[name=level]').val($(this).data('level'));
-				return;
+			$('.class-selector').on('click', function() {
+				$('.class-selector').removeClass('active');
+				$(this).addClass('active');
 			});
-
-			$('.class-selector.active').trigger('click');
 		});
 	</script>
 @stop
@@ -44,51 +58,123 @@
 	{!! Form::open(['url' => '/equipment', 'class' => 'form-horizontal']) !!}
 		<fieldset>
 			<legend>Select your Class</legend>
-			<div class='form-group'>
-				<label class='col-sm-4 col-md-3 control-label'>Disciples of the Hand &amp; Land</label>
-				<div class='col-sm-8 col-md-9'>
-					<div class='btn-group' data-toggle='buttons'>
-						@foreach ($crafting_job_list as $job)
-							<label class='btn btn-primary class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-								<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}>
-								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
-							</label>
-						@endforeach
+			<div class='row text-center'>
+				<div class='col-sm-1' style='width: 25%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/hand.png' width='32' height='32' rel='tooltip' title='Disciples of the Hand'>
 					</div>
-					<div class='btn-group' data-toggle='buttons'>
-						@foreach ($gathering_job_list as $job)
-							<label class='btn btn-info class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-								<input type='radio' name='class' value='{{ $job->abbr }}'>
-								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
-							</label>
+					<div class='row'>
+						@foreach ($crafting_job_list as $job)
+							<div class='col-sm-6'>
+								<label class='class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+									<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}>
+									<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+								</label>
+							</div>
 						@endforeach
 					</div>
 				</div>
-			</div>
-
-			<div class='form-group'>
-				<label class='col-sm-4 col-md-3 control-label'>Disciples of War &amp; Magic</label>
-				<div class='col-sm-8 col-md-9'>
-					<div class='btn-group' data-toggle='buttons'>
-						@foreach ($advanced_melee_job_list as $job)
-						<label class='btn btn-danger class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->abbr }}'>
-							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
-						</label>
-						@endforeach
+				<div class='col-sm-1' style='width: 12.5%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/land.png' width='32' height='32' rel='tooltip' title='Disciples of the Land'>
 					</div>
-					<div class='btn-group' data-toggle='buttons'>
-						@foreach ($advanced_magic_job_list as $job)
-						<label class='btn btn-warning class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
-							<input type='radio' name='class' value='{{ $job->abbr }}'>
-							<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'>
-						</label>
-						@endforeach
+					@foreach ($gathering_job_list as $job)
+						<div>
+							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<input type='radio' name='class' value='{{ $job->abbr }}'>
+								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
+						</div>
+					@endforeach
+				</div>
+				<div class='col-sm-1' style='width: 12.5%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/tank.png' width='32' height='32' rel='tooltip' title='Tanks'>
 					</div>
+					@foreach ($advanced_melee_job_list as $job)
+						@php
+							if ( ! in_array($job->abbr, config('site.roles.tank')))
+								continue;
+						@endphp
+						<div>
+							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<input type='radio' name='class' value='{{ $job->abbr }}'>
+								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
+						</div>
+					@endforeach
+				</div>
+				<div class='col-sm-1' style='width: 12.5%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/healer.png' width='32' height='32' rel='tooltip' title='Healers'>
+					</div>
+					@foreach ($advanced_magic_job_list as $job)
+						@php
+							if ( ! in_array($job->abbr, config('site.roles.healer')))
+								continue;
+						@endphp
+						<div>
+							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<input type='radio' name='class' value='{{ $job->abbr }}'>
+								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
+						</div>
+					@endforeach
+				</div>
+				<div class='col-sm-1' style='width: 12.5%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/melee.png' width='32' height='32' rel='tooltip' title='Melee DPS'>
+					</div>
+					@foreach ($advanced_melee_job_list as $job)
+						@php
+							if ( ! in_array($job->abbr, config('site.roles.melee')))
+								continue;
+						@endphp
+						<div>
+							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<input type='radio' name='class' value='{{ $job->abbr }}'>
+								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
+						</div>
+					@endforeach
+				</div>
+				<div class='col-sm-1' style='width: 12.5%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/ranged.png' width='32' height='32' rel='tooltip' title='Ranged DPS'>
+					</div>
+					@foreach ($advanced_melee_job_list as $job)
+						@php
+							if ( ! in_array($job->abbr, config('site.roles.ranged')))
+								continue;
+						@endphp
+						<div>
+							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<input type='radio' name='class' value='{{ $job->abbr }}'>
+								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
+						</div>
+					@endforeach
+				</div>
+				<div class='col-sm-1' style='width: 12.5%;'>
+					<div style='margin-bottom: 20px;'>
+						<img src='/img/roles/squared/magic.png' width='32' height='32' rel='tooltip' title='Magic Ranged DPS'>
+					</div>
+					@foreach ($advanced_magic_job_list as $job)
+						@php
+							if ( ! in_array($job->abbr, config('site.roles.magic')))
+								continue;
+						@endphp
+						<div>
+							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<input type='radio' name='class' value='{{ $job->abbr }}'>
+								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
+							</label>
+						</div>
+					@endforeach
 				</div>
 			</div>
 		</fieldset>
-		<fieldset>
+		<fieldset style='margin-top: 20px;'>
 			<legend>Options</legend>
 			<div class='form-group'>
 				<label class='col-sm-4 col-md-3 control-label'>Level</label>

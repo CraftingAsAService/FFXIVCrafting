@@ -77,7 +77,7 @@ class EntityController extends Controller {
 	{
 		$item->load('mobs', 'mobs.location', 'mobs.instances');
 
-		return view('entity.mobs', compact('item', 'shops'));
+		return view('entity.mobs', compact('item'));
 	}
 
 	private function instances($item)

@@ -1,13 +1,12 @@
 var gulp = require('gulp'),
 	fs = require('fs'),
+	debounce = require('debounce'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	plugins = gulpLoadPlugins({
 		rename: {
 			'gulp-sass-multi-inheritance': 'sassInheritance'
 		}
 	});
-
-const SANE_OPTIONS = { debounceDelay: 2000, saneOptions: { watchman: true } };
 
 function getStatus() {
 	// If the gulp.stop file exists, don't run any gulp commands
@@ -25,36 +24,32 @@ gulp.task('watch', function() {
 	/**
 	 * CSS
 	 */
-	plugins.saneWatch('resources/assets/scss/**/*.scss', SANE_OPTIONS, function() {
-		gulp.start('css');
-	});
+	gulp.watch('resources/scss/**/*.scss', debounce(gulp.parallel('css')));
 
 	/**
 	 * JavaScript
 	 */
-	plugins.saneWatch('resources/assets/javascript/**/*.js', SANE_OPTIONS, function() {
-		gulp.start('js');
-	});
+	gulp.watch('resources/js/**/*.js', debounce(gulp.parallel('js')));
 });
 
 /**
  * SASS
  */
-gulp.task('css', function() {
+gulp.task('css', function(done) {
 	if ( ! getStatus())
-		return;
+		return done();
 
-	return gulp.src('resources/assets/scss/**/*.scss')
+	return gulp.src('resources/scss/**/*.scss')
 		.pipe(plugins.plumber({ errorHandle: plugins.notify.onError("Error: <%= error.message %>") }))
+		// filter out unchanged scss files, only works when watching
+		.pipe(plugins.if(global.isWatching, plugins.cached('sass')))
 		// Find files that depend on the files that have changed
 		// Also finds files inside of ctgus, as they can depend on common assets
-		.pipe(plugins.sassInheritance({ dir: 'resources/assets/scss' }))
+		.pipe(plugins.sassInheritance({ dir: 'resources/scss' }))
 		// Filter out internal imports (folders and files starting with "_" )
 		.pipe(plugins.filter(function (file) {
 			return !/\/_/.test(file.path) || !/^_/.test(file.relative);
 		}))
-		// filter out unchanged scss files, only works when watching
-		.pipe(plugins.if(global.isWatching, plugins.cached('sass')))
 		// Run SASS and AutoPrefix it
 		.pipe(plugins.sass({ outputStyle: 'compressed' }).on('error', plugins.sass.logError))
 		.pipe(plugins.autoprefixer())
@@ -66,15 +61,15 @@ gulp.task('css', function() {
 /**
  * Scripts
  */
-gulp.task('js', function() {
+gulp.task('js', function(done) {
 	if ( ! getStatus())
-		return;
+		return done();
 
-	return gulp.src('resources/assets/javascript/**/*.js')
+	return gulp.src('resources/js/**/*.js')
 		.pipe(plugins.plumber({ errorHandle: plugins.notify.onError("Error: <%= error.message %>") }))
 		// filter out unchanged js files, only works when watching
-		.pipe(plugins.if(global.isWatching, plugins.cached('uglify')))
-		.pipe(plugins.uglify())
+		.pipe(plugins.if(global.isWatching, plugins.cached('terser')))
+		.pipe(plugins.terser())
 		.pipe(gulp.dest('public/js'))
 		.pipe(plugins.notify({ message: 'JS compiled <%= file.relative %>' }));
 });

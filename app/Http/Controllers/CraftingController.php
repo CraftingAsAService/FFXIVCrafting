@@ -227,8 +227,8 @@ class CraftingController extends Controller
 						'reagents.recipes.job'
 			)
 			->groupBy('item_id')
+			->orderBy('job_id')
 			->orderBy($lvlType == 'i' ? 'level' : 'recipe_level')
-			->orderBy('id')
 			;
 
 		if (isset($item_ids))
@@ -346,7 +346,8 @@ class CraftingController extends Controller
 					exit('Crafting Error');
 					// dd($reagent['item']);
 				}
-				$level = $reagent['item']->recipes[0]->level;
+				// Sorting Pre-Requisite by Job ID
+				$level = $reagent['item']->recipes[0]->job_id;
 			}
 			elseif ($reagent['item']->vendors)
 			{
@@ -367,24 +368,24 @@ class CraftingController extends Controller
 		// Sort the pre-requisite crafting by rank
 		// We don't need to sort them by level, just make sure it's in the proper structure
 		// The keys don't matter either
-		$prc =& $sorted_reagent_list['Pre-Requisite Crafting'];
+// 		$prc =& $sorted_reagent_list['Pre-Requisite Crafting'];
+// dd($prc);
+// 		$new_prc = ['1' => []];
+// 		foreach ($prc as $vals)
+// 			foreach ($vals as $v)
+// 				$new_prc['1'][] = $v;
+// dd($new_prc);
+// 		// Sort them by rank first
+// 		// TODO re-enable rank?  Currently no data
+// 		// usort($new_prc['1'], function($a, $b) {
+// 		// 	return $a['item']->rank - $b['item']->rank;
+// 		// });
+// 		// Then by classjob
+// 		usort($new_prc['1'], function($a, $b) {
+// 			return $a['item']->recipes[0]->job->id - $b['item']->recipes[0]->job->id;
+// 		});
 
-		$new_prc = ['1' => []];
-		foreach ($prc as $vals)
-			foreach ($vals as $v)
-				$new_prc['1'][] = $v;
-
-		// Sort them by rank first
-		// TODO re-enable rank?  Currently no data
-		// usort($new_prc['1'], function($a, $b) {
-		// 	return $a['item']->rank - $b['item']->rank;
-		// });
-		// Then by classjob
-		usort($new_prc['1'], function($a, $b) {
-			return $a['item']->recipes[0]->job->id - $b['item']->recipes[0]->job->id;
-		});
-
-		$prc = $new_prc;
+// 		$sorted_reagent_list['Pre-Requisite Crafting'] = $new_prc;
 
 		$reagent_list = $sorted_reagent_list;
 
