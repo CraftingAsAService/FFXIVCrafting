@@ -24,10 +24,10 @@
 
 @section('banner')
 
-	<a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
+	{{-- <a href='#' id='start_tour' class='start btn btn-primary pull-right' style='margin-top: 12px;'>
 		<i class='glyphicon glyphicon-play'></i>
 		Start Tour
-	</a>
+	</a> --}}
 
 	<h1>
 		<img src='/img/jobs/{{ strtoupper($job->abbr) }}.png' width='32' height='32' style='position: relative; top: -4px;'>
@@ -37,6 +37,8 @@
 @stop
 
 @section('content')
+
+<p>Click the Class Icons to add them to your crafting list!</p>
 
 <table class='table' id='gear-main'>
 	<tbody>

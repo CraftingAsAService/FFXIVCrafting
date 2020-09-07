@@ -353,7 +353,7 @@
 			</div>
 			<div class='panel-body'>
 				<p>Be efficient, make quest items in advance!</p>
-				<p>Materials needed already reflected in lists above.</p>
+				<p>Materials needed already reflected in lists above, but vital information is missing (quantity, HQ requirements). Click the names to add them to your crafting list.</p>
 
 				<ul>
 					@foreach($quest_items as $quest)
@@ -366,14 +366,12 @@
 							No data!
 						@else
 							@foreach ($quest->requirements as $req_item)
-							{{ $req_item->display_name }}
+								<a href='#' class='add-to-list' data-item-id='{{ $req_item->item_id }}' data-item-name='{{ $req_item->display_name }}'>{{ $req_item->display_name }}</a>{{ $loop->last ? '' : ',' }}
 							@endforeach
 						@endif
 					</li>
 					@endforeach
 				</ul>
-
-				<p><em>Want to level faster?  Visit the <a href='/levequests'>Leves</a> page.</em></p>
 			</div>
 		</div>
 	</div>
@@ -388,7 +386,7 @@
 
 				<p>Improve your chances for HQ items by using the <a href='/equipment'>gear profiler</a>.</p>
 
-				<p>Don't forget the <a href='/food'>food</a>{{--  or <a href='/materia'>materia</a> --}}!</p>
+				<p>Don't forget the <a href='/food'>food</a> and <a href='/levequests'>leves</a> for faster leveling!</p>
 			</div>
 		</div>
 	</div>
