@@ -1,6 +1,7 @@
 var crafting = {
 	init:function() {
-		crafting.toggle_crystals();
+		$('#toggle-crystals').click(crafting.toggle_crystals);
+		$('#toggle-crystals').trigger('click');
 
 		$('#toggle-sort').on('click', crafting.toggle_sort);
 		$('#toggle-pr-sort').on('click', crafting.toggle_pr_sort);
@@ -155,7 +156,7 @@ var crafting = {
 
 		if (mode == 'Category') {
 			sectionEl.find('tr.reagent').sort(function (a, b) {
-				return $(a).data('item-category') > $(b).data('item-category') ? 1 : -1;
+				return $(a).data('item-category') + $(a).data('item-name') > $(b).data('item-category') + $(b).data('item-name') ? 1 : -1;
 			}).appendTo(sectionEl);
 		} else if (mode == 'Location') {
 			var locations = {

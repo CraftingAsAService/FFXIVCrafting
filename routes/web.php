@@ -17,6 +17,7 @@ Route::get('entity/{item}/{type}', 'EntityController@show');
 
 // Route::get('materia', 'MateriaController@getIndex');
 Route::get('food', 'FoodController@getIndex');
+Route::get('hunting', 'HuntingController@index');
 // Route::get('quests', 'QuestsController@getIndex');
 
 // Route::get('map', 'MapController@getIndex');

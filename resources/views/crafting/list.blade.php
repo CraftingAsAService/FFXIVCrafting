@@ -115,9 +115,10 @@
 				<th colspan='6'>
 					<button class='btn btn-default btn-sm pull-right collapsible'><i class='glyphicon glyphicon-chevron-down'></i></button>
 					@if ($section == 'Gathered')
-					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-sort'>Category Sort</button>
+					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-crystals'>Toggle Crystals</button>
+					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-sort'>Default Sort</button>
 					@elseif ($section == 'Pre-Requisite Crafting')
-					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-pr-sort'>Natural Sort</button>
+					<button class='btn btn-default btn-sm pull-right margin-right' id='toggle-pr-sort'>Default Sort</button>
 					@endif
 					<div style='margin-top: 4px;'>Origin: {{ $section }}</div>
 				</th>
@@ -137,10 +138,8 @@
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
 					// $link = 'recipe/' . $reagent['item']->recipes[0]->id;
 				}
-				if ($section == 'Gathered' && $reagent['item']->category->name == 'Crystal')
-					continue;
 			?>
-			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}' data-item-location='{{ is_string($level) && $level ? $level : '' }}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif' data-recipe-class='{{ $reagent['item']->recipes[0]->job->abbr ?? '' }}'>
+			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-item-name='{{ $reagent['item']->display_name }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}' data-item-location='{{ is_string($level) && $level ? $level : '' }}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif' data-recipe-class='{{ $reagent['item']->recipes[0]->job->abbr ?? '' }}'>
 				<td class='text-left'>
 					@if ($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>

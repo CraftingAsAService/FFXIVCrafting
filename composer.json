@@ -14,6 +14,7 @@
 		"laravel/framework": "5.8.*",
 		"laravelcollective/html": "5.8.*",
 		"nesbot/carbon": "1.*",
+		"parsecsv/php-parsecsv": "^1.2",
 		"predis/predis": "^1.1",
 		"xivapi/xivapi-php": "^1.6"
 	},
