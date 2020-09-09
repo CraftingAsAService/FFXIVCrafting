@@ -25,7 +25,7 @@ class HuntingController extends Controller
 	{
 		$sections = [];
 
-		$huntingData = \Cache::rememberForever('huntingData', function() {
+		$huntingData = \Cache::store('file')->rememberForever('huntingData', function() {
 			$huntingData = \Storage::get('hunting.tsv');
 			$csv = new \ParseCsv\Csv();
 			$csv->fields = ['class', 'image', 'rank', 'task', 'number', 'area', 'location'];
