@@ -474,10 +474,20 @@ class CraftingController extends Controller
 						// Compile cluster jobs
 						$cluster_jobs = [];
 						foreach ($reagent->nodes as $node)
-							@$cluster_jobs[$node->type <= 1 ? 'MIN' : 'BTN']++;
+						{
+							$jShort = $node->type <= 1 ? 'MIN' : 'BTN';
+
+							if ( ! isset($cluster_jobs[$jShort]))
+								$cluster_jobs[$jShort] = [ 'count' => 0 ];
+
+							$cluster_jobs[$jShort]['type']  = $node->type;
+							$cluster_jobs[$jShort]['timer'] = $node->timer;
+							$cluster_jobs[$jShort]['count']++;
+						}
 
 						// Get the "highest" job
-						asort($cluster_jobs);
+						$x = array_column($cluster_jobs, 'count');
+						array_multisort($x, SORT_DESC, $cluster_jobs);
 
 						$reagent_list[$reagent->id]['self_sufficient'] = array_keys($cluster_jobs)[count($cluster_jobs) - 1];
 						$reagent_list[$reagent->id]['cluster_jobs'] = $cluster_jobs;

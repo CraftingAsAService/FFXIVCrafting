@@ -624,6 +624,8 @@ class XIVAPI
 		$this->loopEndpoint('itemuicategory', [
 			'ID',
 			'Name',
+			'OrderMajor',
+			'OrderMinor',
 		], function($data) {
 			$this->aspir->setData('item_category', [
 				'id'        => $data->ID,
@@ -632,6 +634,7 @@ class XIVAPI
 				//  I'm not using this datapoint, and it would require a Manual function to figure it
 				//  See Garland's "GetCategoryDamageAttribute" function within "Hacks.cs"
 				// 'attribute' => null,
+				'rank'      => ($data->OrderMajor ?? 0) . '.' . sprintf('%03d', $data->OrderMinor ?? 0),
 			], $data->ID);
 		});
 	}

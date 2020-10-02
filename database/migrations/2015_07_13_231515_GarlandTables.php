@@ -387,6 +387,7 @@ class GarlandTables extends Migration
 			$table->string('name');
 			// $table->integer('attribute_id')->unsigned()->nullable();
 			$table->string('attribute')->nullable();
+			$table->decimal('rank', 8, 3)->nullable();
 		});
 
 		if ( ! Schema::hasTable('item'))

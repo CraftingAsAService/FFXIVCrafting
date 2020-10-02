@@ -132,14 +132,14 @@
 				$link = item_link() . $reagent['item']->id;
 				if ($section == 'Pre-Requisite Crafting')
 				{
-					$item_level = $reagent['item']->recipes[0]->level;
+					$item_level = $reagent['item']->recipes[0]->{$section == 'Pre-Requisite Crafting' ? 'recipe_level' : 'level'};
 					$yields = $reagent['item']->recipes[0]->yield;
 					foreach ($reagent['item']->recipes[0]->reagents as $rr_item)
 						$requires[] = $rr_item->pivot->amount . 'x' . $rr_item->id;
 					// $link = 'recipe/' . $reagent['item']->recipes[0]->id;
 				}
 			?>
-			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-item-name='{{ $reagent['item']->display_name }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}' data-item-location='{{ is_string($level) && $level ? $level : '' }}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif' data-recipe-class='{{ $reagent['item']->recipes[0]->job->abbr ?? '' }}'>
+			<tr class='reagent' data-item-id='{{ $reagent['item']->id }}' data-item-name='{{ $reagent['item']->display_name }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $yields }}' data-ilvl='{{ $reagent['item']->ilvl }}' data-item-category='{{ $reagent['item']->category->name }}' data-item-location='{{ is_string($level) && $level ? $level : '' }}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif' data-recipe-class='{{ $reagent['item']->recipes[0]->job->abbr ?? '' }}' data-sorting='{{ $reagent['item']->category->rank . '.' . str_pad($reagent['item']->ilvl, 3, '0', STR_PAD_LEFT) . '.' . str_pad($reagent['item']->id, 8, '0', STR_PAD_LEFT) }}'>
 				<td class='text-left'>
 					@if ($level != 0)
 					<a class='close ilvl' rel='tooltip' title='Level'>
@@ -187,8 +187,8 @@
 				</td>
 				<td class='valign total'>0</td>
 				<td class='valign'>
-					@foreach(array_keys(array_reverse($reagent['cluster_jobs'])) as $cluster_job)
-					<img src='/img/jobs/{{ $cluster_job }}-inactive.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' data-notice='{{ ucwords(strtolower($cluster_job)) }} Nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
+					@foreach(array_reverse($reagent['cluster_jobs']) as $cluster_job => $node)
+					<img src='/img/gathering/nodes/{{ $node['type'] . ($node['timer'] ? '-unspoiled' : '') }}.png' width='24' height='24' class='click-to-view' data-type='{{ strtolower($cluster_job) }}nodes' data-notice='{{ ucwords(strtolower($cluster_job)) }} Nodes' rel='tooltip' title='Click to load {{ $cluster_job }} Nodes'>
 					@endforeach
 
 					@foreach($reagent['item']->recipes as $recipe)

@@ -156,7 +156,7 @@ var crafting = {
 
 		if (mode == 'Category') {
 			sectionEl.find('tr.reagent').sort(function (a, b) {
-				return $(a).data('item-category') + $(a).data('item-name') > $(b).data('item-category') + $(b).data('item-name') ? 1 : -1;
+				return $(a).data('sorting') > $(b).data('sorting') ? 1 : -1;
 			}).appendTo(sectionEl);
 		} else if (mode == 'Location') {
 			var locations = {
