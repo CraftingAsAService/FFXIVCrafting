@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 // php artisan aspir:migrate
 //  OR
 // php artisan migrate:refresh
@@ -44,8 +46,9 @@ class AspirSeeder extends Seeder
 
 		$keys = '(`' . implode('`,`', $keys) . '`)';
 		$updateKeys = implode(', ', $updateKeys);
+		$ignore = $updateKeys ? '' : 'IGNORE';
 
-		foreach (array_chunk($rows, 300) as $batchID => $data)
+		foreach (array_chunk($rows, 500) as $batchID => $data)
 		{
 			$this->command->comment('Inserting ' . count($data) . ' rows for ' . $table . ' (' . ($batchID + 1) . ')');
 
@@ -60,9 +63,9 @@ class AspirSeeder extends Seeder
 			}
 
 			\DB::insert(
-				'INSERT INTO ' . $table . ' ' . $keys .
+				'INSERT ' . $ignore . ' INTO ' . $table . ' ' . $keys .
 				' VALUES ' . implode(',', $values) .
-				' ON DUPLICATE KEY UPDATE ' . $updateKeys
+				($ignore ? '' : ' ON DUPLICATE KEY UPDATE ' . $updateKeys)
 			, $pdo);
 		}
 	}

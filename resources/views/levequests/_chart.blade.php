@@ -116,7 +116,7 @@
 	</thead>
 	<tbody>
 		@foreach($chart as $row)
-		<tr class='{{ $row['level'] - 1 == $account['levels'][strtolower($leve->job_category->jobs[0]->name)] ? 'success' : '' }}'>
+		<tr>
 			<td class='text-center nowrap'>{{ $row['level'] }} to {{ $row['level'] + 1 }}</td>
 			<td class='text-center'>{{ number_format($row['requires']) }}</td>
 			<td class='text-center'>{{ $row['turnins'] }}</td>

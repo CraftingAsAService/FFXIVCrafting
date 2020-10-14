@@ -37,13 +37,13 @@
 			<div class='form-group'>
 				<label for='name' class='col-sm-4 col-md-3 col-lg-2 control-label'>Character Name</label>
 				<div class='col-sm-8 col-md-9 col-lg-10'>
-					<input type='text' name='name' class='form-control' id='name' value='{{ $character_name }}' required='required'>
+					<input type='text' name='name' class='form-control' id='name' value='' required='required'>
 				</div>
 			</div>
 			<div class='form-group'>
 				<label for='server' class='col-sm-4 col-md-3 col-lg-2 control-label'>Server</label>
 				<div class='col-sm-8 col-md-9 col-lg-10'>
-					<input type='text' name='server' class='form-control' id='server' value='{{ $server }}' required='required'>
+					<input type='text' name='server' class='form-control' id='server' value='' required='required'>
 				</div>
 			</div>
 			<div class='form-group text-right'>

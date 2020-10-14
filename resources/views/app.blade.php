@@ -71,20 +71,6 @@
 						</a>
 					</li>
 
-					{{--
-					<li>
-						<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
-							@if(isset($account) && $account)
-							<img src='{!! $account['avatar'] !!}' width='16' height='16' class='border-radius'>
-							<span>{!! $character_name !!}</span>
-							@else
-							<img src="/img/icons/account.png">
-							<span>Account</span>
-							@endif
-						</a>
-					</li>
-					--}}
-
 					<li>
 						<hr>
 					</li>
@@ -161,19 +147,6 @@
 									@endforeach
 								</ul>
 							</li>
-							{{--
-							<li>
-								<a href="/account"{!! isset($active) && $active == 'account' ? ' class="active"' : '' !!}>
-									@if(isset($account) && $account)
-									<img src='{!! $account['avatar'] !!}' width='16' height='16' class='border-radius'>
-									<span>{!! $character_name !!}</span>
-									@else
-									<img src="/img/icons/account.png">
-									<span>Account</span>
-									@endif
-								</a>
-							</li>
-							 --}}
 							<li>
 								<a href="/list"{!! isset($active) && $active == 'list' ? ' class="active"' : '' !!}>
 									<img src="/img/icons/bag.png">

@@ -111,18 +111,6 @@
 					</div>
 
 				</fieldset>
-
-				{{-- @if(isset($account) && $account)
-
-				<a href='#' class='btn btn-default btn-block margin-top' id='account-ilvl'><img src='{!! $account['avatar'] !!}' width='16' height='16' class='border-radius'> Use Account</a>
-
-				@else
-
-				<span class='label label-default hidden-xs' style='display: block; margin-top: 20px;'>
-					Use the Account option<br>for more functionality!
-				</span>
-
-				@endif --}}
 			</div>
 			<div class='col-sm-9'>
 				<fieldset class='margin-bottom mobile-margin-top'>
@@ -131,9 +119,8 @@
 						@foreach($job_list as $job)
 							@php
 								$this_job = $job->id == reset($crafting_job_ids);
-								$this_level = $account ? $account['levels'][strtolower($job->name)] : 0;
 							@endphp
-							<label class='class-selector{{ $this_job ? ' active' : '' }}' data-level='{{ $this_level }}'>
+							<label class='class-selector{{ $this_job ? ' active' : '' }}' data-level='0'>
 								<input type='checkbox' name='classes[]' value='{{ $job->abbr }}' class='hidden' {{ $this_job ? ' checked="checked"' : '' }}>
 								<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>

@@ -66,7 +66,7 @@
 					<div class='row'>
 						@foreach ($crafting_job_list as $job)
 							<div class='col-sm-6'>
-								<label class='class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+								<label class='class-selector{{ $job->id == reset($job_ids['crafting']) ? ' active' : '' }}' data-level='1'>
 									<input type='radio' name='class' value='{{ $job->abbr }}' {{ $job->id == reset($job_ids['crafting']) ? ' checked="checked"' : '' }}>
 									<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 								</label>
@@ -80,7 +80,7 @@
 					</div>
 					@foreach ($gathering_job_list as $job)
 						<div>
-							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<label class='class-selector' data-level='1'>
 								<input type='radio' name='class' value='{{ $job->abbr }}'>
 								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>
@@ -97,7 +97,7 @@
 								continue;
 						@endphp
 						<div>
-							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<label class='class-selector' data-level='1'>
 								<input type='radio' name='class' value='{{ $job->abbr }}'>
 								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>
@@ -114,7 +114,7 @@
 								continue;
 						@endphp
 						<div>
-							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<label class='class-selector' data-level='1'>
 								<input type='radio' name='class' value='{{ $job->abbr }}'>
 								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>
@@ -131,7 +131,7 @@
 								continue;
 						@endphp
 						<div>
-							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<label class='class-selector' data-level='1'>
 								<input type='radio' name='class' value='{{ $job->abbr }}'>
 								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>
@@ -148,7 +148,7 @@
 								continue;
 						@endphp
 						<div>
-							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<label class='class-selector' data-level='1'>
 								<input type='radio' name='class' value='{{ $job->abbr }}'>
 								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>
@@ -165,7 +165,7 @@
 								continue;
 						@endphp
 						<div>
-							<label class='class-selector' data-level='{{ $account ? $account['levels'][strtolower($job->name)] : 1 }}'>
+							<label class='class-selector' data-level='1'>
 								<input type='radio' name='class' value='{{ $job->abbr }}'>
 								<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->abbr }}'> <span class='abbr'>{{ $job->abbr }}</span>
 							</label>

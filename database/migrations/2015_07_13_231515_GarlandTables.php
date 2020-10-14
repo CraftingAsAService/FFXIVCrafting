@@ -454,11 +454,12 @@ class GarlandTables extends Migration
 			$table->increments('id')->unsigned();
 			$table->integer('item_id')->unsigned();
 			$table->integer('job_id')->unsigned();
-			$table->integer('recipe_level')->unsigned();
 			$table->integer('level')->unsigned();
+			$table->integer('recipe_level')->unsigned();
+			$table->tinyInteger('stars')->unsigned()->nullable();
+			$table->smallInteger('difficulty')->unsigned()->nullable();
 			$table->smallInteger('durability')->unsigned()->nullable();
 			$table->smallInteger('quality')->unsigned()->nullable();
-			$table->smallInteger('progress')->unsigned()->nullable();
 			$table->smallInteger('yield')->unsigned();
 			$table->boolean('quick_synth')->unsigned()->nullable();
 			$table->boolean('hq')->unsigned()->nullable();

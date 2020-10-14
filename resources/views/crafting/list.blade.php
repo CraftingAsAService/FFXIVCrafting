@@ -228,7 +228,7 @@
 			<tr class='reagent exempt' data-item-id='{{ $recipe->item->id }}' data-requires='{{ implode('&', $requires) }}' data-yields='{{ $recipe->yield }}'>
 				<td class='text-left'>
 					<div class='pull-right text-right'>
-						@spaceless
+						{{-- TODO ENABLE @spaceless --}}
 						<a class='close ilvl' rel='tooltip' title='Level'>
 							<div class='text-right'>
 								{{ $lvlType == 'r' ? $recipe->recipe_level : $recipe->level }}
@@ -243,7 +243,7 @@
 								@endif
 							</div>
 						</a>
-						@endspaceless
+						{{-- TODO ENABLE @endspaceless --}}
 						<div>
 							@if($include_quests && isset($recipe->item->quest[0]))
 							<img src='/img/{{ $recipe->item->quest[0]->quality ? 'H' : 'N' }}Q.png' rel='tooltip' title='Turn in {{ $recipe->item->quest[0]->amount }}{{ $recipe->item->quest[0]->quality ? ' (HQ)' : '' }} to the Guildmaster{{ $recipe->item->quest[0]->notes ? ', see bottom for note' : '' }}' width='24' height='24'>

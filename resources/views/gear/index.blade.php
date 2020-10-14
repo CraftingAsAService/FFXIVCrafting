@@ -103,7 +103,7 @@
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($crafting_job_list as $job)
 						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : 1; ?>
 						<label class='btn btn-primary class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
 							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
@@ -112,7 +112,7 @@
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($gathering_job_list as $job)
 						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : 1; ?>
 						<label class='btn btn-info class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
 							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
@@ -127,7 +127,7 @@
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($advanced_melee_job_list as $job)
 						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : 1; ?>
 						<label class='btn btn-danger class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
 							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>
@@ -136,7 +136,7 @@
 					<div class='btn-group' data-toggle='buttons'>
 						@foreach($advanced_magic_job_list as $job)
 						<?php $this_job = isset($defaults['job']) && $defaults['job'] == $job->abbr; ?>
-						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : ($account ? $account['levels'][strtolower($job->name)] : 1); ?>
+						<?php $default_level = $this_job && isset($defaults['level']) ? $defaults['level'] : 1; ?>
 						<label class='btn btn-warning class-selector{{ $this_job ? ' select-me' : '' }}' data-job='{{ $job->abbr }}' data-level='{{ $default_level }}'>
 							<img src='/img/jobs/{{ $job->abbr }}-inactive.png' data-active-src='/img/jobs/{{ $job->abbr }}-active.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
 						</label>

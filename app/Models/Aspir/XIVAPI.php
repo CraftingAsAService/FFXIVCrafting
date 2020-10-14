@@ -921,6 +921,12 @@ class XIVAPI
 			'ClassJob.ID',
 			'ItemResult.LevelItem',
 			'RecipeLevelTable.ClassJobLevel',
+			'RecipeLevelTable.Difficulty',
+			'RecipeLevelTable.Durability',
+			'RecipeLevelTable.Quality',
+			'RecipeLevelTable.Stars',
+			'CanQuickSynth',
+			'GameContentLinks.RecipeNotebookList',
 			'AmountResult',
 			'CanHq',
 			// Reagents
@@ -952,17 +958,30 @@ class XIVAPI
 				'id'           => $data->ID,
 				'item_id'      => $data->ItemResultTargetID,
 				'job_id'       => $data->ClassJob->ID,
-				'recipe_level' => $data->RecipeLevelTable->ClassJobLevel,
 				'level'        => $data->ItemResult->LevelItem,
+				'recipe_level' => $data->RecipeLevelTable->ClassJobLevel,
+				'stars'        => $data->RecipeLevelTable->Stars,
+				'difficulty'   => $data->RecipeLevelTable->Difficulty,
+				'durability'   => $data->RecipeLevelTable->Durability,
+				'quality'      => $data->RecipeLevelTable->Quality,
 				'yield'        => $data->AmountResult,
+				'quick_synth'  => $data->CanQuickSynth ? 1 : null,
 				'hq'           => $data->CanHq ? 1 : null,
 				'fc'           => null,
-				// I don't use these datapoints, setting aside
-				// 'durability'   => $data->TODO,
-				// 'quality'      => $data->TODO,
-				// 'progress'     => $data->TODO,
-				// 'quick_synth'  => $data->TODO,
 			], $data->ID);
+
+			foreach ($data->GameContentLinks->RecipeNotebookList as $slot => $rnlIds)
+				foreach ($rnlIds as $notebookId)
+				{
+					if ( ! $notebookId)
+						continue;
+
+					$this->aspir->setData('notebook_recipe', [
+						'recipe_id'   => $data->ID,
+						'notebook_id' => $notebookId,
+						'slot'        => (int) preg_replace('/Recipe/', '', $slot),
+					]);
+				}
 
 			foreach (range(0, 9) as $slot)
 				if ($data->{'ItemIngredient' . $slot . 'TargetID'} && $data->{'AmountIngredient' . $slot})
@@ -976,51 +995,94 @@ class XIVAPI
 		$this->limit = null;
 	}
 
-	public function companyCrafts()
+	// public function companyCrafts()
+	// {
+	// 	// Recipes and Company Crafts can overlap on IDs. Give them some space.
+	// 	$idBase = max(array_keys($this->aspir->data['recipe']));
+
+	// 	$this->loopEndpoint('companycraftsequence', [
+	// 		'ID',
+	// 		'ResultItemTargetID',
+	// 		'CompanyCraftPart0',
+	// 		'CompanyCraftPart1',
+	// 		'CompanyCraftPart2',
+	// 		'CompanyCraftPart3',
+	// 		'CompanyCraftPart4',
+	// 		'CompanyCraftPart5',
+	// 		'CompanyCraftPart6',
+	// 		'CompanyCraftPart7',
+	// 	], function($data) use ($idBase) {
+
+	// 		$recipeId = $idBase + $data->ID;
+
+	// 		$this->aspir->setData('recipe', [
+	// 			'id'           => $recipeId,
+	// 			'item_id'      => $data->ResultItemTargetID,
+	// 			'job_id'       => 0,
+	// 			'recipe_level' => 1,
+	// 			'level'        => 1,
+	// 			'yield'        => 1,
+	// 			'hq'           => null,
+	// 			'fc'           => 1,
+	// 		], $recipeId);
+
+	// 		foreach (range(0, 7) as $partSlot)
+	// 			if ($data->{'CompanyCraftPart' . $partSlot})
+	// 				foreach (range(0, 2) as $processSlot)
+	// 				{
+	// 					$process =& $data->{'CompanyCraftPart' . $partSlot}->{'CompanyCraftProcess' . $processSlot};
+	// 					if ($process)
+	// 						foreach (range(0, 11) as $setSlot)
+	// 							if ($process->{'SetQuantity' . $setSlot})
+	// 								$this->aspir->setData('recipe_reagents', [
+	// 									'item_id'   => $process->{'SupplyItem' . $setSlot}->Item,
+	// 									'recipe_id' => $recipeId,
+	// 									'amount'    => $process->{'SetQuantity' . $setSlot} * $process->{'SetsRequired' . $setSlot},
+	// 								]);
+	// 				}
+	// 	});
+	// }
+
+	public function notebookDivisions()
 	{
-		// Recipes and Company Crafts can overlap on IDs. Give them some space.
-		$idBase = max(array_keys($this->aspir->data['recipe']));
+		// This one doesn't come back; manually add it
+		$this->aspir->setData('notebookdivision', [
+			'id'          => 1, // 0 index'd, artificially +1'd
+			'name'        => '1-5',
+			'category_id' => 0,
+		], 1); // 0 index'd, artificially +1'd
 
-		$this->loopEndpoint('companycraftsequence', [
+		$this->loopEndpoint('notebookdivision', [
 			'ID',
-			'ResultItemTargetID',
-			'CompanyCraftPart0',
-			'CompanyCraftPart1',
-			'CompanyCraftPart2',
-			'CompanyCraftPart3',
-			'CompanyCraftPart4',
-			'CompanyCraftPart5',
-			'CompanyCraftPart6',
-			'CompanyCraftPart7',
-		], function($data) use ($idBase) {
+			'Name',
+			'NotebookDivisionCategoryTargetID',
+		], function($data) {
+			$id = $data->ID + 1; // 0 index'd, artificially +1'd
 
-			$recipeId = $idBase + $data->ID;
+			$this->aspir->setData('notebookdivision', [
+				'id'          => $id,
+				'name'        => $data->Name,
+				'category_id' => $data->NotebookDivisionCategoryTargetID,
+			], $id);
+		});
+	}
 
-			$this->aspir->setData('recipe', [
-				'id'           => $recipeId,
-				'item_id'      => $data->ResultItemTargetID,
-				'job_id'       => 0,
-				'recipe_level' => 1,
-				'level'        => 1,
-				'yield'        => 1,
-				'hq'           => null,
-				'fc'           => 1,
-			], $recipeId);
+	public function notebookDivisionCategories()
+	{
+		// This one doesn't come back (doesn't actually exist, really); manually add it
+		$this->aspir->setData('notebookdivision_category', [
+			'id'   => '0',
+			'name' => 'Leveling',
+		], 0);
 
-			foreach (range(0, 7) as $partSlot)
-				if ($data->{'CompanyCraftPart' . $partSlot})
-					foreach (range(0, 2) as $processSlot)
-					{
-						$process =& $data->{'CompanyCraftPart' . $partSlot}->{'CompanyCraftProcess' . $processSlot};
-						if ($process)
-							foreach (range(0, 11) as $setSlot)
-								if ($process->{'SetQuantity' . $setSlot})
-									$this->aspir->setData('recipe_reagents', [
-										'item_id'   => $process->{'SupplyItem' . $setSlot}->Item,
-										'recipe_id' => $recipeId,
-										'amount'    => $process->{'SetQuantity' . $setSlot} * $process->{'SetsRequired' . $setSlot},
-									]);
-					}
+		$this->loopEndpoint('notebookdivisioncategory', [
+			'ID',
+			'Name',
+		], function($data) {
+			$this->aspir->setData('notebookdivision_category', [
+				'id'   => $data->ID,
+				'name' => $data->Name,
+			], $data->ID);
 		});
 	}
 

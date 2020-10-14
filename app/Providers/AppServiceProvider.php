@@ -1,5 +1,8 @@
-<?php namespace App\Providers;
+<?php
 
+namespace App\Providers;
+
+use Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -25,10 +28,22 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bind(
-			'Illuminate\Contracts\Auth\Registrar',
-			'App\Services\Registrar'
-		);
+		// $this->app->bind(
+		// 	'Illuminate\Contracts\Auth\Registrar',
+		// 	'App\Services\Registrar'
+		// );
+
+		/*
+		// Thanks to `hedronium/spaceless-blade`
+        // Register @spaceless, the Starting Tag
+        Blade::directive('spaceless', function() {
+            return '<?php ob_start() ?>';
+        });
+        // Register @endspaceless, the Ending Tag
+        Blade::directive('endspaceless', function() {
+            return "<?php echo preg_replace('/>\\s+</', '><', ob_get_clean()); ?>";
+        });
+        */
 	}
 
 }

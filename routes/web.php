@@ -23,12 +23,6 @@ Route::get('hunting', 'HuntingController@index');
 // Route::get('map', 'MapController@getIndex');
 // Route::post('map', 'MapController@postIndex');
 
-// Route::get('account', 'AccountController@getIndex');
-// Route::get('account/login', 'AccountController@getLogin');
-// Route::post('account/login', 'AccountController@postLogin');
-// Route::get('account/refresh', 'AccountController@getRefresh');
-// Route::get('account/logout', 'AccountController@getLogout');
-
 Route::get('levequests', 'LevequestsController@getIndex');
 Route::get('levequests/breakdown/{leve_id}', 'LevequestsController@getBreakdown');
 Route::get('levequests/vs/{leveA}/{leveB}', 'LevequestsController@getVs');

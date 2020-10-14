@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Osmose;
+<?php
+
+namespace App\Http\Controllers\Osmose;
 
 use App\Models\Osmose\AppData;
 use App\Models\Osmose\FileHandler;
@@ -20,7 +22,7 @@ class HomeController extends \App\Http\Controllers\Controller
 	{
 		// the app_data table only has one row anyway
 		// $app_data = AppData::first();
-		
+
 		// $tables = array_flip([
 		// 	'ClassJob',
 		// 	'ClassJobCategory',

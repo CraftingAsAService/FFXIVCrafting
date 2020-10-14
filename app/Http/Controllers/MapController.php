@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,7 +19,7 @@ class MapController extends Controller
 	public function getIndex()
 	{
 		abort('404'); // FIXME, there's just not enough data
-		
+
 		// The config doesn't have the names, cache it per language
 		$map = Cache::get('map_config_' . Config::get('language'), function() {
 			$map = Config::get('site.map');
@@ -54,12 +56,12 @@ class MapController extends Controller
 		if ( ! empty($item_list))
 		{
 			$items = Item::with(
-				'name', 
-				'vendors', 
-					'vendors.npc', 
-						'vendors.npc.name', 
-						'vendors.npc.location', 
-						'vendors.npc.location.name', 
+				'name',
+				'vendors',
+					'vendors.npc',
+						'vendors.npc.name',
+						'vendors.npc.location',
+						'vendors.npc.location.name',
 				'clusters',
 					'clusters.classjob',
 						'clusters.classjob.name',

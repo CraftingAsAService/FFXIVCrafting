@@ -97,6 +97,32 @@ class GarlandTools
 		});
 	}
 
+	public function notebookNotebookDivision()
+	{
+		foreach ($this->aspir->data['notebookdivision'] as $nd)
+		{
+			// This row belongs to multiple notebookIds (RecipeNotebookLists)
+			$rowId = $nd['id'] - 1; // 0 index'd, undoing artifical +1'ing
+
+			// https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/blob/0b7c71d86a6fd3d7a315cd869fc13b16ee4259fb/data-extraction/src/index.js#L401-L416 -- Thanks Miu!
+			foreach (range(0, 7) as $index)
+			{
+				$notebookId = $rowId < 1000
+					? 40 * $index + $rowId
+					: 1000 + 8 * ($rowId - 1000) + $index;
+
+				$this->aspir->setData('notebook_notebookdivision', [
+					'notebookdivision_id' => $nd['id'], // Need the real ID here, not the altered RowID
+					'notebook_id'         => $notebookId,
+				]);
+
+				$this->aspir->setData('notebook', [
+					'id' => $notebookId,
+				], $notebookId);
+			}
+		}
+	}
+
 	private function translateMobID($mobId, $base = false)
 	{
 		// The mob id can be split between base and name

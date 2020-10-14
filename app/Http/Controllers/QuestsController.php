@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -39,7 +41,7 @@ class QuestsController extends Controller
 
 			if ( ! isset($quests[$quest->job->abbr]))
 				$quests[$quest->job->abbr] = [];
-			
+
 			foreach ($quest->requirements as $requirement)
 				// foreach ($requirement->recipes as $recipe)
 				// 	if ($recipe->job_id == $quest->job->id)

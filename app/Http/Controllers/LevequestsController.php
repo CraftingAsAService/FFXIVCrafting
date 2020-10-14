@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -216,7 +218,7 @@ class LevequestsController extends Controller
 		// Filter the leves based on the types selected
 
 		$types = $request->input('types', []);
-		// array_walk($types, function(&$x) { $x = str_slug($x); });
+		// array_walk($types, function(&$x) { $x = \Str::sluggify($x); });
 
 		$leves = $leves->filter(function($leve) use ($types) {
 			return in_array($leve->simple_type, $types);
