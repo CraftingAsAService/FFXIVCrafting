@@ -68,7 +68,7 @@
 				</label>
 				<label class='class-selector' v-for='j in jobs' :key='j.id' :class="searchData.jobs[j.abbr] > 0 ? 'active' : ''">
 					<input type='checkbox' name='class' :value='j.id' @click='toggleJobs(j.id, j.abbr)'>
-					<img :src='"/img/jobs/" + j.abbr.toLowerCase() + "-inactive.png"' alt='' width="24" height="24"> <span class="abbr hidden-xs hidden-sm" v-html='j.abbr' style='width: 32px; display: inline-block;'></span>
+					<img :src='"/img/jobs/" + j.abbr.toUpperCase() + "-inactive.png"' alt='' width="24" height="24"> <span class="abbr hidden-xs hidden-sm" v-html='j.abbr' style='width: 32px; display: inline-block;'></span>
 				</label>
 			</div>
 
