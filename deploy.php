@@ -80,7 +80,7 @@ task('upload:db', function() {
 desc('Update the database on Ultros');
 task('ultros:db', function() {
 	require __DIR__ . '/vendor/autoload.php';
-	$dotenv = \Dotenv\Dotenv::create(__DIR__, '.env.' . get('stage'));
+	$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__, '.env.' . get('stage'));
 	$dotenv->load();
 	run('mysql --defaults-file=~/password.cnf -u ' . getenv('DB_USERNAME') . ' -h ' . getenv('DB_HOST') . ' ' . getenv('DB_DATABASE') . ' < ~/caas.sql');
 });
