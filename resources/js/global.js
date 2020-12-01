@@ -39,6 +39,8 @@ var global = {
 					{
 						el.removeClass('btn-default').addClass('btn-success');
 						el.find('.glyphicon-plus').removeClass('glyphicon-plus').addClass('glyphicon-ok');
+						if (typeof craftingListIds !== 'undefined')
+							craftingListIds.push(id);
 					}
 				}
 			});

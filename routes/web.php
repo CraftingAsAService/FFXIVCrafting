@@ -47,9 +47,6 @@ Route::get('gathering/beasts/{id}', 'GatheringController@getBeasts');
 
 Route::get('vendors/view/{id}', 'VendorsController@getView');
 
-Route::get('recipes', 'RecipesController@getIndex');
-Route::get('recipes/search', 'RecipesController@getSearch');
-
 Route::get('list', 'ListController@getIndex');
 Route::post('list/add', 'ListController@postAdd');
 Route::post('list/edit', 'ListController@postEdit');
@@ -71,6 +68,7 @@ Route::get('crafting/from-list', 'CraftingController@getFromList');
 Route::get('crafting/{advanced?}', 'CraftingController@getIndex');
 Route::post('crafting', 'CraftingController@postIndex');
 
+Route::get('recipes', 'PagesController@recipes');
 Route::get('stats', 'PagesController@stats');
 Route::get('report', 'PagesController@report');
 Route::get('thanks', 'PagesController@thanks');

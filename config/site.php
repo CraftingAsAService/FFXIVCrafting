@@ -4,7 +4,7 @@ return [
 
 	'max_level' => 80,
 
-	'cdn' => env('CDN_URL', false),
+	'cdn'       => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),
 
 	'available_languages' => ['en', 'ja', 'de', 'fr'],
@@ -27,7 +27,7 @@ return [
 	'cache_length' => '604800', // in Seconds - 60 * 60 * 24 * 7 -- One Month (php artisan cache:clear should flush it sooner)
 	'equipment_roles' => array('Main Hand','Off Hand','Head','Body','Hands','Waist','Legs','Feet','Ears','Neck','Wrists','Left Ring','Right Ring'),
 	'gear_focus' => array(
-		'PGL,MNK,SAM'  => array(
+		'PGL,MNK,SAM' => array(
 			'Strength',
 			'Critical Hit',
 			'Skill Speed',
@@ -261,12 +261,12 @@ return [
 		21	=> 4, // 'Body, Legs & Feet'
 	),
 	'slot_cannot_equip' => array(
-		13	=> array(2), // 'Main-Hand & Off-Hand',
-		15	=> array(3), // 'Body & Head',
-		16	=> array(5,7,8), // 'Body, Hands, Legs & Feet',
-		18	=> array(8), // 'Legs & Feet',
-		19	=> array(3,5,7,8), // 'Body, Head, Hands, Legs & Feet',
-		21	=> array(7,8), // 'Body, Legs & Feet'
+		13	=> [ 2 ], // 'Main-Hand & Off-Hand',
+		15	=> [ 3 ], // 'Body & Head',
+		16	=> [ 5, 7, 8 ], // 'Body, Hands, Legs & Feet',
+		18	=> [ 8 ], // 'Legs & Feet',
+		19	=> [ 3, 5, 7, 8 ], // 'Body, Head, Hands, Legs & Feet',
+		21	=> [ 7, 8 ], // 'Body, Legs & Feet'
 	),
 	'map' => array(
 		'shroud' => array(

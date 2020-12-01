@@ -38,6 +38,11 @@ class Location extends Model {
 		return $this->belongsTo('App\Models\Garland\Location');
 	}
 
+	public function instances()
+	{
+		return $this->hasMany('App\Models\Garland\Instance', 'zone_id');
+	}
+
 	public function npcs()
 	{
 		return $this->hasMany('App\Models\Garland\Npc', 'zone_id');

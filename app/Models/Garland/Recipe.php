@@ -2,6 +2,8 @@
 
 namespace App\Models\Garland;
 
+use App\Models\Notebook;
+use App\Models\Notebookdivision;
 use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model {
@@ -26,6 +28,11 @@ class Recipe extends Model {
 	public function career()
 	{
 		return $this->hasMany('App\Models\Garland\Career', 'identifier');
+	}
+
+	public function notebooks()
+	{
+		return $this->belongsToMany(Notebook::class, 'notebook_recipe', 'recipe_id', 'notebook_id')->withPivot('slot');
 	}
 
 }
