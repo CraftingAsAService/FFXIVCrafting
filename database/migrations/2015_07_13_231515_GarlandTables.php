@@ -401,6 +401,8 @@ class GarlandTables extends Migration
 			$table->string('jp_name');
 			$table->string('help')->nullable();
 			$table->integer('price')->unsigned()->nullable();
+			$table->integer('gc_price')->unsigned()->nullable();
+			$table->boolean('special_buy')->unsigned()->nullable();
 			$table->integer('sell_price')->unsigned()->nullable();
 			$table->integer('ilvl')->unsigned();
 			$table->integer('elvl')->unsigned()->nullable();
@@ -408,12 +410,7 @@ class GarlandTables extends Migration
 			$table->integer('job_category_id')->unsigned()->nullable();
 			$table->boolean('unique')->unsigned()->nullable();
 			$table->boolean('tradeable')->unsigned()->nullable();
-			$table->boolean('desynthable')->unsigned()->nullable();
-			$table->boolean('projectable')->unsigned()->nullable();
-			$table->boolean('crestworthy')->unsigned()->nullable();
-			$table->smallInteger('delivery')->unsigned()->nullable();
 			$table->smallInteger('equip')->unsigned()->nullable();
-			$table->smallInteger('repair')->unsigned()->nullable();
 			$table->smallInteger('slot')->unsigned()->nullable();
 			$table->tinyInteger('rarity')->unsigned()->nullable();
 			$table->string('icon', 25);

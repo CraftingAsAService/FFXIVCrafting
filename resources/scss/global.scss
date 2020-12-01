@@ -1335,7 +1335,8 @@ table.table-curved {
 	.mobile-margin-top {
 		margin-top: 28px;
 	}
-	.mobile-text-right {
+	.mobile-text-right,
+	.text-right-xs {
 		text-align: right;
 	}
 }
@@ -1403,4 +1404,24 @@ table.table-curved {
 	.bonus-info {
 		visibility: hidden;
 	}
+}
+
+summary:focus {
+    outline: none;
+}
+
+// .rarity-1 {
+
+// }
+.rarity-2 {
+	color: #20bc70;
+}
+.rarity-3 {
+	color: #2673c5;
+}
+.rarity-4 {
+	color: #ff65ad;
+}
+.rarity-7 {
+	color: #7641af;
 }

@@ -2,34 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class PagesController extends Controller
 {
 
+    public function recipes()
+    {
+        view()->share('active', 'recipes');
+        return view('recipes');
+    }
+
     public function stats()
     {
-    	$active = 'stats';
-		return view('pages.stats', compact('active'));
+        view()->share('active', 'stats');
+		return view('pages.stats');
     }
 
     public function report()
     {
-    	$active = 'report';
-		return view('pages.report', compact('active'));
+        view()->share('active', 'report');
+		return view('pages.report');
     }
 
     public function thanks()
     {
-    	$active = 'thanks';
-		return view('pages.thanks', compact('active'));
+        view()->share('active', 'thanks');
+		return view('pages.thanks');
     }
 
     public function credits()
     {
-    	$active = 'credits';
-		return view('pages.credits', compact('active'));
+        view()->share('active', 'credits');
+		return view('pages.credits');
     }
-
 
 }

@@ -54,15 +54,30 @@ class XIVAPI
 			'ID',
 			'Name',
 			'Maps.0.PlaceNameRegionTargetID',
+			'Maps.0.PlaceNameSubTargetID',
+			'Maps.0.PlaceNameTargetID',
 		], function($data) {
 			// Skip empty names
 			if ($data->Name == '')
 				return;
 
+			$parentId = null;
+			$mapData =& $data->Maps[0];
+
+			if ($data->ID != $mapData->PlaceNameRegionTargetID)
+			{
+				// If we're in a sub-node, its parent is the TargetId
+				if ($mapData->PlaceNameSubTargetID == $data->ID)
+					$parentId = $mapData->PlaceNameTargetID;
+				// If we're in a regular node, its parent is the region
+				elseif ($mapData->PlaceNameTargetID == $data->ID)
+					$parentId = $mapData->PlaceNameRegionTargetID;
+			}
+
 			$this->aspir->setData('location', [
-				'id'          => $data->ID,
-				'name'        => $data->Name,
-				'location_id' => $data->Maps[0]->PlaceNameRegionTargetID ?? null,
+				'id'           => $data->ID,
+				'name'         => $data->Name,
+				'location_id'  => $parentId,
 			], $data->ID);
 		});
 	}
@@ -715,7 +730,8 @@ class XIVAPI
 			// Shop Data
 			'GameContentLinks.GilShopItem.Item',
 			// Special Shop contains all Beast Traders, ItemCurrency for Item trades
-			// 'GameContentLinks.SpecialShop',
+			'GameContentLinks.GCScripShopItem.Item',
+			'GameContentLinks.SpecialShop',
 			// ItemAction contains a myriad of things
 			// https://github.com/viion/ffxiv-datamining/blob/master/docs/ItemActions.md
 			//  max attribute values
@@ -727,13 +743,24 @@ class XIVAPI
 			if ($data->Name == '' || substr($data->Name, 0, 6) == 'Dated ')
 				return;
 
+			if ($data->GameContentLinks->GCScripShopItem->Item)
+			{
+				$gcscripshopitemId = $data->GameContentLinks->GCScripShopItem->Item[0];
+
+				$gcPrice = $this->request('GCScripShopItem/' . $gcscripshopitemId, ['columns' => [
+					'CostGCSeals',
+				]])->CostGCSeals;
+			}
+
 			$this->aspir->setData('item', [
 				'id'               => $data->ID,
 				'name'             => $data->Name,
 				'de_name'          => $data->Name_de,
 				'fr_name'          => $data->Name_fr,
 				'jp_name'          => $data->Name_ja,
-				'price'            => $data->PriceMid,
+				'price'            => $data->GameContentLinks->GilShopItem->Item ? $data->PriceMid : null,
+				'gc_price'         => $gcPrice ?? null,
+				'special_buy'      => !! $data->GameContentLinks->SpecialShop,
 				'sell_price'       => $data->PriceLow,
 				'ilvl'             => $data->LevelItem,
 				'elvl'             => $data->LevelEquip,
@@ -746,12 +773,6 @@ class XIVAPI
 				'rarity'           => $data->Rarity,
 				'icon'             => $data->IconID,
 				'sockets'          => $data->MateriaSlotCount,
-				// Ignoring these, not used
-				// 'desynthable'      => $data->TODO,
-				// 'projectable'      => $data->TODO,
-				// 'crestworthy'      => $data->TODO,
-				// 'delivery'         => $data->TODO,
-				// 'repair'           => $data->TODO,
 			], $data->ID);
 
 			// Shopping Data
@@ -978,7 +999,7 @@ class XIVAPI
 
 					$this->aspir->setData('notebook_recipe', [
 						'recipe_id'   => $data->ID,
-						'notebook_id' => $notebookId,
+						'notebook_id' => $notebookId + 1, // Avoid 0 index, accounted for later as well
 						'slot'        => (int) preg_replace('/Recipe/', '', $slot),
 					]);
 				}

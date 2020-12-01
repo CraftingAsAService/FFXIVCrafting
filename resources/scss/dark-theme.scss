@@ -278,7 +278,7 @@ a {
 	Forms
 */
 .form-control {
-	background-color: lighten($color_quill_gray, 10%);
+	background-color: $color_quill_gray;
 }
 
 /*
@@ -872,4 +872,14 @@ th.basically-invisible {
 
 .text-muted {
 	color: darken($color_quill_gray, 30%);
+}
+
+.pager {
+	> li:not(:last-child) {
+		margin-right: 8px;
+	}
+	> li > a {
+		border: 1px solid $color_nero_light;
+		background-color: $color_abbey;
+	}
 }
