@@ -82,7 +82,7 @@ task('ultros:db', function() {
 	require __DIR__ . '/vendor/autoload.php';
 	$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__, '.env.' . get('stage'));
 	$dotenv->load();
-	run('mysql --defaults-file=~/password.cnf -u ' . getenv('DB_USERNAME') . ' -h ' . getenv('DB_HOST') . ' ' . getenv('DB_DATABASE') . ' < ~/caas.sql');
+	run('mysql --defaults-file=~/password.cnf -u ' . $_ENV['DB_USERNAME'] . ' -h ' . $_ENV['DB_HOST'] . ' ' . $_ENV['DB_DATABASE'] . ' < ~/caas.sql');
 });
 before('ultros:db', 'upload:db');
 
