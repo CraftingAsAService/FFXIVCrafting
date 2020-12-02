@@ -79,7 +79,6 @@
 					{!! menu_item('/',			'Home',			'home'		) !!}
 					{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
-					{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 					{!! menu_item('/food',		'Food',			'food'		) !!}
 					{!! menu_item('/hunting',	'Hunting Log',	'hunting'		) !!}
@@ -185,7 +184,6 @@
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
 											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
 											{!! menu_item('/levequests','Leves',		'leves'		) !!}
-											{{-- {!! menu_item('/career',	'Career',		'career'	) !!} --}}
 											{!! menu_item('/food',		'Food',			'food'		) !!}
 											{!! menu_item('/hunting',	'Hunting Log',	'hunting'	) !!}
 											{{-- <li class='dropdown{!! (isset($active) && in_array($active, array('stats', 'materia', 'quests'))) || Request::segment(1) == 'blog' ? ' active' : '' !!}'>

@@ -18,10 +18,6 @@ Route::get('entity/{item}/{type}', 'EntityController@show');
 // Route::get('materia', 'MateriaController@getIndex');
 Route::get('food', 'FoodController@getIndex');
 Route::get('hunting', 'HuntingController@index');
-// Route::get('quests', 'QuestsController@getIndex');
-
-// Route::get('map', 'MapController@getIndex');
-// Route::post('map', 'MapController@postIndex');
 
 Route::get('levequests', 'LevequestsController@getIndex');
 Route::get('levequests/breakdown/{leve_id}', 'LevequestsController@getBreakdown');
@@ -31,14 +27,6 @@ Route::get('levequests/populate-advanced', 'LevequestsController@getPopulateAdva
 
 Route::get('gear', 'GearController@getIndex');
 Route::get('gear/profile/{job?}/{start_level?}', 'GearController@getProfile');
-
-// Route::get('career', 'CareerController@getIndex');
-// Route::get('career/producer/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getProducer');
-// Route::post('career/producer', 'CareerController@postProducer');
-// Route::get('career/receiver/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getReceiver');
-// Route::post('career/receiver', 'CareerController@postReceiver');
-// Route::get('career/gathering/{my_class?}/{supported_classes?}/{min_level?}/{max_level?}', 'CareerController@getGathering');
-// Route::post('career/gathering', 'CareerController@postGathering');
 
 Route::get('gathering', 'GatheringController@getIndex');
 Route::get('gathering/list', 'GatheringController@getList');

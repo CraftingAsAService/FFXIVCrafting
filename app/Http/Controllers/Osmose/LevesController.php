@@ -2,13 +2,6 @@
 
 namespace App\Http\Controllers\Osmose;
 
-// use App\Models\Osmose\AppData;
-// use App\Models\Osmose\FileHandler;
-// use App\Models\Osmose\Career;
-// use App\Models\Osmose\Nodes;
-
-// use Session;
-
 class LevesController extends \App\Http\Controllers\Controller
 {
 	protected $finder;

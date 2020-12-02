@@ -48,14 +48,4 @@ class GatheringController extends Controller
 		];
 	}
 
-	public function getIndex()
-	{
-		return redirect('/career');
-	}
-
-	public function getList()
-	{
-		return redirect('/career');
-	}
-
 }

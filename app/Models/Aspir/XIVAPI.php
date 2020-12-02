@@ -1016,53 +1016,53 @@ class XIVAPI
 		$this->limit = null;
 	}
 
-	// public function companyCrafts()
-	// {
-	// 	// Recipes and Company Crafts can overlap on IDs. Give them some space.
-	// 	$idBase = max(array_keys($this->aspir->data['recipe']));
+	public function companyCrafts()
+	{
+		// Recipes and Company Crafts can overlap on IDs. Give them some space.
+		$idBase = max(array_keys($this->aspir->data['recipe']));
 
-	// 	$this->loopEndpoint('companycraftsequence', [
-	// 		'ID',
-	// 		'ResultItemTargetID',
-	// 		'CompanyCraftPart0',
-	// 		'CompanyCraftPart1',
-	// 		'CompanyCraftPart2',
-	// 		'CompanyCraftPart3',
-	// 		'CompanyCraftPart4',
-	// 		'CompanyCraftPart5',
-	// 		'CompanyCraftPart6',
-	// 		'CompanyCraftPart7',
-	// 	], function($data) use ($idBase) {
+		$this->loopEndpoint('companycraftsequence', [
+			'ID',
+			'ResultItemTargetID',
+			'CompanyCraftPart0',
+			'CompanyCraftPart1',
+			'CompanyCraftPart2',
+			'CompanyCraftPart3',
+			'CompanyCraftPart4',
+			'CompanyCraftPart5',
+			'CompanyCraftPart6',
+			'CompanyCraftPart7',
+		], function($data) use ($idBase) {
 
-	// 		$recipeId = $idBase + $data->ID;
+			$recipeId = $idBase + $data->ID;
 
-	// 		$this->aspir->setData('recipe', [
-	// 			'id'           => $recipeId,
-	// 			'item_id'      => $data->ResultItemTargetID,
-	// 			'job_id'       => 0,
-	// 			'recipe_level' => 1,
-	// 			'level'        => 1,
-	// 			'yield'        => 1,
-	// 			'hq'           => null,
-	// 			'fc'           => 1,
-	// 		], $recipeId);
+			$this->aspir->setData('recipe', [
+				'id'           => $recipeId,
+				'item_id'      => $data->ResultItemTargetID,
+				'job_id'       => 0,
+				'recipe_level' => 1,
+				'level'        => 1,
+				'yield'        => 1,
+				'hq'           => null,
+				'fc'           => 1,
+			], $recipeId);
 
-	// 		foreach (range(0, 7) as $partSlot)
-	// 			if ($data->{'CompanyCraftPart' . $partSlot})
-	// 				foreach (range(0, 2) as $processSlot)
-	// 				{
-	// 					$process =& $data->{'CompanyCraftPart' . $partSlot}->{'CompanyCraftProcess' . $processSlot};
-	// 					if ($process)
-	// 						foreach (range(0, 11) as $setSlot)
-	// 							if ($process->{'SetQuantity' . $setSlot})
-	// 								$this->aspir->setData('recipe_reagents', [
-	// 									'item_id'   => $process->{'SupplyItem' . $setSlot}->Item,
-	// 									'recipe_id' => $recipeId,
-	// 									'amount'    => $process->{'SetQuantity' . $setSlot} * $process->{'SetsRequired' . $setSlot},
-	// 								]);
-	// 				}
-	// 	});
-	// }
+			foreach (range(0, 7) as $partSlot)
+				if ($data->{'CompanyCraftPart' . $partSlot})
+					foreach (range(0, 2) as $processSlot)
+					{
+						$process =& $data->{'CompanyCraftPart' . $partSlot}->{'CompanyCraftProcess' . $processSlot};
+						if ($process)
+							foreach (range(0, 11) as $setSlot)
+								if ($process->{'SetQuantity' . $setSlot})
+									$this->aspir->setData('recipe_reagents', [
+										'item_id'   => $process->{'SupplyItem' . $setSlot}->Item,
+										'recipe_id' => $recipeId,
+										'amount'    => $process->{'SetQuantity' . $setSlot} * $process->{'SetsRequired' . $setSlot},
+									]);
+					}
+		});
+	}
 
 	public function notebookDivisions()
 	{

@@ -28,10 +28,10 @@ class LevequestsController extends Controller
 		$crafting_job_ids[] = Config::get('site.job_ids.fishing');
 
 		$type_to_icon = [
-			'Field' => 'leaf',
-			'Courier' => 'envelope',
+			'Field'           => 'leaf',
+			'Courier'         => 'envelope',
 			'Reverse Courier' => 'plane',
-			'Town' => 'home',
+			'Town'            => 'home',
 		];
 
 		// All Leves
