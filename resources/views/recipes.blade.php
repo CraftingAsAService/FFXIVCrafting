@@ -138,7 +138,7 @@
 										@{{ recipe.item.name }}
 									</div>
 									<div>
-										<img :src='"/img/jobs/" + jobs[recipe.job_id].abbr + "-inactive.png"'>
+										<img :src='"/img/jobs/" + (jobs[recipe.job_id] ? jobs[recipe.job_id].abbr : "ALL") + "-inactive.png"'>
 										@{{ recipe.recipe_level }}
 										@{{ "★".repeat(recipe.stars) }}
 									</div>

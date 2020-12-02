@@ -101,7 +101,7 @@ class Aspir
 			'itemCategories',
 			'items',
 			'recipes',
-			// 'companyCrafts',
+			'companyCrafts',
 			'notebookDivisions',
 			'notebookDivisionCategories',
 		];
