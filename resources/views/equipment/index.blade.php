@@ -2,7 +2,7 @@
 
 @section('meta')
 	<meta name="robots" content="nofollow">
-@stop
+@endsection
 
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
@@ -24,7 +24,7 @@
 			border: 1px solid #5ab65a;
 		}
 	</style>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
@@ -39,13 +39,13 @@
 			});
 		});
 	</script>
-@stop
+@endsection
 
 @section('banner')
 	<a href='/gear' class='btn btn-primary pull-right'>Gear Tool <i class='glyphicon glyphicon-arrow-right'></i></a>
 	<h1>Equipment Calculator</h1>
 	<h2>Display the gear available for a class at a certain level.</h2>
-@stop
+@endsection
 
 @section('content')
 
@@ -217,4 +217,4 @@
 		</fieldset>
 	{!! Form::close() !!}
 
-@stop
+@endsection

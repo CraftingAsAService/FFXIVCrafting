@@ -2,7 +2,7 @@
 
 @section('banner')
 	<h1>Report A Bug</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -31,4 +31,4 @@
 
 	<p>Thanks for taking the time to report bugs on the site!  It's very appreciated!</p>
 
-@stop
+@endsection

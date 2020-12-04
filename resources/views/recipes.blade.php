@@ -2,7 +2,7 @@
 
 @section('meta')
 	<meta name="robots" content="nofollow">
-@stop
+@endsection
 
 @section('vendor-css')
 	<style>
@@ -21,7 +21,7 @@
 		}
 
 		[v-cloak] {
-			display: none;
+			display: none !important;
 		}
 		html #banner h1 {
 			margin-bottom: 0;
@@ -30,16 +30,10 @@
 			padding-top: 0;
 		}
 	</style>
-@stop
+@endsection
 
 @section('javascript')
-	{{-- Include Vue --}}
-
-	{{-- @if (app()->environment('production')) --}}
-	<script src='https://unpkg.com/vue@3.0.2/dist/vue.global.js'></script>
-	{{-- @else
-		<script src='https://unpkg.com/vue@next'></script>
-	@endif --}}
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.2/vue.global.prod.js' integrity='sha512-M8VjsuCj1iBzrwKloFNjvQBmFXT2oF0MWExoLGpQT2nEx5tq7CP+BhWGJdczT1LoWAhyqHh+LJ6ihHSVGyclHw==' crossorigin='anonymous'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js' integrity='sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==' crossorigin='anonymous'></script>
 
 	<script>
@@ -48,20 +42,20 @@
 	</script>
 
 	<script type='text/javascript' src='{{ cdn('/js/pages/recipes.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<h1>
 		Recipe Book
 	</h1>
-@stop
+@endsection
 
 @section('content')
 	<div id='searchBox' v-cloak>
-		<div class='well'>
+		<div class='well' v-if='jobs !== null'>
 			<h5 style='margin-top: 0;'>Jobs</h5>
 
-			<div v-if='jobs !== null'>
+			<div>
 				<label class='class-selector' :class="searchData.jobs['Any'] > 0 ? 'active' : ''">
 					<input type='checkbox' name='class' value='0' checked='checked' @click='toggleJobs(99, "Any")'>
 					<img src='/img/roles/hand.png' alt='' width="24" height="24"> <span class="abbr">All</span>
@@ -130,7 +124,7 @@
 						</colgroup>
 						<tbody>
 							<tr v-for='recipe in recipesPart' :key='recipe.id'>
-								<td class='text-left'>
+								<td>
 									<img :src='recipe.item.icon' width='48' height='48'>
 								</td>
 								<td class='text-left'>
@@ -138,8 +132,8 @@
 										@{{ recipe.item.name }}
 									</div>
 									<div>
-										<img :src='"/img/jobs/" + (jobs[recipe.job_id] ? jobs[recipe.job_id].abbr : "ALL") + "-inactive.png"'>
-										@{{ recipe.recipe_level }}
+										<img :src='"/img/jobs/" + (jobs[recipe.job_id] ? jobs[recipe.job_id].abbr : "ALL") + "-inactive.png"' width='20' height='20' style='vertical-align: bottom;'>
+										<span class='rlvl'>@{{ recipe.recipe_level }}</span>
 										@{{ "★".repeat(recipe.stars) }}
 									</div>
 								</td>
@@ -151,9 +145,6 @@
 								</td>
 							</tr>
 						</tbody>
-						<tfoot>
-
-						</tfoot>
 					</table>
 				</div>
 			</div>
@@ -167,4 +158,4 @@
 		</div>
 	</div>
 
-@stop
+@endsection

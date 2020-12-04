@@ -2,7 +2,7 @@
 
 @section('meta')
 	<meta name="robots" content="noindex,nofollow">
-@stop
+@endsection
 
 @section('vendor-css')
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
@@ -19,13 +19,13 @@
 			font-size: .65em;
 		}
 	</style>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/crafting.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-tour.min.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 
@@ -91,7 +91,7 @@
 	@endif
 	</h2>
 	@endif
-@stop
+@endsection
 
 @section('content')
 
@@ -391,4 +391,4 @@
 	</div>
 </div>
 
-@stop
+@endsection

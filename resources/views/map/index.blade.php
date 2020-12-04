@@ -5,12 +5,12 @@
 	@if(isset($map_title))
 	<h2>{{ $map_title }}</h2>
 	@endif
-@stop
+@endsection
 
 @section('javascript')
 <script type='text/javascript' src='{{ cdn('/js/jquery.overscroll.js') }}'></script>
 <script type='text/javascript' src='{{ cdn('/js/map.js') }}'></script>
-@stop
+@endsection
 
 @section('content')
 
@@ -228,7 +228,7 @@
 	</div>
 @endforeach
 </div>
-@stop
+@endsection
 
 @section('modals')
 
@@ -304,4 +304,4 @@
 	</div>
 </div>
 
-@stop
+@endsection

@@ -9,18 +9,18 @@
 			min-height: 185px;
 		}
 	</style>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/hunting.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<h1>
 		<img src='/img/mob.png' width='32' height='32' style='position: relative; top: -4px;'>
 		Hunting Log
 	</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -88,4 +88,4 @@
 	</fieldset>
 
 	<p>Thanks to the <a href='https://ffxiv.consolegameswiki.com/wiki/Hunting_Log' target='_blank'>FFXIV Wiki</a> for the data and images!</p>
-@stop
+@endsection

@@ -2,13 +2,19 @@
 
 @section('banner')
 	<h1>Levequest Breakdown</h1>
-@stop
+@endsection
 
 @section('content')
 
 @include('levequests._chart')
 
 <h3>Notes</h3>
+
+@if ($leve->level >= 50)
+<p>
+	You will only gain the listed XP amount if you're within the Expansion's Level Range; A level 70+ character attempting to complete a level 60-something Leve will gain almost no experience.
+</p>
+@endif
 
 @if($leve->repeats)
 <p>
@@ -33,4 +39,4 @@
 	@endforeach
 </ul>
 
-@stop
+@endsection

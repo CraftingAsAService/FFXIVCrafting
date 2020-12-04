@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\LeveController;
 use App\Http\Controllers\Api\NotebookdivisionController;
 use App\Http\Controllers\Api\RecipeController;
 use Illuminate\Http\Request;
@@ -31,3 +32,4 @@ Route::get('item/{id}', [ItemController::class, 'show']);
 Route::get('job/types/{type}', [JobController::class, 'types']);
 
 Route::post('recipe/search', [RecipeController::class, 'search']);
+Route::post('leve/search', [LeveController::class, 'search']);

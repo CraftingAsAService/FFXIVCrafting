@@ -1,157 +1,167 @@
 @extends('app')
 
+@section('vendor-css')
+	<style>
+		.class-selector input {
+			display: none;
+		}
+		.class-selector {
+			padding: 4px 8px;
+			margin-bottom: 4px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			margin-right: 8px;
+		}
+		.class-selector.active {
+			border: 1px solid #5ab65a;
+		}
+
+		[v-cloak] {
+			display: none !important;
+		}
+		html #banner h2 {
+			margin-bottom: 0;
+		}
+		html #content {
+			padding-top: 0;
+		}
+
+		@media (min-width: 992px) {
+			#levesBox {
+				display: flex;
+			}
+
+			.search {
+				width: 212px;
+				margin-right: 20px;
+			}
+
+			.results {
+				flex: 1;
+			}
+		}
+	</style>
+@endsection
+
 @section('javascript')
-	<script src='{{ cdn('/js/levequests.js') }}'></script>
-@stop
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.2/vue.global.prod.js' integrity='sha512-M8VjsuCj1iBzrwKloFNjvQBmFXT2oF0MWExoLGpQT2nEx5tq7CP+BhWGJdczT1LoWAhyqHh+LJ6ihHSVGyclHw==' crossorigin='anonymous'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js' integrity='sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==' crossorigin='anonymous'></script>
+
+	<script>
+		const craftingListIds = @json(array_keys(session('list', [])));
+		const maxLevel = {{ config('site.max_level') }};
+	</script>
+
+	<script type='text/javascript' src='{{ cdn('/js/pages/leves.js') }}'></script>
+@endsection
 
 @section('banner')
-	<a href='/levequests/advanced' class='btn btn-primary pull-right'>Advanced Tool <i class='glyphicon glyphicon-arrow-right'></i></a>
+	{{-- <a href='/levequests/advanced' class='btn btn-primary pull-right'>Advanced Tool <i class='glyphicon glyphicon-arrow-right'></i></a> --}}
 	<h1>Levequests</h1>
-	<h2>Get the most out of your allowances</h2>
-@stop
+	<h2>
+		@php
+			$taglines = [
+				'Get the most out of your daily Allowances!',
+				'Don\'t forget about your Scrips!',
+				'Custom Deliveries nets you Custom Experiences!',
+				'Screw it, you\'re just going to make Cookies anyway&hellip;',
+			];
+			$tagline = $taglines[array_rand($taglines)];
+		@endphp
+		{!! $tagline !!}
+	</h2>
+@endsection
 
 @section('content')
 
-<div class='row'>
-	<div class='col-sm-3 col-lg-2'>
-		<fieldset>
-			<legend>Leve Level</legend>
-			<div class='list-group leve-level-select'>
-				@foreach(array_merge(array(1), range(5, 45, 5), range(50, config('site.max_level') - 2, 2)) as $level)
-				<a href='#' class='list-group-item{{ $level == 1 ? ' active' : '' }}' data-level='{{ $level }}'>
-					Level {{ $level }}
-				</a>
-				@endforeach
-			</div>
-		</fieldset>
-	</div>
-	<div class='col-sm-9 col-lg-10'>
-		<fieldset class='margin-bottom'>
-			<legend>Class</legend>
-			<div class='btn-group jobs-list'>
-				@foreach($crafting_job_list as $job)
-				<label class='btn btn-{{ $job->abbr == 'FSH' ? 'info' : 'primary' }} class-selector{{ $job->id == reset($crafting_job_ids) ? ' active' : '' }}' data-level='0' data-class='{{ $job->abbr }}'>
-					<img src='/img/jobs/{{ strtoupper($job->abbr) }}-inactive.png' width='24' height='24' rel='tooltip' title='{{ $job->name }}'>
+<div id='levesBox' v-cloak>
+	<div class='search'>
+		<div class='well' v-if='jobs != null && levels != null'>
+			<h5 style='margin-top: 0;'>Job</h5>
+			<div>
+				<label class='class-selector' v-for='j in jobs' :key='j.id' :class="j.id == activeJob ? 'active' : ''">
+					<input type='checkbox' @click='updateJob(j.id)'>
+					<img :src='"/img/jobs/" + j.abbr.toUpperCase() + "-inactive.png"' alt='' width="24" height="24"> <span class="abbr hidden-xs hidden-sm" v-html='j.abbr' style='width: 32px; display: inline-block;'></span>
 				</label>
-				@endforeach
 			</div>
-		</fieldset>
-		<fieldset style='margin-top: 30px;'>
 
-			@foreach($crafting_job_list as $job)
-			<div class='leve-section' id='{{ $job->abbr }}-leves'>
-
-				@foreach(array_merge(array(1), range(5,45, 5), range(50, config('site.max_level') - 2, 2)) as $level)
-				@php
-					$veryFirstLoop = $loop->parent->first && $loop->first;
-				@endphp
-				<div id='{{ $job->abbr }}-{{ $level }}-leves' class='{!! $veryFirstLoop ? '' : 'hidden' !!}'>
-					<div class='table-responsive'>
-						<legend>Level {{ $level }} {{ $job->name }} Levequests</legend>
-						<table class='levequests-table table table-bordered table-striped table-condensed'>
-							<thead>
-								<tr>
-									<th colspan='2'>Details</th>
-									<th>Rewards</th>
-									<th class='text-center'>
-										Craft or Buy
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								@if (isset($leves[$job->abbr][$level]))
-								@foreach($leves[$job->abbr][$level] as $leve)
-								<?php $item = $leve->requirements[0]; ?>
-								<tr data-item-id='{{ $item->id }}'>
-									<td width='57' class='valign text-center'>
-										<div style='position: relative; overflow: hidden; width: 47px; opacity: 1;'>
-											<img {!! $veryFirstLoop ? '' : 'src="" data-' !!}src='{{ icon($leve->frame) }}' width='47' height='75' style='position: absolute;'>
-											<img {!! $veryFirstLoop ? '' : 'src="" data-' !!}src='{{ icon($leve->plate) }}' width='47' height='75'>
-										</div>
-									</td>
-									<td class='valign details'>
-
-										<h4>
-											<a href='/levequests/breakdown/{{ $leve->id }}'rel='tooltip' title='More Leve Information'>{{ $leve->name }}</a>
-										</h4>
-
-										<p>
-											<a href='{{ item_link() . $item->id }}' class='item-name' target='_blank'><img {!! $veryFirstLoop ? '' : 'src="" data-' !!}src='{{ icon($item->icon) }}' width='24' height='24' style='margin-right: 10px;'>{{ $item->display_name }}</a>
-
-											@if ($item->pivot->amount > 1)
-											<span class='label label-primary' rel='tooltip' title='Amount Required'>
-												x {{ $item->pivot->amount }}
-											</span>
-											@endif
-
-											@if($leve->repeats)
-											<i class='glyphicon glyphicon-fire text-danger margin-left' rel='tooltip' title='Repeatable Turnin!'></i>
-											@endif
-										</p>
-
-										{{-- <p>
-											<img src='/img/locations/{{ preg_replace('/\W/', '', strtolower($leve->major_location)) }}_banner.png' width='24' height='24'>
-											<span class='label label-info'>{{ $leve->type }}</span>
-											{{ ! empty($leve->location) ? $leve->location : '' }}{{ ! empty($leve->location) && ! empty($leve->minor_location) ? ',' : '' }}
-											{{ ! empty($leve->minor_location) ? $leve->minor_location : '' }}
-										</p> --}}
-									</td>
-									<td class='text-center rewards valign'>
-										<div class='text-left inline'>
-											<p class='xp-reward'>
-												<img src='/img/xp.png' width='24' height='24'>
-												{{ number_format($leve->xp) }}
-											</p>
-
-											<p class='gil-reward'>
-												<img src='/img/coin.png' width='24' height='24'>
-												{{ number_format($leve->gil) }}
-											</p>
-										</div>
-									</td>
-									<td class='text-center valign'>
-										<button class='btn btn-default add-to-list' data-item-id='{{ $item->id }}' data-item-name='{{ $item->display_name }}' data-item-quantity='{{ $leve->amount }}'>
-											<i class='glyphicon glyphicon-shopping-cart'></i>
-											<i class='glyphicon glyphicon-plus'></i>
-										</button>
-										@if($item->shops->count())
-										<p class='margin-top'>
-											<a href='#' class='btn btn-default click-to-view' data-type='shops' rel='tooltip' title='Available for {{ $item->price }} gil, Click to load Vendors'>
-												<img src='/img/coin.png' width='20' height='20'>
-												{{ number_format($item->price) }}
-											</a>
-										</p>
-										@endif
-									</td>
-								</tr>
-								@endforeach
-								@endif
-							</tbody>
-						</table>
-					</div>
-
-					<legend>Level {{ $level }} {{ $job->name }} Rewards</legend>
-
-					@if(isset($rewards[$job->id][$level]))
-					<div class='row'>
-						@foreach($rewards[$job->id][$level] as $item_id => $reward)
-						<div class='col-sm-6 col-md-4 margin-bottom'>
-							<a href='{{ item_link() . $item_id }}' class='item-name' target='_blank'><img {!! $veryFirstLoop && $loop->first ? '' : 'src="" data-' !!}src='{{ icon($reward['item']->icon) }}' width='24' height='24' style='margin-right: 10px;'>{{ $reward['item']->display_name }}</a>
-
-							@foreach ($reward['amounts'] as $amount)
-							<span class='label label-primary'>{{ $amount }}</span>
-							@endforeach
-						</div>
-						@endforeach
-					</div>
-					@endif
-				</div>
-				@endforeach
+			<h5>Level</h5>
+			<div>
+				<label class='class-selector' v-for='l in levels' :key='l' :class="l == activeLevel ? 'active' : ''">
+					<input type='checkbox' checked='checked' @click='updateLevel(l)'>
+					<span v-html='l'></span>
+				</label>
 			</div>
-			@endforeach
 
+			<h5>Options</h5>
+			<label>
+				<input type='checkbox' v-model='hq' style='position: relative; top: 1px; margin-right: 2px;'>
+				HQ Turnins
+			</label>
+		</div>
+	</div>
+	<div class='results'>
+		<fieldset v-if='results != null'>
+			<table class='table table-bordered table-striped table-responsive text-center'>
+				<colgroup>
+					<col span='1' style='width: 60px;'></colgroup>
+					<col span='1' style='width: 60%;'></colgroup>
+					<col span='1' style='width: 64px;'></colgroup>
+					<col span='1' style='width: 40%;'></colgroup>
+					<col span='1' style='width: 80px;'></colgroup>
+				</colgroup>
+				<tbody>
+					<tr v-for='leve in results' :key='leve.id'>
+						<td style='padding: 2px;'>
+							<div style='position: relative; overflow: hidden; width: 37px; opacity: 1;'>
+								<img :src='leve.frame' width='37' height='58' style='position: absolute;'>
+								<img :src='leve.plate' width='37' height='58'>
+							</div>
+						</td>
+						<td class='text-left'>
+							<div class='pull-right text-right'>
+								<div>
+									<span v-html='new Intl.NumberFormat().format(leve.xp * (hq ? 2 : 1))'></span>
+									<img src='/img/xp.png' width='20' height='20' style='vertical-align: bottom; margin-left: 4px;'>
+								</div>
+								<div style='margin-top: 4px;'>
+									<span v-html='new Intl.NumberFormat().format(leve.gil * (hq ? 2 : 1))'></span>
+									<img src='/img/coin.png' width='20' height='20' style='vertical-align: bottom; margin-left: 4px;'>
+								</div>
+							</div>
+							<div style='font-size: 1.2em;' class='name'>
+								<img :src='"/img/leve_icon" + (leve.repeats ? "_red" : "") + ".png"' width='20' height='20' style='vertical-align: top;'>
+								<a :href='"/levequests/breakdown/" + leve.id' v-html='leve.name'></a>
+							</div>
+							<div style='margin-top: 5px;'>
+								<span v-html='leve.location.name'></span>
+							</div>
+						</td>
+						<td>
+							<div style='position: relative;'>
+								<img src='/img/hq-overlay.png' v-if='hq' width='48' height='48' style='position: absolute;'>
+								<img :src='leve.recipe.item.icon' width='48' height='48'>
+							</div>
+						</td>
+						<td class='text-left'>
+							<div style='font-size: 1.1em;' :class='"name rarity-" + leve.recipe.item.rarity' v-html='leve.recipe.item.name'></div>
+							<div>
+								<img :src='"/img/jobs/" + jobs[leve.recipe.job_id].abbr.toUpperCase() + "-inactive.png"'width='20' height='20' style='vertical-align: bottom;'>
+								<span class='rlvl' v-html='leve.recipe.recipe_level'></span>
+								<span v-html='"★".repeat(leve.recipe.stars)'></span>
+							</div>
+						</td>
+						<td class='text-center valign'>
+							<button class='btn add-to-list success-after-add' :class="{ 'btn-success': craftingListIds.includes(leve.recipe.item.id), 'btn-default': !craftingListIds.includes(leve.recipe.item.id) }" :data-item-id='leve.recipe.item.id' :data-item-name='leve.recipe.item.name'>
+								<i class='glyphicon glyphicon-shopping-cart'></i>
+								<i class='glyphicon' :class="{ 'glyphicon-ok': craftingListIds.includes(leve.recipe.item.id), 'glyphicon-plus': !craftingListIds.includes(leve.recipe.item.id) }"></i>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</fieldset>
 	</div>
 </div>
 
-@stop
+@endsection

@@ -92,11 +92,6 @@ class Item extends Model {
 		return $this->hasMany('App\Models\Garland\Achievement');
 	}
 
-	public function career()
-	{
-		return $this->hasMany('App\Models\Garland\Career', 'identifier');
-	}
-
 	public function getDisplayNameAttribute()
 	{
 		return $this->{self::localized_name_variable()};

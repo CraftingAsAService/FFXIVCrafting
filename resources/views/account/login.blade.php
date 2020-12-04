@@ -2,16 +2,16 @@
 
 @section('meta')
 	<meta name="robots" content="nofollow">
-@stop
+@endsection
 
 @section('banner')
 	<h1>Load Character</h1>
 	<h2>Your levels will help the system make smarter choices!</h2>
-@stop
+@endsection
 
 @section('css')
 	<link href='{{ cdn('/css/jquery-ui.css') }}' rel='stylesheet' />
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript'>
@@ -23,7 +23,7 @@
 		});
 	</script>
 
-@stop
+@endsection
 
 @section('content')
 
@@ -57,4 +57,4 @@
 		Thanks to <a href='http://xivpads.com/'>XIVPads</a> for their character API!
 	</div>
 
-@stop
+@endsection

@@ -479,30 +479,6 @@ class GarlandTables extends Migration
 			$table->index('item_id');
 			$table->index('recipe_id');
 		});
-
-		if ( ! Schema::hasTable('career'))
-		Schema::create('career', function(Blueprint $table)
-		{
-			$table->increments('id')->unsigned();
-			$table->integer('identifier')->unsigned();
-			$table->enum('type', ['recipe', 'item']);
-			$table->smallInteger('level')->unsigned();
-
-			$table->index('identifier');
-			$table->index('type');
-		});
-
-		if ( ! Schema::hasTable('career_job'))
-		Schema::create('career_job', function(Blueprint $table)
-		{
-			$table->increments('id')->unsigned();
-			$table->integer('career_id')->unsigned();
-			$table->integer('job_id')->unsigned();
-			$table->decimal('amount', 6, 2)->unsigned();
-
-			$table->index('career_id');
-			$table->index('job_id');
-		});
 	}
 
 	/**
@@ -551,8 +527,8 @@ class GarlandTables extends Migration
 			'item_attribute',
 			'recipe',
 			'recipe_reagents',
-			'career',
-			'career_job',
+			'career', // TODO removeme after a few patches
+			'career_job', // TODO removeme after a few patches
 		];
 
 		foreach ($tables as $table)

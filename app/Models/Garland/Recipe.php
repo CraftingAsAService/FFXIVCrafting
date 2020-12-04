@@ -25,11 +25,6 @@ class Recipe extends Model {
 		return $this->belongsTo('App\Models\Garland\Job');
 	}
 
-	public function career()
-	{
-		return $this->hasMany('App\Models\Garland\Career', 'identifier');
-	}
-
 	public function notebooks()
 	{
 		return $this->belongsToMany(Notebook::class, 'notebook_recipe', 'recipe_id', 'notebook_id')->withPivot('slot');

@@ -3,7 +3,7 @@
 @section('javascript')
 	<script type='text/javascript' src='https://code.highcharts.com/highcharts.js'></script>
 	<script type='text/javascript' src='{{ cdn('/js/food.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<h1>Food</h1>
@@ -16,7 +16,7 @@
 	<p>All food lasts 30 minutes and provides a 3% XP Bonus.</p>
 	<p>Click a cell to view the food within.</p>
 	-->
-@stop
+@endsection
 
 @section('content')
 
@@ -162,4 +162,4 @@
 		@endforeach
 	</div>
 
-@stop
+@endsection

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Osmose;
 
 use App\Models\Osmose\AppData;
 use App\Models\Osmose\FileHandler;
-use App\Models\Osmose\Career;
 use App\Models\Osmose\Nodes;
 
 class LibraController extends \App\Http\Controllers\Controller
@@ -625,16 +624,6 @@ class LibraController extends \App\Http\Controllers\Controller
 	public function getGuardiandeity()
 	{
 		return $this->simple('GuardianDeity');
-	}
-
-	public function getCareers()
-	{
-		$c = new Career();
-		$c->run();
-
-		flash('Careers completed.')->message();
-
-		if ( ! $this->all) return redirect('/osmose');
 	}
 
 	public function getNodes()

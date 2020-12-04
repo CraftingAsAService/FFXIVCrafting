@@ -2,7 +2,7 @@
 
 @section('meta')
 	<meta name="robots" content="nofollow">
-@stop
+@endsection
 
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
@@ -21,13 +21,13 @@
 			border: 1px solid #5ab65a;
 		}
 	</style>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/crafting-index.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	@if($previous)
@@ -36,7 +36,7 @@
 	<h1>Crafting Calculator</h1>
 	<h2>Display all the materials needed to craft one of each item between two levels.</h2>
 	<p>In general this will not level you to your desired level.  Visit the <a href='/levequests'>Leves</a> page when you're done crafting!</p>
-@stop
+@endsection
 
 @section('content')
 
@@ -164,7 +164,7 @@
 			</div>
 		</div>
 	{!! Form::close() !!}
-@stop
+@endsection
 
 @section('modals')
 
@@ -303,4 +303,4 @@
 	</div>
 </div>
 
-@stop
+@endsection

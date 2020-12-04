@@ -1,5 +1,5 @@
 const SearchBox = {
-	data() {
+	data () {
 		return {
 			craftingListIds: craftingListIds,
 			jobs: null,
@@ -20,6 +20,7 @@ const SearchBox = {
 		}
 	},
 	mounted () {
+		this.restoreSession()
 		this.loadJobs()
 	},
 	computed: {
@@ -44,6 +45,9 @@ const SearchBox = {
 		}
 	},
 	methods: {
+		restoreSession () {
+			this.searchData = JSON.parse(localStorage.getItem('recipesSearchData', '{}')) || this.searchData
+		},
 		loadJobs () {
 			axios
 				.get('/api/job/types/crafting')
@@ -74,6 +78,7 @@ const SearchBox = {
 			this.searchSubmit()
 		},
 		searchSubmit() {
+			localStorage.setItem('recipesSearchData', JSON.stringify(this.searchData))
 			axios
 				.post('/api/recipe/search', this.searchData)
 				.then(response => {

@@ -4,7 +4,7 @@
 <h1>
 	Site Error
 </h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -22,4 +22,4 @@
 
 <img src='/img/sad-moogle.png' width='392' class='img-responsive'>
 
-@stop
+@endsection

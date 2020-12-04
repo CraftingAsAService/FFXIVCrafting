@@ -3,7 +3,7 @@
 @section('banner')
 	<h1>Osmose</h1>
 	<h2>Libra Parser &amp; Other Tools</h2>
-@stop
+@endsection
 
 @section('content')
 	<h3>Tools</h3>
@@ -75,4 +75,4 @@
 		</div>
 	</div>
 
-@stop
+@endsection
