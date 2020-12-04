@@ -3,7 +3,7 @@
 @section('banner')
 	<h1>Character Stats</h1>
 	<h2>And how they relate to crafting</h2>
-@stop
+@endsection
 
 @section('content')
 	<h2>
@@ -118,4 +118,4 @@
 		<small><em>Some information pulled from <a href='http://www.ffxivpro.com/forum/topic/40286/ffxiv-arr-stats/'>this thread</a>, other pieces pulled from <a href='http://ffxiv.gamerescape.com/wiki/Category:Attributes'>Gamer Escape's wiki</a>.</em></small>
 	</p>
 
-@stop
+@endsection

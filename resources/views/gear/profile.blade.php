@@ -3,11 +3,11 @@
 @section('banner')
 	<h1>{{ $job->name }} Gear Profile</h1>
 	<h2>A look at level {{ $start_level }}</h2>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/gear-profile.js') }}'></script>
-@stop
+@endsection
 
 @section('content')
 
@@ -169,4 +169,4 @@
 
 	<a href='/gear?job={{ $job->abbr }}&amp;level={{ $start_level }}&amp;options={{ implode(',', $options) }}' class='btn btn-primary pull-right'>Select Another Profile</a>
 
-@stop
+@endsection

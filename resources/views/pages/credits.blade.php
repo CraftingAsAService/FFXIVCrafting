@@ -2,7 +2,7 @@
 
 @section('banner')
 	<h1>Credits &amp; Resources</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -174,4 +174,4 @@
 		</div>
 	</div>
 
-@stop
+@endsection

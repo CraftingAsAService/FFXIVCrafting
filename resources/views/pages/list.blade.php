@@ -2,13 +2,13 @@
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/list.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<h1>
 		Crafting List
 	</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -84,7 +84,7 @@
 
 @endif
 
-@stop
+@endsection
 
 @section('modals')
 <div class="modal fade" id='savedList' data-base-url='https://{{ $_SERVER['HTTP_HOST'] }}/list/saved/'>
@@ -103,4 +103,4 @@
 		</div>
 	</div>
 </div>
-@stop
+@endsection

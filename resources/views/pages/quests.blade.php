@@ -2,20 +2,20 @@
 
 @section('meta')
 	<meta name="robots" content="nofollow">
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-multiselect.js') }}'></script>
 	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
 	<script src='{{ cdn('/js/quests.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<a href='/quests' class='btn btn-default pull-right' id='load-setup' rel='tooltip' title='Load saved setup'><i class='glyphicon glyphicon-folder-open'></i></a>
 	<a href='#' class='btn btn-default margin-right pull-right' id='save-setup' rel='tooltip' title='Save setup for later'><i class='glyphicon glyphicon-floppy-disk'></i></a>
 
 	<h1>Quest Information</h1>
-@stop
+@endsection
 
 @section('content')
 <div class='alert alert-info'>
@@ -115,4 +115,4 @@
 	</table>
 </div>
 
-@stop
+@endsection

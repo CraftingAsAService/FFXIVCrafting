@@ -2,7 +2,7 @@
 
 @section('banner')
 	<h1>Leve Vs Leve</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -17,4 +17,4 @@
 	</div>
 </div>
 
-@stop
+@endsection

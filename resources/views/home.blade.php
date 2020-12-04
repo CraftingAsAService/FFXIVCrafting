@@ -2,16 +2,16 @@
 
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{!! cdn('/js/home.js') !!}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<h1>Welcome to FFXIV Crafting</h1>
 	<h2>Crafting information and planning for FFXIV: A Realm Reborn</h2>
-@stop
+@endsection
 
 @section('content')
 
@@ -63,4 +63,4 @@
 	</div>
 </div>
 
-@stop
+@endsection

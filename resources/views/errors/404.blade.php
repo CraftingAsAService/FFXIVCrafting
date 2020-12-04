@@ -2,7 +2,7 @@
 
 @section('banner')
 	<h1>Page Not Found</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -12,4 +12,4 @@
 
 <img src='/img/sad-moogle.png' width='392' class='img-responsive'>
 
-@stop
+@endsection

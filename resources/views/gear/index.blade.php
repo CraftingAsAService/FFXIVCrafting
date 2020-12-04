@@ -2,12 +2,12 @@
 
 @section('meta')
 	<meta name="robots" content="nofollow">
-@stop
+@endsection
 
 @section('vendor-css')
 	<link href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/home.js') }}'></script>
@@ -84,13 +84,13 @@
 			return;
 		});
 	</script>
-@stop
+@endsection
 
 @section('banner')
 	<a href='/equipment' class='btn btn-primary pull-right'>Equipment Tool <i class='glyphicon glyphicon-arrow-right'></i></a>
 	<h1>Gear Calculator</h1>
 	<h2>Display the gear available for a class at a certain level.</h2>
-@stop
+@endsection
 
 @section('content')
 
@@ -184,4 +184,4 @@
 		</fieldset>
 	{!! Form::close() !!}
 
-@stop
+@endsection

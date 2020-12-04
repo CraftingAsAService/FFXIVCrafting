@@ -2,12 +2,12 @@
 
 @section('meta')
 	<meta name="robots" content="noindex,nofollow">
-@stop
+@endsection
 
 @section('vendor-css')
 	<link href='{{ cdn('/css/bootstrap-switch.css') }}' rel='stylesheet'>
 	<link href='{{ cdn('/css/bootstrap-tour.css') }}' rel='stylesheet'>
-@stop
+@endsection
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/bootstrap-switch.js') }}'></script>
@@ -20,7 +20,7 @@
 		var max_level = {{ config('site.max_level') }};
 	</script>
 	<script type='text/javascript' src='{{ cdn('/js/equipment.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 
@@ -34,7 +34,7 @@
 		{{ $job->name }}
 	</h1>
 	<h2>Equipment Guide</h2>
-@stop
+@endsection
 
 @section('content')
 
@@ -187,4 +187,4 @@
 </div>
 @endif
 
-@stop
+@endsection

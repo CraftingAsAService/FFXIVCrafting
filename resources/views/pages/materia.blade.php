@@ -2,11 +2,11 @@
 
 @section('javascript')
 	<script type='text/javascript' src='{{ cdn('/js/materia.js') }}'></script>
-@stop
+@endsection
 
 @section('banner')
 	<h1>Materia</h1>
-@stop
+@endsection
 
 @section('content')
 
@@ -60,4 +60,4 @@
 	</table>
 </div>
 
-@stop
+@endsection
