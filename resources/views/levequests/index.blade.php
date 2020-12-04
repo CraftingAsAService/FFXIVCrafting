@@ -11,6 +11,7 @@
 			border: 1px solid transparent;
 			border-radius: 4px;
 			margin-right: 8px;
+			cursor: pointer;
 		}
 		.class-selector.active {
 			border: 1px solid #5ab65a;

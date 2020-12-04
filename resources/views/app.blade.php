@@ -79,7 +79,7 @@
 					{!! menu_item('/',			'Home',			'home'		) !!}
 					{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 					{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
-					{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
+					{!! menu_item('/recipes',	'Recipes',	    'recipes'	) !!}
 					{!! menu_item('/food',		'Food',			'food'		) !!}
 					{!! menu_item('/hunting',	'Hunting Log',	'hunting'		) !!}
 					{!! menu_item('/levequests','Leves',		'leves'		) !!}
@@ -182,7 +182,7 @@
 											{{-- menu_item('/',			'Home',			'home'		) --}}
 											{!! menu_item('/equipment',	'Equipment',	'equipment'	) !!}
 											{!! menu_item('/crafting',	'Crafting',		'crafting'	) !!}
-											{!! menu_item('/recipes',	'Recipe Book',	'recipes'	) !!}
+											{!! menu_item('/recipes',	'Recipes',	    'recipes'	) !!}
 											{!! menu_item('/levequests','Leves',		'leves'		) !!}
 											{!! menu_item('/food',		'Food',			'food'		) !!}
 											{!! menu_item('/hunting',	'Hunting Log',	'hunting'	) !!}

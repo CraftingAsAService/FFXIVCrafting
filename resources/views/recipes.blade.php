@@ -15,6 +15,7 @@
 			border: 1px solid transparent;
 			border-radius: 4px;
 			margin-right: 8px;
+			cursor: pointer;
 		}
 		.class-selector.active {
 			border: 1px solid #5ab65a;
@@ -46,7 +47,7 @@
 
 @section('banner')
 	<h1>
-		Recipe Book
+		Recipes
 	</h1>
 @endsection
 
@@ -128,13 +129,11 @@
 									<img :src='recipe.item.icon' width='48' height='48'>
 								</td>
 								<td class='text-left'>
-									<div style='font-size: 1.1em;' :class='"name rarity-" + recipe.item.rarity'>
-										@{{ recipe.item.name }}
-									</div>
+									<div style='font-size: 1.1em;' :class='"name rarity-" + recipe.item.rarity' v-html='recipe.item.name'></div>
 									<div>
 										<img :src='"/img/jobs/" + (jobs[recipe.job_id] ? jobs[recipe.job_id].abbr : "ALL") + "-inactive.png"' width='20' height='20' style='vertical-align: bottom;'>
-										<span class='rlvl'>@{{ recipe.recipe_level }}</span>
-										@{{ "★".repeat(recipe.stars) }}
+										<span class='rlvl' v-html='recipe.recipe_level'></span>
+										<span v-html='"★".repeat(recipe.stars)' style='margin-left: 4px;'></span>
 									</div>
 								</td>
 								<td class='text-center valign'>
@@ -148,11 +147,11 @@
 					</table>
 				</div>
 			</div>
-			<nav v-if='this.response.links.prev !== null || this.response.links.next !== null'>
+			<nav v-if='response.links.prev !== null || response.links.next !== null'>
 				<ul class="pager">
-					<li :class="{ 'invisible': this.response.links.prev === null }"><a href="#" @click.prevent='previousPage()'>Previous</a></li>
-					<li>Page @{{ this.response.meta.current_page }}</li>
-					<li :class="{ 'invisible': this.response.links.next === null }"><a href="#" @click.prevent='nextPage()'>Next</a></li>
+					<li :class="{ 'invisible': response.links.prev === null }"><a href="#" @click.prevent='previousPage()'>Previous</a></li>
+					<li>Page @{{ response.meta.current_page }}</li>
+					<li :class="{ 'invisible': response.links.next === null }"><a href="#" @click.prevent='nextPage()'>Next</a></li>
 				</ul>
 			</nav>
 		</div>
