@@ -13,9 +13,6 @@
 		<link href="/img/favicon@2x.png" rel="icon" type="image/png">
 		<meta name='csrf-token' content='{{ Session::token() }}'>
 
-		<!-- Google Webmaster Tools Verification -->
-		<meta name="google-site-verification" content="31bB29x-UyxdPFc_t--x2BnBY1mGDooQCfGo2XcmlAI">
-
 		<!-- IE11 is stupid -->
 		<meta name="msapplication-config" content="none"/>
 
@@ -332,6 +329,7 @@
 
 		@yield('javascript')
 
+		{{-- TODO phase out analytics --}}
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -342,6 +340,17 @@
 			ga('require', 'displayfeatures');
 			ga('send', 'pageview');
 		</script>
+
+		{{-- GTM --}}
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-KVHFB5GWQ8"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-KVHFB5GWQ8');
+		</script>
+
 		<script type="text/javascript">
 			window.doorbellOptions = {
 				id: '10072',
