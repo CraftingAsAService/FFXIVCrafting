@@ -24,7 +24,7 @@ var global = {
 			var el = $(this),
 				id = el.data('itemId'),
 				name = el.data('itemName')
-				qty = el.data('itemQuantity');
+				qty = el.data('itemQuantity') || 1;
 
 			$.ajax({
 				url: '/list/add',

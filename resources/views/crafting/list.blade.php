@@ -365,7 +365,7 @@
 							No data!
 						@else
 							@foreach ($quest->requirements as $req_item)
-								<a href='#' class='add-to-list' data-item-id='{{ $req_item->item_id }}' data-item-name='{{ $req_item->display_name }}'>{{ $req_item->display_name }}</a>{{ $loop->last ? '' : ',' }}
+								{{ $req_item->display_name }}{{ $loop->last ? '' : ',' }}
 							@endforeach
 						@endif
 					</li>
