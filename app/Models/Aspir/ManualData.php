@@ -132,7 +132,7 @@ class ManualData
 		$iconTransition = $this->readTSV($this->path . 'iconTransition.tsv')
 			->pluck('new', 'original');
 
-		$basePath = '/srv/personal/craftingasaservice/assets/ffxiv/';
+		$basePath = '/mnt/Projects/Sandbox/Personal/craftingasaservice/assets/ffxiv/';
 
 		foreach ($iconTransition as $original => $new)
 		{
@@ -155,7 +155,7 @@ class ManualData
 	public function getIcons()
 	{
 		$domain = 'https://xivapi.com/i/';
-		$basePath = '/srv/personal/craftingasaservice/assets/ffxiv/i/';
+		$basePath = '/mnt/Projects/Sandbox/Personal/craftingasaservice/assets/ffxiv/i/';
 
 		// A stream context to ignore http warnings
 		$streamContext = stream_context_create([

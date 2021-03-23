@@ -108,7 +108,7 @@ class XIVAPI
 			$gatheringItemIds = [];
 			foreach (range(0,7) as $i)
 				if ($data->{'Item' . $i})
-					$gatheringItemIds[] = $data->{'Item' . $i};
+					$gatheringItemIds[] = $data->{'Item' . $i}->ID;
 
 			if (empty($gatheringItemIds))
 				return;
@@ -125,7 +125,7 @@ class XIVAPI
 			foreach ($gi as $gatheringItem)
 				if ($gatheringItem)
 					$this->aspir->setData('item_node', [
-						'item_id' => $gatheringItem->Item,
+						'item_id' => $gatheringItem->Item->ID,
 						'node_id' => $data->ID,
 					]);
 
@@ -391,8 +391,8 @@ class XIVAPI
 				'sort'            => $data->SortKey,
 				'zone_id'         => $data->PlaceNameTargetID,
 				'icon'            => $data->IconID,
-				'issuer_id'       => $data->IssuerStart,
-				'target_id'       => $data->TargetEnd,
+				'issuer_id'       => $data->IssuerStart ? $data->IssuerStart->ID : null,
+				'target_id'       => $data->TargetEnd ? $data->TargetEnd->ID : null,
 				'genre'           => $data->JournalGenreTargetID,
 			], $data->ID);
 
@@ -513,32 +513,35 @@ class XIVAPI
 			// The Quantities are only applicable for "Normal" Ventures
 			$quantities = [];
 			$name = null;
-			if ($data->IsRandom)
+			if ($data->Task)
 			{
-				$q = $this->request('retainertaskrandom/' . $data->Task, ['columns' => [
-					'Name',
-				]]);
+				if ($data->IsRandom)
+				{
+					$q = $this->request('retainertaskrandom/' . $data->Task->ID, ['columns' => [
+						'Name',
+					]]);
 
-				$name = $q->Name;
-			}
-			else
-			{
-				$q = $this->request('retainertasknormal/' . $data->Task, ['columns' => [
-					'Quantity0',
-					'Quantity1',
-					'Quantity2',
-					'ItemTarget',
-					'ItemTargetID',
-				]]);
+					$name = $q->Name;
+				}
+				else
+				{
+					$q = $this->request('retainertasknormal/' . $data->Task->ID, ['columns' => [
+						'Quantity0',
+						'Quantity1',
+						'Quantity2',
+						'ItemTarget',
+						'ItemTargetID',
+					]]);
 
-				foreach (range(0, 2) as $slot)
-					$quantities[] = $q->{'Quantity' . $slot};
+					foreach (range(0, 2) as $slot)
+						$quantities[] = $q->{'Quantity' . $slot};
 
-				if ($q->ItemTarget == 'Item' && $q->ItemTargetID)
-					$this->aspir->setData('item_venture', [
-						'item_id'    => $q->ItemTargetID,
-						'venture_id' => $data->ID,
-					]);
+					if ($q->ItemTarget == 'Item' && $q->ItemTargetID)
+						$this->aspir->setData('item_venture', [
+							'item_id'    => $q->ItemTargetID,
+							'venture_id' => $data->ID,
+						]);
+				}
 			}
 
 			$this->aspir->setData('venture', [
