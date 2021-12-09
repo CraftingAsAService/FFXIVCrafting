@@ -994,18 +994,19 @@ class XIVAPI
 				'fc'           => null,
 			], $data->ID);
 
-			foreach ($data->GameContentLinks->RecipeNotebookList as $slot => $rnlIds)
-				foreach ($rnlIds as $notebookId)
-				{
-					if ( ! $notebookId)
-						continue;
+			if ($data->GameContentLinks->RecipeNotebookList)
+				foreach ($data->GameContentLinks->RecipeNotebookList as $slot => $rnlIds)
+					foreach ($rnlIds as $notebookId)
+					{
+						if ( ! $notebookId)
+							continue;
 
-					$this->aspir->setData('notebook_recipe', [
-						'recipe_id'   => $data->ID,
-						'notebook_id' => $notebookId + 1, // Avoid 0 index, accounted for later as well
-						'slot'        => (int) preg_replace('/Recipe/', '', $slot),
-					]);
-				}
+						$this->aspir->setData('notebook_recipe', [
+							'recipe_id'   => $data->ID,
+							'notebook_id' => $notebookId + 1, // Avoid 0 index, accounted for later as well
+							'slot'        => (int) preg_replace('/Recipe/', '', $slot),
+						]);
+					}
 
 			foreach (range(0, 9) as $slot)
 				if ($data->{'ItemIngredient' . $slot . 'TargetID'} && $data->{'AmountIngredient' . $slot})
