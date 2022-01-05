@@ -513,7 +513,9 @@ class XIVAPI
 			// The Quantities are only applicable for "Normal" Ventures
 			$quantities = [];
 			$name = null;
-			if ($data->Task)
+
+			// 6.05, IDs above this range were erroring, quickfix to resolve, might not be necessary in the future
+			if ($data->Task && $data->Task->ID < 30102)
 			{
 				if ($data->IsRandom)
 				{

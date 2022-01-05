@@ -21,6 +21,7 @@ class Leve extends JsonResource
             'name'     => $this->name,
             // 'item'     => new ItemResource($this->requirements->first()),
             'recipe'   => new RecipeResource($this->requirements->first()->recipes->first()),
+            'quantity' => $this->requirements[0]->pivot->amount,
             'level'    => $this->level,
             'xp'       => $this->xp,
             'gil'      => $this->gil,

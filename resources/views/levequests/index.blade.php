@@ -153,7 +153,7 @@
 							</div>
 						</td>
 						<td class='text-center valign'>
-							<button class='btn add-to-list success-after-add' :class="{ 'btn-success': craftingListIds.includes(leve.recipe.item.id), 'btn-default': !craftingListIds.includes(leve.recipe.item.id) }" :data-item-id='leve.recipe.item.id' :data-item-name='leve.recipe.item.name'>
+							<button class='btn add-to-list success-after-add' :class="{ 'btn-success': craftingListIds.includes(leve.recipe.item.id), 'btn-default': !craftingListIds.includes(leve.recipe.item.id) }" :data-item-id='leve.recipe.item.id' :data-item-name='leve.recipe.item.name' :data-item-quantity='leve.quantity'>
 								<i class='glyphicon glyphicon-shopping-cart'></i>
 								<i class='glyphicon' :class="{ 'glyphicon-ok': craftingListIds.includes(leve.recipe.item.id), 'glyphicon-plus': !craftingListIds.includes(leve.recipe.item.id) }"></i>
 							</button>
