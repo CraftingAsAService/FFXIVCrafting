@@ -244,8 +244,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/6.0.png" class="img-responsive">
-								<p class='text-center'>This site has been optimized for Patch 6.0</p>
+								<img src="/img/patch/6.1.png" class="img-responsive">
+								<p class='text-center'>This site has been optimized for Patch 6.1</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Support</p>

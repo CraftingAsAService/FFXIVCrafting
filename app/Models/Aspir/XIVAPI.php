@@ -123,7 +123,7 @@ class XIVAPI
 			])->Results;
 
 			foreach ($gi as $gatheringItem)
-				if ($gatheringItem)
+				if ($gatheringItem && $gatheringItem->Item)
 					$this->aspir->setData('item_node', [
 						'item_id' => $gatheringItem->Item->ID,
 						'node_id' => $data->ID,
