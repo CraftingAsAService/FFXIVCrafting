@@ -21,11 +21,12 @@
 		"xivapi/xivapi-php": "^1.6"
 	},
 	"require-dev": {
+		"deployer/deployer": "6.*",
 		"facade/ignition": "^2.3.6",
-        "fzaninotto/faker": "^1.9.1",
-        "mockery/mockery": "^1.3.1",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3"
+		"fzaninotto/faker": "^1.9.1",
+		"mockery/mockery": "^1.3.1",
+		"nunomaduro/collision": "^5.0",
+		"phpunit/phpunit": "^9.3"
 	},
 	"autoload": {
 		"psr-4": {
