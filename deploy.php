@@ -5,7 +5,7 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Server user set in ~/.aliases
-$user = exec('echo $DOUSER');
+$user = 'nick';
 
 // Project name
 set('application', 'ffxivcrafting');
@@ -59,6 +59,7 @@ set('writable_dirs', [
 
 host('qa')
 	->hostname('ultros')
+	->identityFile('~/.ssh/id_rsa')
 	->user($user)
 	->forwardAgent() // Use local ssh credentials for git
 	->stage('qa')
@@ -66,6 +67,7 @@ host('qa')
 
 host('production')
 	->hostname('ultros')
+	->identityFile('~/.ssh/id_rsa')
 	->user($user)
 	->forwardAgent() // Use local ssh credentials for git
 	->stage('production');
