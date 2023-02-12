@@ -244,8 +244,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/6.2.png" class="img-responsive" alt='Buried Memory'>
-								<p class='text-center'>This site has been optimized for Patch 6.2</p>
+								<img src="/img/patch/6.3.png" class="img-responsive" alt='Gods Revel Lands Tremble'>
+								<p class='text-center'>This site has been optimized for Patch 6.3</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Support</p>

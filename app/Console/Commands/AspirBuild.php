@@ -43,7 +43,7 @@ class AspirBuild extends Command {
 		\DB::table('cache')->truncate();
 
 		$this->info('Exporting MySQL Database');
-		echo exec('mysqldump -u homestead -psecret ffxivcrafting > ../ultros/caas.sql');
+		echo exec('mysqldump -u root -ppassword ffxivcrafting > ../ultros/caas.sql');
 	}
 
 }

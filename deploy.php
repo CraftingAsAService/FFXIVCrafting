@@ -59,7 +59,7 @@ set('writable_dirs', [
 
 host('qa')
 	->hostname('ultros')
-	->identityFile('~/.ssh/id_rsa')
+	->identityFile('~/.ssh/tickthokk')
 	->user($user)
 	->forwardAgent() // Use local ssh credentials for git
 	->stage('qa')
@@ -67,7 +67,7 @@ host('qa')
 
 host('production')
 	->hostname('ultros')
-	->identityFile('~/.ssh/id_rsa')
+	->identityFile('~/.ssh/tickthokk')
 	->user($user)
 	->forwardAgent() // Use local ssh credentials for git
 	->stage('production');
