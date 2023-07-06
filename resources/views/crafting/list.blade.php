@@ -29,6 +29,8 @@
 
 @section('banner')
 
+	@include('partials.support-us')
+
 	{{-- <a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
 		<i class='glyphicon glyphicon-play'></i>
 		Tour
@@ -389,6 +391,26 @@
 			</div>
 		</div>
 	</div>
+
+
 </div>
+
+@include('partials.support-us')
+
+
+<script>
+	const su = localStorage.getItem('support-us');
+	if (su !== 'Hide') {
+		for (let item of document.getElementsByClassName('support-us')) {
+			item.classList.remove('collapse');
+			item.getElementsByClassName('hide-btn')[0].addEventListener('click', () => {
+				localStorage.setItem('support-us', 'Hide');
+				for (let item of document.getElementsByClassName('support-us')) {
+					item.classList.add('collapse');
+				}
+			});
+		}
+	}
+</script>
 
 @endsection
