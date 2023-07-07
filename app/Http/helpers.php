@@ -38,7 +38,8 @@ function assetcdn($asset)
 	if( ! $cdn)
 		return asset( $asset );
 
-	return 'https://' . $cdn . '/' . $asset;
+    $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+	return $protocol . $cdn . '/' . $asset;
 }
 
 function random_guardian_name()

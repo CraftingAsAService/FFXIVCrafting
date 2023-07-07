@@ -400,7 +400,7 @@ class CraftingController extends Controller
 			if (isset($$var))
 				view()->share(compact($var));
 
-		return view('crafting.list');
+		return view('crafting.list2'); // TODO 1
 	}
 
 	private function _reagents($recipes = [], $self_sufficient = FALSE, $multiplier = 1, $include_quests = FALSE, $top_level = FALSE)
