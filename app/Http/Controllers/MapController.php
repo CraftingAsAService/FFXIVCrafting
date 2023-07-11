@@ -7,11 +7,10 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-use Config;
-use Cache;
-
 use App\Models\CAAS\PlaceName;
 use App\Models\CAAS\Item;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class MapController extends Controller
 {

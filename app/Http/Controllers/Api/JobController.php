@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Garland\Job;
 use App\Models\Garland\Recipe;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class JobController extends Controller
 {

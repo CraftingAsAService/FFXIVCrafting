@@ -6,22 +6,35 @@
     "type": "git",
     "url": "http://github.com/tickthokk/ffxivcrafting/"
   },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
   "dependencies": {
-    "debounce": "^1.2.0",
-    "fb-watchman": "^2.0.1",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "debounce": "^1.2.1",
+    "fb-watchman": "^2.0.2",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-cached": "^1.1.1",
     "gulp-concat": "^2.6.1",
-    "gulp-filter": "^6.0.0",
+    "gulp-filter": "^7.0.0",
     "gulp-if": "^3.0.0",
-    "gulp-load-plugins": "^2.0.3",
-    "gulp-notify": "^3.2.0",
+    "gulp-load-plugins": "^2.0.8",
+    "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.2.1",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.1.0",
     "gulp-sass-multi-inheritance": "^1.0.2",
-    "gulp-terser": "^1.2.0",
-    "imageoptim-cli": "^3.0.2"
+    "gulp-terser": "^2.1.0",
+    "imageoptim-cli": "^3.1.7",
+    "sass": "^1.63.6",
+    "vue": "^3.2.36",
+    "vue-loader": "^17.0.1"
+  },
+  "devDependencies": {
+    "axios": "^1.1.2",
+    "laravel-vite-plugin": "^0.7.5",
+    "vite": "^4.0.0"
   },
   "browserslist": [
     "> 1%",

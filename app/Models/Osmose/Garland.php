@@ -2,7 +2,7 @@
 
 namespace App\Models\Osmose;
 
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class Garland
 {

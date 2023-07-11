@@ -51,6 +51,7 @@ const LevesBox = {
 				.then(response => {
 					this.response = response.data
 					this.results = this.response.data // aka response.data.data
+					console.log(this.results)
 				})
 				// .catch(error => console.log(error))
 		},

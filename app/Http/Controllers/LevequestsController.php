@@ -6,8 +6,6 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Cache;
-use Config;
 
 use App\Models\Garland\Leve;
 use App\Models\Garland\Job;

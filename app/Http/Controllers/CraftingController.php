@@ -7,14 +7,11 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-use Config;
-use Cookie;
-use Session;
-
 use App\Models\Garland\Item;
 use App\Models\Garland\Job;
 use App\Models\Garland\Quest;
 use App\Models\Garland\Recipe;
+use Illuminate\Support\Facades\Config;
 
 class CraftingController extends Controller
 {

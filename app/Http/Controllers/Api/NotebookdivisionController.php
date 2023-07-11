@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Notebookdivision;
 use App\Models\NotebookdivisionCategories;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class NotebookdivisionController extends Controller
 {

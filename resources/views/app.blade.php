@@ -250,15 +250,19 @@
 							<div class="col-sm-3">
 								<p class="headline">Support</p>
 
-								<p class="view-all"><a href="https://www.patreon.com/bePatron?u=954057" data-patreon-widget-type="become-patron-button">Become a Patron!</a></p>
+								<p class="view-all">
+									<a href="https://www.patreon.com/bePatron?u=954057" target="_blank">
+										Become a Patron!
+									</a>
+								</p>
 
-								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Or donate with PayPal!</a></p>
-								<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>
-									<input type='hidden' name='cmd' value='_s-xclick'>
-									<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>
-									<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>
-									<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>
-								</form>
+{{--								<p class="view-all"><a href="#buymeabeer" id='buymeabeer'>Or donate with PayPal!</a></p>--}}
+{{--								<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top' class='hidden'>--}}
+{{--									<input type='hidden' name='cmd' value='_s-xclick'>--}}
+{{--									<input type='hidden' name='hosted_button_id' value='NWDCLNE6FY76U'>--}}
+{{--									<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' border='0' name='submit' id='buymeabeer_button'>--}}
+{{--									<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>--}}
+{{--								</form>--}}
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Other Links</p>

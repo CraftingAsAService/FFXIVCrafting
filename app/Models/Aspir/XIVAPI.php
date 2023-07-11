@@ -7,7 +7,7 @@
 
 namespace App\Models\Aspir;
 
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class XIVAPI
 {

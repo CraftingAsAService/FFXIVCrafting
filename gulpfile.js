@@ -8,6 +8,8 @@ var gulp = require('gulp'),
 		}
 	});
 
+var sass = require('gulp-sass')(require('sass'));
+
 function getStatus() {
 	// If the gulp.stop file exists, don't run any gulp commands
 	// Used in conjunction with a git alias/function that creates and deletes this file
@@ -51,11 +53,11 @@ gulp.task('css', function(done) {
 			return !/\/_/.test(file.path) || !/^_/.test(file.relative);
 		}))
 		// Run SASS and AutoPrefix it
-		.pipe(plugins.sass({ outputStyle: 'compressed' }).on('error', plugins.sass.logError))
+		.pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
 		.pipe(plugins.autoprefixer())
 		// Save file down and notify
 		.pipe(gulp.dest('public/css'))
-		.pipe(plugins.notify({ message: 'Sass compiled <%= file.relative %>' }));
+		.pipe(plugins.notify({ "message": 'Sass compiled <%= file.relative %>' }));
 });
 
 /**
@@ -71,5 +73,5 @@ gulp.task('js', function(done) {
 		.pipe(plugins.if(global.isWatching, plugins.cached('terser')))
 		.pipe(plugins.terser())
 		.pipe(gulp.dest('public/js'))
-		.pipe(plugins.notify({ message: 'JS compiled <%= file.relative %>' }));
+		.pipe(plugins.notify({ "message": 'JS compiled <%= file.relative %>' }));
 });
