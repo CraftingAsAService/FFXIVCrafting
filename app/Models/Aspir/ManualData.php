@@ -21,6 +21,25 @@ class ManualData
 		$this->aspir =& $aspir;
 	}
 
+    // public function nodes()
+    // {
+    //     // https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/blob/master/libs/data/src/lib/json/gathering-point-to-node-id.json
+    //     // "30051": 10,
+    //     // "30052": 14,
+    //     // "30053": 14,
+    //
+    //
+    //     $teamcraftNodes = file_get_contents('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json/nodes.json');
+    //     $nodes = json_decode($teamcraftNodes, true);
+    //     dd($nodes);
+    //     // Looking for nodes with hidden items
+    //     $nodesWithHiddenItems = $nodes->filter(fn ($node) => ! empty($node['hiddenItems']) && $node['zoneid']);
+    //     dd($nodesWithHiddenItems->keys());
+    //
+    //
+    //
+    // }
+
 	public function nodeCoordinates()
 	{
 		// Node Coordinates file is manually built

@@ -4,12 +4,12 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
+// Server user set in ~/.aliases
 $user = 'nick';
 
 // Project name
 set('application', 'ffxivcrafting');
 set('allow_anonymous_stats', true);
-set('remote_user', $user);
 
 // Project repository
 set('repository', 'git@github.com:CraftingAsAService/FFXIVCrafting.git');
@@ -29,55 +29,67 @@ set('git_cache', false); // Seems to be faster without it
 set('http_user', 'www-data');
 set('http_group', 'www-data');
 
-// set('shared_dirs', [
-// 	'storage',
-// 	'public/assets',
-// ]);
-//
-// set('shared_files', [
-// 	'.env',
-// ]);
-//
-// set('copy_dirs', [
-// 	'vendor',
-// ]);
+set('shared_dirs', [
+	'storage',
+	'public/assets',
+]);
 
-// set('writable_dirs', [
-// 	'bootstrap/cache',
-// 	'storage',
-// 	'storage/app',
-// 	'storage/app/public',
-// 	'storage/framework',
-// 	'storage/framework/cache',
-// 	'storage/framework/sessions',
-// 	'storage/framework/views',
-// 	'storage/logs',
-// 	'vendor',
-// ]);
+set('shared_files', [
+	'.env',
+]);
+
+set('copy_dirs', [
+	'vendor',
+]);
+
+set('writable_dirs', [
+	'bootstrap/cache',
+	'storage',
+	'storage/app',
+	'storage/app/public',
+	'storage/framework',
+	'storage/framework/cache',
+	'storage/framework/sessions',
+	'storage/framework/views',
+	'storage/logs',
+	'vendor',
+]);
 
 // Hosts
-host('cactuar')
-	->setRemoteUser($user)
-    ->set('labels', ['stage' => 'production']);
+
+host('qa')
+	->hostname('ultros')
+	->identityFile('~/.ssh/tickthokk')
+	->user($user)
+	->forwardAgent() // Use local ssh credentials for git
+	->stage('qa')
+	->set('deploy_path', '/srv/www/{{application}}-qa');
+
+host('production')
+	->hostname('ultros')
+	->identityFile('~/.ssh/tickthokk')
+	->user($user)
+	->forwardAgent() // Use local ssh credentials for git
+	->stage('production');
 
 // Tasks
 
 desc('Upload the database');
 task('upload:db', function() {
-	upload('../cactuar/caas.sql', '~/caas.sql');
+	upload('../ultros/caas.sql', '~/caas.sql');
 });
 
-desc('Update the database on Cactuar');
-task('cactuar:db', function() {
+desc('Update the database on Ultros');
+task('ultros:db', function() {
 	require __DIR__ . '/vendor/autoload.php';
-	$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__, '.env.' . get('labels')['stage']);
+	$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__, '.env.' . get('stage'));
 	$dotenv->load();
 	run('mysql --defaults-file=~/password.cnf -u ' . $_ENV['DB_USERNAME'] . ' -h ' . $_ENV['DB_HOST'] . ' ' . $_ENV['DB_DATABASE'] . ' < ~/caas.sql');
 });
-before('cactuar:db', 'upload:db');
+before('ultros:db', 'upload:db');
 
-desc('Update the assets on Cactuar');
-task('cactuar:assets', function() {
+desc('Update the assets on Ultros');
+task('ultros:assets', function() {
 	upload('../assets/ffxiv/i/', '/srv/www/assets/i/');
 });
 
@@ -113,24 +125,23 @@ task('artisan:refresh', function () {
 });
 
 // Primary Task
-// desc('Deploy your project');
-// task('deploy', [
-// 	// 'deploy:info',
-// 	'deploy:prepare',
-// 	'deploy:lock',
-// 	'deploy:release',     // Prepare `release`
-// 	'deploy:update_code', // GitHub call
-// 	'deploy:shared',      // Create symlinks for shared_dirs and files
-// 	'deploy:copy_dirs',   // Copies vendor/ folder
-// 	'deploy:vendors',     // composer install --no-dev -o
-//  'deploy:unlock',      // :writable wants to lock?
-// 	'deploy:writable',    // Makes sure storage folders are writable
-// 	'artisan:refresh',    // artisan:optimize on steroids
-// 	'artisan:migrate',    // Database migration
-// 	'deploy:symlink',     // `release` is now `current`
-// 	'deploy:unlock',
-// 	'deploy:cleanup',
-// ]);
+desc('Deploy your project');
+task('deploy', [
+	'deploy:info',
+	'deploy:prepare',
+	'deploy:lock',
+	'deploy:release',     // Prepare `release`
+	'deploy:update_code', // GitHub call
+	'deploy:shared',      // Create symlinks for shared_dirs and files
+	'deploy:copy_dirs',   // Copies vendor/ folder
+	'deploy:vendors',     // composer install --no-dev -o
+	'deploy:writable',    // Makes sure storage folders are writable
+	'artisan:refresh',    // artisan:optimize on steroids
+	'artisan:migrate',    // Database migration
+	'deploy:symlink',     // `release` is now `current`
+	'deploy:unlock',
+	'cleanup',
+]);
 
 // Additional task executions
 

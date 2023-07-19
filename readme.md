@@ -16,12 +16,12 @@ php artisan aspir:migrate
 
 php artisan aspir:build-db
 
-dep ultros:db
+dep cactuar:db
 
 
 php artisan aspir:assets
 
-dep ultros:assets
+dep cactuar:assets
 
 
 dep deploy

@@ -1388,6 +1388,9 @@ table.table-curved {
 #doorbell-button {
 	right: 0;
 	border-radius: 5px 0 0 0;
+	@media (max-width: 767px) {
+		display: none;
+	}
 }
 
 .isearch {
