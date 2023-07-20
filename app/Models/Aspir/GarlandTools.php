@@ -8,8 +8,6 @@
 
 namespace App\Models\Aspir;
 
-use Cache;
-
 class GarlandTools
 {
 

@@ -53,7 +53,7 @@
 		const maxLevel = {{ config('site.max_level') }};
 	</script>
 
-	<script type='text/javascript' src='{{ cdn('/js/pages/leves.js') }}'></script>
+	<script src='{{ cdn('/js/pages/leves.js') }}'></script>
 @endsection
 
 @section('banner')
@@ -82,7 +82,7 @@
 			<div>
 				<label class='class-selector' v-for='j in jobs' :key='j.id' :class="j.id == activeJob ? 'active' : ''">
 					<input type='checkbox' @click='updateJob(j.id)'>
-					<img :src='"/img/jobs/" + j.abbr.toUpperCase() + "-inactive.png"' alt='' width="24" height="24"> <span class="abbr hidden-xs hidden-sm" v-html='j.abbr' style='width: 32px; display: inline-block;'></span>
+					<img :src='"/img/jobs/" + j?.abbr.toUpperCase() + "-inactive.png"' alt='' width="24" height="24"> <span class="abbr hidden-xs hidden-sm" v-html='j?.abbr' style='width: 32px; display: inline-block;'></span>
 				</label>
 			</div>
 
@@ -147,7 +147,7 @@
 						<td class='text-left'>
 							<div style='font-size: 1.1em;' :class='"name rarity-" + leve.recipe.item.rarity' v-html='leve.recipe.item.name'></div>
 							<div>
-								<img :src='"/img/jobs/" + jobs[leve.recipe.job_id].abbr.toUpperCase() + "-inactive.png"'width='20' height='20' style='vertical-align: bottom;'>
+								<img :src='"/img/jobs/" + jobs[leve.recipe.job_id]?.abbr.toUpperCase() + "-inactive.png"'width='20' height='20' style='vertical-align: bottom;'>
 								<span class='rlvl' v-html='leve.recipe.recipe_level'></span>
 								<span v-html='"★".repeat(leve.recipe.stars)'></span>
 							</div>

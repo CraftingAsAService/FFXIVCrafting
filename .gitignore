@@ -5,3 +5,5 @@ public/assets
 .DS_Store
 Thumbs.db
 gulp.stop
+.idea
+public/hot

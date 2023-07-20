@@ -110,47 +110,50 @@
 							<tbody>
 								@foreach($section['data'] as $stat_names => $group)
 									@foreach($group as $item)
-									@foreach(['nq', 'hq'] as $quality)
-									<?php if ($quality == 'hq' && ! $item['has_hq']) continue; ?>
-									<tr class='hidden' data-stats='{{ $stat_names }}' data-quality='{{ $quality }}' data-item-id='{{ $item['id'] }}'>
-										<td>
-											@if($item['shops_count'] && $quality == 'nq')
-											<a href='#' class='click-to-view pull-right' data-type='shops' rel='tooltip' title='Available for {{ $item['price'] }} gil, Click to load Shops'>
-												<img src='/img/coin.png' width='24' height='24'>
-											</a>
-											@endif
+										@foreach(['nq', 'hq'] as $quality)
+											<?php if ($quality == 'hq' && ! $item['has_hq']) continue; ?>
+											<tr class='hidden' data-stats='{{ $stat_names }}' data-quality='{{ $quality }}' data-item-id='{{ $item['id'] }}'>
+												<td>
+													@if($item['shops_count'] && $quality == 'nq')
+														<a href='#' class='click-to-view pull-right' data-type='shops' rel='tooltip' title='Available for {{ $item['price'] }} gil, Click to load Shops'>
+															<img src='/img/coin.png' width='24' height='24'>
+														</a>
+													@endif
 
-											<a href='{{ item_link() . $item['id'] }}' target='_blank'>
-												<span class='overlay-container'>
-												@if($quality == 'hq')
-												<img src='/img/hq-overlay.png' width='36' height='36' class='hq-overlay' style='top: inherit;'>
-												@endif
-												<img src='{{ icon($item['icon']) }}' width='36' height='36'>
-												</span>
-												{{ $item['name'] }}
-											</a>
-										</td>
-										@foreach(explode('|', $stat_names) as $stat_name)
-										@if(isset($item['stats'][$stat_name][$quality]))
-										<td class='text-center valign' data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $stat_name }}'@if ($item['stats'][$stat_name][$quality]['amount'] != 0) rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $stat_name }}'@endif>
-											+{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}
-											<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
-										</td>
-										@else
-										<td class='text-center valign' data-stat-name='{{ $stat_name }}' rel='tooltip'>
-											+0
-											<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
-										</td>
-										@endif
+													<a href='{{ item_link() . $item['id'] }}' target='_blank'>
+													<span class='overlay-container'>
+													@if($quality == 'hq')
+														<img src='/img/hq-overlay.png' width='36' height='36' class='hq-overlay' style='top: inherit;'>
+													@endif
+													<img src='{{ icon($item['icon']) }}' width='36' height='36'>
+													</span>
+														{{ $item['name'] }}
+													</a>
+												</td>
+												@foreach(explode('|', $stat_names) as $stat_name)
+													@if(isset($item['stats'][$stat_name][$quality]))
+														<td
+															class='text-center valign'
+															data-amount='{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}' data-stat-name='{{ $stat_name }}'@if ($item['stats'][$stat_name][$quality]['amount'] != 0) rel='tooltip' title='Maximum output of {{ number_format($item['stats'][$stat_name][$quality]['amount']) }}% with {{ number_format($item['stats'][$stat_name][$quality]['threshold']) }} {{ $stat_name }}'@endif
+														>
+															+{{ number_format($item['stats'][$stat_name][$quality]['limit']) }}
+															<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
+														</td>
+													@else
+														<td class='text-center valign' data-stat-name='{{ $stat_name }}' rel='tooltip'>
+															+0
+															<img src='/img/stats/{{ $stat_name }}.png' class='stat-icon'>
+														</td>
+													@endif
+												@endforeach
+												<td class='cart text-center valign'>
+													<button class='btn btn-default add-to-list' data-item-id='{{ $item['id'] }}' data-item-name='{{ $item['name'] }}'>
+														<i class='glyphicon glyphicon-shopping-cart'></i>
+														<i class='glyphicon glyphicon-plus'></i>
+													</button>
+												</td>
+											</tr>
 										@endforeach
-										<td class='cart text-center valign'>
-											<button class='btn btn-default add-to-list' data-item-id='{{ $item['id'] }}' data-item-name='{{ $item['name'] }}'>
-												<i class='glyphicon glyphicon-shopping-cart'></i>
-												<i class='glyphicon glyphicon-plus'></i>
-											</button>
-										</td>
-									</tr>
-									@endforeach
 									@endforeach
 								@endforeach
 							</tbody>

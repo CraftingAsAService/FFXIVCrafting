@@ -8,21 +8,20 @@ Image for Footer: http://na.finalfantasyxiv.com/lodestone/special/patchnote_log/
 
 ## Updating
 
+These commands should be done in Vagrant.
+
 ```
 php artisan cache:clear file (optionally necessary)
 php artisan aspir:data
 php artisan aspir:migrate
-
-
 php artisan aspir:build-db
-
-dep ultros:db
-
-
 php artisan aspir:assets
+```
 
-dep ultros:assets
+These commands should be done on the Mac.
 
-
+```
+dep cactuar:db
+dep cactuar:assets
 dep deploy
 ```

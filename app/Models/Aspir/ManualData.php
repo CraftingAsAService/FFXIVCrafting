@@ -21,6 +21,25 @@ class ManualData
 		$this->aspir =& $aspir;
 	}
 
+    // public function nodes()
+    // {
+    //     // https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/blob/master/libs/data/src/lib/json/gathering-point-to-node-id.json
+    //     // "30051": 10,
+    //     // "30052": 14,
+    //     // "30053": 14,
+    //
+    //
+    //     $teamcraftNodes = file_get_contents('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json/nodes.json');
+    //     $nodes = json_decode($teamcraftNodes, true);
+    //     dd($nodes);
+    //     // Looking for nodes with hidden items
+    //     $nodesWithHiddenItems = $nodes->filter(fn ($node) => ! empty($node['hiddenItems']) && $node['zoneid']);
+    //     dd($nodesWithHiddenItems->keys());
+    //
+    //
+    //
+    // }
+
 	public function nodeCoordinates()
 	{
 		// Node Coordinates file is manually built
@@ -132,7 +151,7 @@ class ManualData
 		$iconTransition = $this->readTSV($this->path . 'iconTransition.tsv')
 			->pluck('new', 'original');
 
-		$basePath = '/Users/nick/Projects/ffxiv/assets/ffxiv/';
+		$basePath = '/mnt/Projects/ffxiv/assets/ffxiv/';
 
 		foreach ($iconTransition as $original => $new)
 		{
@@ -155,7 +174,7 @@ class ManualData
 	public function getIcons()
 	{
 		$domain = 'https://xivapi.com/i/';
-		$basePath = '/Users/nick/Projects/ffxiv/assets/ffxiv/i/';
+		$basePath = '/mnt/Projects/ffxiv/assets/ffxiv/i';
 
 		// A stream context to ignore http warnings
 		$streamContext = stream_context_create([

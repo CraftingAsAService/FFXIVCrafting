@@ -6,11 +6,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Cache;
-use Config;
 
 use App\Models\Garland\Item;
 use App\Models\CAAS\Stat;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class FoodController extends Controller
 {

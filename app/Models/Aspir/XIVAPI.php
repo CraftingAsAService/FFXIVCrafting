@@ -7,7 +7,7 @@
 
 namespace App\Models\Aspir;
 
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class XIVAPI
 {
@@ -84,69 +84,97 @@ class XIVAPI
 
 	public function nodes()
 	{
-		// You must be looking at gathering items.  What you're looking for there is the GatheringPoint table, which has a PlaceName (i.e., Cedarwood) and a TerritoryType.  The TerritoryType then has the PlaceName you're looking for - Lower La Noscea.
-		// Be warned that what I referred to as a 'node' is really a GatheringPointBase.  There are lots of gathering points with the same items because they appear in different places on the map.
+        $tcBase = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master';
+        $teamcraftNodes = json_decode(
+            file_get_contents($tcBase . '/libs/data/src/lib/json/nodes.json'),
+            true
+        );
+
+        $timeConverter = [
+            0 =>  'Midnight',
+            // 1 => '1am', etc
+            ...array_map(fn ($i) => $i . "am", range(1, 11)),
+            12 => 'Noon',
+            // 13 => '1pm', etc
+            ...array_map(fn ($i) => ($i - 12) . "pm", range(13, 23)),
+        ];
+
+		// You must be looking at gathering items.  What you're looking for there is the GatheringPoint table,
+        // which has a PlaceName (i.e., Cedarwood) and a TerritoryType.
+        //  The TerritoryType then has the PlaceName you're looking for - Lower La Noscea.
+		// Be warned that what I referred to as a 'node' is really a GatheringPointBase.
+        //  There are lots of gathering points with the same items because they appear in different places on the map.
 		$this->loopEndpoint('gatheringpointbase', [
 			'ID',
 			'GatheringType.ID',
 			'GatheringLevel',
 			'GameContentLinks.GatheringPoint.GatheringPointBase.0',
 			// Items go from Item0 to Item7; There's rumor of this being Array'd
-			'Item0',
-			'Item1',
-			'Item2',
-			'Item3',
-			'Item4',
-			'Item5',
-			'Item6',
-			'Item7',
-		], function($data) {
-			if ($data->GameContentLinks->GatheringPoint->GatheringPointBase['0'] == null)
-				return;
+			'Item0.Item.ID',
+			'Item1.Item.ID',
+			'Item2.Item.ID',
+			'Item3.Item.ID',
+			'Item4.Item.ID',
+			'Item5.Item.ID',
+			'Item6.Item.ID',
+			'Item7.Item.ID',
+		], function($data) use ($teamcraftNodes, $timeConverter) {
+            if ($data->GameContentLinks->GatheringPoint->GatheringPointBase[0] === null)
+                return;
 
-			// Loop through Item#
-			$gatheringItemIds = [];
-			foreach (range(0,7) as $i)
-				if ($data->{'Item' . $i})
-					$gatheringItemIds[] = $data->{'Item' . $i}->ID;
+            $tcNodeData = $teamcraftNodes[$data->ID] ?? false;
 
-			if (empty($gatheringItemIds))
-				return;
+            // Loop through Item#s
+            $items = [];
+            foreach (range(0,7) as $i)
+                if ($data->{'Item' . $i}->Item->ID)
+                    $items[] = $data->{'Item' . $i}->Item->ID;
 
-			sort($gatheringItemIds);
+            if ( ! empty($tcNodeData['hiddenItems'])) {
+                $items = array_merge($items, $tcNodeData['hiddenItems']);
+            }
 
-			$gi = $this->request('gatheringitem', [
-				'ids' => implode(',', $gatheringItemIds),
-				'columns' => [
-					'Item',
-				],
-			])->Results;
+            foreach ($items as $itemId)
+                $this->aspir->setData('item_node', [
+                    'item_id' => $itemId,
+                    'node_id' => $data->ID,
+                ]);
 
-			foreach ($gi as $gatheringItem)
-				if ($gatheringItem && $gatheringItem->Item)
-					$this->aspir->setData('item_node', [
-						'item_id' => $gatheringItem->Item->ID,
-						'node_id' => $data->ID,
-					]);
+            // Loop through each gathering point looking for a valid placename
+            $gp = $this->request('gatheringpoint/' . $data->GameContentLinks->GatheringPoint->GatheringPointBase[0], ['columns' => [
+                'PlaceName.ID',
+                'PlaceName.Name',
+                'TerritoryType.PlaceName.ID',
+                'TerritoryType.PlaceName.Name',
+            ]]);
 
-			$gp = $this->request('gatheringpoint/' . $data->GameContentLinks->GatheringPoint->GatheringPointBase['0'], ['columns' => [
-				'PlaceName.ID',
-				'PlaceName.Name',
-				'TerritoryType.PlaceName.ID',
-				'TerritoryType.PlaceName.Name',
-			]]);
+            // If the node doesn't have a name, it's not a valid node. Skip.
+            if ( ! $gp->PlaceName->Name)
+                return;
 
-			$this->aspir->setData('node', [
-				'id'          => $data->ID,
-				'name'        => $gp->PlaceName->Name,
-				'type'        => $data->GatheringType->ID,
-				'level'       => $data->GatheringLevel,
-				'zone_id'     => $gp->TerritoryType->PlaceName->ID,
-				'area_id'     => $gp->PlaceName->ID,
-				'coordinates' => null, // Filled in later
-				'timer'       => null, // Filled in later
-			], $data->ID);
-		});
+            $nodeData = [
+                'id'          => $data->ID,
+                'name'        => $gp->PlaceName->Name,
+                'type'        => $data->GatheringType->ID,
+                'level'       => $data->GatheringLevel,
+                'zone_id'     => $gp->TerritoryType->PlaceName->ID,
+                'area_id'     => $gp->PlaceName->ID,
+                'coordinates' => null,
+                'timer'       => null,
+            ];
+
+            if ($tcNodeData) {
+                if (isset($tcNodeData['x'])) {
+                    $nodeData['coordinates'] = $tcNodeData['x'] . ' x ' . $tcNodeData['y'];
+                }
+                if ( ! empty($tcNodeData['spawns'])) {
+                    $spawns = array_map(fn ($time) => $timeConverter[$time], $tcNodeData['spawns']);
+                    $nodeData['timer'] = implode(', ', $spawns) . ' for ' . $tcNodeData['duration'] . 'm';
+                }
+            }
+
+            $this->aspir->setData('node', $nodeData, $data->ID);
+        });
 	}
 
 	public function fishingSpots()
@@ -1143,7 +1171,7 @@ class XIVAPI
 			$chunk = $this->request($endpoint, ['ids' => $ids->join(','), 'columns' => $columns]);
 
 			foreach ($chunk->Results as $data)
-				$callback($data);
+                ($callback)($data);
 		}
 	}
 

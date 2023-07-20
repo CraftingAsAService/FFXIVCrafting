@@ -6,11 +6,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Cache;
-use Config;
+use Illuminate\Support\Facades\Cache;
 
 use App\Models\Garland\Item;
 use App\Models\CAAS\Stat;
+use Illuminate\Support\Facades\Storage;
 
 class HuntingController extends Controller
 {
@@ -25,8 +25,8 @@ class HuntingController extends Controller
 	{
 		$sections = [];
 
-		$huntingData = \Cache::store('file')->rememberForever('huntingData', function() {
-			$huntingData = \Storage::get('hunting.tsv');
+		$huntingData = Cache::store('file')->rememberForever('huntingData', function() {
+			$huntingData = Storage::get('hunting.tsv');
 			$csv = new \ParseCsv\Csv();
 			$csv->fields = ['class', 'image', 'rank', 'task', 'number', 'area', 'location'];
 			$csv->offset = 1; // Ignore header

@@ -114,14 +114,15 @@ class Aspir
 		];
 
 		$manualdataCalls = [
-			'nodeCoordinates',
-			'nodeTimers',
+            // 'nodes',
+			// 'nodeCoordinates',
+			// 'nodeTimers',
 			'randomVentureItems', // TODO, COME BACK TO WHEN ITEMS EXIST
 			'leveTypes',
 		];
 
 		$rowCounts = [];
-		foreach (['xivapi', 'garlandtools', 'manualdata'] as $type)
+        foreach (['xivapi', 'garlandtools', 'manualdata'] as $type)
 		{
 			$this->command->comment('Beginning ' . $type . ' Calls');
 			foreach (${$type . 'Calls'} as $function)
