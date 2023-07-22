@@ -3,7 +3,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><img src="/img/shop.png" width="24" height="24"> {{ $item->name }} Shops - {{ number_format($item->price, 0, '.', ',') }} <img src="/img/coin.png" width="24" height="24"></h4>
+				<h4 class="modal-title">
+					<img src="/img/shop.png" width="24" height="24">
+					{{ $item->name }} Shops
+					@if ($item->price)
+					- {{ number_format($item->price, 0, '.', ',') }} <img src="/img/coin.png" width="24" height="24">
+					@endif
+				</h4>
 			</div>
 			<div class="modal-body">
 				<table class='table table-bordered table-striped'>
@@ -32,6 +38,16 @@
 						@endforeach
 					</tbody>
 				</table>
+				@if ($item->special_buy)
+					<p>
+						Vendors listed may use alternative currency, like a beast tribe.
+					</p>
+				@endif
+				@if ($item->gc_price)
+					<p>
+						Also available via Grand Company Quartermasters for {{ number_format($item->gc_price, 0, '.', ',') }} Seals.
+					</p>
+				@endif
 			</div>
 		</div>
 	</div>

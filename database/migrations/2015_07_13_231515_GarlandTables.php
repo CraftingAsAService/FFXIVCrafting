@@ -165,7 +165,7 @@ class GarlandTables extends Migration
 		Schema::create('shop', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
-			$table->integer('name')->unsigned()->nullable();
+			$table->string('name')->nullable();
 		});
 
 		if ( ! Schema::hasTable('item_shop'))
@@ -173,7 +173,8 @@ class GarlandTables extends Migration
 		{
 			$table->increments('id')->unsigned();
 			$table->integer('item_id')->unsigned();
-			$table->integer('shop_id')->unsigned();
+            $table->integer('shop_id')->unsigned();
+            $table->boolean('alt_currency')->unsigned();
 
 			$table->index('item_id');
 			$table->index('shop_id');

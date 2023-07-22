@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
-
-use Config;
-use Cookie;
 
 use App\Models\CAAS\Stat;
 use App\Models\Garland\Item;
 Use App\Models\Garland\Job;
 use App\Models\Garland\JobCategory;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
 
 class EquipmentController extends Controller
 {
@@ -121,34 +117,9 @@ class EquipmentController extends Controller
 
 		view()->share(compact('original_level', 'slim_mode', 'maxLevelWarning'));
 
-		#$starting_equipment = [];
-
 		// 3 + ($slim_mode ? 1 : 0)
 		$equipment = Item::calculate($job->id, $level - 1, 4, $craftable_only, $rewardable_too);
-		// dd($equipment);
-		// dd($equipment[7]['Hands'][6][0]->attributes);//->relations['attributes']);
-		// dd($equipment[7]['Hands'][6][0]->relations['attributes']);
 		$equipment = $this->getOutput($equipment);
-
-		// dd($equipment);
-		//dd($equipment['46']);
-
-		// if ($level > 1)
-		// {
-		// 	view()->share('level', $level - 1);
-
-		// 	$starting_equipment[$level - 1] = $this->getOutput($equipment, $roles);
-		// }
-
-
-		// foreach (range($level, $level + ($slim_mode ? 3 : 2)) as $e_level)
-		// {
-		// 	view()->share('level', $e_level);
-
-		// 	$equipment = Item::calculate($job->id, $e_level, $craftable_only, $rewardable_too);
-		// 	$starting_equipment[$e_level] = $this->getOutput($equipment, $roles);
-		// }
-
 
 		$this->shareJobLists();
 
@@ -158,12 +129,11 @@ class EquipmentController extends Controller
 
 	public function postLoad(Request $request)
 	{
-		$inputs = $request->all();
-
 		$job = $request['job'];
 		$level = $request['level'];
-		$craftable_only = $request['craftable_only'];
-		$rewardable_too = $request['rewardable_too'];
+        // These come across as strings
+		$craftable_only = $request['craftable_only'] === "true";
+		$rewardable_too = $request['rewardable_too'] === "true";
 
 		// All Jobs
 		$job_list = Job::pluck('name', 'abbr')->all();

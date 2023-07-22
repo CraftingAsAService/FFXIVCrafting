@@ -165,7 +165,12 @@
 									{{-- &mdash; --}}
 									@if ($reagent['item']->nodes->where('timer', '!=', null)->count())
 									@foreach ($reagent['item']->nodes->where('timer', '!=', null) as $node)
-									<i class='glyphicon glyphicon-time' rel='tooltip' data-html='true' title='{{ $node->timer }}'></i>
+										<span rel="tooltip" data-html='true' title="{{ ucfirst($node->timer_type) }} - {{ $node->timer }}" style="margin-right: 3px;">
+											@if ($node->timer_type)
+											<span>{{ ucfirst($node->timer_type)[0] }}</span>
+											@endif
+											<i class='glyphicon glyphicon-time'></i>
+										</span>
 									@endforeach
 									@endif
 									<span rel='tooltip' data-html='true' title='{!! empty($reagent['item']->nodes->first()->coordinates) ? 'N/A' : $reagent['item']->nodes->first()->coordinates !!}{{ $reagent['item']->nodes->count() > 1 ? '<br>' . ($reagent['item']->nodes->count() - 1) . ' other locations available.' : '' }}'>{!! $level !!}@if ( ! empty($reagent['item']->nodes->first()->level)), L{{ $reagent['item']->nodes->first()->level }}@endif</span>
@@ -197,7 +202,7 @@
 					<img src='/img/jobs/{{ $recipe->job->abbr }}{{ isset($classes) && in_array($recipe->job->abbr, $classes) ? '' : '-inactive' }}.png' width='24' height='24' class='click-to-view' data-type='recipes' rel='tooltip' title='Click to load {{ $recipe->job->abbr }}&#39;s Recipe'>
 					@endforeach
 
-					@if($reagent['item']->shops->count())
+					@if($reagent['item']->special_buy || $reagent['item']->gc_price || $reagent['item']->shops->count())
 					<img src='/img/shop.png' width='24' height='24' rel='tooltip' title='Available for {{ $reagent['item']->price }} gil, Click to load Shops' class='click-to-view{{ $reagent['self_sufficient'] ? ' opaque' : '' }}' data-type='shops'>
 					<span class='hidden vendors'>{{ $reagent['item']->price }}</span>
 					@endif
@@ -354,7 +359,7 @@
 			</div>
 			<div class='panel-body'>
 				<p>Be efficient, make quest items in advance!</p>
-				<p>Materials needed already reflected in lists above, but vital information is missing (quantity, HQ requirements). Click the names to add them to your crafting list.</p>
+				<p>Materials needed already reflected in lists above, but vital information is missing (quantity, HQ requirements).</p>
 
 				<ul>
 					@foreach($quest_items as $quest)

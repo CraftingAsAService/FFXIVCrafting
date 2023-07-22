@@ -480,7 +480,8 @@ class CraftingController extends Controller
 								$cluster_jobs[$jShort] = [ 'count' => 0 ];
 
 							$cluster_jobs[$jShort]['type']  = $node->type;
-							$cluster_jobs[$jShort]['timer'] = $node->timer;
+                            $cluster_jobs[$jShort]['timer'] = $node->timer;
+                            $cluster_jobs[$jShort]['timer_type'] = $node->timer_type;
 							$cluster_jobs[$jShort]['count']++;
 						}
 

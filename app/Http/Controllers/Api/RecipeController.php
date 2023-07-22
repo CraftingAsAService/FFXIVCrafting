@@ -16,10 +16,10 @@ class RecipeController extends Controller
 	public function search()
 	{
 		$validatedData = request()->validate([
-			'name'      => 'nullable|min:3|max:80',
+			'name'      => 'nullable|min:3|max:255',
 			// 'sort'      => '',
-			'levelMin' => 'numeric|max:' . config('site.max_level'),
-			'levelMax' => 'numeric|max:' . config('site.max_level'),
+			'levelMin' => 'numeric',
+			'levelMax' => 'numeric',
 			// 'stars'     => '',
 			'notebooks' => 'array',
 			'divisions' => 'array',
@@ -43,7 +43,11 @@ class RecipeController extends Controller
 			$orderBy = 'i.' . Item::localized_name_variable();
 		$query->orderBy($orderBy, $sort);
 
-		$query->whereBetween('recipe_level', [request('levelMin') ?: 1, request('levelMax') ?: 1]);
+        $min = 1;
+        $max = config('site.max_level');
+        $levelMin = min(max(request('levelMin', $min), $min), $max);
+        $levelMax = min(max(request('levelMax', $max), $min), $max);
+        $query->whereBetween('recipe_level', [$levelMin, $levelMax]);
 
 		$stars = request('stars');
 		if ($stars != 'any')

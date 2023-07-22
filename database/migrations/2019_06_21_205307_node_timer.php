@@ -16,6 +16,7 @@ class NodeTimer extends Migration
         Schema::table('node', function(Blueprint $table)
         {
             $table->string('timer')->nullable();
+            $table->string('timer_type')->nullable();
         });
     }
 
@@ -29,6 +30,7 @@ class NodeTimer extends Migration
         Schema::table('node', function(Blueprint $table)
         {
             $table->dropColumn('timer');
+            $table->dropColumn('timer_type');
         });
     }
 }

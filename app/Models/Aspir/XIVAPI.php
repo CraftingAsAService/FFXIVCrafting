@@ -161,6 +161,7 @@ class XIVAPI
                 'area_id'     => $gp->PlaceName->ID,
                 'coordinates' => null,
                 'timer'       => null,
+                'timer_type'  => null,
             ];
 
             if ($tcNodeData) {
@@ -170,6 +171,12 @@ class XIVAPI
                 if ( ! empty($tcNodeData['spawns'])) {
                     $spawns = array_map(fn ($time) => $timeConverter[$time], $tcNodeData['spawns']);
                     $nodeData['timer'] = implode(', ', $spawns) . ' for ' . $tcNodeData['duration'] . 'm';
+
+                    if ($tcNodeData['legendary']) {
+                        $nodeData['timer_type'] = 'legendary';
+                    } elseif ($tcNodeData['ephemeral']) {
+                        $nodeData['timer_type'] = 'ephemeral';
+                    }
                 }
             }
 
@@ -772,7 +779,6 @@ class XIVAPI
 			//  item food connections
 			'ItemAction',
 		], function($data) use ($rootParamConversion) {
-
 			if ($data->Name == '' || substr($data->Name, 0, 6) == 'Dated ')
 				return;
 
@@ -809,16 +815,27 @@ class XIVAPI
 			], $data->ID);
 
 			// Shopping Data
-			if ($data->GameContentLinks->GilShopItem->Item)
-				foreach ($data->GameContentLinks->GilShopItem->Item as $item)
-					$this->aspir->setData('item_shop', [
-						'item_id' => $data->ID,
-						// Shops come through as "262175.11", we only need what's before the dot
-						'shop_id' => explode('.', $item)[0],
-					]);
+            if ($data->GameContentLinks->GilShopItem->Item)
+                foreach ($data->GameContentLinks->GilShopItem->Item as $item)
+                    $this->aspir->setData('item_shop', [
+                        'item_id' => $data->ID,
+                        // Shops come through as "262175.11", we only need what's before the dot
+                        'shop_id' => explode('.', $item)[0],
+                        'alt_currency' => false,
+                    ]);
+
+            if ($data->GameContentLinks->SpecialShop)
+                foreach ($data->GameContentLinks->SpecialShop as $itemReceive => $shopArray)
+                    foreach ($shopArray as $item)
+                        $this->aspir->setData('item_shop', [
+                            'item_id' => $data->ID,
+                            // Shops come through as "262175.11", we only need what's before the dot
+                            'shop_id' => explode('.', $item)[0],
+                            'alt_currency' => true,
+                        ]);
 
 			// Attribute Data
-			$nqParams = $hqParams = $maxParams = [];
+			$nqParams = $hqParams = [];
 
 			foreach ($rootParamConversion as $key => $name)
 				if ($data->$key)

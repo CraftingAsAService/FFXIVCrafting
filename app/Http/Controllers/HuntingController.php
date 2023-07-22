@@ -23,9 +23,7 @@ class HuntingController extends Controller
 
 	public function index()
 	{
-		$sections = [];
-
-		$huntingData = Cache::store('file')->rememberForever('huntingData', function() {
+		$huntingData = Cache::rememberForever('huntingData', function() {
 			$huntingData = Storage::get('hunting.tsv');
 			$csv = new \ParseCsv\Csv();
 			$csv->fields = ['class', 'image', 'rank', 'task', 'number', 'area', 'location'];
