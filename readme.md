@@ -21,7 +21,9 @@ php artisan aspir:assets
 These commands should be done on the Mac.
 
 ```
+dep artisan:down
 dep cactuar:db
 dep cactuar:assets
 dep deploy
+dep artisan:up
 ```
