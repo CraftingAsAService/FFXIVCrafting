@@ -174,7 +174,7 @@ class ManualData
 	public function getIcons()
 	{
 		$domain = 'https://xivapi.com/i/';
-		$basePath = '/mnt/Projects/ffxiv/assets/ffxiv/i';
+		$basePath = '/mnt/Projects/ffxiv/assets/ffxiv/i/';
 
 		// A stream context to ignore http warnings
 		$streamContext = stream_context_create([
@@ -209,8 +209,9 @@ class ManualData
 				$iconBase = $basePath . $folder . '/';
 				$icon = $icon . '.png';
 
-				if (in_array('/' . $folder . '/' . $icon, $existingImages))
+				if (in_array($folder . '/' . $icon, $existingImages)) {
 					continue;
+                }
 
 				$image = file_get_contents($domain . $folder . '/' . $icon, false, $streamContext);
 				$this->aspir->command->info('Downloading ' . $icon);

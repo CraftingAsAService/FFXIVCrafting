@@ -244,8 +244,8 @@
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/6.4.png" class="img-responsive" alt='The Dark Throne'>
-								<p class='text-center'>This site has been optimized for Patch 6.4</p>
+								<img src="/img/patch/6.5.png" class="img-responsive" alt='Growing Light'>
+								<p class='text-center'>This site has been optimized for Patch 6.5</p>
 							</div>
 							<div class="col-sm-3">
 								<p class="headline">Support</p>

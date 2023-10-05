@@ -29,7 +29,7 @@
 
 @section('banner')
 
-	@include('partials.support-us')
+{{--	@include('partials.support-us')--}}
 
 	{{-- <a href='#' id='start_tour' class='start btn btn-primary pull-right hidden-print' style='margin-top: 12px;'>
 		<i class='glyphicon glyphicon-play'></i>

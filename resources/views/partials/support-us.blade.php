@@ -6,7 +6,7 @@
 	<div class='alert-body'>
 		<p>
 			Please consider <a href="https://www.patreon.com/ffxivcrafting" target="_blank" class='alert-link'>becoming a patron</a>! 
-			I've posted more information in a <a href="https://www.reddit.com/r/ffxivcrafting/comments/14sewyf/ffxivcrafting_needs_your_support/" target="_blank" class='alert-link'>reddit thread</a>.
+{{--			I've posted more information in a <a href="https://www.reddit.com/r/ffxivcrafting/comments/14sewyf/ffxivcrafting_needs_your_support/" target="_blank" class='alert-link'>reddit thread</a>.--}}
 		</p>
 	</div>
 </div>

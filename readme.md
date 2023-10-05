@@ -2,6 +2,11 @@
 ## Crafting As A Service
 ### An online tool to help crafters in Final Fantasy XIV: A Realm Reborn.
 
+## Thank you:
+
+- https://xivapi.com
+- https://github.com/xivapi/classjob-icons
+
 ## Routine Updates
 
 Image for Footer: http://na.finalfantasyxiv.com/lodestone/special/patchnote_log/

@@ -1187,8 +1187,9 @@ class XIVAPI
 
 			$chunk = $this->request($endpoint, ['ids' => $ids->join(','), 'columns' => $columns]);
 
-			foreach ($chunk->Results as $data)
-                ($callback)($data);
+            if (isset($chunk->Results))
+                foreach ($chunk->Results as $data)
+                    ($callback)($data);
 		}
 	}
 

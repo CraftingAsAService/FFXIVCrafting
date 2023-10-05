@@ -138,7 +138,7 @@ return [
 			'Spell Speed'		=> 0.119,
 		],
 		'CNJ,WHM,SCH,AST' => [
-			'Physical Damage'	=> 8.732,
+			// 'Physical Damage'	=> 8.732,
 			'Mind'				=> 1,
 			'Direct Hit Rate'			=> 0, // Healers don't need Direct Hit Rate
 			'Critical Hit'	=> 0.204,
