@@ -29,17 +29,21 @@ class HuntingController extends Controller
 			$csv->fields = ['class', 'image', 'rank', 'task', 'number', 'area', 'location'];
 			$csv->offset = 1; // Ignore header
 			$csv->auto($huntingData); // Auto detect delimiter and parse()
-			return collect($csv->data)->sortBy('rank')->sortBy('task')->sortBy('location')->groupBy(function($row) {
-				if (preg_match('/Thanalan/', $row['area']))
-					return 'Thanalan';
-				if (preg_match('/Shroud/', $row['area']))
-					return 'Black Shroud';
-				if (preg_match('/Noscea/', $row['area']))
-					return 'La Noscea';
-				return 'Other';
-			})->map(function($row) {
-				return $row->groupBy('area');
-			});
+			return collect($csv->data)
+                ->sortBy('rank')
+                ->sortBy('task')
+                ->sortBy('location')
+                ->groupBy(function($row) {
+                    if (preg_match('/Thanalan/', $row['area']))
+                        return 'Thanalan';
+                    if (preg_match('/Shroud/', $row['area']))
+                        return 'Black Shroud';
+                    if (preg_match('/Noscea/', $row['area']))
+                        return 'La Noscea';
+                    return 'Other';
+                })->map(function($row) {
+                    return $row->groupBy('area');
+                });
 		});
 
 		$companies = [

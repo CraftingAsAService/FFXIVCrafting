@@ -22,6 +22,17 @@ class GarlandTools
 		$this->aspir =& $aspir;
 	}
 
+    public function nodes()
+    {
+        // $garBase = 'https://raw.githubusercontent.com/ufx/GarlandTools/master';
+        // $garContents = file_get_contents($garBase . '/Garland.Web/bell/nodes.js');
+        // $garContents = preg_replace(['/^.*gt\.bell\.nodes = /', "/;\\n$/"], '', $garContents);
+        // $garNodes = json_decode($garContents, true);
+
+        // dd($this->aspir->data['node']);
+
+    }
+
 	public function mobs()
 	{
 		$this->loopEndpoint('mob', function($data) {

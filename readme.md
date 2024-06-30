@@ -32,3 +32,10 @@ dep cactuar:assets
 dep deploy
 dep artisan:up
 ```
+
+For the time being I also need to manually move the assets folder symlink
+
+```
+cd releases/##/public
+mv ../../##/public/assets .
+```

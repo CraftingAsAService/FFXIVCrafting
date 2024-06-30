@@ -224,30 +224,30 @@
 					<div class='container'>
 
 						<div class="row">
-							<div class="col-sm-3">
-								<p class="headline">Recent News</p>
+{{--							<div class="col-sm-3">--}}
+{{--								<p class="headline">Recent News</p>--}}
 
-								{{-- See /app/Helpers/ViewHelper.php for recent_posts() function --}}
-								@foreach(recent_posts() as $post)
-								<div class="post">
-									<div class="title">
-										<a href="{{ $post['url'] }}">{!! $post['title'] !!}</a>
-									</div>
-									<div class="date">
-										<img src="/img/icons/time.png"><span>{{ $post['created'] }}</span>
-									</div>
-									<hr>
-								</div>
-								@endforeach
+{{--								--}}{{-- See /app/Helpers/ViewHelper.php for recent_posts() function --}}
+{{--								@foreach(recent_posts() as $post)--}}
+{{--								<div class="post">--}}
+{{--									<div class="title">--}}
+{{--										<a href="{{ $post['url'] }}">{!! $post['title'] !!}</a>--}}
+{{--									</div>--}}
+{{--									<div class="date">--}}
+{{--										<img src="/img/icons/time.png"><span>{{ $post['created'] }}</span>--}}
+{{--									</div>--}}
+{{--									<hr>--}}
+{{--								</div>--}}
+{{--								@endforeach--}}
 
-								<p class="view-all"><a href="https://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>
-							</div>
-							<div class="col-sm-3">
+{{--								<p class="view-all"><a href="https://www.reddit.com/r/ffxivcrafting">View All Recent News</a></p>--}}
+{{--							</div>--}}
+							<div class="col-sm-4">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/6.5.png" class="img-responsive" alt='Growing Light'>
-								<p class='text-center'>This site has been optimized for Patch 6.5</p>
+								<img src="/img/patch/7.0.png" class="img-responsive" alt='Dawntrail'>
+								<p class='text-center'>This site has been optimized for Patch 7.0</p>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-4 text-center">
 								<p class="headline">Support</p>
 
 								<p class="view-all">
@@ -264,8 +264,11 @@
 {{--									<img alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1'>--}}
 {{--								</form>--}}
 							</div>
-							<div class="col-sm-3">
-								<p class="headline">Other Links</p>
+							<div class="col-sm-4">
+								<p class="headline">
+{{--									Other --}}
+									Links
+								</p>
 
 								<div class='row'>
 									<div class='col-xs-12 col-md-6'>

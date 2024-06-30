@@ -2,7 +2,7 @@
 
 return [
 
-	'max_level' => 90,
+	'max_level' => 100,
 
 	'cdn'       => env('CDN_URL', false),
 	'asset_cdn' => env('CDN_ASSET_URL', false),

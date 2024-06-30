@@ -88,10 +88,10 @@
 					<h5>Level Range</h5>
 					<div class='row'>
 						<div class='col-xs-6'>
-							<input type='number' v-model='searchData.levelMin' class='form-control margin-right' min='1' max='{{ config('site.max_level') }}' style='width: 57px; display: inline-block;' @keyup.enter='search()'>
+							<input type='number' v-model='searchData.levelMin' class='form-control margin-right' min='1' max='{{ config('site.max_level') }}' style='width: 64px; display: inline-block;' @keyup.enter='search()'>
 						</div>
 						<div class='col-xs-6'>
-							<input type='number' v-model='searchData.levelMax' class='form-control' min='1' max='{{ config('site.max_level') }}' style='width: 57px; display: inline-block;' @keyup.enter='search()'>
+							<input type='number' v-model='searchData.levelMax' class='form-control' min='1' max='{{ config('site.max_level') }}' style='width: 64px; display: inline-block;' @keyup.enter='search()'>
 						</div>
 					</div>
 				</div>

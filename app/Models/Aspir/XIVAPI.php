@@ -90,6 +90,11 @@ class XIVAPI
             true
         );
 
+        // $garBase = 'https://raw.githubusercontent.com/ufx/GarlandTools/master';
+        // $garContents = file_get_contents($garBase . '/Garland.Web/bell/nodes.js');
+        // $garContents = preg_replace(['/^.*gt\.bell\.nodes = /', "/;\\n$/"], '', $garContents);
+        // $garNodes = json_decode($garContents, true);
+
         $timeConverter = [
             0 =>  'Midnight',
             // 1 => '1am', etc
@@ -118,7 +123,7 @@ class XIVAPI
 			'Item5.Item.ID',
 			'Item6.Item.ID',
 			'Item7.Item.ID',
-		], function($data) use ($teamcraftNodes, $timeConverter) {
+		], function($data) use ($teamcraftNodes, $timeConverter/*, $garNodes*/) {
             if ($data->GameContentLinks->GatheringPoint->GatheringPointBase[0] === null)
                 return;
 
@@ -149,8 +154,28 @@ class XIVAPI
             ]]);
 
             // If the node doesn't have a name, it's not a valid node. Skip.
-            if ( ! $gp->PlaceName->Name)
-                return;
+//             if ( ! $gp->PlaceName->Name) {
+// // if ($data->ID == 338) {
+// //     // 38934 === Raw Zoisite
+// // }
+//                 $relevantGarlandNodes = array_filter($garNodes, function ($entry) use ($tcNodeData) {
+//                     return count(array_filter($entry['items'], function ($item) use ($tcNodeData) {
+//                         return in_array($item['id'], $tcNodeData['items']);
+//                     })) > 0;
+//                 });
+//
+//                 if (!$relevantGarlandNodes) {
+//                     return;
+//                 }
+//
+//                 dd($relevantGarlandNodes[0], $tcNodeData);
+//                 dd($garNodes[0]['items'], $tcNodeData);
+//                 // dd($data, $tcNodeData, $items, $gp);
+//                 // $garNodes = json_decode($garContents, true);
+//                 // dd($this->aspir->data['location']);
+//
+//                 return;
+//             }
 
             $nodeData = [
                 'id'          => $data->ID,
@@ -182,6 +207,7 @@ class XIVAPI
 
             $this->aspir->setData('node', $nodeData, $data->ID);
         });
+        // dd('TEST EXIT');
 	}
 
 	public function fishingSpots()
@@ -1170,7 +1196,7 @@ class XIVAPI
 	 * @param  function $callback $data is passed into here
 	 * @param  array    $filters  An array of callback functions; A way to reduce identifiers even more
 	 */
-	private function loopEndpoint($endpoint, $columns, $callback, $filters = [])
+	private function loopEndpoint($endpoint, $columns, \Closure $callback, $filters = [])
 	{
 		$request = $this->listRequest($endpoint, ['columns' => ['ID']]);
 		foreach ($request->chunk($this->chunkLimit !== null ? $this->chunkLimit : 100) as $chunk)

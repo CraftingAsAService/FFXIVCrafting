@@ -107,6 +107,7 @@ class Aspir
 		];
 
 		$garlandtoolsCalls = [
+            'nodes',
 			'mobs',
 			'npcs',
 			'instances',
