@@ -26,9 +26,9 @@ php artisan aspir:assets
 These commands should be done on the Mac.
 
 ```
+dep cactuar:assets
 dep artisan:down
 dep cactuar:db
-dep cactuar:assets
 dep deploy
 dep artisan:up
 ```
@@ -38,4 +38,10 @@ For the time being I also need to manually move the assets folder symlink
 ```
 cd releases/##/public
 mv ../../##/public/assets .
+```
+
+And while on the server, clear the view cache
+
+```
+php artisan view:clear
 ```
