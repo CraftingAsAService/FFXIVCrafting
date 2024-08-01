@@ -245,7 +245,7 @@
 							<div class="col-sm-4">
 								<p class="headline">Current Patch</p>
 								<img src="/img/patch/7.0.png" class="img-responsive" alt='Dawntrail'>
-								<p class='text-center'>This site has been optimized for Patch 7.0</p>
+								<p class='text-center'>This site has been optimized for Patch 7.05</p>
 							</div>
 							<div class="col-sm-4 text-center">
 								<p class="headline">Support</p>
