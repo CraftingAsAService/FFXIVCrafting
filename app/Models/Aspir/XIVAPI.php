@@ -14,72 +14,78 @@ class XIVAPI
 
 	public $aspir;
 
-	private $api;
-
 	public $limit = null;
 	public $chunkLimit = null;
 
 	public function __construct(&$aspir)
 	{
-		$this->api = new \XIVAPI\XIVAPI();
-		$this->api->environment->key(config('services.xivapi.key'));
-
 		$this->aspir =& $aspir;
 	}
 
-	public function achievements()
+	public function achievements(): void
 	{
-		$this->loopEndpoint('achievement', [
-			'ID',
-			'Name',
-			'ItemTargetID',
-			'IconID',
-		], function($data) {
-			// We only care about achievements that provide an item
-			if ( ! $data->ItemTargetID)
-				return;
+		$this->loopEndpoint(
+            'Achievement',
+            [
+                'Name',
+                'Item.row_id',
+                'Icon',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
+                $itemId = $this->xivData($data, 'Item.id');
 
-			$this->aspir->setData('achievement', [
-				'id'      => $data->ID,
-				'name'    => $data->Name,
-				'item_id' => $data->ItemTargetID,
-				'icon'    => $data->IconID,
-			], $data->ID);
-		});
+                // We only care about achievements that provide an item
+                if ( ! $itemId) {
+                    return;
+                }
+
+                $this->aspir->setData('achievement', [
+                    'id'      => $id,
+                    'name'    => $this->xivData($data, 'Name'),
+                    'item_id' => $this->xivData($data, 'Item.id'),
+                    'icon'    => $this->xivData($data, 'Icon.id'),
+                ], $id);
+            }
+        );
 	}
 
-	public function locations()
+	public function locations(): void
 	{
-		$this->loopEndpoint('placename', [
-			'ID',
-			'Name',
-			'Maps.0.PlaceNameRegionTargetID',
-			'Maps.0.PlaceNameSubTargetID',
-			'Maps.0.PlaceNameTargetID',
-		], function($data) {
-			// Skip empty names
-			if ($data->Name == '')
-				return;
+		$this->loopEndpoint(
+            'Map',
+			[
+                'PlaceName.Name',
+                'PlaceNameRegion.row_id',
+                'PlaceNameSub.Name',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'PlaceName.id');
+                $name = $this->xivData($data, 'PlaceName.Name');
 
-			$parentId = null;
-			$mapData =& $data->Maps[0];
+                // Skip empty names
+                if (!$name) {
+                    return;
+                }
 
-			if ($data->ID != $mapData->PlaceNameRegionTargetID)
-			{
-				// If we're in a sub-node, its parent is the TargetId
-				if ($mapData->PlaceNameSubTargetID == $data->ID)
-					$parentId = $mapData->PlaceNameTargetID;
-				// If we're in a regular node, its parent is the region
-				elseif ($mapData->PlaceNameTargetID == $data->ID)
-					$parentId = $mapData->PlaceNameRegionTargetID;
-			}
+                $regionId = $this->xivData($data, 'PlaceNameRegion.id');
+                $subRegionId = $this->xivData($data, 'PlaceNameSub.id');
+                $subRegionName = $this->xivData($data, 'PlaceNameSub.Name');
 
-			$this->aspir->setData('location', [
-				'id'           => $data->ID,
-				'name'         => $data->Name,
-				'location_id'  => $parentId,
-			], $data->ID);
-		});
+                // If this is a subregion; that becomes the ID, everything shifts up
+                if ($subRegionId) {
+                    $regionId = $id;
+                    $id = $subRegionId;
+                    $name = $subRegionName;
+                }
+
+                $this->aspir->setData('location', [
+                    'id'           => $id,
+                    'name'         => $name,
+                    'location_id'  => $regionId,
+                ], $id);
+            }
+        );
 	}
 
 	public function nodes()
@@ -109,621 +115,691 @@ class XIVAPI
         //  The TerritoryType then has the PlaceName you're looking for - Lower La Noscea.
 		// Be warned that what I referred to as a 'node' is really a GatheringPointBase.
         //  There are lots of gathering points with the same items because they appear in different places on the map.
-		$this->loopEndpoint('gatheringpointbase', [
-			'ID',
-			'GatheringType.ID',
-			'GatheringLevel',
-			'GameContentLinks.GatheringPoint.GatheringPointBase.0',
-			// Items go from Item0 to Item7; There's rumor of this being Array'd
-			'Item0.Item.ID',
-			'Item1.Item.ID',
-			'Item2.Item.ID',
-			'Item3.Item.ID',
-			'Item4.Item.ID',
-			'Item5.Item.ID',
-			'Item6.Item.ID',
-			'Item7.Item.ID',
-		], function($data) use ($teamcraftNodes, $timeConverter/*, $garNodes*/) {
-            if ($data->GameContentLinks->GatheringPoint->GatheringPointBase[0] === null)
-                return;
-
-            $tcNodeData = $teamcraftNodes[$data->ID] ?? false;
-
-            // Loop through Item#s
-            $items = [];
-            foreach (range(0,7) as $i)
-                if ($data->{'Item' . $i}->Item->ID)
-                    $items[] = $data->{'Item' . $i}->Item->ID;
-
-            if ( ! empty($tcNodeData['hiddenItems'])) {
-                $items = array_merge($items, $tcNodeData['hiddenItems']);
-            }
-
-            foreach ($items as $itemId)
-                $this->aspir->setData('item_node', [
-                    'item_id' => $itemId,
-                    'node_id' => $data->ID,
-                ]);
-
-            // Loop through each gathering point looking for a valid placename
-            $gp = $this->request('gatheringpoint/' . $data->GameContentLinks->GatheringPoint->GatheringPointBase[0], ['columns' => [
-                'PlaceName.ID',
+		$this->loopEndpoint(
+            'GatheringPoint',
+            [
+                'GatheringPointBase.GatheringType.row_id',
+                'GatheringPointBase.GatheringLevel',
+                'GatheringPointBase.Item[].row_id',
                 'PlaceName.Name',
-                'TerritoryType.PlaceName.ID',
-                'TerritoryType.PlaceName.Name',
-            ]]);
+                'TerritoryType.PlaceName.row_id',
+            ],
+            function ($data) use ($teamcraftNodes, $timeConverter/*, $garNodes*/) {
+                $id = $this->xivData($data, 'GatheringPointBase.id');
+                $placeNameID = $this->xivData($data, 'PlaceName.id');
 
-            // If the node doesn't have a name, it's not a valid node. Skip.
-//             if ( ! $gp->PlaceName->Name) {
-// // if ($data->ID == 338) {
-// //     // 38934 === Raw Zoisite
-// // }
-//                 $relevantGarlandNodes = array_filter($garNodes, function ($entry) use ($tcNodeData) {
-//                     return count(array_filter($entry['items'], function ($item) use ($tcNodeData) {
-//                         return in_array($item['id'], $tcNodeData['items']);
-//                     })) > 0;
-//                 });
-//
-//                 if (!$relevantGarlandNodes) {
-//                     return;
-//                 }
-//
-//                 dd($relevantGarlandNodes[0], $tcNodeData);
-//                 dd($garNodes[0]['items'], $tcNodeData);
-//                 // dd($data, $tcNodeData, $items, $gp);
-//                 // $garNodes = json_decode($garContents, true);
-//                 // dd($this->aspir->data['location']);
-//
-//                 return;
-//             }
-
-            $nodeData = [
-                'id'          => $data->ID,
-                'name'        => $gp->PlaceName->Name,
-                'type'        => $data->GatheringType->ID,
-                'level'       => $data->GatheringLevel,
-                'zone_id'     => $gp->TerritoryType->PlaceName->ID,
-                'area_id'     => $gp->PlaceName->ID,
-                'coordinates' => null,
-                'timer'       => null,
-                'timer_type'  => null,
-            ];
-
-            if ($tcNodeData) {
-                if (isset($tcNodeData['x'])) {
-                    $nodeData['coordinates'] = $tcNodeData['x'] . ' x ' . $tcNodeData['y'];
+                if ($placeNameID === 0) {
+                    return;
                 }
-                if ( ! empty($tcNodeData['spawns'])) {
-                    $spawns = array_map(fn ($time) => $timeConverter[$time], $tcNodeData['spawns']);
-                    $nodeData['timer'] = implode(', ', $spawns) . ' for ' . $tcNodeData['duration'] . 'm';
 
-                    if ($tcNodeData['legendary']) {
-                        $nodeData['timer_type'] = 'legendary';
-                    } elseif ($tcNodeData['ephemeral']) {
-                        $nodeData['timer_type'] = 'ephemeral';
+                $tcNodeData = $teamcraftNodes[$id] ?? false;
+
+                $items = [];
+                foreach ($this->xivData($data, 'GatheringPointBase.Item') as $item) {
+                    if ( ! $item['row_id']) {
+                        continue;
+                    }
+                    $items[] = $item['row_id'];
+                }
+
+                if ( ! empty($tcNodeData['hiddenItems'])) {
+                    $items = array_merge($items, $tcNodeData['hiddenItems']);
+                }
+
+                foreach ($items as $itemId) {
+                    $this->aspir->setData('item_node', [
+                        'item_id' => $itemId,
+                        'node_id' => $id,
+                        // TODO 1 - Worried about duplicates now
+                    ]);
+                }
+
+                $nodeData = [
+                    'id'          => $id,
+                    'name'        => $this->xivData($data, 'PlaceName.Name'),
+                    'type'        => $this->xivData($data, 'GatheringPointBase.GatheringType.id'),
+                    'level'       => $this->xivData($data, 'GatheringPointBase.GatheringLevel'),
+                    'zone_id'     => $this->xivData($data, 'TerritoryType.PlaceName.id'),
+                    'area_id'     => $placeNameID,
+                    'coordinates' => null,
+                    'timer'       => null,
+                    'timer_type'  => null,
+                ];
+
+                if ($tcNodeData) {
+                    if (isset($tcNodeData['x'])) {
+                        $nodeData['coordinates'] = $tcNodeData['x'] . ' x ' . $tcNodeData['y'];
+                    }
+                    if ( ! empty($tcNodeData['spawns'])) {
+                        $spawns = array_map(fn ($time) => $timeConverter[$time], $tcNodeData['spawns']);
+                        $nodeData['timer'] = implode(', ', $spawns) . ' for ' . $tcNodeData['duration'] . 'm';
+
+                        if ($tcNodeData['legendary']) {
+                            $nodeData['timer_type'] = 'legendary';
+                        } elseif ($tcNodeData['ephemeral']) {
+                            $nodeData['timer_type'] = 'ephemeral';
+                        }
                     }
                 }
-            }
 
-            $this->aspir->setData('node', $nodeData, $data->ID);
-        });
-        // dd('TEST EXIT');
+                $this->aspir->setData('node', $nodeData, $id);
+            }
+        );
 	}
 
 	public function fishingSpots()
 	{
-		$this->loopEndpoint('fishingspot', [
-			'ID',
-			'PlaceName.Name',
-			'FishingSpotCategory',
-			'GatheringLevel',
-			'Radius',
-			'X',
-			'Z',
-			'TerritoryType.PlaceName.ID',
-			'PlaceName.ID',
-			// Items go from Item0 to Item9; There's rumor of this being Array'd
-			'Item0.ID',
-			'Item0.LevelItem',
-			'Item1.ID',
-			'Item1.LevelItem',
-			'Item2.ID',
-			'Item2.LevelItem',
-			'Item3.ID',
-			'Item3.LevelItem',
-			'Item4.ID',
-			'Item4.LevelItem',
-			'Item5.ID',
-			'Item5.LevelItem',
-			'Item6.ID',
-			'Item6.LevelItem',
-			'Item7.ID',
-			'Item7.LevelItem',
-			'Item8.ID',
-			'Item8.LevelItem',
-			'Item9.ID',
-			'Item9.LevelItem',
-		], function($data) {
-			// Skip empty names
-			if ($data->PlaceName->Name == '')
-				return;
+		$this->loopEndpoint(
+            'FishingSpot',
+            [
+                'Item[].LevelItem.row_id',
+                'PlaceName.Name',
+                'TerritoryType.PlaceName.row_id',
+                'FishingSpotCategory',
+                'GatheringLevel',
+                'Radius',
+                'X',
+                'Z',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
+                $placeName = $this->xivData($data, 'PlaceName.Name');
 
-			// Loop through Item#
-			$hasItems = false;
-			foreach (range(0,9) as $i)
-				if ($data->{'Item' . $i}->ID)
-				{
-					$hasItems = true;
-					$this->aspir->setData('fishing_item', [
-						'item_id'    => $data->{'Item' . $i}->ID,
-						'fishing_id' => $data->ID,
-						'level'      => $data->{'Item' . $i}->LevelItem,
-					]);
-				}
+                // Skip empty names
+                if ($placeName === '') {
+                    return;
+                }
 
-			// Don't include the fishing node if there aren't any items attached
-			if ( ! $hasItems)
-				return;
+                $placeNameID = $this->xivData($data, 'PlaceName.id');
 
-			$this->aspir->setData('fishing', [
-				'id'          => $data->ID,
-				'name'        => $data->PlaceName->Name,
-				'category_id' => $data->FishingSpotCategory,
-				'level'       => $data->GatheringLevel,
-				'radius'      => $data->Radius,
-				'x'           => 1 + ($data->X / 50), // Translate a number like 1203 to something like 25.06
-				'y'           => 1 + ($data->Z / 50),
-				'zone_id'     => $data->TerritoryType->PlaceName->ID,
-				'area_id'     => $data->PlaceName->ID,
-			], $data->ID);
-		});
+                $hasItems = false;
+                foreach ($this->xivData($data, 'Item') as $item) {
+                    $itemId = $this->xivData($item, 'id');
+
+                    if ($itemId) {
+                        $hasItems = true;
+                        $this->aspir->setData('fishing_item', [
+                            'item_id'    => $itemId,
+                            'fishing_id' => $id,
+                            'level'      => $this->xivData($item, 'LevelItem.id'),
+                        ]);
+                    }
+                }
+
+                // Don't include the fishing node if there aren't any items attached
+                if ( ! $hasItems) {
+                    return;
+                }
+
+                $this->aspir->setData('fishing', [
+                    'id'          => $id,
+                    'name'        => $placeName,
+                    'category_id' => $this->xivData($data, 'FishingSpotCategory'),
+                    'level'       => $this->xivData($data, 'GatheringLevel'),
+                    'radius'      => $this->xivData($data, 'Radius'),
+                    'x'           => 1 + ($this->xivData($data, 'X') / 50), // Translate a number like 1203 to something like 25.06
+                    'y'           => 1 + ($this->xivData($data, 'Z') / 50),
+                    'zone_id'     => $this->xivData($data, 'TerritoryType.PlaceName.id'),
+                    'area_id'     => $placeNameID,
+                ], $id);
+            }
+        );
 	}
 
 	public function mobs()
 	{
-		$this->loopEndpoint('bnpcname', [
-			'ID',
-			'Name',
-		], function($data) {
-			// Skip empty names
-			if ($data->Name == '')
-				return;
+		$this->loopEndpoint(
+            'BNpcName',
+            [
+                'Singular', // Literally only one datapoint available (their name, with the key `Singular`)
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
+                $name = $this->xivData($data, 'Singular');
 
-			$this->aspir->setData('mob', [
-				'id'      => $data->ID,
-				'name'    => $data->Name,
-				'quest'   => null, // Filled in later
-				'level'   => null, // Filled in later
-				'zone_id' => null, // Filled in later
-			], $data->ID);
-		});
+                // Skip empty names
+                if (!$name) {
+                    return;
+                }
+
+                $this->aspir->setData('mob', [
+                    'id'      => $id,
+                    'name'    => $name,
+                    'quest'   => null, // Filled in later
+                    'level'   => null, // Filled in later
+                    'zone_id' => null, // Filled in later
+                ], $id);
+            }
+        );
 	}
 
 	public function npcs()
 	{
-		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 500;
+        // ENpcResident has their name, and that's it.
 
-		$this->loopEndpoint('enpcresident', [
-			'ID',
-			'Name',
-			// There's a bug related *'s when grouping
-			//  It limits the amount of results that can come back if another in the pack don't also have results
-			'Quests.*.ID',
-			'GilShop.*.ID',
-			'GilShop.*.Name',
-			'SpecialShop.*.ID',
-			'SpecialShop.*.Name',
-			// 'Quests',
-			// 'GilShop',
-			// 'SpecialShop',
-		], function($data) {
-			// Skip empty names
-			if ($data->Name == '')
-				return;
 
-			$this->aspir->setData('npc', [
-				'id'      => $data->ID,
-				'name'    => $data->Name,
-				'zone_id' => null, // Filled in later
-				'approx'  => null, // Filled in later
-				'x'       => null, // Filled in later
-				'y'       => null, // Filled in later
-			], $data->ID);
+        // GilShop is worthless, other than "it's an entity"
+        // https://beta.xivapi.com/api/1/sheet/GilShop/262218
+        // GilShopInfo is worthless
+        // GilShopItem is worthless? On its own.
+        // ... https://beta.xivapi.com/api/1/sheet/GilShopItem/263000
 
-			if ($data->Quests)
-				foreach ($data->Quests as $quest)
-					if ($quest->ID)
-						$this->aspir->setData('npc_quest', [
-							'quest_id' => $quest->ID,
-							'npc_id' => $data->ID,
-						]);
-
-			foreach (['GilShop', 'SpecialShop'] as $shopType)
-				if ($data->$shopType)
-					foreach ($data->$shopType as $shop)
-						if ($shop->ID)
-						{
-							$this->aspir->setData('shop', [
-								'id'   => $shop->ID,
-								'name' => $shop->Name,
-							], $shop->ID);
-
-							$this->aspir->setData('npc_shop', [
-								'shop_id' => $shop->ID,
-								'npc_id' => $data->ID,
-							]);
-						}
-		}, [
-			'ids' => function($value, $key) {
-				// After ID 1028800, Quests, GilShop and SpecialShop all disappear, causing errors
-				return $value < 1028800;
-			}
-		]);
-
-		$this->limit = null;
+        // I can't find anything linking an NPC to a specific shop
+        // So, I'm creating fake NPCs that have "everything" in that category
+        $this->gilShop();
+        $this->gcscripShop();
+        $this->specialShop();
 	}
+
+    private function gilShop()
+    {
+        // This "GilShop" NPC will house all items you can buy with gil
+        $npcID = $shopID = 1;
+
+        $this->aspir->setData('npc', [
+            'id'      => $npcID,
+            'name'    => 'GilShopNPC',
+            'zone_id' => null,
+            'approx'  => null,
+            'x'       => null,
+            'y'       => null,
+        ], $npcID);
+
+        $this->aspir->setData('shop', [
+            'id'   => $shopID,
+            'name' => 'GilShop',
+        ], $shopID);
+
+        $this->aspir->setData('npc_shop', [
+            'shop_id' => $shopID,
+            'npc_id' => $npcID,
+        ]);
+
+        $this->loopEndpoint(
+            'GilShopItem',
+            [
+                'Item.row_id'
+            ],
+            function ($data) use ($shopID) {
+                $id = $this->xivData($data, 'Item.id');
+
+                $this->aspir->setData('item_shop', [
+                    'item_id' => $id,
+                    'shop_id' => $shopID,
+                    'alt_currency' => false, // Gil isn't alt currency
+                ]);
+            }
+        );
+    }
+
+    private function gcscripShop()
+    {
+        // This "GCScripShop" NPC will house all items you can buy with GrandCompany Scrips
+        $npcID = $shopID = 2;
+
+        $this->aspir->setData('npc', [
+            'id'      => $npcID,
+            'name'    => 'GCScripShopNPC',
+            'zone_id' => null,
+            'approx'  => null,
+            'x'       => null,
+            'y'       => null,
+        ], $npcID);
+
+        $this->aspir->setData('shop', [
+            'id'   => $shopID,
+            'name' => 'GCScripShop',
+        ], $shopID);
+
+        $this->aspir->setData('npc_shop', [
+            'shop_id' => $shopID,
+            'npc_id' => $npcID,
+        ]);
+
+        $this->loopEndpoint(
+            'GCScripShopItem',
+            [
+                // NOTE: Keep in sync with the GCScripShopItem call in items(); it'll be cached
+                'CostGCSeals',
+                'Item.row_id'
+            ],
+            function ($data) use ($shopID) {
+                $id = $this->xivData($data, 'Item.id');
+
+                $this->aspir->setData('item_shop', [
+                    'item_id' => $id,
+                    'shop_id' => $shopID,
+                    'alt_currency' => false, // Gil isn't alt currency
+                ]);
+            }
+        );
+    }
+
+    private function specialShop()
+    {
+        // This "SpecialShop" NPC will house all items you can buy... specially
+        $npcID = $shopID = 3;
+
+        $this->aspir->setData('npc', [
+            'id'      => $npcID,
+            'name'    => 'SpecialShopNPC',
+            'zone_id' => null,
+            'approx'  => null,
+            'x'       => null,
+            'y'       => null,
+        ], $npcID);
+
+        $this->aspir->setData('shop', [
+            'id'   => $shopID,
+            'name' => 'SpecialShop',
+        ], $shopID);
+
+        $this->aspir->setData('npc_shop', [
+            'shop_id' => $shopID,
+            'npc_id' => $npcID,
+        ]);
+
+        $i = 0;
+        $this->loopEndpoint(
+            'SpecialShop',
+            [
+                // NOTE: Keep in sync with the SpecialShop call in items(); it'll be cached
+                'Item[].Item[].row_id',
+            ],
+            function ($data) use ($shopID, &$i) {
+                $parentItemLoop = $this->xivData($data, 'Item');
+                foreach ($parentItemLoop as $pil) {
+                    foreach ($pil['Item'] as $item) {
+                        $id = $item['row_id'];
+                        if (!$id) {
+                            continue;
+                        }
+                        $i++;
+                        $this->aspir->setData('item_shop', [
+                            'item_id' => $id,
+                            'shop_id' => $shopID,
+                            'alt_currency' => true,
+                        ]);
+                    }
+                }
+            }
+        );
+    }
 
 	public function quests()
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 400;
+		// $this->limit = 400;
 
-		$this->loopEndpoint('quest', [
-			'ID',
-			'Name',
-			'ClassJobCategory0TargetID',
-			'ClassJobLevel0',
-			'SortKey',
-			'PlaceNameTargetID',
-			'IconID',
-			'IssuerStart',
-			'TargetEnd',
-			'JournalGenreTargetID',
-			// Rewards; 00-05 are guaranteed. 10-14 are choices. Catalysts are likely guaranteed as well.
-			// 	Make sure the Target's are "Item"
-			'ItemReward00',
-			'ItemCountReward00',
-			'ItemReward01',
-			'ItemCountReward01',
-			'ItemReward02',
-			'ItemCountReward02',
-			'ItemReward03',
-			'ItemCountReward03',
-			'ItemReward04',
-			'ItemCountReward04',
-			'ItemReward05',
-			'ItemCountReward05',
-			'ItemReward10Target',
-			'ItemReward10TargetID',
-			'ItemCountReward10',
-			'ItemReward11Target',
-			'ItemReward11TargetID',
-			'ItemCountReward11',
-			'ItemReward12Target',
-			'ItemReward12TargetID',
-			'ItemCountReward12',
-			'ItemReward13Target',
-			'ItemReward13TargetID',
-			'ItemCountReward13',
-			'ItemReward14Target',
-			'ItemReward14TargetID',
-			'ItemCountReward14',
-			'ItemCatalyst0Target',
-			'ItemCatalyst0TargetID',
-			'ItemCountCatalyst0',
-			'ItemCatalyst1Target',
-			'ItemCatalyst1TargetID',
-			'ItemCountCatalyst1',
-			'ItemCatalyst2Target',
-			'ItemCatalyst2TargetID',
-			'ItemCountCatalyst2',
-			// Required; There's like 40 of these, but I'm only going to go for 10
-			'ScriptInstruction0',
-			'ScriptArg0',
-			'ScriptInstruction1',
-			'ScriptArg1',
-			'ScriptInstruction2',
-			'ScriptArg2',
-			'ScriptInstruction3',
-			'ScriptArg3',
-			'ScriptInstruction4',
-			'ScriptArg4',
-			'ScriptInstruction5',
-			'ScriptArg5',
-			'ScriptInstruction6',
-			'ScriptArg6',
-			'ScriptInstruction7',
-			'ScriptArg7',
-			'ScriptInstruction8',
-			'ScriptArg8',
-			'ScriptInstruction9',
-			'ScriptArg9',
-		], function($data) {
-			// Skip empty names
-			if ($data->Name == '')
-				return;
+		$this->loopEndpoint(
+            'Quest',
+            [
+                'Name',
+                'ClassJobCategory0.row_id',
+                'ClassJobLevel',
+                'IssuerStart.row_id', // ENpcResident
+                'Icon',
+                'ItemCountReward',
+                'OptionalItemCountReward',
+                'OptionalItemReward[].row_id',
+                'PlaceName.row_id',
+                'Reward[].row_id',
+                'SortKey',
+                'TargetEnd.row_id', // ENpcResident
+                'ItemCatalyst[].row_id',
+                'ItemCountCatalyst',
+                'JournalGenre.row_id',
+                'QuestParams', // RITEM ScriptInstruction === ScriptArg [ItemID]
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
+                $name = $this->xivData($data, 'Name');
 
-			$this->aspir->setData('quest', [
-				'id'              => $data->ID,
-				'name'            => $data->Name,
-				'job_category_id' => $data->ClassJobCategory0TargetID,
-				'level'           => $data->ClassJobLevel0,
-				'sort'            => $data->SortKey,
-				'zone_id'         => $data->PlaceNameTargetID,
-				'icon'            => $data->IconID,
-				'issuer_id'       => $data->IssuerStart ? $data->IssuerStart->ID : null,
-				'target_id'       => $data->TargetEnd ? $data->TargetEnd->ID : null,
-				'genre'           => $data->JournalGenreTargetID,
-			], $data->ID);
+                // Skip empty names
+                if (!$name) {
+                    return;
+                }
 
-			// Required Items
-			foreach (range(0, 9) as $slot)
-				if (substr($data->{'ScriptInstruction' . $slot}, 0, 5) == 'RITEM')
-					$this->aspir->setData('quest_required', [
-						'item_id'  => $data->{'ScriptArg' . $slot},
-						'quest_id' => $data->ID,
-					]);
+                $this->aspir->setData('quest', [
+                    'id'              => $id,
+                    'name'            => $name,
+                    'job_category_id' => $this->xivData($data, 'ClassJobCategory0.id'),
+                    'level'           => $this->xivData($data, 'ClassJobLevel')[0],
+                    'sort'            => $this->xivData($data, 'SortKey'),
+                    'zone_id'         => $this->xivData($data, 'PlaceName.id'),
+                    'icon'            => $this->xivData($data, 'Icon')['id'],
+                    'issuer_id'       => $this->xivData($data, 'IssuerStart.id'),
+                    'target_id'       => $this->xivData($data, 'TargetEnd.id'),
+                    'genre'           => $this->xivData($data, 'JournalGenre.id'),
+                ], $id);
 
-			// Reward Items, Guaranteed, 00-05
-			foreach (range(0, 5) as $slot)
-				if ($data->{'ItemReward0' . $slot})
-					$this->aspir->setData('quest_reward', [
-						'item_id'  => $data->{'ItemReward0' . $slot},
-						'quest_id' => $data->ID,
-						'amount'   => $data->{'ItemCountReward0' . $slot},
-					]);
+                // Required Items
+                foreach ($this->xivData($data, 'QuestParams') as $param) {
+                    if (str_starts_with($param['ScriptInstruction'], 'RITEM') && $param['ScriptArg']) {
+                        $this->aspir->setData('quest_required', [
+                            'item_id'  => $param['ScriptArg'],
+                            'quest_id' => $id,
+                        ]);
+                    }
+                }
 
-			// Reward Items, Optional, 10-14
-			foreach (range(10, 14) as $slot)
-				if ($data->{'ItemReward' . $slot . 'TargetID'} && $data->{'ItemReward' . $slot . 'Target'} == 'Item')
-					$this->aspir->setData('quest_reward', [
-						'item_id'  => $data->{'ItemReward' . $slot . 'TargetID'},
-						'quest_id' => $data->ID,
-						'amount'   => $data->{'ItemCountReward' . $slot},
-					]);
+                // Reward Items, Guaranteed
+                $rewardCounts = $this->xivData($data, 'ItemCountReward');
+                foreach ($this->xivData($data, 'Reward') as $key => $reward) {
+                    $rewardId = $this->xivData($reward, 'id');
+                    if ($this->xivData($reward, 'id') && $rewardCounts[$key]) {
+                        $this->aspir->setData('quest_reward', [
+                            'item_id'  => $rewardId,
+                            'quest_id' => $id,
+                            'amount'   => $rewardCounts[$key],
+                        ]);
+                    }
+                }
 
-			// Reward Items/Catalyst Items
-			foreach (range(0, 2) as $slot)
-				if ($data->{'ItemCatalyst' . $slot . 'TargetID'} && $data->{'ItemCatalyst' . $slot . 'Target'} == 'Item')
-					$this->aspir->setData('quest_reward', [
-						'item_id'  => $data->{'ItemCatalyst' . $slot . 'TargetID'},
-						'quest_id' => $data->ID,
-						'amount'   => $data->{'ItemCountCatalyst' . $slot},
-					]);
-		});
+                // Reward Items, Optional
+                $rewardCounts = $this->xivData($data, 'OptionalItemCountReward');
+                foreach ($this->xivData($data, 'OptionalItemReward') as $key => $reward) {
+                    $rewardId = $this->xivData($reward, 'id');
+                    if ($this->xivData($reward, 'id') && $rewardCounts[$key]) {
+                        $this->aspir->setData('quest_reward', [
+                            'item_id'  => $rewardId,
+                            'quest_id' => $id,
+                            'amount'   => $rewardCounts[$key],
+                        ]);
+                    }
+                }
 
-		$this->limit = null;
+                // Reward Items/Catalyst Items
+                $catalystCounts = $this->xivData($data, 'ItemCountCatalyst');
+                foreach ($this->xivData($data, 'ItemCatalyst') as $key => $catalyst) {
+                    $catalystId = $this->xivData($catalyst, 'id');
+                    if ($this->xivData($catalyst, 'id') && $catalystCounts[$key]) {
+                        $this->aspir->setData('quest_reward', [
+                            'item_id'  => $catalystId,
+                            'quest_id' => $id,
+                            'amount'   => $catalystCounts[$key],
+                        ]);
+                    }
+                }
+            }
+        );
+
+		// $this->limit = null;
 	}
 
 	public function instances()
 	{
-		$this->loopEndpoint('instancecontent', [
-			'ID',
-			'Name',
-			'ContentType.ID',
-			'ContentFinderCondition.TerritoryType.PlaceName.ID',
-			'ContentFinderCondition.ImageID',
-		], function($data) {
-			// Skip empty names
-			if ($data->Name == '')
-				return;
+		$this->loopEndpoint(
+            'ContentFinderCondition',
+            [
+                'Name',
+                'Content.row_id', // The "real" ID
+                'ContentType.row_id',
+                'TerritoryType.Map.PlaceName',
+                'Image',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'Content.id');
+                $name = ucfirst($this->xivData($data, 'Name')); // Name comes across as "the [Instance]", want "The [Instance]"
 
-			$this->aspir->setData('instance', [
-				'id'      => $data->ID,
-				'name'    => $data->Name,
-				'type'    => $data->ContentType->ID,
-				'zone_id' => $data->ContentFinderCondition->TerritoryType->PlaceName->ID,
-				'icon'    => $data->ContentFinderCondition->ImageID,
-			], $data->ID);
-		});
+                // Skip empty names
+                if (!$name) {
+                    return;
+                }
+
+                $this->aspir->setData('instance', [
+                    'id'      => $id,
+                    'name'    => $name,
+                    'type'    => $this->xivData($data, 'ContentType.id'),
+                    'zone_id' => $this->xivData($data, 'TerritoryType.Map.PlaceName')['value'],
+                    'icon'    => $this->xivData($data, 'Image')['id'],
+                ], $id);
+            }
+        );
 	}
 
 	public function jobs()
 	{
-		$this->loopEndpoint('classjob', [
-			'ID',
-			'NameEnglish', // `NameEnglish` is capitalized; `Name` is not
-			'Abbreviation',
-		], function($data) {
-			$this->aspir->setData('job', [
-				'id'   => $data->ID,
-				'name' => $data->NameEnglish,
-				'abbr' => $data->Abbreviation,
-			], $data->ID);
-		});
+		$this->loopEndpoint(
+            'ClassJob',
+            [
+                'NameEnglish', // `NameEnglish` is capitalized; `Name` is not
+                'Abbreviation',
+            ],
+                function ($data) {
+                $id = $this->xivData($data, 'id');
+
+                $this->aspir->setData('job', [
+                    'id'   => $id,
+                    'name' => $this->xivData($data, 'NameEnglish'),
+                    'abbr' => $this->xivData($data, 'Abbreviation'),
+                ], $id);
+            }
+        );
 	}
 
 	public function jobCategories()
 	{
 		// classjobcategory has a datapoint for every job abbreviation
 		//  Dynamically collect them. The key's will stay as the ID, which will be helpful
-		$abbreviations = collect($this->aspir->data['job'])->map(function($job) {
+		$abbreviations = collect($this->aspir->data['job'])->map(function ($job) {
 			return $job['abbr'];
 		});
 
-		$this->loopEndpoint('classjobcategory', array_merge([
-			'ID',
-			'Name',
-		], $abbreviations->toArray()), function($data) use ($abbreviations) {
-			$this->aspir->setData('job_category', [
-				'id'   => $data->ID,
-				'name' => $data->Name,
-			], $data->ID);
+		$this->loopEndpoint(
+            'ClassJobCategory',
+            [
+                'Name',
+                ...$abbreviations->toArray(),
+            ],
+            function ($data) use ($abbreviations) {
+                $id = $this->xivData($data, 'id');
 
-			foreach ($abbreviations as $jobId => $abbr)
-				if ($data->$abbr == 1)
-					$this->aspir->setData('job_job_category', [
-						'job_id'          => $jobId,
-						'job_category_id' => $data->ID,
-					]);
-		});
+                $this->aspir->setData('job_category', [
+                    'id'   => $id,
+                    'name' => $this->xivData($data, 'Name'),
+                ], $id);
+
+                foreach ($abbreviations as $jobId => $abbr) {
+                    if ($this->xivData($data, $abbr)) {
+                        $this->aspir->setData('job_job_category', [
+                            'job_id'          => $jobId,
+                            'job_category_id' => $id,
+                        ]);
+                    }
+                }
+            }
+        );
 	}
 
 	public function ventures()
 	{
-		$this->loopEndpoint('retainertask', [
-			'ID',
-			'ClassJobCategory.ID',
-			'RetainerLevel',
-			'MaxTimeMin',
-			'VentureCost',
-			'IsRandom',
-			'Task',
-		], function($data) {
-			// The Quantities are only applicable for "Normal" Ventures
-			$quantities = [];
-			$name = null;
+		$this->loopEndpoint(
+            'RetainerTask',
+            [
+                'ClassJobCategory.row_id',
+                'RetainerLevel',
+                'MaxTimemin',
+                'VentureCost',
+                'IsRandom',
+                'Task',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
 
-			// 6.05, IDs above this range were erroring, quickfix to resolve, might not be necessary in the future
-			if ($data->Task && $data->Task->ID < 30102)
-			{
-				if ($data->IsRandom)
-				{
-					$q = $this->request('retainertaskrandom/' . $data->Task->ID, ['columns' => [
-						'Name',
-					]]);
+                // The Quantities are only applicable for "Normal" Ventures
+                $quantities = null;
+                // Name is only applicable on "Random" Ventures
+                $name = null;
 
-					$name = $q->Name;
-				}
-				else
-				{
-					$q = $this->request('retainertasknormal/' . $data->Task->ID, ['columns' => [
-						'Quantity0',
-						'Quantity1',
-						'Quantity2',
-						'ItemTarget',
-						'ItemTargetID',
-					]]);
+                if ($this->xivData($data, 'Task')['sheet'] === 'RetainerTaskNormal') {
+                    // RetainerTaskNormal
+                    if ($this->xivData($data, 'Task.Item.id')) {
+                        $quantities = implode(',', $this->xivData($data, 'Task.Quantity'));
 
-					foreach (range(0, 2) as $slot)
-						$quantities[] = $q->{'Quantity' . $slot};
+                        $this->aspir->setData('item_venture', [
+                            'item_id'    => $this->xivData($data, 'Task.Item.id'),
+                            'venture_id' => $id,
+                        ]);
+                    }
+                } else {
+                    // RetainerRandomTask
+                    $name = $this->xivData($data, 'Task.Name');
+                }
 
-					if ($q->ItemTarget == 'Item' && $q->ItemTargetID)
-						$this->aspir->setData('item_venture', [
-							'item_id'    => $q->ItemTargetID,
-							'venture_id' => $data->ID,
-						]);
-				}
-			}
-
-			$this->aspir->setData('venture', [
-				'id'              => $data->ID,
-				'name'            => $name,
-				'amounts'         => empty($quantities) ? null : implode(',', $quantities),
-				'job_category_id' => $data->ClassJobCategory->ID,
-				'level'           => $data->RetainerLevel,
-				'cost'            => $data->VentureCost,
-				'minutes'         => $data->MaxTimeMin,
-			], $data->ID);
-		});
+                $this->aspir->setData('venture', [
+                    'id'              => $id,
+                    'name'            => $name,
+                    'amounts'         => $quantities,
+                    'job_category_id' => $this->xivData($data, 'ClassJobCategory.id'),
+                    'level'           => $this->xivData($data, 'RetainerLevel'),
+                    'cost'            => $this->xivData($data, 'VentureCost'),
+                    'minutes'         => $this->xivData($data, 'MaxTimemin'),
+                ], $id);
+            }
+        );
 	}
 
 	public function leves()
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 1000;
-		$this->chunkLimit = 10;
+		// $this->limit = 1000;
+		// $this->chunkLimit = 10;
 
-		$this->loopEndpoint('leve', [
-			'ID',
-			'Name',
-			'ClassJobCategory.ID',
-			'LeveVfx.IconID',
-			'LeveVfxFrame.IconID',
-			'GilReward',
-			'ExpReward',
-			'ClassJobLevel',
-			'PlaceNameIssued.ID',
-			'IconIssuerID',
-			'CraftLeve.Item0TargetID',
-			'CraftLeve.ItemCount0',
-			'CraftLeve.Repeats',
-			// Inefficient catchall, but there are a large number of datapoints in there I need to sift through
-			'LeveRewardItem',
-		], function($data) {
-			// No rewards? Don't bother.
-			if ($data->LeveRewardItem == null)
-				return;
+		$this->loopEndpoint(
+            'Leve',
+            [
+                'Name',
+                'ClassJobCategory.row_id',
+                'ClassJobLevel',
+                'ExpReward',
+                'GilReward',
+                'IconIssuer',
+                'LeveVfx.Icon',
+                'LeveVfxFrame.Icon',
+                'PlaceNameIssued.row_id',
+                'LeveRewardItem',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
 
-			$this->aspir->setData('leve', [
-				'id'              => $data->ID,
-				'name'            => $data->Name,
-				'type'            => null, // Filled in later
-				'level'           => $data->ClassJobLevel,
-				'job_category_id' => $data->ClassJobCategory->ID,
-				'area_id'         => $data->PlaceNameIssued->ID,
-				'repeats'         => $data->CraftLeve->Repeats, // Only CraftLeves can repeat
-				'xp'              => $data->ExpReward,
-				'gil'             => $data->GilReward,
-				'plate'           => $data->LeveVfx->IconID,
-				'frame'           => $data->LeveVfxFrame->IconID,
-				// This never was the "Area" icon, but the Issuer's image
-				//  I don't think I'm using this datapoint, but it's not nullable
-				'area_icon'       => $data->IconIssuerID,
-			], $data->ID);
+                // No rewards? Don't bother.
+                if (!$this->xivData($data, 'LeveRewardItem.id')) {
+                    return;
+                }
 
-			// Rewards come in 8 total "Groups"
-			foreach (range(0, 7) as $slot)
-			{
-				$probability = $data->LeveRewardItem->{'Probability%' . $slot};
+                $this->aspir->setData('leve', [
+                    'id'              => $id,
+                    'name'            => $this->xivData($data, 'Name'),
+                    'type'            => null, // Filled in later
+                    'level'           => $this->xivData($data, 'ClassJobLevel'),
+                    'job_category_id' => $this->xivData($data, 'ClassJobCategory.id'),
+                    'area_id'         => $this->xivData($data, 'PlaceNameIssued.id'),
+                    'repeats'         => false, // Overridden next in the CraftLeve loop
+                    'xp'              => $this->xivData($data, 'ExpReward'),
+                    'gil'             => $this->xivData($data, 'GilReward'),
+                    'plate'           => $this->xivData($data, 'LeveVfx.Icon')['id'],
+                    'frame'           => $this->xivData($data, 'LeveVfxFrame.Icon')['id'],
+                    // This never was the "Area" icon, but the Issuer's image
+                    //  I don't think I'm using this datapoint, but it's not nullable
+                    'area_icon'       => $this->xivData($data, 'IconIssuer')['id'],
+                ], $id);
 
-				if ( ! $probability)
-					continue;
+                $probability = $this->xivData($data, 'LeveRewardItem.ProbabilityPercent');
 
-				$rewardGroup =& $data->LeveRewardItem->{'LeveRewardItemGroup' . $slot};
+                foreach ($this->xivData($data, 'LeveRewardItem.LeveRewardItemGroup') as $slot => $group) {
+                    $groupProbability = $probability[$slot];
 
-				// Up to 9 total items can be in a group
-				foreach (range(0, 8) as $itemSlot)
-					// Count0 should be higher than 0, Item0Target should be set to "Item", and the item shouldn't be a crystal
-					//  Crystals are Category 59, there's too many to bother with, and it's not a particularly useful piece of information
-					if ($rewardGroup->{'Count' . $itemSlot} && $rewardGroup->{'Item' . $itemSlot . 'Target'} == 'Item' && $rewardGroup->{'Item' . $itemSlot . 'TargetID'} && $rewardGroup->{'Item' . $itemSlot}->ItemUICategory != 59)
-						$this->aspir->setData('leve_reward', [
-							'item_id' => $rewardGroup->{'Item' . $itemSlot . 'TargetID'},
-							'leve_id' => $data->ID,
-							'rate'    => $probability,
-							'amount'  => $rewardGroup->{'Count' . $itemSlot},
-						]);
-			}
+                    if (!$groupProbability) {
+                        continue;
+                    }
 
-			// Requirements
-			// Up to slot 3 targets exist, however I couldn't find a use-case where a leve required more than one
-			if ($data->CraftLeve->Item0TargetID)
-				$this->aspir->setData('leve_required', [
-					'item_id' => $data->CraftLeve->Item0TargetID,
-					'leve_id' => $data->ID,
-					'amount'  => $data->CraftLeve->ItemCount0,
-				]);
-		});
+                    foreach (range(0, 8) as $itemSlot) {
+                        $amount = $group['fields']['Count'][$itemSlot] ?? null;
+                        $itemId = $group['fields']['Item'][$itemSlot]['value'] ?? null;
+                        // $isHQ = $group['fields']['IsHQ'][$itemSlot];
 
-		$this->chunkLimit = null;
-		$this->limit = null;
+                        if (!$amount || !$itemId) {
+                            continue;
+                        }
+
+                        $this->aspir->setData('leve_reward', [
+                            'item_id' => $itemId,
+                            'leve_id' => $id,
+                            'rate'    => $groupProbability,
+                            'amount'  => $amount,
+                        ]);
+                    }
+                }
+            }
+        );
+
+        $this->loopEndpoint(
+            'CraftLeve',
+            [
+                'Leve.row_id',
+                'Item[].row_id',
+                'ItemCount',
+                'Repeats',
+            ],
+            function ($data) {
+                $leveId = $this->xivData($data, 'Leve.id');
+
+                if (!$leveId || !isset($this->aspir->data['leve'][$leveId])) {
+                    return;
+                }
+
+                $this->aspir->data['leve'][$leveId]['repeats'] = !!$this->xivData($data, 'Repeats');
+
+                $counts = $this->xivData($data, 'ItemCount');
+
+                foreach ($this->xivData($data, 'Item') as $key => $item) {
+                    $amount = $counts[$key];
+
+                    if (!$amount) {
+                        continue;
+                    }
+
+                    $this->aspir->setData('leve_required', [
+                        'item_id' => $this->xivData($item, 'id'),
+                        'leve_id' => $leveId,
+                        'amount'  => $amount,
+                    ]);
+                }
+            }
+        );
+
+		// $this->chunkLimit = null;
+		// $this->limit = null;
 	}
 
 	public function itemCategories()
 	{
-		$this->loopEndpoint('itemuicategory', [
-			'ID',
-			'Name',
-			'OrderMajor',
-			'OrderMinor',
-		], function($data) {
-			$this->aspir->setData('item_category', [
-				'id'        => $data->ID,
-				'name'      => $data->Name,
-				// Previously listed "Physical Damage" or "Magic Damage"
-				//  I'm not using this datapoint, and it would require a Manual function to figure it
-				//  See Garland's "GetCategoryDamageAttribute" function within "Hacks.cs"
-				// 'attribute' => null,
-				'rank'      => ($data->OrderMajor ?? 0) . '.' . sprintf('%03d', $data->OrderMinor ?? 0),
-			], $data->ID);
-		});
+		$this->loopEndpoint(
+            'ItemUICategory',
+            [
+                'Name',
+                'OrderMajor',
+                'OrderMinor',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
+                $major = $this->xivData($data, 'OrderMajor') ?? 0;
+                $minor = $this->xivData($data, 'OrderMinor') ?? 0;
+
+                $this->aspir->setData('item_category', [
+                    'id'        => $id,
+                    'name'      => $this->xivData($data, 'Name'),
+                    'rank'      => $major . '.' . sprintf('%03d', $minor),
+                ], $id);
+            }
+        );
 	}
 
 	public function items()
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 1000;
+		// $this->limit = 1000;
 
 		$rootParamConversion = [
 			'Block'       => 'Block Strength',
@@ -735,362 +811,430 @@ class XIVAPI
 			'DelayMs'     => 'Delay',
 		];
 
-		$this->loopEndpoint('item', [
-			'ID',
-			'Name',
-			'Name_de',
-			'Name_fr',
-			'Name_ja',
-			'PriceMid',
-			'PriceLow',
-			'LevelEquip',
-			'LevelItem',
-			'ItemUICategory.ID',
-			'IsUnique',
-			'ClassJobCategoryTargetID',
-			'IsUntradable',
-			'EquipRestriction',
-			'EquipSlotCategory.ID',
-			'Rarity',
-			'IconID',
-			'MateriaSlotCount',
-			// Attribute Hunting
-			'BaseParam0.Name',
-			'BaseParamValue0',
-			'BaseParam1.Name',
-			'BaseParamValue1',
-			'BaseParam2.Name',
-			'BaseParamValue2',
-			'BaseParam3.Name',
-			'BaseParamValue3',
-			'BaseParam4.Name',
-			'BaseParamValue4',
-			'BaseParam5.Name',
-			'BaseParamValue5',
-			// Special X != Normal X
-			'CanBeHq', // AKA Special
-			'BaseParamSpecial0.Name',
-			'BaseParamValueSpecial0',
-			'BaseParamSpecial1.Name',
-			'BaseParamValueSpecial1',
-			'BaseParamSpecial2.Name',
-			'BaseParamValueSpecial2',
-			'BaseParamSpecial3.Name',
-			'BaseParamValueSpecial3',
-			'BaseParamSpecial4.Name',
-			'BaseParamValueSpecial4',
-			'BaseParamSpecial5.Name',
-			'BaseParamValueSpecial5',
-			// Base Attributes
-			// HQs of these exist as Special, will need to match on names
-			'Block', // As "Block Strength"
-			'BlockRate', // As "Block Rate"
-			'DefenseMag', // As "Magic Defense"
-			'DefensePhys', // As "Defense"
-			'DamageMag', // As "Magic Damage"
-			'DamagePhys', // As "Physical Damage"
-			'DelayMs', // As "Delay"
-			// Materia Values might always be 0, TODO double check and Manual if needed
-			'Materia.BaseParam.Name',
-			'Materia.Value',
-			// Shop Data
-			'GameContentLinks.GilShopItem.Item',
-			// Special Shop contains all Beast Traders, ItemCurrency for Item trades
-			'GameContentLinks.GCScripShopItem.Item',
-			'GameContentLinks.SpecialShop',
-			// ItemAction contains a myriad of things
-			// https://github.com/viion/ffxiv-datamining/blob/master/docs/ItemActions.md
-			//  max attribute values
-			//  potion values
-			//  item food connections
-			'ItemAction',
-		], function($data) use ($rootParamConversion) {
-			if ($data->Name == '' || substr($data->Name, 0, 6) == 'Dated ')
-				return;
+        $foodTracker = [];
 
-			if ($data->GameContentLinks->GCScripShopItem->Item)
-			{
-				$gcscripshopitemId = $data->GameContentLinks->GCScripShopItem->Item[0];
+		$this->loopEndpoint(
+            'Item',
+            [
+                'Name',
+                'CanBeHq', // AKA Special
+                'ClassJobCategory.row_id',
+                'PriceMid',
+                'PriceLow',
+                'LevelEquip',
+                'LevelItem.row_id',
+                'ItemUICategory.row_id',
+                'IsUnique',
+                'IsUntradable',
+                'EquipRestriction',
+                'EquipSlotCategory.row_id',
+                'Rarity',
+                'Icon',
+                'MateriaSlotCount',
+                // Attribute Hunting
+                'BaseParam[].Name',
+                'BaseParamValue',
+                'BaseParamSpecial[].Name',
+                'BaseParamValueSpecial',
+                // Base Attributes
+                // HQs of these exist as Special, will need to match on names
+                'Block', // As "Block Strength"
+                'BlockRate', // As "Block Rate"
+                'DefenseMag', // As "Magic Defense"
+                'DefensePhys', // As "Defense"
+                'DamageMag', // As "Magic Damage"
+                'DamagePhys', // As "Physical Damage"
+                'Delayms', // As "Delay"
+                // ItemAction contains a myriad of things
+                // https://github.com/viion/ffxiv-datamining/blob/master/docs/ItemActions.md
+                //  max attribute values
+                //  potion values
+                //  item food connections
+                'ItemAction',
+		    ],
+            function ($data) use ($rootParamConversion, &$foodTracker) {
+                $id = $this->xivData($data, 'id');
+                $name = $this->xivData($data, 'Name');
 
-				$gcPrice = $this->request('GCScripShopItem/' . $gcscripshopitemId, ['columns' => [
-					'CostGCSeals',
-				]])->CostGCSeals;
-			}
+                // Ignore "Dated Bronze Gladius", etc
+                if (!$name || str_starts_with($name, 'Dated ')) {
+                    return;
+                }
 
-			$this->aspir->setData('item', [
-				'id'               => $data->ID,
-				'name'             => $data->Name,
-				'de_name'          => $data->Name_de,
-				'fr_name'          => $data->Name_fr,
-				'jp_name'          => $data->Name_ja,
-				'price'            => $data->GameContentLinks->GilShopItem->Item ? $data->PriceMid : null,
-				'gc_price'         => $gcPrice ?? null,
-				'special_buy'      => !! $data->GameContentLinks->SpecialShop,
-				'sell_price'       => $data->PriceLow,
-				'ilvl'             => $data->LevelItem,
-				'elvl'             => $data->LevelEquip,
-				'item_category_id' => $data->ItemUICategory->ID,
-				'job_category_id'  => $data->ClassJobCategoryTargetID,
-				'unique'           => $data->IsUnique,
-				'tradeable'        => $data->IsUntradable ? null : 1,
-				'equip'            => $data->EquipRestriction,
-				'slot'             => $data->EquipSlotCategory->ID,
-				'rarity'           => $data->Rarity,
-				'icon'             => $data->IconID,
-				'sockets'          => $data->MateriaSlotCount,
-			], $data->ID);
+                $this->aspir->setData('item', [
+                    'id'               => $id,
+                    'name'             => $name,
+                    'de_name'          => null,
+                    'fr_name'          => null,
+                    'jp_name'          => null,
+                    'price'            => $this->xivData($data, 'PriceMid'),
+                    'gc_price'         => null, // Updated below with GCScripShopItem loop
+                    'special_buy'      => null, // Updated below with SpecialShop loop
+                    'sell_price'       => $this->xivData($data, 'PriceLow'),
+                    'ilvl'             => $this->xivData($data, 'LevelItem.id'),
+                    'elvl'             => $this->xivData($data, 'LevelEquip'),
+                    'item_category_id' => $this->xivData($data, 'ItemUICategory.id'),
+                    'job_category_id'  => $this->xivData($data, 'ClassJobCategory.id'),
+                    'unique'           => $this->xivData($data, 'IsUnique'),
+                    'tradeable'        => $this->xivData($data, 'IsUntradable') ? null : 1,
+                    'equip'            => $this->xivData($data, 'EquipRestriction'),
+                    'slot'             => $this->xivData($data, 'EquipSlotCategory.id'),
+                    'rarity'           => $this->xivData($data, 'Rarity'),
+                    'icon'             => $this->xivData($data, 'Icon')['id'],
+                    'sockets'          => $this->xivData($data, 'MateriaSlotCount'),
+                ], $id);
 
-			// Shopping Data
-            if ($data->GameContentLinks->GilShopItem->Item)
-                foreach ($data->GameContentLinks->GilShopItem->Item as $item)
-                    $this->aspir->setData('item_shop', [
-                        'item_id' => $data->ID,
-                        // Shops come through as "262175.11", we only need what's before the dot
-                        'shop_id' => explode('.', $item)[0],
-                        'alt_currency' => false,
-                    ]);
+                // Attribute Data
+                $nqParams = $hqParams = [];
 
-            if ($data->GameContentLinks->SpecialShop)
-                foreach ($data->GameContentLinks->SpecialShop as $itemReceive => $shopArray)
-                    foreach ($shopArray as $item)
-                        $this->aspir->setData('item_shop', [
-                            'item_id' => $data->ID,
-                            // Shops come through as "262175.11", we only need what's before the dot
-                            'shop_id' => explode('.', $item)[0],
-                            'alt_currency' => true,
+                foreach ($rootParamConversion as $key => $name) {
+                    $val = $this->xivData($data, $key);
+                    if ($val) {
+                        $nqParams[$rootParamConversion[$key]] = $val;
+                    }
+                }
+
+                // Delay comes through as "2000", but we want it as "2.00"
+                if (isset($nqParams['Delay'])) {
+                    $nqParams['Delay'] /= 1000;
+                }
+
+                $canBeHQ = $this->xivData($data, 'CanBeHq');
+                $baseParams = $this->xivData($data, 'BaseParam');
+                $baseParamValues = $this->xivData($data, 'BaseParamValue');
+                $specialParams = $this->xivData($data, 'BaseParamSpecial');
+                $specialParamValues = $this->xivData($data, 'BaseParamValueSpecial');
+
+                foreach (range(0, 5) as $slot) {
+                    $attr = $baseParams[$slot]['fields']['Name'] ?? null;
+                    if ($attr && $baseParamValues[$slot]) {
+                        $nqParams[$attr] = $baseParamValues[$slot];
+                    }
+                }
+
+                // Slot numbers between base and special aren't necessarily the same, hence the split foreach loops
+                if ($canBeHQ) {
+                    foreach (range(0, 5) as $slot) {
+                        $attr = $specialParams[$slot]['fields']['Name'] ?? null;
+                        if ($attr && $specialParamValues[$slot] && isset($nqParams[$attr])) {
+                            $hqParams[$attr] = $specialParamValues[$slot] + $nqParams[$attr];
+                        }
+                    }
+                }
+
+                // Item Actions provide Attribute Data
+                $itemAction = $this->xivData($data, 'ItemAction');
+
+                if ($this->xivData($itemAction, 'id')) {
+                    $dataQuality = [
+                        'nq' => $this->xivData($itemAction, 'Data'),
+                    ];
+                    if ($canBeHQ) {
+                        $dataQuality['hq'] = $this->xivData($itemAction, 'DataHQ');
+                    }
+
+                    switch ($this->xivData($itemAction, 'Type')) {
+                        case 844:
+                        case 845:
+                        case 846:
+                            // Crafting + Gathering Food
+                            // Battle Food
+                            // Attribute Potions, eg: X-Potion of Dexterity
+                            // Handled below with a ItemFood query
+                            $foodId = $itemAction['fields']['Data'][1]; // ItemFood ID is in slot 1
+                            $foodTracker[$foodId] = $id;
+                            break;
+                        case 847:
+                            // Health potions, eg: X-Potion
+                            foreach ($dataQuality as $quality => $qualityData) {
+                                $this->aspir->setData('item_attribute', [
+                                    'item_id'   => $id,
+                                    'attribute' => 'HP',
+                                    'quality'   => $quality,
+                                    'amount'    => $qualityData[0], // data_0 = %
+                                    'limit'     => $qualityData[1], // data_1 = max
+                                ]);
+                            }
+                            break;
+                        case 848:
+                            // Ether MP potions, eg: X-Ether
+                            foreach ($dataQuality as $quality => $qualityData) {
+                                $this->aspir->setData('item_attribute', [
+                                    'item_id'   => $id,
+                                    'attribute' => 'MP',
+                                    'quality'   => $quality,
+                                    'amount'    => $qualityData[0], // data_0 = %
+                                    'limit'     => $qualityData[1], // data_1 = max
+                                ]);
+                            }
+                            break;
+                        case 849:
+                            // Elixir potions
+                            foreach ($dataQuality as $quality => $qualityData) {
+                                $this->aspir->setData('item_attribute', [
+                                    'item_id'   => $id,
+                                    'attribute' => 'HP',
+                                    'quality'   => $quality,
+                                    'amount'    => $qualityData[0], // data_0 = %
+                                    'limit'     => $qualityData[1], // data_1 = max
+                                ]);
+                            }
+
+                            foreach ($dataQuality as $quality => $qualityData) {
+                                $this->aspir->setData('item_attribute', [
+                                    'item_id'   => $id,
+                                    'attribute' => 'MP',
+                                    'quality'   => $quality,
+                                    'amount'    => $qualityData[2], // data_3 = %
+                                    'limit'     => $qualityData[3], // data_4 = max
+                                ]);
+                            }
+
+                            break;
+                    }
+                }
+
+                foreach (['nq', 'hq'] as $quality) {
+                    foreach (${$quality . 'Params'} as $attribute => $amount) {
+                        $this->aspir->setData('item_attribute', [
+                            'item_id'   => $id,
+                            'attribute' => $attribute,
+                            'quality'   => $quality,
+                            'amount'    => $amount,
+                            'limit'     => null,
                         ]);
+                    }
+                }
+            }
+        );
 
-			// Attribute Data
-			$nqParams = $hqParams = [];
+        $this->loopEndpoint(
+            'Materia',
+            [
+                'BaseParam.Name',
+                'Item[].row_id',
+                'Value',
+            ],
+            function ($data) {
+                $values = $this->xivData($data, 'Value');
 
-			foreach ($rootParamConversion as $key => $name)
-				if ($data->$key)
-					$nqParams[$rootParamConversion[$key]] = $data->$key;
+                if (array_sum($values) === 0) {
+                    return;
+                }
 
-			// Delay comes through as "2000", but we want it as "2.00"
-			if (isset($nqParams['Delay']))
-				$nqParams['Delay'] /= 1000;
+                $attribute = $this->xivData($data, 'BaseParam.Name');
+                $itemIds = array_map(fn ($item) => $item['row_id'], $this->xivData($data, 'Item'));
 
-			if ($data->Materia->BaseParam->Name && $data->Materia->Value)
-				$nqParams[$data->Materia->BaseParam->Name] = $data->Materia->Value;
+                foreach ($values as $key => $amount) {
+                    $itemId = $itemIds[$key];
 
-			foreach (range(0, 5) as $slot)
-				if ($data->{'BaseParam' . $slot}->Name)
-					$nqParams[$data->{'BaseParam' . $slot}->Name] = $data->{'BaseParamValue' . $slot};
+                    if (!$amount || !$itemId) {
+                        continue;
+                    }
 
-			if ($data->CanBeHq)
-				foreach (range(0, 5) as $slot)
-					if ($data->{'BaseParamSpecial' . $slot}->Name && isset($nqParams[$data->{'BaseParamSpecial' . $slot}->Name]))
-						$hqParams[$data->{'BaseParamSpecial' . $slot}->Name] = $nqParams[$data->{'BaseParamSpecial' . $slot}->Name] + $data->{'BaseParamValueSpecial' . $slot};
+                    $this->aspir->setData('item_attribute', [
+                        'item_id'   => $itemId,
+                        'attribute' => $attribute,
+                        'quality'   => 'nq',
+                        'amount'    => $amount,
+                        'limit'     => null,
+                    ]);
+                }
+            }
+        );
 
-			// Item Actions provide Attribute Data
-			if ($data->ItemAction)
-			{
-				$dataQualitySlots = [ '' => 'nq' ];
-				if ($data->CanBeHq)
-					$dataQualitySlots['HQ'] = 'hq';
+        $this->loopEndpoint(
+            'ItemFood',
+            [
+                'BaseParam[].Name',
+                'Value',
+                'ValueHQ',
+                'Max',
+                'MaxHQ',
+                'IsRelative',
+            ],
+            function ($data) use ($foodTracker) {
+                $id = $this->xivData($data, 'id');
+                $itemId = $foodTracker[$id] ?? false;
 
-				switch ($data->ItemAction->Type)
-				{
-					// Health potions, eg: X-Potion
-					case 847:
-						foreach ($dataQualitySlots as $qualitySlot => $quality)
-							$this->aspir->setData('item_attribute', [
-								'item_id'   => $data->ID,
-								'attribute' => 'HP',
-								'quality'   => $quality,
-								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '0'}, // data_0 = %
-								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '1'}, // data_1 = max
-							]);
-						break;
-					// Ether MP potions, eg: X-Ether
-					case 848:
-						foreach ($dataQualitySlots as $qualitySlot => $quality)
-							$this->aspir->setData('item_attribute', [
-								'item_id'   => $data->ID,
-								'attribute' => 'MP',
-								'quality'   => $quality,
-								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '0'}, // data_0 = %
-								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '1'}, // data_1 = max
-							]);
-						break;
-					// Elixir potions,
-					case 849:
-						foreach ($dataQualitySlots as $qualitySlot => $quality)
-							$this->aspir->setData('item_attribute', [
-								'item_id'   => $data->ID,
-								'attribute' => 'HP',
-								'quality'   => $quality,
-								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '0'}, // data_0 = %
-								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '1'}, // data_1 = max
-							]);
+                $nqValues = $this->xivData($data, 'Value');
+                $hqValues = $this->xivData($data, 'ValueHQ');
 
-						foreach ($dataQualitySlots as $qualitySlot => $quality)
-							$this->aspir->setData('item_attribute', [
-								'item_id'   => $data->ID,
-								'attribute' => 'MP',
-								'quality'   => $quality,
-								'amount'    => $data->ItemAction->{'Data' . $qualitySlot . '2'}, // data_3 = %
-								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '3'}, // data_4 = max
-							]);
-						break;
-					// Wings, eg: Icarus Wing, restores TP
-					case 1767:
-						foreach ($dataQualitySlots as $qualitySlot => $quality)
-							$this->aspir->setData('item_attribute', [
-								'item_id'   => $data->ID,
-								'attribute' => 'TP',
-								'quality'   => $quality,
-								'amount'    => '100', // Assumed %
-								'limit'     => $data->ItemAction->{'Data' . $qualitySlot . '3'}, // data_0 = max TP to restore
-							]);
-						break;
-					// Crafting + Gathering Food
-					// Battle Food
-					// Attribute Potions, eg: X-Potion of Dexterity
-					// data_1 = `ItemFood`
-					// data_2 = Duration in seconds
-					case 844:
-					case 845:
-					case 846:
-						$food = $this->request('itemfood/' . $data->ItemAction->Data1, ['columns' => [
-							'BaseParam0.Name',
-							'BaseParam1.Name',
-							'BaseParam2.Name',
-							'Value0',
-							'Value1',
-							'Value2',
-							'ValueHQ0',
-							'ValueHQ1',
-							'ValueHQ2',
-							'IsRelative0',
-							'IsRelative1',
-							'IsRelative2',
-							'Max0',
-							'Max1',
-							'Max2',
-							'MaxHQ0',
-							'MaxHQ1',
-							'MaxHQ2',
-						]]);
+                if (!$itemId || (array_sum($nqValues) + array_sum($hqValues)) === 0) {
+                    return;
+                }
 
-						foreach (range(0, 2) as $slot)
-							if ($food->{'BaseParam' . $slot}->Name)
-								foreach ($dataQualitySlots as $qualitySlot => $quality)
-									$this->aspir->setData('item_attribute', [
-										'item_id'   => $data->ID,
-										'attribute' => $food->{'BaseParam' . $slot}->Name,
-										'quality'   => $quality,
-										'amount'    => $food->{'IsRelative' . $slot}
-														? $food->{'Value' . strtoupper($qualitySlot) . $slot}
-														: null,
-										'limit'     => $food->{'IsRelative' . $slot}
-														? $food->{'Max' . strtoupper($qualitySlot) . $slot}
-														: $food->{'Value' . strtoupper($qualitySlot) . $slot},
-									]);
+                $nqMax = $this->xivData($data, 'Max');
+                $hqMax = $this->xivData($data, 'MaxHQ');
+                $isRelative = $this->xivData($data, 'IsRelative');
+                $names = array_map(fn ($b) => $b['fields']['Name'], $this->xivData($data, 'BaseParam'));
 
-						break;
-				}
-			}
+                foreach (range(0, 2) as $slot) {
+                    $attribute = $names[$slot];
 
-			foreach (['nq', 'hq'] as $quality)
-				foreach (${$quality . 'Params'} as $attribute => $amount)
-					$this->aspir->setData('item_attribute', [
-						'item_id'   => $data->ID,
-						'attribute' => $attribute,
-						'quality'   => $quality,
-						'amount'    => $amount,
-						'limit'     => null,
-					]);
-		});
+                    if (!$attribute) {
+                        continue;
+                    }
 
-		$this->limit = null;
+                    $rel = $isRelative[$slot];
+
+                    foreach (['nq', 'hq'] as $quality) {
+                        $val =& ${$quality . 'Values'}[$slot]; // $nqValues, $hqValues
+                        $max =& ${$quality . 'Max'}[$slot]; // $nqMax, $hqMax
+
+                        $this->aspir->setData('item_attribute', [
+                            'item_id'   => $itemId,
+                            'attribute' => $attribute,
+                            'quality'   => $quality,
+                            'amount'    => $rel ? $val : null,
+                            'limit'     => $rel ? $max : $val,
+                        ]);
+                    }
+                }
+            }
+        );
+
+        $this->loopEndpoint(
+            'GCScripShopItem',
+            [
+                // NOTE: Keep in sync with the GCScripShopItem call in npcs(); it'll be cached
+                'CostGCSeals',
+                'Item.row_id',
+            ],
+            function ($data) {
+                $gcPrice = $this->xivData($data, 'CostGCSeals');
+                $itemId = $this->xivData($data, 'Item.id');
+
+                if (!$gcPrice || !$itemId || !isset($this->aspir->data['item'][$itemId])) {
+                    return;
+                }
+
+                $this->aspir->data['item'][$itemId]['gc_price'] = $gcPrice;
+            }
+        );
+
+        $this->loopEndpoint(
+            'SpecialShop',
+            [
+                // NOTE: Keep in sync with the SpecialShop call in npcs(); it'll be cached
+                'Item[].Item[].row_id',
+            ],
+            function ($data) {
+                $parentItemLoop = $this->xivData($data, 'Item');
+                foreach ($parentItemLoop as $pil) {
+                    foreach ($pil['Item'] as $item) {
+                        $itemId = $item['row_id'];
+
+                        if (!$itemId || !isset($this->aspir->data['item'][$itemId])) {
+                            continue;
+                        }
+
+                        $this->aspir->data['item'][$itemId]['special_buy'] = true;
+                    }
+                }
+            }
+        );
+
+		// $this->limit = null;
 	}
 
 	public function recipes()
 	{
 		// 3000 calls were taking over the allotted 10s call limit imposed by XIVAPI's Guzzle Implementation
-		$this->limit = 500;
+		// $this->limit = 500;
 
-		$this->loopEndpoint('recipe', [
-			'ID',
-			'ItemResultTargetID',
-			'ClassJob.ID',
-			'ItemResult.LevelItem',
-			'RecipeLevelTable.ClassJobLevel',
-			'RecipeLevelTable.Difficulty',
-			'RecipeLevelTable.Durability',
-			'RecipeLevelTable.Quality',
-			'RecipeLevelTable.Stars',
-			'CanQuickSynth',
-			'GameContentLinks.RecipeNotebookList',
-			'AmountResult',
-			'CanHq',
-			// Reagents
-			'ItemIngredient0TargetID',
-			'ItemIngredient1TargetID',
-			'ItemIngredient2TargetID',
-			'ItemIngredient3TargetID',
-			'ItemIngredient4TargetID',
-			'ItemIngredient5TargetID',
-			'ItemIngredient6TargetID',
-			'ItemIngredient7TargetID',
-			'ItemIngredient8TargetID',
-			'ItemIngredient9TargetID',
-			'AmountIngredient0',
-			'AmountIngredient1',
-			'AmountIngredient2',
-			'AmountIngredient3',
-			'AmountIngredient4',
-			'AmountIngredient5',
-			'AmountIngredient6',
-			'AmountIngredient7',
-			'AmountIngredient8',
-			'AmountIngredient9',
-		], function($data) {
-			if ( ! $data->ItemResultTargetID)
-				return;
+        $craftType = [
+            // CraftTypeID -> ClassJobID
+            0 => 8, // Woodworking -> Carpenter
+            1 => 9, // Smithing -> Blacksmith
+            2 => 10, // Armorcraft -> Armorer
+            3 => 11, // Goldsmithing -> Goldsmith
+            4 => 12, // Leatherworking -> Leatherworker
+            5 => 13, // Clothcraft -> Weaver
+            6 => 14, // Alchemy -> Alchemist
+            7 => 15, // Cooking -> Culinarian
+        ];
 
-			$this->aspir->setData('recipe', [
-				'id'           => $data->ID,
-				'item_id'      => $data->ItemResultTargetID,
-				'job_id'       => $data->ClassJob->ID,
-				'level'        => $data->ItemResult->LevelItem,
-				'recipe_level' => $data->RecipeLevelTable->ClassJobLevel,
-				'stars'        => $data->RecipeLevelTable->Stars,
-				'difficulty'   => $data->RecipeLevelTable->Difficulty,
-				'durability'   => $data->RecipeLevelTable->Durability,
-				'quality'      => $data->RecipeLevelTable->Quality,
-				'yield'        => $data->AmountResult,
-				'quick_synth'  => $data->CanQuickSynth ? 1 : null,
-				'hq'           => $data->CanHq ? 1 : null,
-				'fc'           => null,
-			], $data->ID);
+		$this->loopEndpoint(
+            'Recipe',
+            [
+                'AmountIngredient',
+                'AmountResult',
+                'CanHq',
+                'CanQuickSynth',
+                'Ingredient[].row_id', // Reagents
+                'ItemResult.LevelItem',
+                'CraftType.row_id',
+                'RecipeLevelTable.ClassJobLevel',
+                'RecipeLevelTable.Difficulty',
+                'RecipeLevelTable.Durability',
+                'RecipeLevelTable.Quality',
+                'RecipeLevelTable.Stars',
+            ],
+            function ($data) use ($craftType) {
+                $id = $this->xivData($data, 'id');
+                $itemId = $this->xivData($data, 'ItemResult.id');
 
-			if ($data->GameContentLinks->RecipeNotebookList)
-				foreach ($data->GameContentLinks->RecipeNotebookList as $slot => $rnlIds)
-					foreach ($rnlIds as $notebookId)
-					{
-						if ( ! $notebookId)
-							continue;
+                if ( ! $itemId) {
+                    return;
+                }
 
-						$this->aspir->setData('notebook_recipe', [
-							'recipe_id'   => $data->ID,
-							'notebook_id' => $notebookId + 1, // Avoid 0 index, accounted for later as well
-							'slot'        => (int) preg_replace('/Recipe/', '', $slot),
-						]);
-					}
+                $this->aspir->setData('recipe', [
+                    'id'           => $id,
+                    'item_id'      => $itemId,
+                    'job_id'       => $craftType[$this->xivData($data, 'CraftType.id')],
+                    'level'        => $this->xivData($data, 'ItemResult.LevelItem.id'),
+                    'recipe_level' => $this->xivData($data, 'RecipeLevelTable.ClassJobLevel'),
+                    'stars'        => $this->xivData($data, 'RecipeLevelTable.Stars'),
+                    'difficulty'   => $this->xivData($data, 'RecipeLevelTable.Difficulty'),
+                    'durability'   => $this->xivData($data, 'RecipeLevelTable.Durability'),
+                    'quality'      => $this->xivData($data, 'RecipeLevelTable.Quality'),
+                    'yield'        => $this->xivData($data, 'AmountResult'),
+                    'quick_synth'  => $this->xivData($data, 'CanQuickSynth') ? 1 : null,
+                    'hq'           => $this->xivData($data, 'CanHq') ? 1 : null,
+                    'fc'           => null,
+                ], $id);
 
-			foreach (range(0, 9) as $slot)
-				if ($data->{'ItemIngredient' . $slot . 'TargetID'} && $data->{'AmountIngredient' . $slot})
-					$this->aspir->setData('recipe_reagents', [
-						'item_id'   => $data->{'ItemIngredient' . $slot . 'TargetID'},
-						'recipe_id' => $data->ID,
-						'amount'    => $data->{'AmountIngredient' . $slot},
-					]);
-		});
+                $ingredients = $this->xivData($data, 'Ingredient');
+                $amounts = $this->xivData($data, 'AmountIngredient');
 
-		$this->limit = null;
+                foreach ($ingredients as $key => $reagent) {
+                    if (($reagent['row_id'] ?? false) && $amounts[$key]) {
+                        $this->aspir->setData('recipe_reagents', [
+                            'item_id'   => $reagent['row_id'],
+                            'recipe_id' => $id,
+                            'amount'    => $amounts[$key],
+                        ]);
+                    }
+                }
+            }
+        );
+
+        $this->loopEndpoint(
+            'RecipeNotebookList',
+            [
+                'Recipe[].row_id',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id') + 1; // Avoid 0 index, accounted for later as well
+
+                foreach ($this->xivData($data, 'Recipe') as $slot => $recipe) {
+                    $recipeId = $recipe['row_id'] ?? false;
+
+                    if (!$recipeId) {
+                        continue;
+                    }
+
+                    $this->aspir->setData('notebook_recipe', [
+                        'recipe_id'   => $recipeId,
+                        'notebook_id' => $id,
+                        'slot'        => $slot,
+                    ]);
+                }
+            }
+        );
+
+        // $this->limit = null;
 	}
 
 	public function companyCrafts()
@@ -1098,162 +1242,190 @@ class XIVAPI
 		// Recipes and Company Crafts can overlap on IDs. Give them some space.
 		$idBase = max(array_keys($this->aspir->data['recipe']));
 
-		$this->loopEndpoint('companycraftsequence', [
-			'ID',
-			'ResultItemTargetID',
-			'CompanyCraftPart0',
-			'CompanyCraftPart1',
-			'CompanyCraftPart2',
-			'CompanyCraftPart3',
-			'CompanyCraftPart4',
-			'CompanyCraftPart5',
-			'CompanyCraftPart6',
-			'CompanyCraftPart7',
-		], function($data) use ($idBase) {
+		$this->loopEndpoint(
+            'CompanyCraftSequence',
+            [
+                'ResultItem.row_id',
+                'CompanyCraftPart',
+		    ],
+            function ($data) use ($idBase) {
+                $recipeId = $this->xivData($data, 'id') + $idBase;
 
-			$recipeId = $idBase + $data->ID;
+                $this->aspir->setData('recipe', [
+                    'id'           => $recipeId,
+                    'item_id'      => $this->xivData($data, 'ResultItem.id'),
+                    'job_id'       => 0,
+                    'level'        => 1,
+                    'recipe_level' => 1,
+                    'stars'        => null,
+                    'difficulty'   => null,
+                    'durability'   => null,
+                    'quality'      => null,
+                    'yield'        => 1,
+                    'quick_synth'  => null,
+                    'hq'           => null,
+                    'fc'           => 1,
+                ], $recipeId);
 
-			$this->aspir->setData('recipe', [
-				'id'           => $recipeId,
-				'item_id'      => $data->ResultItemTargetID,
-				'job_id'       => 0,
-				'level'        => 1,
-				'recipe_level' => 1,
-				'stars'        => null,
-				'difficulty'   => null,
-				'durability'   => null,
-				'quality'      => null,
-				'yield'        => 1,
-				'quick_synth'  => null,
-				'hq'           => null,
-				'fc'           => 1,
-			], $recipeId);
+                $ccp = $this->xivData($data, 'CompanyCraftPart');
 
-			foreach (range(0, 7) as $partSlot)
-				if ($data->{'CompanyCraftPart' . $partSlot})
-					foreach (range(0, 2) as $processSlot)
-					{
-						$process =& $data->{'CompanyCraftPart' . $partSlot}->{'CompanyCraftProcess' . $processSlot};
-						if ($process)
-							foreach (range(0, 11) as $setSlot)
-								if ($process->{'SetQuantity' . $setSlot})
-									$this->aspir->setData('recipe_reagents', [
-										'item_id'   => $process->{'SupplyItem' . $setSlot}->Item,
-										'recipe_id' => $recipeId,
-										'amount'    => $process->{'SetQuantity' . $setSlot} * $process->{'SetsRequired' . $setSlot},
-									]);
-					}
-		});
+                foreach ($ccp as $part) {
+                    foreach ($this->xivData($part, 'CompanyCraftProcess') as $process) {
+                        $setQuantity = $this->xivData($process, 'SetQuantity');
+                        $setsRequired = $this->xivData($process, 'SetsRequired');
+                        $supplyItem = $this->xivData($process, 'SupplyItem');
+
+                        foreach ($setQuantity as $key => $quantity) {
+                            $amount = $quantity * $setsRequired[$key];
+                            $itemId = $supplyItem[$key]['value'];
+
+                            $this->aspir->setData('recipe_reagents', [
+                                'item_id'   => $itemId,
+                                'recipe_id' => $recipeId,
+                                'amount'    => $amount,
+                            ]);
+                        }
+                    }
+                }
+            }
+        );
 	}
 
 	public function notebookDivisions()
 	{
-		// This one doesn't come back; manually add it
-		$this->aspir->setData('notebookdivision', [
-			'id'          => 1, // 0 index'd, artificially +1'd
-			'name'        => '1-5',
-			'category_id' => 0,
-		], 1); // 0 index'd, artificially +1'd
 
-		$this->loopEndpoint('notebookdivision', [
-			'ID',
+		$this->loopEndpoint('NotebookDivision', [
 			'Name',
-			'NotebookDivisionCategoryTargetID',
-		], function($data) {
-			$id = $data->ID + 1; // 0 index'd, artificially +1'd
+			'NotebookDivisionCategory.Name',
+		], function ($data) {
+            $id = $this->xivData($data, 'id') + 1; // 0 index'd, artificially +1'd
+
+            $categoryId = $this->xivData($data, 'NotebookDivisionCategory.id') + 1; // Also 0 index'd
 
 			$this->aspir->setData('notebookdivision', [
 				'id'          => $id,
-				'name'        => $data->Name,
-				'category_id' => $data->NotebookDivisionCategoryTargetID,
+				'name'        => $this->xivData($data, 'Name'),
+				'category_id' => $categoryId,
 			], $id);
-		});
-	}
 
-	public function notebookDivisionCategories()
-	{
-		// This one doesn't come back (doesn't actually exist, really); manually add it
-		$this->aspir->setData('notebookdivision_category', [
-			'id'   => '0',
-			'name' => 'Leveling',
-		], 0);
+            // Category `0` has no name, name it Leveling
+            $categoryName = $categoryId === 1
+                ? 'Leveling'
+                : $this->xivData($data, 'NotebookDivisionCategory.Name');
 
-		$this->loopEndpoint('notebookdivisioncategory', [
-			'ID',
-			'Name',
-		], function($data) {
-			$this->aspir->setData('notebookdivision_category', [
-				'id'   => $data->ID,
-				'name' => $data->Name,
-			], $data->ID);
+            $this->aspir->setData('notebookdivision_category', [
+                'id'   => $categoryId,
+                'name' => $categoryName,
+            ], $categoryId);
 		});
 	}
 
 	/**
 	 * loopEndpoint - Loop around an XIVAPI Endpoint
-	 * @param  string   $endpoint Any type of `/content`
-	 * @param  array    $columns  Specific columns to reduce XIVAPI Load
-	 * @param  function $callback $data is passed into here
-	 * @param  array    $filters  An array of callback functions; A way to reduce identifiers even more
 	 */
-	private function loopEndpoint($endpoint, $columns, \Closure $callback, $filters = [])
+	private function loopEndpoint(string $endpoint, string|array $fields, callable $callback, int $limit = 100)
 	{
-		$request = $this->listRequest($endpoint, ['columns' => ['ID']]);
-		foreach ($request->chunk($this->chunkLimit !== null ? $this->chunkLimit : 100) as $chunk)
-		{
-			$ids = $chunk->map(function($item) {
-				return $item->ID;
-			});
+        if (is_array($fields)) {
+            $fields = implode(',', $fields);
+        }
 
-			if (isset($filters['ids']))
-				$ids = $ids->filter($filters['ids']);
+        $url = "https://beta.xivapi.com/api/1/sheet/{$endpoint}?fields={$fields}";
 
-			if (empty($ids))
-				continue;
+        echo 'Starting: ' . $endpoint . PHP_EOL;
 
-			$chunk = $this->request($endpoint, ['ids' => $ids->join(','), 'columns' => $columns]);
+        $after = 0;
+        while (true) {
+            $output = $this->curl($url . '&limit=' . $limit . '&after=' . $after);
 
-            if (isset($chunk->Results))
-                foreach ($chunk->Results as $data)
+            $result = json_decode($output, true);
+
+            if (!isset($result['rows'])) {
+                dd($result);
+            }
+
+            if ($result['rows']) {
+                foreach ($result['rows'] as $data) {
                     ($callback)($data);
-		}
+                }
+                $after = end($result['rows'])['row_id'];
+            }
+
+            if (count($result['rows']) < $limit) {
+                break;
+            }
+        }
 	}
 
-	private function listRequest($content, $queries = [])
-	{
-		$queries['limit'] = $this->limit !== null ? $this->limit : 3000; // Maximum allowed per https://xivapi.com/docs/Game-Data#lists
-		$queries['page'] = 1;
+    private function xivData(array $data, string $key): mixed
+    {
+        // Convert 'GatheringPointBase.GatheringType.id' to
+        // $data['fields']['GatheringPointBase']['fields']['GatheringType']['id']
+        // Convert 'GatheringPointBase.GatheringType.Value' to
+        // $data['fields']['GatheringPointBase']['fields']['GatheringType']['fields']['Value']
+        $ref =& $data;
+        foreach (explode('.', $key) as $p) {
+            // Special case: The ID isn't in fields, and I want to use the shorthand `id` instead of `row_id`
+            if ($p === 'id') {
+                $ref =& $ref['row_id'];
+            } else {
+                $ref =& $ref['fields'][$p];
+            }
+        }
 
-		$results = [];
+        return $ref;
+    }
 
-		while (true)
-		{
-			// $response now contains ->Pagination and ->Results
-			$response = $this->request($content, $queries);
+    private function curl($url)
+    {
+        return Cache::store('file')->rememberForever('aspir:' . $url, function () use ($url) {
+            echo 'Querying: ' . preg_replace('/^.*&after=(\d+).*$/', '$1', $url) . PHP_EOL;
 
-			$results = array_merge($results, $response->Results);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'FFXIVCrafting');
+            $output = curl_exec($ch);
+            curl_close($ch);
 
-			if ($response->Pagination->PageTotal == $response->Pagination->Page)
-				break;
+            return $output;
+        });
+    }
 
-			$queries['page'] = $response->Pagination->PageNext;
-		}
-
-		return collect($results);
-	}
-
-	private function request($content, $queries = [])
-	{
-		$command =& $this->aspir->command;
-		$api =& $this->api;
-
-		return Cache::store('file')->rememberForever($content . serialize($queries), function() use ($content, $queries, $api, $command) {
-			$command->info(
-				'Querying: ' . $content .
-				(isset($queries['ids']) ? ' ' . preg_replace('/,.+,/', '-', $queries['ids']) : '')
-			);
-			return $api->queries($queries)->content->{$content}()->list();
-		});
-	}
+	// private function listRequest($content, $queries = [])
+	// {
+	// 	$queries['limit'] = $this->limit !== null ? $this->limit : 3000; // Maximum allowed per https://xivapi.com/docs/Game-Data#lists
+	// 	$queries['page'] = 1;
+    //
+	// 	$results = [];
+    //
+	// 	while (true)
+	// 	{
+	// 		// $response now contains ->Pagination and ->Results
+	// 		$response = $this->request($content, $queries);
+    //
+	// 		$results = array_merge($results, $response->Results);
+    //
+	// 		if ($response->Pagination->PageTotal == $response->Pagination->Page)
+	// 			break;
+    //
+	// 		$queries['page'] = $response->Pagination->PageNext;
+	// 	}
+    //
+	// 	return collect($results);
+	// }
+    //
+	// private function request($content, $queries = [])
+	// {
+	// 	$command =& $this->aspir->command;
+	// 	$api =& $this->api;
+    //
+	// 	return Cache::store('file')->rememberForever($content . serialize($queries), function () use ($content, $queries, $api, $command) {
+	// 		$command->info(
+	// 			'Querying: ' . $content .
+	// 			(isset($queries['ids']) ? ' ' . preg_replace('/,.+,/', '-', $queries['ids']) : '')
+	// 		);
+	// 		return $api->queries($queries)->content->{$content}()->list();
+	// 	});
+	// }
 
 }

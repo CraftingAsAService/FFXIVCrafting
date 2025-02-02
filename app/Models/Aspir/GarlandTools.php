@@ -55,18 +55,21 @@ class GarlandTools
 
 	public function npcs()
 	{
-		$this->loopEndpoint('npc', function($data) {
-			$this->aspir->setData('npc', [
-				'zone_id' => $data->npc->zoneid ?? null,
-				'approx'  => $data->npc->approx ?? null,
-			], $data->npc->id, true);
+        // The new api is very hard to figure out npc->shop relations
+        // skipping all this for now
 
-			if (isset($data->npc->coords))
-				$this->aspir->setData('npc', [
-					'x' => $data->npc->coords[0],
-					'y' => $data->npc->coords[1],
-				], $data->npc->id);
-		});
+		// $this->loopEndpoint('npc', function($data) {
+		// 	$this->aspir->setData('npc', [
+		// 		'zone_id' => $data->npc->zoneid ?? null,
+		// 		'approx'  => $data->npc->approx ?? null,
+		// 	], $data->npc->id, true);
+        //
+		// 	if (isset($data->npc->coords))
+		// 		$this->aspir->setData('npc', [
+		// 			'x' => $data->npc->coords[0],
+		// 			'y' => $data->npc->coords[1],
+		// 		], $data->npc->id);
+		// });
 	}
 
 	public function instances()

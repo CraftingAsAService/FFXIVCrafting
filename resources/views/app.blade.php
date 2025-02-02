@@ -16,8 +16,8 @@
 		<!-- IE11 is stupid -->
 		<meta name="msapplication-config" content="none"/>
 
-		<title>Crafting as a Service | Final Fantasy XIV ARR Crafting Information</title>
-		<meta name='description' content='Final Fantasy XIV ARR Crafting Information and Planning'>
+		<title>Crafting as a Service | Final Fantasy XIV Crafting Information</title>
+		<meta name='description' content='Final Fantasy XIV Crafting Information and Planning'>
 		<meta name='keywords' content=''>
 
 		<meta charset='utf-8'>

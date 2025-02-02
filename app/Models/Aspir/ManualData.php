@@ -174,11 +174,18 @@ class ManualData
 	public function getIcons()
 	{
 		$domain = 'https://xivapi.com/i/';
-		$basePath = '/mnt/Projects/ffxiv/assets/ffxiv/i/';
+        $baseDomain = 'https://beta.xivapi.com/api/1/asset?path=ui/icon/%s/%s.tex&format=png';
+
+        $basePath = '/mnt/Projects/ffxiv/assets/ffxiv/i/';
 
 		// A stream context to ignore http warnings
 		$streamContext = stream_context_create([
 			'http' => ['ignore_errors' => true],
+            'ssl' => [
+                "allow_self_signed" => true,
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ],
 		]);
 
 		$iconSets = [
@@ -191,44 +198,60 @@ class ManualData
 		];
 
 		exec('find "' . $basePath . '" -name *.png', $existingImages);
-		$existingImages = array_map(function($value) use ($basePath) {
+		$existingImages = array_map(function ($value) use ($basePath) {
 			return str_replace($basePath, '', $value);
 		}, $existingImages);
 
-		foreach ($iconSets as $set)
-			foreach ($set as $icon)
-			{
-				// All icons are five digits, otherwise we'd have different rules.
-				//  See https://xivapi.com/docs/Icons
-				$icon = (strlen($icon) == 6 ? '' : '0') . $icon;
+		foreach ($iconSets as $set) {
+            foreach ($set as $icon) {
+                // All icons are five digits, otherwise we'd have different rules.
+                //  See https://xivapi.com/docs/Icons
+                $icon = (strlen($icon) === 6 ? '' : '0') . $icon;
 
-				if (strlen($icon) != 6)
-					continue;
-
-				$folder = substr($icon, 0, 3) . "000";
-				$iconBase = $basePath . $folder . '/';
-				$icon = $icon . '.png';
-
-				if (in_array($folder . '/' . $icon, $existingImages)) {
-					continue;
+                if (strlen($icon) !== 6) {
+                    continue;
                 }
 
-				$image = file_get_contents($domain . $folder . '/' . $icon, false, $streamContext);
-				$this->aspir->command->info('Downloading ' . $icon);
+                $folder = substr($icon, 0, 3) . "000";
 
-				if (str_contains($image, '"Code":404'))
-				{
-					$this->aspir->command->error('Download failed, 404');
-					continue;
-				}
+                $apiUrl = sprintf($baseDomain, $folder, $icon);
 
-				if ( ! is_dir($iconBase))
-					exec('mkdir "' . $iconBase . '"');
+                $iconBase = $basePath . $folder . '/';
+                $icon = $icon . '.png';
 
-				file_put_contents($iconBase . $icon, $image);
+                if (in_array($folder . '/' . $icon, $existingImages)) {
+                    continue;
+                }
 
-				$existingImages[] = $folder . '/' . $icon;
-			}
+                $this->aspir->command->info('Downloading ' . $icon);
+
+                $retryLimit = 3;
+                $tries = 0;
+                retry:
+                try {
+                    $tries++;
+                    $image = file_get_contents($apiUrl, false, $streamContext);
+                } catch (\Exception $e) {
+                    $this->aspir->command->info('Retrying ' . $icon . ' (' . $tries . ')');
+                    if ($tries <= $retryLimit) {
+                        goto retry;
+                    }
+                }
+
+                if (str_contains($image, '"code":404')) {
+                    $this->aspir->command->error('Download failed, 404');
+                    continue;
+                }
+
+                if (!is_dir($iconBase)) {
+                    exec('mkdir "' . $iconBase . '"');
+                }
+
+                file_put_contents($iconBase . $icon, $image);
+
+                $existingImages[] = $folder . '/' . $icon;
+            }
+        }
 	}
 
 	private function readTSV($filename)
