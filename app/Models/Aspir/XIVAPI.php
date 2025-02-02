@@ -52,11 +52,29 @@ class XIVAPI
 
 	public function locations(): void
 	{
+        // "Map" alone doesn't get all the placenames. "Placename" alone doesn't get all the relations.
+        $this->loopEndpoint(
+            'PlaceName',
+            [
+                'Name',
+            ],
+            function ($data) {
+                $id = $this->xivData($data, 'id');
+                $name = $this->xivData($data, 'Name');
+
+                $this->aspir->setData('location', [
+                    'id'           => $id,
+                    'name'         => $name,
+                    'location_id'  => null,
+                ], $id);
+            }
+        );
+
 		$this->loopEndpoint(
             'Map',
 			[
                 'PlaceName.Name',
-                'PlaceNameRegion.row_id',
+                'PlaceNameRegion.Name',
                 'PlaceNameSub.Name',
             ],
             function ($data) {
@@ -74,6 +92,13 @@ class XIVAPI
 
                 // If this is a subregion; that becomes the ID, everything shifts up
                 if ($subRegionId) {
+                    // But still add the original data
+                    $this->aspir->setData('location', [
+                        'id'           => $id,
+                        'name'         => $name,
+                        'location_id'  => $regionId,
+                    ], $id);
+
                     $regionId = $id;
                     $id = $subRegionId;
                     $name = $subRegionName;
@@ -1242,14 +1267,16 @@ class XIVAPI
 		// Recipes and Company Crafts can overlap on IDs. Give them some space.
 		$idBase = max(array_keys($this->aspir->data['recipe']));
 
+        $processRecipeRelation = [];
+
 		$this->loopEndpoint(
             'CompanyCraftSequence',
             [
+                'CompanyCraftPart[].CompanyCraftProcess[].row_id',
                 'ResultItem.row_id',
-                'CompanyCraftPart',
 		    ],
-            function ($data) use ($idBase) {
-                $recipeId = $this->xivData($data, 'id') + $idBase;
+            function ($data) use ($idBase, &$processRecipeRelation) {
+                $recipeId = $this->xivData($data, 'id') + 1 + $idBase; // plus company crafts are zero index'd
 
                 $this->aspir->setData('recipe', [
                     'id'           => $recipeId,
@@ -1271,20 +1298,43 @@ class XIVAPI
 
                 foreach ($ccp as $part) {
                     foreach ($this->xivData($part, 'CompanyCraftProcess') as $process) {
-                        $setQuantity = $this->xivData($process, 'SetQuantity');
-                        $setsRequired = $this->xivData($process, 'SetsRequired');
-                        $supplyItem = $this->xivData($process, 'SupplyItem');
-
-                        foreach ($setQuantity as $key => $quantity) {
-                            $amount = $quantity * $setsRequired[$key];
-                            $itemId = $supplyItem[$key]['value'];
-
-                            $this->aspir->setData('recipe_reagents', [
-                                'item_id'   => $itemId,
-                                'recipe_id' => $recipeId,
-                                'amount'    => $amount,
-                            ]);
+                        if ($process['row_id']) {
+                            $processRecipeRelation[$process['row_id']][] = $recipeId;
                         }
+                    }
+                }
+            }
+        );
+
+        // Sequence->Part->Process->SupplyItem->Item is too deep from the above query to get ItemID, another loop is required
+        $this->loopEndpoint(
+            'CompanyCraftProcess',
+            [
+                'SetQuantity',
+                'SetsRequired',
+                'SupplyItem[].Item.row_id',
+            ],
+            function ($data) use ($processRecipeRelation) {
+                $id = $this->xivData($data, 'id');
+
+                $setQuantity = $this->xivData($data, 'SetQuantity');
+                $setsRequired = $this->xivData($data, 'SetsRequired');
+                $supplyItem = $this->xivData($data, 'SupplyItem');
+
+                foreach ($processRecipeRelation[$id] as $recipeId) {
+                    foreach ($setQuantity as $key => $quantity) {
+                        $amount = $quantity * $setsRequired[$key];
+                        $itemId = $this->xivData($supplyItem[$key], 'Item.id');
+
+                        if (!$amount || !$itemId) {
+                            continue;
+                        }
+
+                        $this->aspir->setData('recipe_reagents', [
+                            'item_id'   => $itemId,
+                            'recipe_id' => $recipeId,
+                            'amount'    => $amount,
+                        ]);
                     }
                 }
             }

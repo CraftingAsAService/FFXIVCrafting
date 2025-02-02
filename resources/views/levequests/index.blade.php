@@ -135,7 +135,7 @@
 								<a :href='"/levequests/breakdown/" + leve.id' v-html='leve.name'></a>
 							</div>
 							<div style='margin-top: 5px;'>
-								<span v-html='leve.location.name'></span>
+								<span v-html='leve.location?.name'></span>
 							</div>
 						</td>
 						<td>
