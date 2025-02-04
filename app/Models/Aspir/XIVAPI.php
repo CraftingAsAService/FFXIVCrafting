@@ -14,6 +14,7 @@ class XIVAPI
 
 	public $aspir;
 
+    public ?string $lang = null;
 	public $limit = null;
 	public $chunkLimit = null;
 
@@ -1045,6 +1046,28 @@ class XIVAPI
             }
         );
 
+        $languages = [
+            'ja' => 'jp_name',
+            'de' => 'de_name',
+            'fr' => 'fr_name',
+        ];
+        foreach ($languages as $lang => $column) {
+            $this->lang = $lang;
+            $this->loopEndpoint(
+                'Item',
+                [ 'Name' ],
+                function ($data) use ($column) {
+                    $id = $this->xivData($data, 'id');
+                    $name = $this->xivData($data, 'Name');
+
+                    if (isset($this->aspir->data['item'][$id]) && $name) {
+                        $this->aspir->data['item'][$id][$column] = $name;
+                    }
+                }
+            );
+        }
+        $this->lang = null;
+
         $this->loopEndpoint(
             'Materia',
             [
@@ -1393,7 +1416,11 @@ class XIVAPI
 
         $url = "https://beta.xivapi.com/api/1/sheet/{$endpoint}?fields={$fields}";
 
-        echo 'Starting: ' . $endpoint . PHP_EOL;
+        if ($this->lang) {
+            $url .= '&language=' . $this->lang;
+        }
+
+        echo 'Starting: ' . $endpoint . ($this->lang ? ' (' . $this->lang . ')' : '') . PHP_EOL;
 
         $after = 0;
         while (true) {
@@ -1402,7 +1429,7 @@ class XIVAPI
             $result = json_decode($output, true);
 
             if (!isset($result['rows'])) {
-                dd($result);
+                dd($result, 'ERROR? No rows?');
             }
 
             if ($result['rows']) {
@@ -1421,7 +1448,7 @@ class XIVAPI
     private function xivData(array $data, string $key): mixed
     {
         // Convert 'GatheringPointBase.GatheringType.id' to
-        // $data['fields']['GatheringPointBase']['fields']['GatheringType']['id']
+        // $data['fields']['GatheringPointBase']['fields']['GatheringType']['row_id']
         // Convert 'GatheringPointBase.GatheringType.Value' to
         // $data['fields']['GatheringPointBase']['fields']['GatheringType']['fields']['Value']
         $ref =& $data;
