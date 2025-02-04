@@ -145,7 +145,6 @@ class XIVAPI
             [
                 'GatheringPointBase.GatheringType.row_id',
                 'GatheringPointBase.GatheringLevel',
-                'GatheringPointBase.Item[].row_id',
                 'PlaceName.Name',
                 'TerritoryType.PlaceName.row_id',
             ],
@@ -155,28 +154,6 @@ class XIVAPI
 
                 if ($placeNameID === 0) {
                     return;
-                }
-
-                $tcNodeData = $teamcraftNodes[$id] ?? false;
-
-                $items = [];
-                foreach ($this->xivData($data, 'GatheringPointBase.Item') as $item) {
-                    if ( ! $item['row_id']) {
-                        continue;
-                    }
-                    $items[] = $item['row_id'];
-                }
-
-                if ( ! empty($tcNodeData['hiddenItems'])) {
-                    $items = array_merge($items, $tcNodeData['hiddenItems']);
-                }
-
-                foreach ($items as $itemId) {
-                    $this->aspir->setData('item_node', [
-                        'item_id' => $itemId,
-                        'node_id' => $id,
-                        // TODO 1 - Worried about duplicates now
-                    ]);
                 }
 
                 $nodeData = [
@@ -190,6 +167,8 @@ class XIVAPI
                     'timer'       => null,
                     'timer_type'  => null,
                 ];
+
+                $tcNodeData = $teamcraftNodes[$id] ?? false;
 
                 if ($tcNodeData) {
                     if (isset($tcNodeData['x'])) {
@@ -210,7 +189,40 @@ class XIVAPI
                 $this->aspir->setData('node', $nodeData, $id);
             }
         );
-	}
+
+        // GatheringPoint doesn't go "deep" enough to pull back ItemIDs
+        $this->loopEndpoint(
+            'GatheringPointBase',
+            [
+                'Item[].Item.row_id',
+            ],
+            function ($data) use ($teamcraftNodes) {
+                $id = $this->xivData($data, 'id');
+
+                $tcNodeData = $teamcraftNodes[$id] ?? false;
+
+                $items = [];
+                foreach ($this->xivData($data, 'Item') as $item) {
+                    $itemId = $this->xivData($item, 'Item.id');
+                    if ( ! $itemId) {
+                        continue;
+                    }
+                    $items[] = $itemId;
+                }
+
+                if ( ! empty($tcNodeData['hiddenItems'])) {
+                    $items = array_merge($items, $tcNodeData['hiddenItems']);
+                }
+
+                foreach ($items as $itemId) {
+                    $this->aspir->setData('item_node', [
+                        'item_id' => $itemId,
+                        'node_id' => $id,
+                    ]);
+                }
+            }
+        );
+    }
 
 	public function fishingSpots()
 	{
