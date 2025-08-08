@@ -20,7 +20,7 @@ set('deploy_path', '/srv/www/{{application}}');
 // Overrides branch by using --branch
 //  Production will only use the `production` branch
 set('branch', function() {
-	return input()->getOption('branch') ?: 'master';
+	return input()->getOption('branch') ?: 'main';
 });
 
 set('git_tty', true);

@@ -604,12 +604,17 @@ class XIVAPI
                 'NameEnglish', // `NameEnglish` is capitalized; `Name` is not
                 'Abbreviation',
             ],
-                function ($data) {
+            function ($data) {
                 $id = $this->xivData($data, 'id');
+                $name = $this->xivData($data, 'NameEnglish');
+
+                if (!$name) {
+                    return;
+                }
 
                 $this->aspir->setData('job', [
                     'id'   => $id,
-                    'name' => $this->xivData($data, 'NameEnglish'),
+                    'name' => $name,
                     'abbr' => $this->xivData($data, 'Abbreviation'),
                 ], $id);
             }
@@ -1355,6 +1360,10 @@ class XIVAPI
                 $setQuantity = $this->xivData($data, 'SetQuantity');
                 $setsRequired = $this->xivData($data, 'SetsRequired');
                 $supplyItem = $this->xivData($data, 'SupplyItem');
+
+                if (!isset($processRecipeRelation[$id])) {
+                    return;
+                }
 
                 foreach ($processRecipeRelation[$id] as $recipeId) {
                     foreach ($setQuantity as $key => $quantity) {
