@@ -244,8 +244,8 @@
 {{--							</div>--}}
 							<div class="col-sm-4">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/7.3.png" class="img-responsive" alt="The Promise of Tomorrow">
-								<p class='text-center'>This site has been optimized for Patch 7.3</p>
+								<img src="/img/patch/7.4.png" class="img-responsive" alt="Into the Mist">
+								<p class='text-center'>This site has been optimized for Patch 7.4</p>
 							</div>
 							<div class="col-sm-4 text-center">
 								<p class="headline">Support</p>
