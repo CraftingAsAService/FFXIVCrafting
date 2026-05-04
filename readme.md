@@ -23,7 +23,7 @@ php artisan aspir:build-db
 php artisan aspir:assets
 ```
 
-These commands should be done on the Mac.
+These commands should be done on the Mac. Be sure you've pushed to github.
 
 ```
 dep cactuar:assets
