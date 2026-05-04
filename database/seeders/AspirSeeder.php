@@ -62,6 +62,8 @@ class AspirSeeder extends Seeder
 					$pdo[] = $value === FALSE ? NULL : $value;
 			}
 
+            // var_dump([$keys, array_slice($pdo, -6)]);
+
 			\DB::insert(
 				'INSERT ' . $ignore . ' INTO ' . $table . ' ' . $keys .
 				' VALUES ' . implode(',', $values) .

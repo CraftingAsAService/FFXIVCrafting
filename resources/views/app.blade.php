@@ -244,7 +244,7 @@
 {{--							</div>--}}
 							<div class="col-sm-4">
 								<p class="headline">Current Patch</p>
-								<img src="/img/patch/7.5.png" class="img-responsive" alt="Trail to the Heavens">
+								<img src="/img/patch/7.5.png" class="img-responsive" alt="Trail to the Heavens" style="width: 180px; margin-left: 90px;">
 								<p class='text-center'>This site has been optimized for Patch 7.5</p>
 							</div>
 							<div class="col-sm-4 text-center">

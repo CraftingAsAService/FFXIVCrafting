@@ -904,6 +904,9 @@ class XIVAPI
                     return;
                 }
 
+                // EquipRestriction is race dependent, but we only want a yes/no: is it equipment
+                $equip = collect($this->xivData($data, 'EquipRestriction')['fields'])->where(fn ($i) => $i)->count() > 1;
+
                 $this->aspir->setData('item', [
                     'id'               => $id,
                     'name'             => $name,
@@ -920,7 +923,7 @@ class XIVAPI
                     'job_category_id'  => $this->xivData($data, 'ClassJobCategory.id'),
                     'unique'           => $this->xivData($data, 'IsUnique'),
                     'tradeable'        => $this->xivData($data, 'IsUntradable') ? null : 1,
-                    'equip'            => $this->xivData($data, 'EquipRestriction'),
+                    'equip'            => $equip,
                     'slot'             => $this->xivData($data, 'EquipSlotCategory.id'),
                     'rarity'           => $this->xivData($data, 'Rarity'),
                     'icon'             => $this->xivData($data, 'Icon')['id'],
@@ -976,7 +979,7 @@ class XIVAPI
                         $dataQuality['hq'] = $this->xivData($itemAction, 'DataHQ');
                     }
 
-                    switch ($this->xivData($itemAction, 'Type')) {
+                    switch ($this->xivData($itemAction, 'Action')['value']) {
                         case 844:
                         case 845:
                         case 846:
