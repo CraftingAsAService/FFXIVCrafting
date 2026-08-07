@@ -32,15 +32,15 @@ const SearchBox = {
 				return [ this.results ]
 			} else if (pieces == 2) {
 				return [
-					this.results.splice(0, split),
-					this.results.splice(-split)
+					this.results.slice(0, split),
+					this.results.slice(split)
 				]
 			}
 
 			return [
-				this.results.splice(0, split),
-				this.results.splice(split, split + split),
-				this.results.splice(-split)
+				this.results.slice(0, split),
+				this.results.slice(split, split + split),
+				this.results.slice(split + split)
 			]
 		}
 	},
